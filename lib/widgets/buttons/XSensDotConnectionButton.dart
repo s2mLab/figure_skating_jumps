@@ -7,12 +7,16 @@ class XSensDotConnectionButton extends StatefulWidget {
 }
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>{
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
       width: 40,
-      color: Color(0xFF12A411),
+      color: const Color(0xFF12A411),
     );
   }
+
+
 }
