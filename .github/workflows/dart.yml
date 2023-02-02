@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Setup
         run: mkdir current && cd current
+      - name: Confirm Location
+        run: echo "$PWD"
 
   # dependencies:
   #   runs-on: self-hosted
