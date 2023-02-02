@@ -13,44 +13,34 @@ on:
       - '**'
 
 jobs:
-  setup:
+  dependencies:
     runs-on: self-hosted
+    needs: setup
     steps:
-      - name: Where are you
-        run: echo "$PWD"
-      - name: Setup
-        run: mkdir current && cd current
-      - name: Confirm Location
-        run: echo "$PWD"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
 
-  # dependencies:
-  #   runs-on: self-hosted
-  #   needs: setup
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-java@v1
-  #       with:
-  #         java-version: '12.x'
-  #     - uses: subosito/flutter-action@v1
-  #       with:
-  #         channel: 'stable'
+      # Note: This workflow uses the latest stable version of the Dart SDK.
+      # You can specify other versions if desired, see documentation here:
+      # https://github.com/dart-lang/setup-dart/blob/main/README.md
+      # - uses: dart-lang/setup-dart@v1
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
-  #     # Note: This workflow uses the latest stable version of the Dart SDK.
-  #     # You can specify other versions if desired, see documentation here:
-  #     # https://github.com/dart-lang/setup-dart/blob/main/README.md
-  #     # - uses: dart-lang/setup-dart@v1
-  #     - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - name: Install dependencies
+        run: flutter pub get
 
-  #     - name: Install dependencies
-  #       run: flutter pub get
-
-  # analysis:
-  #   runs-on: self-hosted
-  #   needs: dependencies
-  #   steps:
-  #     # Consider passing '--fatal-infos' for slightly stricter analysis.
-  #     - name: Analyze project source
-  #       run: flutter analyze
+  analysis:
+    runs-on: self-hosted
+    needs: dependencies
+    steps:
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Analyze project source
+        run: flutter analyze
 
   # lint:
   #   runs-on: self-hosted
