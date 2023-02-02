@@ -44,11 +44,10 @@ class _TopbarState extends State<Topbar> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [XSensDotConnectionButton()],
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Center(
+                child: XSensDotConnectionButton(),
               ),
             ),
           ],
