@@ -16,6 +16,8 @@ jobs:
   setup:
     runs-on: self-hosted
     steps:
+      - name: Where are you
+        run: echo "$PWD"
       - name: Setup
         run: mkdir current && cd current
       - name: Confirm Location
