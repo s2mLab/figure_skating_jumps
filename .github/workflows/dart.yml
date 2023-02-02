@@ -7,7 +7,7 @@ name: Dart
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "test-pipeline" ]
   pull_request:
     branches:
       - '**'
@@ -24,6 +24,13 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Get unzip
+        run: sudo apt install unzip
+
+      # Makes sure you can download the sdk
+      - name: Clean
+        run: rm -rf /home/ubuntu/actions-runner/_work/_tool/dart-sdk
+
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
@@ -37,6 +44,13 @@ jobs:
     runs-on: self-hosted
     needs: dependencies
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze
@@ -56,12 +70,4 @@ jobs:
   #     # want to change this to 'flutter test'.
   #     - name: Run tests
   #       run: flutter test
-
-  # clean:
-  #   runs-on: self-hosted
-  #   if: ${{ always() }}
-  #   # Add all jobs in here
-  #   needs: [setup, dependencies, analysis]
-  #   steps:
-  #     - name: Clean
-  #       run: cd .. && rm -rf current
+      
