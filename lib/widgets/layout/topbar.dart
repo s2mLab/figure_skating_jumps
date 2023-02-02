@@ -1,13 +1,15 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../buttons/XSensDotConnectionButton.dart';
 
-class Topbar extends StatefulWidget {
-  const Topbar({Key? key}): super(key: key);
+class Topbar extends StatefulWidget implements PreferredSizeWidget {
+  const Topbar({Key? key}) : super(key: key);
   @override
   State<Topbar> createState() => _TopbarState();
+
+  @override
+  final Size preferredSize = const Size.fromHeight(88.0);
 }
 
 class _TopbarState extends State<Topbar> {
@@ -23,35 +25,35 @@ class _TopbarState extends State<Topbar> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: () =>{},
+                    onPressed: () => {},
                     iconSize: 48,
-                    color: Color(0xFFFFFFFF),
+                    color: primaryBackground,
                     icon: const Icon(Icons.menu_rounded),
                     padding: EdgeInsets.zero),
-                Text('allo'),
+                Container(
+                  height: 40,
+                  width: 40,
+                  color: primaryColorLight,
+                ),
+                const SizedBox(
+                  height: 48,
+                  width: 48,
+                ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-                  XSensDotConnectionButton()
-                ],
-
+                children: const [XSensDotConnectionButton()],
               ),
             ),
           ],
-
         ),
       ),
-
-
     );
   }
-
 }
