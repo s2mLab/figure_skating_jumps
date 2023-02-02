@@ -57,7 +57,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: const Text(
                       'Connecter un appareil XSens DOT',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: paleText, fontSize: 18),
                     ))),
           ),
         )

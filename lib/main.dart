@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/widgets/Screens/connection_dot_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // prevent rotation phone
+    // prevent phone rotation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

@@ -5,6 +5,7 @@ class XSensDotConnection {
   List<XSensStateSubscriber> _connectionStateSubscribers = [];
 
   bool subscribeConnectionState(XSensStateSubscriber subscriber) {
+    _connectionStateSubscribers.add(subscriber);
     return true;
   }
 
