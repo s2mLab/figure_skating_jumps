@@ -1,7 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../buttons/XSensDotConnectionButton.dart';
+import '../buttons/x_sens_dot_connection_button.dart';
 
 class Topbar extends StatefulWidget implements PreferredSizeWidget {
   const Topbar({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class Topbar extends StatefulWidget implements PreferredSizeWidget {
   State<Topbar> createState() => _TopbarState();
 
   @override
-  final Size preferredSize = const Size.fromHeight(88.0);
+  final Size preferredSize = const Size.fromHeight(104.0);
 }
 
 class _TopbarState extends State<Topbar> {
@@ -25,7 +25,7 @@ class _TopbarState extends State<Topbar> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                     onPressed: () => {},

@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
-import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
