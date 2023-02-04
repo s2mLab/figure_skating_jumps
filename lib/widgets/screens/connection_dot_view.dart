@@ -1,6 +1,8 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../layout/topbar.dart';
+
 class ConnectionDotView extends StatefulWidget {
   const ConnectionDotView({Key? key}) : super(key: key);
 
@@ -9,19 +11,15 @@ class ConnectionDotView extends StatefulWidget {
 }
 
 class _ConnectionDotViewState extends State<ConnectionDotView> {
-  String noConnectionMessage() {
-    return "Zut! il semblerait que vous n'ayez \n"
+  String noConnectionMessage = "Zut! il semblerait que vous n'ayez \n"
         "pas encore associé un appareil \n"
         "XSens DOT. Tapoter le bouton ci-\n"
         "dessous pour commencer.";
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-      ),
+      appBar: const Topbar(),
       body: Column(children: [
         Container(
             margin: const EdgeInsets.all(16),
@@ -34,7 +32,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            noConnectionMessage(),
+            noConnectionMessage,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: discreetText,
