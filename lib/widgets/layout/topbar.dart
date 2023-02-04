@@ -9,7 +9,7 @@ class Topbar extends StatefulWidget implements PreferredSizeWidget {
   State<Topbar> createState() => _TopbarState();
 
   @override
-  final Size preferredSize = const Size.fromHeight(104.0);
+  final Size preferredSize = const Size.fromHeight(128);
 }
 
 class _TopbarState extends State<Topbar> {
@@ -18,7 +18,7 @@ class _TopbarState extends State<Topbar> {
     return Container(
       width: double.infinity,
       color: primaryColor,
-      height: 120,
+      height: 128,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
         child: Column(
