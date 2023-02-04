@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
@@ -35,7 +34,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text('XSens DOT Déconnecté', style: TextStyle(color: primaryColorLight)),
+              const Text('XSens DOT Déconnecté', style: TextStyle(color: primaryColorLight)),
               Container(
                 width: 8,
                 height: 8,
