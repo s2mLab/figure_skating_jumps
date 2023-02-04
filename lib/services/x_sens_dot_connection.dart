@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 class XSensDotConnection {
   XSensConnectionState connectionState = XSensConnectionState.disconnected;
-  List<XSensStateSubscriber> _connectionStateSubscribers = [];
+  final List<XSensStateSubscriber> _connectionStateSubscribers = [];
 
   bool subscribeConnectionState(XSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);

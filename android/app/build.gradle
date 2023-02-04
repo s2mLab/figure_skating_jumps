@@ -47,8 +47,8 @@ android {
         applicationId "com.example.figure_skating_jumps"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 26
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -66,6 +66,17 @@ flutter {
     source '../..'
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.work:work-runtime:2.7.1"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
+    implementation(name: 'Xsens_DOT_SDK_Core', ext: 'aar')
+    implementation(name: 'Xsens_DOT_SDK_Mfm', ext: 'aar')
+    implementation(name: 'Xsens_DOT_SDK_Ota', ext: 'aar')
 }
