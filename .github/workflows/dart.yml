@@ -24,9 +24,6 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Get unzip
-        run: sudo apt install unzip
-
       # Makes sure you can download the sdk
       - name: Clean
         run: rm -rf /home/ubuntu/actions-runner/_work/_tool/dart-sdk
