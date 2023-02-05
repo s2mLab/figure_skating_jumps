@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/connection_new_xsens_dot_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../layout/topbar.dart';
@@ -50,7 +51,14 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
               borderRadius: BorderRadius.circular(30),
             ),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConnectionNewXSensDotDialog();
+                    },
+                  );
+                },
                 child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: const Text(
