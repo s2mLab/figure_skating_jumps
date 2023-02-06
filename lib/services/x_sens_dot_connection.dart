@@ -1,34 +1,36 @@
+import '../enums/x_sens_connection_state.dart';
+import '../interfaces/x_sens_state_subscriber.dart';
+
 class XSensDotConnection {
-  static final XSensDotConnection _xSensDotConnection = XSensDotConnection._internal();
+  static final XSensDotConnection _xSensDotConnection =
+      XSensDotConnection._internal(XSensConnectionState.disconnected);
+  final List<XSensStateSubscriber> _connectionStateSubscribers = [];
+  XSensConnectionState _connectionState;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory XSensDotConnection() {
     return _xSensDotConnection;
   }
-  XSensDotConnection._internal();
 
-  XSensConnectionState connectionState = XSensConnectionState.disconnected;
-  final List<XSensStateSubscriber> _connectionStateSubscribers = [];
+  XSensDotConnection._internal(this._connectionState);
 
-  bool subscribeConnectionState(XSensStateSubscriber subscriber) {
+  XSensConnectionState subscribeConnectionState(
+      XSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
-    return true;
+    return getState();
   }
 
+  XSensConnectionState getState() {
+    return _connectionState;
+  }
 
-
-}
-
-enum XSensConnectionState {
-  disconnected,
-  reconnecting,
-  connected,
-  unknown
-}
-
-abstract class XSensStateSubscriber {
-
-  XSensConnectionState onStateChange(XSensConnectionState state);
-
+  // Temporarily public for testing purposes
+  // TODO: Privatize
+  void changeState(XSensConnectionState state) {
+    _connectionState = state;
+    for (XSensStateSubscriber s in _connectionStateSubscribers) {
+      s.onStateChange(state);
+    }
+  }
 }
