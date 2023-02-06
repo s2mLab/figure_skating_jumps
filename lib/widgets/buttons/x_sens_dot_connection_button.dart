@@ -12,6 +12,21 @@ class XSensDotConnectionButton extends StatefulWidget {
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements XSensStateSubscriber {
   XSensDotConnection connection = XSensDotConnection();
+  List<String> connectionStateMessages = [
+    "XSens DOT Connecté",
+    "Tentative de reconnexion",
+    "XSens DOT Déconnecté"
+  ];
+  List<TextStyle> connectionStateStyles = [
+    const TextStyle(color: Color(0xFF00BEFF)),
+    const TextStyle(color: darkText),
+    const TextStyle(color: Color(0xFF00BEFF))
+  ];
+  List<Color> connectionBackgroundColors = [
+    primaryColorLight,
+    const Color(0xFFFF9C40),
+    Colors.black
+  ];
 
   @override
   void initState() {
@@ -29,12 +44,14 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           borderRadius: BorderRadius.circular(8),
         ),
         child: MaterialButton(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
           onPressed: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text('XSens DOT Déconnecté', style: TextStyle(color: primaryColorLight)),
+              const Text('XSens DOT Déconnecté',
+                  style: TextStyle(color: primaryColorLight)),
               Container(
                 width: 8,
                 height: 8,
