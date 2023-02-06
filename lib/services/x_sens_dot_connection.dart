@@ -1,3 +1,5 @@
+import '../enums/x_sens_connection_state.dart';
+
 class XSensDotConnection {
   static final XSensDotConnection _xSensDotConnection =
       XSensDotConnection._internal(XSensConnectionState.disconnected);
@@ -31,8 +33,6 @@ class XSensDotConnection {
     }
   }
 }
-
-enum XSensConnectionState { connected, reconnecting, disconnected }
 
 abstract class XSensStateSubscriber {
   void onStateChange(XSensConnectionState state);

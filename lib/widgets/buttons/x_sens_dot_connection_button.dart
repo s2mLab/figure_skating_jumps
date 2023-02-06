@@ -3,6 +3,8 @@ import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 
+import '../../enums/x_sens_connection_state.dart';
+
 class XSensDotConnectionButton extends StatefulWidget {
   const XSensDotConnectionButton({Key? key}) : super(key: key);
   @override
