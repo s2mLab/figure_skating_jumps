@@ -12,18 +12,28 @@ class XSensDotConnection {
   XSensDotConnection._internal(this._connectionState);
   final List<XSensStateSubscriber> _connectionStateSubscribers = [];
 
-  bool subscribeConnectionState(XSensStateSubscriber subscriber) {
+  XSensConnectionState subscribeConnectionState(
+      XSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
-    return true;
+    return getState();
   }
 
   XSensConnectionState getState() {
     return _connectionState;
+  }
+
+  // Temporarily public for testing purposes
+  // TODO: Privatize
+  void changeState(XSensConnectionState state) {
+    _connectionState = state;
+    for (XSensStateSubscriber s in _connectionStateSubscribers) {
+      s.onStateChange(state);
+    }
   }
 }
 
 enum XSensConnectionState { connected, reconnecting, disconnected }
 
 abstract class XSensStateSubscriber {
-  XSensConnectionState onStateChange(XSensConnectionState state);
+  void onStateChange(XSensConnectionState state);
 }
