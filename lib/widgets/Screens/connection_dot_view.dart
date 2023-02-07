@@ -1,4 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/widgets/buttons/connect_new_dot.dart';
+import 'package:figure_skating_jumps/widgets/layout/dot_connected.dart';
+import 'package:figure_skating_jumps/widgets/layout/no_dot_connected.dart';
 import 'package:flutter/material.dart';
 
 class ConnectionDotView extends StatefulWidget {
@@ -30,36 +33,9 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                     color: primaryColor,
                     fontSize: 25,
                     fontWeight: FontWeight.bold))),
-        Expanded(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            noConnectionMessage(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: discreetText,
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.all(16),
-              child: Image.asset('assets/images/missing_xdot.png'))
-        ])),
-        Center(
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: TextButton(
-                onPressed: () {},
-                child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: const Text(
-                      'Connecter un appareil XSens DOT',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ))),
-          ),
+        const Expanded(child: false ? NoDotConnected() : DotConnected()),
+        const Center(
+          child: ConnectNewDot(),
         )
       ]),
     );
