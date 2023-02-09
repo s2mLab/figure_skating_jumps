@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       first = await xSensChannel
           .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V1'});
     } on PlatformException catch (e) {
-      log(e.message!!);
+      log(e.message!);
       first = "1failed";
     }
 
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       second = await xSensChannel
           .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V2'});
     } on PlatformException catch (e) {
-      log(e.message!!);
+      log(e.message!);
       second = "2failed";
     }
 
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
       edge = await xSensChannel
           .invokeMethod('exampleXSens', <String, dynamic>{'version': ''});
     } on PlatformException catch (e) {
-      log(e.message!!);
+      log(e.message!);
       edge = "3failed";
     }
     Fluttertoast.showToast(
