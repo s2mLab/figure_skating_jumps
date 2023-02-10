@@ -1,0 +1,5 @@
+configurations.maybeCreate("default")
+
+artifacts.add("default", file('Xsens_DOT_SDK_Core.aar'))
+artifacts.add("default", file('Xsens_DOT_SDK_Mfm.aar'))
+artifacts.add("default", file('Xsens_DOT_SDK_Ota.aar'))
