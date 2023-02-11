@@ -149,8 +149,13 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   Widget verifyStep() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: const [
-        XSensStateIcon(false, XSensConnectionState.reconnecting),
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: Center(child: XSensStateIcon(false, XSensConnectionState.reconnecting)),
+        ),
+        InstructionPrompt('Vérifier la réception du capteur (1/2)', secondaryColor)
 
       ],
     );
