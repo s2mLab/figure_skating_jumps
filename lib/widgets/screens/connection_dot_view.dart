@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/widgets/layout/dot_connected.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                     color: primaryColor,
                     fontSize: 25,
                     fontWeight: FontWeight.bold))),
-        const Expanded(child: false ? NoDotConnected() : DotConnected()),
+        Expanded(child: BluetoothDiscovery().getDevices().isEmpty ? const NoDotConnected() : const DotConnected()), //TODO : adjust when real connections
         Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
