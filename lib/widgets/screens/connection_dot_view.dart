@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/connection_new_xsens_dot_dialog.dart';
 import 'package:figure_skating_jumps/widgets/layout/dot_connected.dart';
 import 'package:flutter/material.dart';
 
