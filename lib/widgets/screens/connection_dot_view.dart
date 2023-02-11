@@ -13,9 +13,9 @@ class ConnectionDotView extends StatefulWidget {
 
 class _ConnectionDotViewState extends State<ConnectionDotView> {
   String noConnectionMessage = "Zut! il semblerait que vous n'ayez \n"
-        "pas encore associé un appareil \n"
-        "XSens DOT. Tapoter le bouton ci-\n"
-        "dessous pour commencer.";
+      "pas encore associé un appareil \n"
+      "XSens DOT. Tapoter le bouton ci-\n"
+      "dessous pour commencer.";
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return ConnectionNewXSensDotDialog();
+                      return const ConnectionNewXSensDotDialog();
                     },
                   );
                 },
