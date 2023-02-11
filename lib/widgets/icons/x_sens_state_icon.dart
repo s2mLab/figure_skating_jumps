@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class XSensStateIcon extends StatelessWidget {
-  static const double _smallHeight = 40;
+  static const double _smallHeight = 64;
   static const double _bigHeight = 160;
   final bool _isSmall;
   final XSensConnectionState _state;
