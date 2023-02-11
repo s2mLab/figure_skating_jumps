@@ -2,7 +2,10 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/widgets/layout/dot_connected.dart';
 import 'package:flutter/material.dart';
 
-import '../buttons/connect_new_dot.dart';
+import '../../enums/ice_button_importance.dart';
+import '../../enums/ice_button_size.dart';
+import '../buttons/ice_button.dart';
+import '../dialogs/connection_new_xsens_dot_dialog.dart';
 import '../layout/no_dot_connected.dart';
 import '../layout/topbar.dart';
 
@@ -32,7 +35,24 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                     fontSize: 25,
                     fontWeight: FontWeight.bold))),
         const Expanded(child: false ? NoDotConnected() : DotConnected()),
-        const Center(child: ConnectNewDot())
+        Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: IceButton(
+                  text: 'Connecter un appareil XSens DOT',
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ConnectionNewXSensDotDialog();
+                      },
+                    );
+                  },
+                  textColor: paleText,
+                  color: primaryColor,
+                  iceButtonImportance: IceButtonImportance.mainAction,
+                  iceButtonSize: IceButtonSize.large),
+            ))
       ]),
     );
   }
