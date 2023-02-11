@@ -69,17 +69,9 @@ flutter {
     source '../..'
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.work:work-runtime:2.7.1"
     implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
-    implementation(name: 'Xsens_DOT_SDK_Core', ext: 'aar')
-    implementation(name: 'Xsens_DOT_SDK_Mfm', ext: 'aar')
-    implementation(name: 'Xsens_DOT_SDK_Ota', ext: 'aar')
+    implementation project(':Xsens_DOT_SDK')
 }

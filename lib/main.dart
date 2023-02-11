@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +47,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const xSensChannel = MethodChannel('xsens-dot-channel');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,9 +64,48 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context) => const ConnectionDotView()),
                 );
               },
-              child: const Text('connection page'))
+              child: const Text('connection page')),
+          TextButton(
+              onPressed: () async {
+                _exampleXsens();
+              },
+              child: const Text('SDK connection test'))
         ],
       )),
+    );
+  }
+
+  _exampleXsens() async {
+    String first;
+    try {
+      first = await xSensChannel
+          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V1'});
+    } on PlatformException catch (e) {
+      log(e.message!);
+      first = "1failed";
+    }
+
+    String second;
+    try {
+      second = await xSensChannel
+          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V2'});
+    } on PlatformException catch (e) {
+      log(e.message!);
+      second = "2failed";
+    }
+
+    String edge;
+    try {
+      edge = await xSensChannel
+          .invokeMethod('exampleXSens', <String, dynamic>{'version': ''});
+    } on PlatformException catch (e) {
+      log(e.message!);
+      edge = "3failed";
+    }
+    Fluttertoast.showToast(
+      msg: ('$first $second $edge'),
+      toastLength: Toast.LENGTH_LONG,
+      fontSize: 18.0,
     );
   }
 }
