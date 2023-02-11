@@ -59,6 +59,7 @@ dev_dependencies:
 flutter:
     assets:
         - assets/images/
+        - assets/vectors/
 
     fonts:
         - family: Jost

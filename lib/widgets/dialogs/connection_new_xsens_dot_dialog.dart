@@ -1,6 +1,8 @@
+import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
@@ -55,11 +57,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               index: _connectionStep,
               children: [
                 newPairingStep(),
-                TextButton(
-                    onPressed: toConfiguration,
-                    child: const InstructionPrompt(
-                        'Vérifier la réception du capteur (1/2)',
-                        secondaryColor)),
+                verifyStep(),
                 TextButton(
                     onPressed: toSearch,
                     child: const InstructionPrompt(
@@ -75,12 +73,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   void toSearch() {
     setState(() {
       _connectionStep = 0;
-    });
-  }
-
-  void toVerification() {
-    setState(() {
-      _connectionStep = 1;
     });
   }
 
@@ -128,25 +120,38 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                 );
               }),
         )),
-        SizedBox(
-            height: 56,
-            width: 300,
-            child: Center(
-                child: ElevatedButton(
-                    onPressed: () {
-                      discoveryService.changeList();
-                    },
-                    child:
-                        const Text('ajouter', textAlign: TextAlign.center)))),
-        SizedBox(
-            height: 56,
-            width: 300,
-            child: Center(
-                child: ElevatedButton(
-                    onPressed: () {
-                      discoveryService.removeEntry();
-                    },
-                    child: const Text('enlever', textAlign: TextAlign.center))))
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  discoveryService.removeEntry();
+                },
+                child: const Text('test enlever', textAlign: TextAlign.center)),
+            ElevatedButton(
+                onPressed: () {
+                  discoveryService.changeList();
+                },
+                child: const Text('test ajouter', textAlign: TextAlign.center)),
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _connectionStep = 1;
+                  });
+                },
+                child:
+                    const Text('test continuer', textAlign: TextAlign.center)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget verifyStep() {
+    return Column(
+      children: const [
+        XSensStateIcon(false, XSensConnectionState.reconnecting),
+
       ],
     );
   }
