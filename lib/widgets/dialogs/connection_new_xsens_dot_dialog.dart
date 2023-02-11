@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -36,9 +37,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>{
           IndexedStack(
             index: _connectionStep,
             children: [
-              TextButton(onPressed: toVerification, child: const Text('Searching...')),
-              TextButton(onPressed: toConfiguration, child: const Text('Verifying...')),
-              TextButton(onPressed: toSearch, child: const Text('Confirmed and configured!')),
+              TextButton(onPressed: toVerification, child: const InstructionPrompt('Veuillez donner l’autorisation à l’application d’accéder au Bluetooth. L’option se trouve généralement dans les paramètres de votre appareil.', secondaryColor)),
+              TextButton(onPressed: toConfiguration, child: const InstructionPrompt('Vérifier la réception du capteur (1/2)', secondaryColor)),
+              TextButton(onPressed: toSearch, child: const InstructionPrompt('Confirmed and configured!', secondaryColor)),
             ],
           )
         ],

@@ -59,6 +59,14 @@ flutter:
     assets:
         - assets/images/
 
+    fonts:
+        - family: Jost
+          fonts:
+              - asset: assets/fonts/Jost-VariableFont_wght.ttf
+              - asset: assets/fonts/Jost-Italic-VariableFont_wght.ttf
+                style: italic
+
+
     # The following line ensures that the Material Icons font is
     # included with your application, so that you can use the icons in
     # the material Icons class.
