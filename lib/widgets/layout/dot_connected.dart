@@ -5,7 +5,7 @@ class DotConnected extends StatefulWidget {
   const DotConnected({Key? key}) : super(key: key);
 
   @override
-  _DotConnectedState createState() => _DotConnectedState();
+  State<DotConnected> createState() => _DotConnectedState();
 }
 
 class _DotConnectedState extends State<DotConnected> {
