@@ -1,7 +1,10 @@
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +33,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: primaryBackground,
       insetPadding: const EdgeInsets.all(16),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
@@ -149,14 +153,25 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   Widget verifyStep() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Padding(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Padding(
           padding: EdgeInsets.all(16),
-          child: Center(child: XSensStateIcon(false, XSensConnectionState.reconnecting)),
+          child: Center(
+              child: XSensStateIcon(false, XSensConnectionState.reconnecting)),
         ),
-        InstructionPrompt('Vérifier la réception du capteur (1/2)', secondaryColor)
-
+        const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: InstructionPrompt(
+              'Vérifier la réception du capteur (1/2)', secondaryColor),
+        ),
+        IceButton(
+            text: 'Annuler',
+            onPressed: () {},
+            textColor: primaryColor,
+            color: primaryColor,
+            iceButtonImportance: IceButtonImportance.secondaryAction,
+            iceButtonSize: IceButtonSize.large)
       ],
     );
   }

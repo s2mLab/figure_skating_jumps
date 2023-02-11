@@ -1,0 +1,1 @@
+enum IceButtonSize { small, medium, large }
