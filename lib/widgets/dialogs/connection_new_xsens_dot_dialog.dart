@@ -62,9 +62,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             child: IndexedStack(
               index: _connectionStep,
               children: [
-                newPairingStep(),
-                verifyStep(),
-                configureAndConfirm(),
+                _newPairingStep(),
+                _verifyStep(),
+                _configureAndConfirm(),
               ],
             ),
           )
@@ -73,7 +73,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     );
   }
 
-  Widget newPairingStep() {
+  Widget _newPairingStep() {
     return Column(
       children: [
         const Padding(
@@ -146,7 +146,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     );
   }
 
-  Widget verifyStep() {
+  Widget _verifyStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -199,7 +199,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     );
   }
 
-  Widget configureAndConfirm() {
+  Widget _configureAndConfirm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
