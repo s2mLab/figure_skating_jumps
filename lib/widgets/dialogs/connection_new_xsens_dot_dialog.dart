@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/interfaces/bluetooth_discovery_subscriber.d
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: primaryBackground,
-      insetPadding: const EdgeInsets.all(16),
+      insetPadding:
+          const EdgeInsets.only(left: 16, right: 16, top: 104, bottom: 104),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -62,10 +64,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               children: [
                 newPairingStep(),
                 verifyStep(),
-                TextButton(
-                    onPressed: toSearch,
-                    child: const InstructionPrompt(
-                        'Confirmed and configured!', secondaryColor)),
+                configureAndConfirm(),
               ],
             ),
           )
@@ -102,9 +101,13 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             children: const [
               Padding(
                 padding: EdgeInsets.only(right: 16),
-                child: CircularProgressIndicator(
-                  color: primaryColorDark,
-                  value: null,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: primaryColorDark,
+                    value: null,
+                  ),
                 ),
               ),
               Text('Recherche en cours', style: TextStyle(fontFamily: 'Jost'))
@@ -119,33 +122,37 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
-                  child:
-                      InstructionPrompt(devices[index].name, primaryColorLight),
+                  child: XSensDotListElement(
+                    text: devices[index].name,
+                    graphic: const XSensStateIcon(
+                        true, XSensConnectionState.disconnected),
+                  ),
                 );
               }),
         )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  discoveryService.removeEntry();
-                },
-                child: const Text('test enlever', textAlign: TextAlign.center)),
-            ElevatedButton(
-                onPressed: () {
-                  discoveryService.changeList();
-                },
-                child: const Text('test ajouter', textAlign: TextAlign.center)),
-            ElevatedButton(
+        Center(
+            child: IceButton(
+                text: 'Continuer temporaire',
                 onPressed: () {
                   setState(() {
                     _connectionStep = 1;
                   });
                 },
-                child:
-                    const Text('test continuer', textAlign: TextAlign.center)),
-          ],
+                textColor: primaryColor,
+                color: primaryColor,
+                iceButtonImportance: IceButtonImportance.secondaryAction,
+                iceButtonSize: IceButtonSize.medium)),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: IceButton(
+              text: 'Annuler',
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              textColor: primaryColor,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.large),
         ),
       ],
     );
@@ -165,13 +172,91 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: InstructionPrompt(
               'Vérifier la réception du capteur (1/2)', secondaryColor),
         ),
-        IceButton(
-            text: 'Annuler',
-            onPressed: () {},
-            textColor: primaryColor,
-            color: primaryColor,
-            iceButtonImportance: IceButtonImportance.secondaryAction,
-            iceButtonSize: IceButtonSize.large)
+        Expanded(
+            child: Container(
+          color: Colors.pink,
+          height: 60,
+          width: 300,
+        )),
+        Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
+          child: IceButton(
+              text: 'Poursuivre le jumelage',
+              onPressed: () {
+                setState(() {
+                  _connectionStep = 2;
+                });
+              },
+              textColor: paleText,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.mainAction,
+              iceButtonSize: IceButtonSize.large),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: IceButton(
+              text: 'Annuler',
+              onPressed: () {
+                setState(() {
+                  _connectionStep =
+                      0; // TODO: Deselect chosen XSensDOT instance when available
+                });
+              },
+              textColor: primaryColor,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.large),
+        ),
+      ],
+    );
+  }
+
+  Widget configureAndConfirm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Center(
+              child: XSensStateIcon(false, XSensConnectionState.connected)),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: InstructionPrompt(
+              'Configurer la fréquence de réception (2/2)', secondaryColor),
+        ),
+        Expanded(
+            child: Container(
+          color: Colors.pink,
+          height: 60,
+          width: 300,
+        )),
+        Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
+          child: IceButton(
+              text:
+                  'Compléter le jumelage', // TODO: Forbid if frequency hasn't been chosen
+              onPressed: () {
+                // TODO: Pair the device.
+              },
+              textColor: paleText,
+              color: confirm,
+              iceButtonImportance: IceButtonImportance.mainAction,
+              iceButtonSize: IceButtonSize.large),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: IceButton(
+              text: 'Annuler le jumelage',
+              onPressed: () {
+                Navigator.pop(context,
+                    true); // TODO: Delete programmatically assigned XSENS DOT connector value when available
+              },
+              textColor: primaryColor,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.large),
+        ),
       ],
     );
   }

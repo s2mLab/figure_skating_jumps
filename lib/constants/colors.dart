@@ -20,3 +20,4 @@ const discreetText = Color(0xFF979797); // Guidance/tooltip/disabled text
 const darkText = Color(0xFF131313); // Black text
 
 const dotConnection = Color(0xFFB1E5B0); // Dot good connection
+const confirm = Color(0xFF167D14);
