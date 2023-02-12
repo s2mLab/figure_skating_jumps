@@ -74,18 +74,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     );
   }
 
-  void toSearch() {
-    setState(() {
-      _connectionStep = 0;
-    });
-  }
-
-  void toConfiguration() {
-    setState(() {
-      _connectionStep = 2;
-    });
-  }
-
   Widget newPairingStep() {
     return Column(
       children: [
