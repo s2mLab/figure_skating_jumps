@@ -24,7 +24,7 @@ class InstructionPrompt extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(_text, style: const TextStyle(fontFamily: 'Jost', fontSize: 16, color: darkText ), textAlign: TextAlign.left,
+            child: Text(_text, style: const TextStyle(fontSize: 16, color: darkText), textAlign: TextAlign.left,
               softWrap: true),
           ),
         ]

@@ -19,10 +19,10 @@ class XSensDotListElement extends StatelessWidget {
             borderRadius: BorderRadius.circular(10), color: primaryColorLight),
       ),
       graphic,
-      const Padding(
-        padding: EdgeInsets.only(left: 8.0),
-        child: Text('XSens Dot Christophe',
-            style: TextStyle(fontFamily: 'Jost', fontSize: 18)),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Text(text,
+            style: const TextStyle(fontSize: 18)),
       )
     ]);
   }

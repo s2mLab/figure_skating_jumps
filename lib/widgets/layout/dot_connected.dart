@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _DotConnectedState extends State<DotConnected> {
                             child: const Text(
                               'XSens Dot Thomas',
                               textAlign: TextAlign.left,
-                              style: TextStyle(color: discreetText, fontSize: 18),
+                              style: TextStyle(color: paleText, fontSize: 18),
                             )),
                         Container(
                           height: 24,
@@ -84,9 +85,24 @@ class _DotConnectedState extends State<DotConnected> {
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
-                child: const Text(
-                  'Appareils connus à proximité',
-                  style: TextStyle(color: darkText, fontSize: 20),
+                child: Row(
+                  children: const [
+                    Text(
+                      knownDevicesNear,
+                      style: TextStyle(color: darkText, fontSize: 20),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.0),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: discreetText,
+                          value: null,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(
@@ -98,7 +114,7 @@ class _DotConnectedState extends State<DotConnected> {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 child: const Text(
-                  'Mes appareils',
+                  myDevices,
                   style: TextStyle(color: darkText, fontSize: 20),
                 ),
               ),

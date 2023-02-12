@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: primaryBackground
+        scaffoldBackgroundColor: primaryBackground,
+        fontFamily: 'Jost',
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Center(child: Text("God Navigation Page"))),
       body: Center(
           child: Column(
         children: [
@@ -65,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context) => const ConnectionDotView()),
                 );
               },
-              child: const Text('connection page')),
+              child: const Text('ConnectionDotView')),
           TextButton(
               onPressed: () async {
                 _exampleXsens();

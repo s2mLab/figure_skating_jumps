@@ -11,6 +11,7 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../constants/lang_fr.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
@@ -51,7 +52,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Connecter un nouvel XSens DOT',
+                  newXSensConnectionDialogTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: paleText, fontSize: 20),
                 ),
@@ -90,9 +91,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       children: [
         const Padding(
           padding: EdgeInsets.all(16.0),
-          child: InstructionPrompt(
-              'Veuillez donner l’autorisation à l’application d’accéder au Bluetooth. L’option se trouve généralement dans les paramètres de votre appareil.',
-              secondaryColor),
+          child:
+              InstructionPrompt(bluetoothAuthorizationPrompt, secondaryColor),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -110,7 +110,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   ),
                 ),
               ),
-              Text('Recherche en cours', style: TextStyle(fontFamily: 'Jost'))
+              Text(searching)
             ],
           ),
         ),
@@ -145,7 +145,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: 'Annuler',
+              text: cancel,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -170,7 +170,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: InstructionPrompt(
-              'Vérifier la réception du capteur (1/2)', secondaryColor),
+              '$verifyConnectivity (1/2)', secondaryColor),
         ),
         Expanded(
             child: Container(
@@ -181,7 +181,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
-              text: 'Poursuivre le jumelage',
+              text: continueTo,
               onPressed: () {
                 setState(() {
                   _connectionStep = 2;
@@ -195,7 +195,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: 'Annuler',
+              text: cancel,
               onPressed: () {
                 setState(() {
                   _connectionStep =
@@ -223,7 +223,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: InstructionPrompt(
-              'Configurer la fréquence de réception (2/2)', secondaryColor),
+              '$configureFrequency (2/2)', secondaryColor),
         ),
         Expanded(
             child: Container(
@@ -235,7 +235,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
               text:
-                  'Compléter le jumelage', // TODO: Forbid if frequency hasn't been chosen
+                  completePairing, // TODO: Forbid if frequency hasn't been chosen
               onPressed: () {
                 // TODO: Pair the device.
               },
@@ -247,7 +247,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: 'Annuler le jumelage',
+              text: cancel,
               onPressed: () {
                 Navigator.pop(context,
                     true); // TODO: Delete programmatically assigned XSENS DOT connector value when available

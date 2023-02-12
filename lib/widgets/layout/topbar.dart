@@ -28,7 +28,7 @@ class _TopbarState extends State<Topbar> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                    onPressed: () => {},
+                    onPressed: () {},
                     iconSize: 48,
                     color: primaryBackground,
                     icon: const Icon(Icons.menu_rounded),
