@@ -4,9 +4,9 @@ const String cancel = "Annuler";
 const String continueTo = "Poursuivre";
 
 // widgets/button/x_sens_dot_connection_button
-const String connectionStateMessageConnected = "XSens DOT Connecté";
+const String connectionStateMessageConnected = "XSens DOT connecté";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
-const String connectionStateMessageDisconnected = "XSens DOT Déconnecté";
+const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
