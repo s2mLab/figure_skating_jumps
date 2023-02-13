@@ -1,14 +1,11 @@
+import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
+import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:flutter/cupertino.dart';
 import '../../constants/colors.dart';
+import '../../constants/lang_fr.dart';
 
 class NoDotConnected extends StatelessWidget {
   const NoDotConnected({Key? key}) : super(key: key);
-
-  static const String noConnectionMessage =
-      "Zut! il semblerait que vous n'ayez \n"
-      "pas encore associé un appareil \n"
-      "XSens DOT. Tapoter le bouton ci-\n"
-      "dessous pour commencer.";
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,7 @@ class NoDotConnected extends StatelessWidget {
       ),
       Container(
           margin: const EdgeInsets.all(16),
-          child: Image.asset('assets/images/missing_xdot.png'))
+          child: const XSensStateIcon(false, XSensConnectionState.reconnecting))
     ]);
   }
 }

@@ -27,7 +27,7 @@ class XSensDotListElement extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text('XSens Dot Christophe',
-              style: TextStyle(fontFamily: 'Jost', fontSize: 18)),
+              style: TextStyle(fontSize: 18)),
         )
       ]),
     );
