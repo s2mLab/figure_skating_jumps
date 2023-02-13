@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/lang_fr.dart';
 import '../../enums/x_sens_connection_state.dart';
 import '../../interfaces/x_sens_state_subscriber.dart';
 
@@ -18,23 +19,23 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
   XSensDotConnection connection = XSensDotConnection();
   late XSensConnectionState connectionState;
   final List<String> _connectionStateMessages = [
-    "XSens DOT Connecté",
-    "Tentative de reconnexion",
-    "XSens DOT Déconnecté"
+    connectionStateMessageConnected,
+    connectionStateMessageReconnecting,
+    connectionStateMessageDisconnected,
   ];
   final List<TextStyle> _connectionStateStyles = [
-    const TextStyle(color: Color(0xFF00BEFF)),
+    const TextStyle(color: connectedXSensDotButtonForeground),
     const TextStyle(color: darkText),
-    const TextStyle(color: Color(0xFF00BEFF))
+    const TextStyle(color: connectedXSensDotButtonForeground)
   ];
   final List<Color> _connectionBackgroundColors = [
     primaryColorLight,
-    const Color(0xFFFF9C40),
+    reconnectingXSensDotButtonBackground,
     Colors.black
   ];
   final List<Color> _connectionForegroundColors = [
-    const Color(0xFF61FF5E),
-    const Color(0xFFEBFF00),
+    connectedXSensDotButtonIndicator,
+    reconnectingXSensDotButtonIndicator,
     errorColor
   ];
 
@@ -61,7 +62,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        const ConnectionDotView())); // Risk of pushing non stop the screen on top on an already loaded one.
+                        const ConnectionDotView())); // TODO: Risk of pushing non stop the screen on top on an already loaded one.
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
