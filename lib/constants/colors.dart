@@ -21,3 +21,8 @@ const darkText = Color(0xFF131313); // Black text
 
 const dotConnection = Color(0xFF167D14); // Dot good connection
 const confirm = Color(0xFF167D14);
+
+const connectedXSensDotButtonForeground = Color(0xFF00BEFF);
+const reconnectingXSensDotButtonIndicator = Color(0xFFEBFF00);
+const connectedXSensDotButtonIndicator = Color(0xFF61FF5E);
+const reconnectingXSensDotButtonBackground = Color(0xFFFF9C40);

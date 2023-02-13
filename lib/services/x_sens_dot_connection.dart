@@ -3,7 +3,7 @@ import '../interfaces/x_sens_state_subscriber.dart';
 
 class XSensDotConnection {
   static final XSensDotConnection _xSensDotConnection =
-      XSensDotConnection._internal(XSensConnectionState.disconnected);
+      XSensDotConnection._internal(XSensConnectionState.reconnecting);
   final List<XSensStateSubscriber> _connectionStateSubscribers = [];
   XSensConnectionState _connectionState;
 
