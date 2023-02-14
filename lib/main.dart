@@ -1,12 +1,15 @@
 import 'dart:developer';
 
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 _exampleXsens();
               },
-              child: const Text('SDK connection test'))
+              child: const Text('SDK connection test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().signUp('gary@gary.com', 'A1b!78p', SkatingUser('gary', 'gary', UserRole.coach));
+              },
+              child: const Text('Sign up test'))
         ],
       )),
     );
