@@ -79,7 +79,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 UserClient().signUp('gary@gary.com', 'A1b!78p', SkatingUser('gary', 'gary', UserRole.coach));
               },
-              child: const Text('Sign up test'))
+              child: const Text('Sign up test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().signIn('gary@gary.com', 'A1b!78p');
+                UserClient().signOut();
+              },
+              child: const Text('Sign in test'))
         ],
       )),
     );
