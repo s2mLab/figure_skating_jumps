@@ -1,7 +1,4 @@
 import 'dart:convert';
-
-import 'package:figure_skating_jumps/enums/user_role.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
