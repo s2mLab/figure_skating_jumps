@@ -7,10 +7,9 @@ class SkatingUser {
   late String _firstName;
   late String _lastName;
   late UserRole _role;
-  final List<Capture> _captures = <Capture>[];
-  final List<SkatingUser> _trainees = <
-      SkatingUser>[]; //TODO when creating skaters -> decides if whe keep a list of User or only their UID
-  final List<SkatingUser> _coaches = <SkatingUser>[];
+  final List<Capture> _captures = [];
+  final List<SkatingUser> _trainees = []; //TODO when creating skaters -> decides if whe keep a list of User or only their UID
+  final List<SkatingUser> _coaches = [];
 
   String get firstName {
     return _firstName;

@@ -28,7 +28,7 @@ class UserClient {
     return _currentSkatingUser;
   }
 
-  signUp(String email, String password, SkatingUser userInfo) {
+  void signUp(String email, String password, SkatingUser userInfo) {
     _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((userCreds) {
@@ -51,7 +51,7 @@ class UserClient {
     });
   }
 
-  signIn(String email, String password) {
+  void signIn(String email, String password) {
     _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)
         .then((userCreds) {
       if (userCreds.user == null) {
@@ -67,7 +67,7 @@ class UserClient {
     });
   }
 
-  signOut() {
+  void signOut() {
     _currentSkatingUser = null;
     _firebaseAuth.signOut();
   }
