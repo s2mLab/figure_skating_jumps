@@ -1,7 +1,7 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
-import 'package:figure_skating_jumps/interfaces/bluetooth_discovery_subscriber.dart';
+import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -21,7 +21,7 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 }
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
-    implements BluetoothDiscoverySubscriber {
+    implements IBluetoothDiscoverySubscriber {
   int _connectionStep = 0;
   List<BluetoothDevice> devices = [];
   BluetoothDiscovery discoveryService = BluetoothDiscovery();

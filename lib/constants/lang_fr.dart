@@ -11,6 +11,7 @@ const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
 const String knownDevicesNear = "Appareils connus à proximité";
+const String connectedDevice = "Appareil connecté";
 
 // widgets/layout/no_dot_connected
 const String noConnectionMessage =

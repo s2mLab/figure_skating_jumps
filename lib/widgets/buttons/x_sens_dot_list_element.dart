@@ -6,9 +6,10 @@ class XSensDotListElement extends StatelessWidget {
   final String text;
   final Widget graphic;
   final VoidCallback? onPressed;
+  final Color? lineColor;
 
   const XSensDotListElement(
-      {required this.text, required this.graphic, this.onPressed, super.key});
+      {required this.text, required this.graphic, this.onPressed, this.lineColor, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +17,22 @@ class XSensDotListElement extends StatelessWidget {
       onPressed: onPressed,
       elevation: 0,
       color: primaryBackground,
-      child: Row(children: [
+      padding: EdgeInsets.zero,
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Container(
           height: 64,
           width: 4,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: primaryColorLight),
+              borderRadius: BorderRadius.circular(10),
+              color: lineColor ?? primaryColorLight),
         ),
         graphic,
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text('XSens Dot Christophe',
-              style: TextStyle(fontSize: 18)),
+        Expanded(
+          child: Text(text,
+              style: const TextStyle(
+                  fontSize: 18,
+                  color: darkText,
+                  overflow: TextOverflow.ellipsis)),
         )
       ]),
     );
