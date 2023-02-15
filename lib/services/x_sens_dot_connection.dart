@@ -1,10 +1,10 @@
 import '../enums/x_sens_connection_state.dart';
-import '../interfaces/x_sens_state_subscriber.dart';
+import '../interfaces/i_x_sens_state_subscriber.dart';
 
 class XSensDotConnection {
   static final XSensDotConnection _xSensDotConnection =
       XSensDotConnection._internal(XSensConnectionState.reconnecting);
-  final List<XSensStateSubscriber> _connectionStateSubscribers = [];
+  final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
   XSensConnectionState _connectionState;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
@@ -16,7 +16,7 @@ class XSensDotConnection {
   XSensDotConnection._internal(this._connectionState);
 
   XSensConnectionState subscribeConnectionState(
-      XSensStateSubscriber subscriber) {
+      IXSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
     return getState();
   }
@@ -29,7 +29,7 @@ class XSensDotConnection {
   // TODO: Privatize
   void changeState(XSensConnectionState state) {
     _connectionState = state;
-    for (XSensStateSubscriber s in _connectionStateSubscribers) {
+    for (IXSensStateSubscriber s in _connectionStateSubscribers) {
       s.onStateChange(state);
     }
   }
