@@ -1,0 +1,1 @@
+enum UserRole { coach, iceSkater }
