@@ -26,3 +26,6 @@ const String configureFrequency = "Configurer la fréquence de réception";
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDot = "Connecter un appareil XSens DOT";
+
+// widgets/screens/raw_data_view
+const String rawDataTitle = "Données brutes du XSens DOT";
