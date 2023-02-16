@@ -7,6 +7,7 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../buttons/ice_button.dart';
+import '../buttons/nav_menu_element.dart';
 import '../dialogs/connection_new_xsens_dot_dialog.dart';
 import '../layout/no_dot_connected.dart';
 import '../layout/topbar.dart';
@@ -23,6 +24,20 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Topbar(isDebug: false),
+      drawerEnableOpenDragGesture: false,
+      drawerScrimColor: Colors.transparent,
+      drawer: Padding(
+        padding: const EdgeInsets.only(top: 128.0),
+        child: Drawer(
+          backgroundColor: primaryColor,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              NavMenuElement(text: 'Données brutes', iconData: Icons.terminal, onPressed: () {}),
+            ],
+          ),
+        ),
+      ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
