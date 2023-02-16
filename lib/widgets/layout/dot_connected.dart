@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../enums/x_sens_connection_state.dart';
 import '../buttons/x_sens_dot_list_element.dart';
+import '../dialogs/configure_x_sens_dot_dialog.dart';
 import '../icons/x_sens_state_icon.dart';
 
 class DotConnected extends StatefulWidget {
@@ -15,138 +16,116 @@ class DotConnected extends StatefulWidget {
 }
 
 class _DotConnectedState extends State<DotConnected> {
+  late XSensStateIcon stateIconConnected;
+  late XSensStateIcon stateIconDisconnected;
+
+  @override
+  void initState() {
+    stateIconConnected = const XSensStateIcon(true, XSensConnectionState.connected);
+    stateIconDisconnected = const XSensStateIcon(true, XSensConnectionState.disconnected);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: dotConnection),
-                child: Row(
-                  children: [
-                    const XSensStateIcon(false, XSensConnectionState.connected),
-                    Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.all(16),
-                            child: const Text(
-                              'XSens Dot Thomas',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(color: paleText, fontSize: 18),
-                            )),
-                        Container(
-                          height: 24,
-                          width: 200,
-                          margin: const EdgeInsets.only(left: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: primaryBackground),
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: const Text(
-                              'configuration',
-                              style: TextStyle(color: discreetText),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, top: 8),
-                          height: 24,
-                          width: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: errorColor),
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: const Text(
-                              'Déconnection',
-                              style: TextStyle(color: darkText),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ))
-                  ],
-                ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: const Text(
+                connectedDevice,
+                style: TextStyle(color: primaryColorLight, fontSize: 20),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  children: const [
-                    Text(
-                      knownDevicesNear,
-                      style: TextStyle(color: darkText, fontSize: 20),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: discreetText,
-                          value: null,
-                        ),
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: XSensDotListElement(
+                      hasLine: true,
+                      lineColor: connectedXSensDotButtonIndicator,
+                      text: BluetoothDiscovery()
+                          .getDevices()[0]
+                          .assignedName, // TODO: Change for autogenerated list when DB available
+                      graphic: stateIconConnected,
+                      onPressed: () async {
+                        final result = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ConfigureXSensDotDialog(
+                                  name: BluetoothDiscovery()
+                                      .getDevices()[0]
+                                      .assignedName);
+                            });
+                        if (result == null) setState(() {});
+                      }),
+                )),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                children: const [
+                  Text(
+                    knownDevicesNear,
+                    style: TextStyle(color: primaryColorLight, fontSize: 20),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: discreetText,
+                        value: null,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: XSensDotListElement(
-                    hasLine: true,
-                    text: BluetoothDiscovery()
-                        .getDevices()[0]
-                        .name, // TODO: Change for autogenerated list when DB available
-                    graphic: const XSensStateIcon(
-                        true, XSensConnectionState.disconnected),
-                    onPressed: () => debugPrint("Pressed"),
-                  )),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: const Text(
-                  myDevices,
-                  style: TextStyle(color: darkText, fontSize: 20),
-                ),
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: XSensDotListElement(
+                  hasLine: true,
+                  text: BluetoothDiscovery()
+                      .getDevices()[1]
+                      .assignedName, // TODO: Change for autogenerated list when DB available
+                  graphic: stateIconDisconnected,
+                  onPressed: () => debugPrint("Pressed"),
+                )),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              child: const Text(
+                myDevices,
+                style: TextStyle(color: primaryColorLight, fontSize: 20),
               ),
-              Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: XSensDotListElement(
-                    hasLine: true,
-                    text: BluetoothDiscovery()
-                        .getDevices()[0]
-                        .name, // TODO: Change for autogenerated list when DB available
-                    graphic: const XSensStateIcon(
-                        true, XSensConnectionState.disconnected),
-                    onPressed: () => debugPrint("Pressed"),
-                  )),
-              Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: XSensDotListElement(
-                    hasLine: true,
-                    text: BluetoothDiscovery()
-                        .getDevices()[0]
-                        .name, // TODO: Change for autogenerated list when DB available
-                    graphic: const XSensStateIcon(
-                        true, XSensConnectionState.disconnected),
-                    onPressed: () => debugPrint("Pressed"),
-                  )),
-            ],
-          ),
-        ));
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: XSensDotListElement(
+                  hasLine: true,
+                  text: BluetoothDiscovery()
+                      .getDevices()[2]
+                      .assignedName, // TODO: Change for autogenerated list when DB available
+                  graphic: stateIconDisconnected,
+                  onPressed: () => debugPrint("Pressed"),
+                )),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: XSensDotListElement(
+                  hasLine: true,
+                  text: BluetoothDiscovery()
+                      .getDevices()[3]
+                      .assignedName, // TODO: Change for autogenerated list when DB available
+                  graphic: stateIconDisconnected,
+                  onPressed: () => debugPrint("Pressed"),
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -19,7 +19,6 @@ const paleText = Color(0xFFFAFAFA); // White text
 const discreetText = Color(0xFF979797); // Guidance/tooltip/disabled text
 const darkText = Color(0xFF131313); // Black text
 
-const dotConnection = Color(0xFF167D14); // Dot good connection
 const confirm = Color(0xFF167D14);
 
 const connectedXSensDotButtonForeground = Color(0xFF00BEFF);
