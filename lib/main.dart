@@ -91,8 +91,11 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const RawDataView()),
+                  MaterialPageRoute( // TODO: remove periodic stream and instantiate with xsensdot device datastream
+                      builder: (context) => RawDataView(logStream: Stream.periodic(
+                        const Duration(milliseconds: 300),
+                            (count) => 'Log entry $count',
+                      ).take(50),)),
                 );
               },
               child: const Text('Raw data test')),
