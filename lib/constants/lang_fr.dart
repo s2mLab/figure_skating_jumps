@@ -17,7 +17,8 @@ const String noConnectionMessage =
     "Zut! il semblerait que vous n'ayez pas encore associé un appareil XSens DOT. Tapoter le bouton ci-dessous pour commencer.";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
-const String bluetoothAuthorizationPrompt = 'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';
+const String bluetoothAuthorizationPrompt =
+    'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';
 const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
@@ -28,4 +29,6 @@ const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDot = "Connecter un appareil XSens DOT";
 
 // widgets/screens/raw_data_view
-const String rawDataTitle = "Données brutes du XSens DOT";
+const String rawDataTitle = "Données brutes XSens DOT";
+const String warnRawDataPrompt =
+    "Cette page n'a pas pour but de fournir des données compréhensibles. Avant tout, elle vise à permettre de constater les données en temps réel de l'appareil connecté à des fins de recherche ou de débogage.";
