@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
 import '../../enums/x_sens_connection_state.dart';
-import '../../interfaces/x_sens_state_subscriber.dart';
+import '../../interfaces/i_x_sens_state_subscriber.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
   const XSensDotConnectionButton({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class XSensDotConnectionButton extends StatefulWidget {
 }
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
-    implements XSensStateSubscriber {
+    implements IXSensStateSubscriber {
   XSensDotConnection connection = XSensDotConnection();
   late XSensConnectionState connectionState;
   final List<String> _connectionStateMessages = [

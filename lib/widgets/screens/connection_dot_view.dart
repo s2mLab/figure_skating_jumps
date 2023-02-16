@@ -42,6 +42,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
               text: connectNewXSensDot,
               onPressed: () {
                 showDialog(
+                  barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) {
                     return const ConnectionNewXSensDotDialog();

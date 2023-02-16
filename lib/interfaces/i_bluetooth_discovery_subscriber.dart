@@ -1,5 +1,5 @@
 import '../models/bluetooth_device.dart';
 
-abstract class BluetoothDiscoverySubscriber {
+abstract class IBluetoothDiscoverySubscriber {
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices);
 }
