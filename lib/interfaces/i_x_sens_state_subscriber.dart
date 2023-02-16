@@ -1,5 +1,5 @@
 import '../enums/x_sens_connection_state.dart';
 
-abstract class XSensStateSubscriber {
+abstract class IXSensStateSubscriber {
   void onStateChange(XSensConnectionState state);
 }

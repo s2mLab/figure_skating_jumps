@@ -28,12 +28,29 @@ class IceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: iceButtonImportance == IceButtonImportance.secondaryAction ? primaryBackground : color,
+      color: iceButtonImportance == IceButtonImportance.mainAction
+          ? color
+          : primaryBackground,
       textColor: textColor,
       elevation: 0,
+      focusElevation:
+          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
+      hoverElevation:
+          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
+      highlightElevation:
+          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
       height: _heights[iceButtonSize.index],
-      minWidth: _widths[iceButtonSize.index],
-      shape: iceButtonImportance == IceButtonImportance.secondaryAction ? RoundedRectangleBorder(side : BorderSide(width: 1, color: color),borderRadius: BorderRadius.circular(32)) : RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+      minWidth: iceButtonImportance == IceButtonImportance.discreetAction
+          ? null
+          : _widths[iceButtonSize.index],
+      shape: iceButtonImportance == IceButtonImportance.secondaryAction
+          ? RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: color),
+              borderRadius: BorderRadius.circular(32))
+          : (iceButtonImportance == IceButtonImportance.discreetAction
+              ? null
+              : RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32))),
       onPressed: onPressed,
       child: Text(
         text,
