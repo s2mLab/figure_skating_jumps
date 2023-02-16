@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -85,7 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 UserClient().signIn('gary@gary.com', 'A1b!78p');
                 UserClient().signOut();
               },
-              child: const Text('Sign in test'))
+              child: const Text('Sign in test')),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute( // TODO: remove periodic stream and instantiate with xsensdot device datastream
+                      builder: (context) => RawDataView(logStream: Stream.periodic(
+                        const Duration(milliseconds: 300),
+                            (count) => 'Log entry $count',
+                      ).take(50),)),
+                );
+              },
+              child: const Text('Raw data test')),
         ],
       )),
     );

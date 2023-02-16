@@ -22,7 +22,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(),
+      appBar: const Topbar(isDebug: false),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
