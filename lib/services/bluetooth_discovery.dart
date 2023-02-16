@@ -2,12 +2,20 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 
 class BluetoothDiscovery {
-  static final BluetoothDevice _sampleDevice =
-      BluetoothDevice('XSens_Dot_A12Xx123A', '00-B0-D0-63-C2-26', 0.3);
+  static final BluetoothDevice _sampleDevice = BluetoothDevice(
+      'XSens_Dot_A12Xx123A',
+      '00-B0-D0-63-C2-26',
+      0.3); // TODO: remove hardcoded when connexion exists
   static final BluetoothDiscovery _bluetoothDiscovery =
       BluetoothDiscovery._internal();
   final List<IBluetoothDiscoverySubscriber> _subscribers = [];
-  List<BluetoothDevice> _devices = [_sampleDevice];
+  List<BluetoothDevice> _devices = [
+    // TODO: remove hardcoded when connexion exists
+    _sampleDevice,
+    BluetoothDevice.deepClone(_sampleDevice),
+    BluetoothDevice.deepClone(_sampleDevice),
+    BluetoothDevice.deepClone(_sampleDevice)
+  ];
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
