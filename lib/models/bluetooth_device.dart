@@ -2,6 +2,7 @@ class BluetoothDevice {
   late final String _name;
   late final String _macAddress;
   late final double _signalStrength;
+  late String _assignedName;
 
   String get name {
     return _name;
@@ -9,6 +10,16 @@ class BluetoothDevice {
 
   String get macAddress {
     return _macAddress;
+  }
+
+  String get assignedName {
+    return _assignedName;
+  }
+
+  set assignedName(String val) {
+    if (val.isNotEmpty) {
+      _assignedName = val;
+    }
   }
 
   double get signalStrength {
@@ -30,11 +41,13 @@ class BluetoothDevice {
             '_signalStrength'
           ])
         : _signalStrength = signalStrength;
+    _assignedName = _name;
   }
 
   BluetoothDevice.deepClone(BluetoothDevice toBeDeepClonedDevice) {
     _name = toBeDeepClonedDevice.name;
     _macAddress = toBeDeepClonedDevice.macAddress;
     _signalStrength = toBeDeepClonedDevice.signalStrength;
+    _assignedName = toBeDeepClonedDevice.assignedName;
   }
 }
