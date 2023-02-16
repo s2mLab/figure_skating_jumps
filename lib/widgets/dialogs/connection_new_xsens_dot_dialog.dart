@@ -157,8 +157,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt(
-              '$verifyConnectivity (1/2)', secondaryColor),
+          child: InstructionPrompt('$verifyConnectivity (1/2)', secondaryColor),
         ),
         Expanded(
             child: Container(
@@ -210,8 +209,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt(
-              '$configureFrequency (2/2)', secondaryColor),
+          child: InstructionPrompt('$configureFrequency (2/2)', secondaryColor),
         ),
         Expanded(
             child: Container(

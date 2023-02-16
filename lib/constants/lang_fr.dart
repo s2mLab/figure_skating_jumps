@@ -2,6 +2,7 @@
 const String searching = "Recherche en cours";
 const String cancel = "Annuler";
 const String continueTo = "Poursuivre";
+const String goBack = "Retour";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
@@ -23,6 +24,10 @@ const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
 const String configureFrequency = "Configurer la fréquence de réception";
+
+// widgets/layout/configure_x_sens_dot_dialog
+const String forgetDevice = "Oublier";
+const String disconnectDevice = "Déconnecter";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
