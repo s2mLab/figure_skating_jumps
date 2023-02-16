@@ -50,7 +50,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
               Container(
                 color: Colors.pink, //TODO: Frequency configuration
                 height: 60,
-                child: Text("TODO: Frequency configuration"),
+                child: const Text("TODO: Frequency configuration"),
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
