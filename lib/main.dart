@@ -73,12 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('ConnectionDotView')),
           TextButton(
               onPressed: () async {
-                _exampleXsens();
-              },
-              child: const Text('SDK connection test')),
-          TextButton(
-              onPressed: () async {
-                UserClient().signUp('gary@gary.com', 'A1b!78p', SkatingUser('gary', 'gary', UserRole.coach));
+                UserClient().signUp('gary@gary.com', 'A1b!78p',
+                    SkatingUser('gary', 'gary', UserRole.coach));
               },
               child: const Text('Sign up test')),
           TextButton(
@@ -88,14 +84,32 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Sign in test')),
           TextButton(
+              onPressed: () async => _getSDKVersion(),
+              child: const Text('getSDKVersion')),
+          TextButton(
+              onPressed: () async => _getCloseXsensDot(),
+              child: const Text('getCloseXsensDot')),
+          TextButton(
+              onPressed: () async => _connectXsensDot(),
+              child: const Text('connectXsenDot')),
+          TextButton(
+              onPressed: () async => _startMeasuring(),
+              child: const Text('START')),
+          TextButton(
+              onPressed: () async => _stopmeasuring(),
+              child: const Text('STOP')),
+          TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute( // TODO: remove periodic stream and instantiate with xsensdot device datastream
-                      builder: (context) => RawDataView(logStream: Stream.periodic(
-                        const Duration(milliseconds: 300),
-                            (count) => 'Log entry $count',
-                      ).take(50),)),
+                  MaterialPageRoute(
+                      // TODO: remove periodic stream and instantiate with xsensdot device datastream
+                      builder: (context) => RawDataView(
+                            logStream: Stream.periodic(
+                              const Duration(milliseconds: 300),
+                              (count) => 'Log entry $count',
+                            ).take(50),
+                          )),
                 );
               },
               child: const Text('Raw data test')),
@@ -104,37 +118,50 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _exampleXsens() async {
-    String first;
+  _getSDKVersion() async {
     try {
-      first = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V1'});
+      debugPrint("1");
+      debugPrint(await xSensChannel.invokeMethod('getSDKVersion'));
     } on PlatformException catch (e) {
-      log(e.message!);
-      first = "1failed";
+      debugPrint(e.message!);
     }
+  }
 
-    String second;
+  _getCloseXsensDot() async {
     try {
-      second = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V2'});
+      debugPrint("2");
+      debugPrint(await xSensChannel.invokeMethod('getCloseXsensDot'));
     } on PlatformException catch (e) {
-      log(e.message!);
-      second = "2failed";
+      debugPrint(e.message!);
     }
+  }
 
-    String edge;
+  _connectXsensDot() async {
     try {
-      edge = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': ''});
+      debugPrint("3");
+      debugPrint((await xSensChannel.invokeMethod('connectXsensDot',
+              <String, dynamic>{'address': 'D4:22:CD:00:19:F4'}))
+          .toString());
     } on PlatformException catch (e) {
-      log(e.message!);
-      edge = "3failed";
+      debugPrint(e.message!);
     }
-    Fluttertoast.showToast(
-      msg: ('$first $second $edge'),
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 18.0,
-    );
+  }
+
+  _startMeasuring() async {
+    try {
+      debugPrint("4");
+      debugPrint(await xSensChannel.invokeMethod('startMeasuring'));
+    } on PlatformException catch (e) {
+      debugPrint(e.message!);
+    }
+  }
+
+  _stopmeasuring() async {
+    try {
+      debugPrint("5");
+      debugPrint(await xSensChannel.invokeMethod('stopMeasuring'));
+    } on PlatformException catch (e) {
+      debugPrint(e.message!);
+    }
   }
 }
