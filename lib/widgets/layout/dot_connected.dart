@@ -21,8 +21,10 @@ class _DotConnectedState extends State<DotConnected> {
 
   @override
   void initState() {
-    stateIconConnected = const XSensStateIcon(true, XSensConnectionState.connected);
-    stateIconDisconnected = const XSensStateIcon(true, XSensConnectionState.disconnected);
+    stateIconConnected =
+        const XSensStateIcon(true, XSensConnectionState.connected);
+    stateIconDisconnected =
+        const XSensStateIcon(true, XSensConnectionState.disconnected);
     super.initState();
   }
 

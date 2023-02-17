@@ -23,7 +23,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isDebug: false),
+      appBar: const Topbar(isDevFeature: false),
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(),

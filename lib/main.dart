@@ -78,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('SDK connection test')),
           TextButton(
               onPressed: () async {
-                UserClient().signUp('gary@gary.com', 'A1b!78p', SkatingUser('gary', 'gary', UserRole.coach));
+                UserClient().signUp('gary@gary.com', 'A1b!78p',
+                    SkatingUser('gary', 'gary', UserRole.coach));
               },
               child: const Text('Sign up test')),
           TextButton(
@@ -91,11 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute( // TODO: remove periodic stream and instantiate with xsensdot device datastream
-                      builder: (context) => RawDataView(logStream: Stream.periodic(
-                        const Duration(milliseconds: 300),
-                            (count) => 'Log entry $count',
-                      ).take(50),)),
+                  MaterialPageRoute(
+                      // TODO: remove periodic stream and instantiate with xsensdot device datastream
+                      builder: (context) => RawDataView(
+                            logStream: Stream.periodic(
+                              const Duration(milliseconds: 300),
+                              (count) => 'Log entry $count',
+                            ).take(50),
+                          )),
                 );
               },
               child: const Text('Raw data test')),

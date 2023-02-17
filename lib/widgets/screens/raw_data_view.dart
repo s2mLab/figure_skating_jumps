@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ class RawDataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isDebug: true),
+      appBar: const Topbar(isDevFeature: true),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -44,6 +46,8 @@ class _LoggerView extends StatefulWidget {
 class _LoggerViewState extends State<_LoggerView> {
   final List<String> _logs = [];
   final ScrollController _scrollController = ScrollController();
+  late final StreamSubscription<String>? _subscription;
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +56,7 @@ class _LoggerViewState extends State<_LoggerView> {
         'vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     // Adds logs as they arrive to the _logs list so that
     // they'd be displayed by the ListView.builder
-    widget.logStream.listen((log) {
+    _subscription = widget.logStream.listen((log) {
       setState(() {
         _logs.add(log);
       });
@@ -64,25 +68,32 @@ class _LoggerViewState extends State<_LoggerView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _subscription?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-          color: Colors.black,
-          width: double.infinity,
-          child: ListView.builder(
-              controller: _scrollController,
-              itemCount: _logs.length,
-              itemBuilder: (context, i) {
-                return Text(_logs[i],
-                    style: const TextStyle(
-                        fontSize: 10,
-                        color: paleText,
-                        fontFamily: 'monospace'));
-              })),
+    return WillPopScope(
+      onWillPop: () {
+        _subscription?.cancel();
+        return Future.value(true);
+      },
+      child: Expanded(
+        child: Container(
+            color: Colors.black,
+            width: double.infinity,
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: _logs.length,
+                itemBuilder: (context, i) {
+                  return Text(_logs[i],
+                      style: const TextStyle(
+                          fontSize: 10,
+                          color: paleText,
+                          fontFamily: 'monospace'));
+                })),
+      ),
     );
   }
 }
