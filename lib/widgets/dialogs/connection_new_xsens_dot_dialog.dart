@@ -111,6 +111,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: XSensDotListElement(
+                    hasLine: true,
                     text: devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
