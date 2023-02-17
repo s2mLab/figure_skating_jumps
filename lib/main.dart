@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isDevFeature: true),
+      appBar: const Topbar(isUserDebuggingFeature: true),
       drawer: const IceDrawerMenu(),
       body: Center(
           child: Column(

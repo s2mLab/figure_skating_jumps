@@ -14,7 +14,7 @@ class RawDataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isDevFeature: true),
+      appBar: const Topbar(isUserDebuggingFeature: true),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

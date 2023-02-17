@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../buttons/x_sens_dot_connection_button.dart';
 
 class Topbar extends StatefulWidget implements PreferredSizeWidget {
-  final bool isDevFeature;
-  const Topbar({required this.isDevFeature, Key? key}) : super(key: key);
+  final bool isUserDebuggingFeature;
+  const Topbar({required this.isUserDebuggingFeature, Key? key}) : super(key: key);
   @override
   State<Topbar> createState() => _TopbarState();
 
@@ -19,7 +19,7 @@ class _TopbarState extends State<Topbar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: widget.isDevFeature ? darkText : primaryColor,
+      color: widget.isUserDebuggingFeature ? darkText : primaryColor,
       height: 128,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
