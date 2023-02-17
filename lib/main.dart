@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Center(child: Text("God Navigation Page"))),
+      appBar: const Topbar(isDevFeature: true),
+      drawer: const IceDrawerMenu(),
       body: Center(
           child: Column(
         children: [
+          const Text('Navigation Dieu',
+              style: TextStyle(
+                  color: primaryColor,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold)),
           TextButton(
               onPressed: () {
                 Navigator.push(
