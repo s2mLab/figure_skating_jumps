@@ -8,7 +8,11 @@ class NavMenuElement extends StatelessWidget {
   final VoidCallback onPressed;
   final IconData iconData;
 
-  const NavMenuElement({super.key, required this.text, required this.onPressed, required this.iconData});
+  const NavMenuElement(
+      {super.key,
+      required this.text,
+      required this.onPressed,
+      required this.iconData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,13 @@ class NavMenuElement extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-          child: XSensDotListElement(hasLine: false, textColor: paleText, text: text, graphic: Icon(iconData, color: primaryBackground), onPressed: onPressed,),
+          child: XSensDotListElement(
+            hasLine: false,
+            textColor: paleText,
+            text: text,
+            graphic: Icon(iconData, color: primaryBackground),
+            onPressed: onPressed,
+          ),
         ),
         Container(
           color: primaryColorLight,
@@ -25,5 +35,4 @@ class NavMenuElement extends StatelessWidget {
       ],
     );
   }
-
 }
