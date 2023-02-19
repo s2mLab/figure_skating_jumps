@@ -37,7 +37,7 @@ class BluetoothDiscovery {
   }
 
   void refreshFromKotlinHandle() async {
-    XSensDotChannelService().startScan();
+    await XSensDotChannelService().startScan();
     Timer(_scanDuration, () async {
       _devices = await XSensDotChannelService().stopScan();
       _notifySubscribers(getDevices());
