@@ -1,9 +1,12 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/demoConnection.dart';
 import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,6 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('ConnectionDotView')),
           TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DemoConnection()),
+                );
+              },
+              child: const Text('Demo XSensDot')),
+          TextButton(
               onPressed: () async {
                 UserClient().signUp('gary@gary.com', 'A1b!78p',
                     SkatingUser('gary', 'gary', UserRole.coach));
@@ -83,21 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 UserClient().signOut();
               },
               child: const Text('Sign in test')),
-          TextButton(
-              onPressed: () async => _getSDKVersion(),
-              child: const Text('getSDKVersion')),
-          TextButton(
-              onPressed: () async => _getCloseXsensDot(),
-              child: const Text('getCloseXsensDot')),
-          TextButton(
-              onPressed: () async => _connectXsensDot(),
-              child: const Text('connectXsenDot')),
-          TextButton(
-              onPressed: () async => _startMeasuring(),
-              child: const Text('START')),
-          TextButton(
-              onPressed: () async => _stopmeasuring(),
-              child: const Text('STOP')),
           TextButton(
               onPressed: () {
                 Navigator.push(
@@ -116,52 +113,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       )),
     );
-  }
-
-  _getSDKVersion() async {
-    try {
-      debugPrint("1");
-      debugPrint(await xSensChannel.invokeMethod('getSDKVersion'));
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
-
-  _getCloseXsensDot() async {
-    try {
-      debugPrint("2");
-      debugPrint(await xSensChannel.invokeMethod('getCloseXsensDot'));
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
-
-  _connectXsensDot() async {
-    try {
-      debugPrint("3");
-      debugPrint((await xSensChannel.invokeMethod('connectXsensDot',
-              <String, dynamic>{'address': 'D4:22:CD:00:19:F4'}))
-          .toString());
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
-
-  _startMeasuring() async {
-    try {
-      debugPrint("4");
-      debugPrint(await xSensChannel.invokeMethod('startMeasuring'));
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
-
-  _stopmeasuring() async {
-    try {
-      debugPrint("5");
-      debugPrint(await xSensChannel.invokeMethod('stopMeasuring'));
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
   }
 }

@@ -22,6 +22,8 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     var currentXsensDot: XsensDotDevice? = null
+    var deviceScanner = DeviceScanner(this)
+
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -46,13 +48,12 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getSDKVersion(call: MethodCall, result: MethodChannel.Result) {
-       return result.success(XsensDotSdk.getSdkVersion())
+       result.success(XsensDotSdk.getSdkVersion())
     }
 
     private fun getCloseXsensDot(call: MethodCall, result: MethodChannel.Result) {
         checkBluetoothAndPermission()
-        val deviceScanner = DeviceScanner(this)
-        return result.success(deviceScanner.getDevices())
+        result.success(deviceScanner.getDevices())
     }
 
     private fun connectXsensDot(call: MethodCall, result: MethodChannel.Result) {
@@ -67,20 +68,19 @@ class MainActivity : FlutterActivity() {
 
         currentXsensDot?.connect()
 
-        return result.success(currentXsensDot?.connectionState)
+        result.success(call.argument<String>("address"))
     }
 
     private fun startMeasuring(call: MethodCall, result: MethodChannel.Result) {
-//        currentXsensDot?.setOutputRate(10)
         currentXsensDot?.startMeasuring()
         Log.i("Android", "start")
-        return result.success(currentXsensDot?.name)
+        result.success(currentXsensDot?.name)
     }
 
     private fun stopMeasuring(call: MethodCall, result: MethodChannel.Result) {
         currentXsensDot?.stopMeasuring()
         Log.i("Android", "stop")
-        return result.success(currentXsensDot?.name)
+        result.success(currentXsensDot?.name)
     }
 
     private fun checkBluetoothAndPermission(): Boolean {
