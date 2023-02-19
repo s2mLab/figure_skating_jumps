@@ -6,7 +6,7 @@ class DemoConnection extends StatefulWidget {
   const DemoConnection({Key? key}) : super(key: key);
 
   @override
-  _DemoConnectionState createState() => _DemoConnectionState();
+  State<DemoConnection> createState() => _DemoConnectionState();
 }
 
 class _DemoConnectionState extends State<DemoConnection> {

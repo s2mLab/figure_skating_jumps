@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:figure_skating_jumps/models/device_info.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
