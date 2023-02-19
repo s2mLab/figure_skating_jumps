@@ -37,7 +37,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices = _discoveryService.subscribeBluetoothDiscovery(this);
     _discoveryService.refreshFromKotlinHandle();
     super.initState();
-    _scanDeviceTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _scanDeviceTimer = Timer.periodic(_discoveryService.scanDuration, (_) {
       if(_connectionStep == 0) {
         _discoveryService.refreshFromKotlinHandle();
       }
