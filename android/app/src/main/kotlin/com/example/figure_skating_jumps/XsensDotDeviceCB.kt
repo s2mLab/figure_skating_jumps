@@ -8,6 +8,8 @@ import java.util.ArrayList
 import kotlin.math.log
 
 class XsensDotDeviceCB: XsensDotDeviceCallback {
+    val currentData: CustomXsensDotData? = null
+
     override fun onXsensDotConnectionChanged(p0: String?, p1: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
     }
@@ -29,7 +31,8 @@ class XsensDotDeviceCB: XsensDotDeviceCallback {
     }
 
     override fun onXsensDotDataChanged(p0: String?, p1: XsensDotData?) {
-        Log.i("XSensDot", p1?.acc.toString())
+        val currentData = CustomXsensDotData(p1)
+        Log.i("XSensDot", p1?.acc?.get(0).toString())
     }
 
     override fun onXsensDotInitDone(p0: String?) {
