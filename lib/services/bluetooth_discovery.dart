@@ -30,7 +30,7 @@ class BluetoothDiscovery {
     ]; //Deep copy for now, might be relevant to shallow copy in the end
   }
 
-  void refreshFromJavaHandle() async {
+  void refreshFromKotlinHandle() async {
     XSensDotChannelService().startScan();
     Timer(const Duration(seconds: 5), () async {
       _devices = await XSensDotChannelService().stopScan();

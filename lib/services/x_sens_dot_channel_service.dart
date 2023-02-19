@@ -48,11 +48,19 @@ class XSensDotChannelService {
     return devices;
   }
 
-  Future<String> connectXsensDot(
+  Future<String> connectXSensDot(
       {String macAddress = 'D4:22:CD:00:19:F4'}) async {
     try {
       return await _xSensChannel.invokeMethod(
-          'connectXsensDot', <String, dynamic>{'address': macAddress});
+          'connectXSensDot', <String, dynamic>{'address': macAddress});
+    } on PlatformException catch (e) {
+      return e.message!;
+    }
+  }
+
+  Future<String> disconnectXSensDot() async {
+    try {
+      return await _xSensChannel.invokeMethod('disconnectXSensDot');
     } on PlatformException catch (e) {
       return e.message!;
     }
