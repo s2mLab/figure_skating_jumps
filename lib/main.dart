@@ -1,19 +1,15 @@
-import 'dart:developer';
-import 'dart:typed_data';
-
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
-import 'package:figure_skating_jumps/widgets/screens/demoConnection.dart';
+import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 
 Future<void> main() async {
@@ -57,7 +53,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const xSensChannel = MethodChannel('xsens-dot-channel');
 
   @override
   Widget build(BuildContext context) {
