@@ -52,7 +52,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.red[200]),
-                          child: const Text('get SDK Version'),
+                          child: const Text('Get SDK Version'),
                         )),
                     GestureDetector(
                         onTap: () async {
@@ -63,7 +63,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.green[200]),
-                          child: const Text('start Scan'),
+                          child: const Text('Start Scan'),
                         )),
                   ],
                 ),
@@ -94,7 +94,6 @@ class _DemoConnectionState extends State<DemoConnection> {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              border: Border.all(width: 3),
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.blueGrey[300]),
                           child: const Text('Connect Xsens DOT'),
