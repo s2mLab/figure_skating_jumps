@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
@@ -9,11 +10,16 @@ class BluetoothDiscovery {
       BluetoothDiscovery._internal();
   final List<IBluetoothDiscoverySubscriber> _subscribers = [];
   List<BluetoothDevice> _devices = [];
+  static const _scanDuration = Duration(seconds: 3);
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory BluetoothDiscovery() {
     return _bluetoothDiscovery;
+  }
+
+  Duration get scanDuration {
+    return _scanDuration;
   }
 
   BluetoothDiscovery._internal();
@@ -32,7 +38,7 @@ class BluetoothDiscovery {
 
   void refreshFromKotlinHandle() async {
     XSensDotChannelService().startScan();
-    Timer(const Duration(seconds: 5), () async {
+    Timer(_scanDuration, () async {
       _devices = await XSensDotChannelService().stopScan();
       _notifySubscribers(getDevices());
     });
