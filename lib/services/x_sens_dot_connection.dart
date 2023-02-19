@@ -36,6 +36,7 @@ class XSensDotConnection {
       String response = await XSensDotChannelService().connectXSensDot(macAddress: bluetoothDevice.macAddress);
       if(response == bluetoothDevice.macAddress) {
         _currentXSensDevice = bluetoothDevice;
+        _changeState(XSensConnectionState.connected);
       }
       return response == bluetoothDevice.macAddress;
     }
@@ -49,6 +50,7 @@ class XSensDotConnection {
       String? currentMac = _currentXSensDevice?.macAddress;
       if(response.contains(currentMac!)) {
         _currentXSensDevice = null;
+        _changeState(XSensConnectionState.disconnected);
       }
       return response.contains(currentMac);
     }
