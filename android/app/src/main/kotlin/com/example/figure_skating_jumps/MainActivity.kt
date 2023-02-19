@@ -53,7 +53,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun stopScan(result: MethodChannel.Result) {
-        result.success(deviceScanner.stopScan())
+        result.success(deviceScanner.stopScan().toString())
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
