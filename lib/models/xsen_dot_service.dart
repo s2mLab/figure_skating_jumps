@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 
 class XsensDotService {
   static const xSensChannel = MethodChannel('xsens-dot-channel');
-  List<XsensDotData> data = [];
+  List<XSensDotData> data = [];
   List<DeviceInfo> availableDevice = [];
   late DeviceInfo connectedDevice;
 
