@@ -34,7 +34,8 @@ class MainActivity : FlutterActivity() {
             "getSDKVersion" -> getSDKVersion(result)
             "startScan" -> startScan(result)
             "stopScan" -> stopScan(result)
-            "connectXsensDot" -> connectXsensDot(call, result)
+            "connectXSensDot" -> connectXSensDot(call, result)
+            "disconnectXSensDot" -> disconnectXSensDot(result)
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
             else -> result.notImplemented()
@@ -55,7 +56,7 @@ class MainActivity : FlutterActivity() {
         result.success(deviceScanner.stopScan())
     }
 
-    private fun connectXsensDot(call: MethodCall, result: MethodChannel.Result) {
+    private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         checkBluetoothAndPermission(this)
         val xsensDotDeviceCB = XsensDotDeviceCB()
 
@@ -68,6 +69,16 @@ class MainActivity : FlutterActivity() {
         currentXsensDot?.connect()
 
         result.success(call.argument<String>("address"))
+    }
+
+    private fun disconnectXSensDot(result: MethodChannel.Result) {
+        try {
+            currentXsensDot?.disconnect()
+            result.success("Successfully disconnected device: ${currentXsensDot?.address}")
+        } catch (e : Error) {
+            val disconnectErrorCode = "42"
+            result.error(disconnectErrorCode, e.message, e.stackTrace )
+        }
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
