@@ -1,17 +1,15 @@
-import 'dart:developer';
-
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 
 Future<void> main() async {
@@ -55,7 +53,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const xSensChannel = MethodChannel('xsens-dot-channel');
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +77,14 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('ConnectionDotView')),
           TextButton(
-              onPressed: () async {
-                _exampleXsens();
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DemoConnection()),
+                );
               },
-              child: const Text('SDK connection test')),
+              child: const Text('Demo XSensDot')),
           TextButton(
               onPressed: () async {
                 UserClient().signUp('gary@gary.com', 'A1b!78p',
@@ -113,40 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Raw data test')),
         ],
       )),
-    );
-  }
-
-  _exampleXsens() async {
-    String first;
-    try {
-      first = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V1'});
-    } on PlatformException catch (e) {
-      log(e.message!);
-      first = "1failed";
-    }
-
-    String second;
-    try {
-      second = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': 'V2'});
-    } on PlatformException catch (e) {
-      log(e.message!);
-      second = "2failed";
-    }
-
-    String edge;
-    try {
-      edge = await xSensChannel
-          .invokeMethod('exampleXSens', <String, dynamic>{'version': ''});
-    } on PlatformException catch (e) {
-      log(e.message!);
-      edge = "3failed";
-    }
-    Fluttertoast.showToast(
-      msg: ('$first $second $edge'),
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 18.0,
     );
   }
 }
