@@ -92,7 +92,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('start measurment'),
                         )),
                     GestureDetector(
-                        onTap: () async => _xsensDotService.stopmeasuring(),
+                        onTap: () async => _xsensDotService.stopMeasuring(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(

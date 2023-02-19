@@ -19,22 +19,18 @@ class XsensDotService {
     }
   }
 
-  Future<List<dynamic>> getCloseXsensDot() async {
+  Future<void> startScan() async {
     List<dynamic> res = [];
     try {
-      await xSensChannel.invokeMethod('getCloseXsensDot');
-      debugPrint("in");
-      Timer.periodic(const Duration(seconds: 3), (timer) {});
-      res = await xSensChannel.invokeMethod('stopScan') as List<dynamic>;
+      await xSensChannel.invokeMethod('startScan');
     } on PlatformException catch (e) {
       debugPrint("err");
       debugPrint(e.message!);
     }
-    return res;
   }
 
   Future<List<dynamic>> stopScan() async {
-    List<dynamic> res = [];
+    List<dynamic> res = await xSensChannel.invokeMethod('stopScan') as List<dynamic>;
     try {} on PlatformException catch (e) {
       debugPrint(e.message!);
     }
@@ -58,7 +54,7 @@ class XsensDotService {
     }
   }
 
-  stopmeasuring() async {
+  stopMeasuring() async {
     try {
       debugPrint(await xSensChannel.invokeMethod('stopMeasuring'));
     } on PlatformException catch (e) {

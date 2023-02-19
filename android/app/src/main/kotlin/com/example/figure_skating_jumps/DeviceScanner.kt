@@ -24,19 +24,13 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
         }
     }
 
-    fun getDevices(): Any? {
+    fun startScan() {
         listDevice.clear();
         mXsScanner = XsensDotScanner(mainActivity, this)
 
-        if (mXsScanner == null) {
-            return null
-        }
-
         mXsScanner!!.setScanMode(ScanSettings.SCAN_MODE_BALANCED)
 
-        //var activity = Activity()
         val activity = mainActivity?.context as Activity
-//        requestScanningPermission(activity, 1)
 
         val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         if (ActivityCompat.checkSelfPermission(
@@ -44,13 +38,14 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
                 Manifest.permission.BLUETOOTH_SCAN
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            return
         }
+
         activity.startActivityForResult(intent, 1)
         mXsScanner!!.startScan()
+    }
 
-        // timer
-
-        // stop scan
+    fun stopScan(): MutableList<String?> {
         mXsScanner?.stopScan()
 
         // return listDevice
