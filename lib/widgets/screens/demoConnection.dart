@@ -23,7 +23,7 @@ class _DemoConnectionState extends State<DemoConnection> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.lightGreen[100],
-        appBar: const Topbar(isDebug: false),
+        appBar: const Topbar(isUserDebuggingFeature: true),
         body: Container(
             margin: const EdgeInsets.all(30),
             child: Column(
