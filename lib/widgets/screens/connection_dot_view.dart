@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/widgets/layout/dot_connected.dart';
+import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
@@ -22,7 +23,10 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isDebug: false),
+      appBar: const Topbar(isUserDebuggingFeature: false),
+      drawerEnableOpenDragGesture: false,
+      drawerScrimColor: Colors.transparent,
+      drawer: const IceDrawerMenu(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
