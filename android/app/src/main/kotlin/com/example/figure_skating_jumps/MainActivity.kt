@@ -47,6 +47,7 @@ class MainActivity : FlutterActivity() {
 
     private fun startScan(result: MethodChannel.Result) {
         checkBluetoothAndPermission(this)
+        deviceScanner.startScan()
         result.success("Scan Started!")
     }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
@@ -25,11 +27,19 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   int _connectionStep = 0;
   List<BluetoothDevice> devices = [];
   BluetoothDiscovery discoveryService = BluetoothDiscovery();
+  late Timer _scanDeviceTimer;
 
   @override
   void initState() {
     devices = discoveryService.subscribeBluetoothDiscovery(this);
     super.initState();
+    _scanDeviceTimer = Timer.periodic(const Duration(seconds: 5), (_) { discoveryService.refreshFromJavaHandle();});
+  }
+
+  @override
+  void dispose() {
+    _scanDeviceTimer.cancel();
+    super.dispose();
   }
 
   @override
