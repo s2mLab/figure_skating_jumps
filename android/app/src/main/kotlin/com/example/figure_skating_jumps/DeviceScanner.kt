@@ -7,6 +7,8 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCallback
 import com.xsens.dot.android.sdk.utils.XsensDotScanner
@@ -16,6 +18,7 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
     private var mXsScanner: XsensDotScanner? = null
     private var listDevice = mutableListOf<Pair<String?, String?>>()
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onXsensDotScanned(p0: BluetoothDevice?, p1: Int) {
         if (p0?.address != null  && !listDevice.any {it.first == p0.address }) {
 
@@ -27,7 +30,7 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
                 return
             }
 
-            listDevice.add(Pair(p0.address, p0.name))
+            listDevice.add(Pair(p0.address, p0.alias))
         }
     }
 
