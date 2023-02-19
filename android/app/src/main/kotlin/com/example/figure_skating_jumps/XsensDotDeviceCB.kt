@@ -5,8 +5,6 @@ import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
 import com.xsens.dot.android.sdk.models.FilterProfileInfo
 import java.util.ArrayList
-import kotlin.math.log
-
 class XsensDotDeviceCB: XsensDotDeviceCallback {
     val currentData: CustomXsensDotData? = null
 
