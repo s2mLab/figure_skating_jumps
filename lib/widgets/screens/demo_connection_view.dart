@@ -1,4 +1,8 @@
-import 'package:figure_skating_jumps/models/xsen_dot_service.dart';
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +14,7 @@ class DemoConnection extends StatefulWidget {
 }
 
 class _DemoConnectionState extends State<DemoConnection> {
-  final XsensDotService _xsensDotService = XsensDotService();
+  final XSensDotChannelService _xsensDotService = XSensDotChannelService();
   List<String> outputText = [];
 
   setOutput(String text) {
@@ -47,10 +51,25 @@ class _DemoConnectionState extends State<DemoConnection> {
                               color: Colors.red[200]),
                           child: const Text('get SDK Version'),
                         )),
+                    IceButton(
+                      onPressed: () async {
+                        await _xsensDotService.startScan();
+                      },
+                      iceButtonImportance: IceButtonImportance.mainAction,
+                      iceButtonSize: IceButtonSize.small,
+                      color: primaryColor,
+                      text: 'Start Scan',
+                      textColor: paleText,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
                     GestureDetector(
                         onTap: () async {
                           List<dynamic> devices =
-                              await _xsensDotService.getCloseXsensDot();
+                              await _xsensDotService.stopScan();
                           for (dynamic dev in devices) {
                             setOutput("available device -> $dev");
                           }
@@ -60,24 +79,23 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.green[300]),
-                          child: const Text('Scan'),
+                          child: const Text('Stop Scan'),
+                        )),
+                    GestureDetector(
+                        onTap: () async {
+                          setOutput(
+                              "connection to : ${await _xsensDotService.connectXsensDot()}");
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 3),
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blueGrey[300]),
+                          child: const Text('Connect Xsens DOT'),
                         )),
                   ],
                 ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                    onTap: () async {
-                      setOutput(
-                          "connection to : ${await _xsensDotService.connectXsensDot()}");
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 3),
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.blueGrey[300]),
-                      child: const Text('Connect XsensDot'),
-                    )),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -89,7 +107,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.teal[200]),
-                          child: const Text('start measurment'),
+                          child: const Text('Start Measurement'),
                         )),
                     GestureDetector(
                         onTap: () async => _xsensDotService.stopMeasuring(),
@@ -98,7 +116,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.deepOrange[300]),
-                          child: const Text('stop measurment'),
+                          child: const Text('Stop Measurement'),
                         )),
                   ],
                 ),
