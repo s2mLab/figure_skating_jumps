@@ -6,6 +6,8 @@ import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/bluetooth_device.dart';
+
 class DemoConnection extends StatefulWidget {
   const DemoConnection({Key? key}) : super(key: key);
 
@@ -70,8 +72,8 @@ class _DemoConnectionState extends State<DemoConnection> {
                         onTap: () async {
                           List<dynamic> devices =
                               await _xsensDotService.stopScan();
-                          for (dynamic dev in devices) {
-                            setOutput("available device -> $dev");
+                          for (BluetoothDevice dev in devices) {
+                            setOutput("available device -> ${dev.macAddress}");
                           }
                         },
                         child: Container(
