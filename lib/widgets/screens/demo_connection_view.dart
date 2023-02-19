@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
@@ -53,20 +54,22 @@ class _DemoConnectionState extends State<DemoConnection> {
                               color: Colors.red[200]),
                           child: const Text('get SDK Version'),
                         )),
-                    IceButton(
-                      onPressed: () async {
-                        await _xsensDotService.startScan();
-                      },
-                      iceButtonImportance: IceButtonImportance.mainAction,
-                      iceButtonSize: IceButtonSize.small,
-                      color: primaryColor,
-                      text: 'Start Scan',
-                      textColor: paleText,
-                    ),
+                    GestureDetector(
+                        onTap: () async {
+                          await _xsensDotService.startScan();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.green[200]),
+                          child: const Text('start Scan'),
+                        )),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
                         onTap: () async {
@@ -80,7 +83,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.green[300]),
+                              color: Colors.pink[200]),
                           child: const Text('Stop Scan'),
                         )),
                     GestureDetector(
