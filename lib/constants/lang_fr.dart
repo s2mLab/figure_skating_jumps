@@ -18,6 +18,9 @@ const String connectedDevice = "Appareil connecté";
 const String noConnectionMessage =
     "Zut! il semblerait que vous n'ayez pas encore associé un appareil XSens DOT. Tapoter le bouton ci-dessous pour commencer.";
 
+// widgets/layout/ice_drawer_menu
+const String rawDataDrawerTile = "Données brutes";
+
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
     'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';

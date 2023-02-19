@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../buttons/x_sens_dot_connection_button.dart';
 
 class Topbar extends StatefulWidget implements PreferredSizeWidget {
-  final bool isDebug;
-  const Topbar({required this.isDebug, Key? key}) : super(key: key);
+  final bool isUserDebuggingFeature;
+  const Topbar({required this.isUserDebuggingFeature, Key? key}) : super(key: key);
   @override
   State<Topbar> createState() => _TopbarState();
 
@@ -19,7 +19,7 @@ class _TopbarState extends State<Topbar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: widget.isDebug ? darkText : primaryColor,
+      color: widget.isUserDebuggingFeature ? darkText : primaryColor,
       height: 128,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
@@ -30,17 +30,18 @@ class _TopbarState extends State<Topbar> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
                     iconSize: 48,
                     color: primaryBackground,
                     icon: const Icon(Icons.menu_rounded),
                     padding: EdgeInsets.zero),
                 SizedBox(
-                  height: 48,
-                  width: 110,
-                  child:
-                    SvgPicture.asset('assets/vectors/blanc-logo-patinage-quebec.svg')
-                ),
+                    height: 48,
+                    width: 110,
+                    child: SvgPicture.asset(
+                        'assets/vectors/blanc-logo-patinage-quebec.svg')),
                 const SizedBox(
                   height: 48,
                   width: 48,
