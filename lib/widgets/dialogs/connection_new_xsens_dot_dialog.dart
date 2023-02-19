@@ -38,7 +38,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _discoveryService.refreshFromKotlinHandle();
     super.initState();
     _scanDeviceTimer = Timer.periodic(const Duration(seconds: 5), (_) {
-      _discoveryService.refreshFromKotlinHandle();
+      if(_connectionStep == 0) {
+        _discoveryService.refreshFromKotlinHandle();
+      }
     });
   }
 
@@ -272,7 +274,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
-    _devices = devices;
-    setState(() {});
+    if(mounted) {
+      setState(() {
+        _devices = devices;
+      });
+    }
   }
 }
