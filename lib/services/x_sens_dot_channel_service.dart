@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:figure_skating_jumps/Utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
@@ -35,20 +36,11 @@ class XSensDotChannelService {
   }
 
   Future<List<BluetoothDevice>> stopScan() async {
-    List<Object?> res = [];
+    List<BluetoothDevice> devices = [];
     try {
-       res = await _xSensChannel.invokeMethod('stopScan')
-      as List<Object?>;
+      devices = XSensDeserializer.deserialize(await _xSensChannel.invokeMethod('stopScan'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
-    }
-    List<BluetoothDevice> devices = [];
-    for(var obj in res) {
-      BluetoothDevice? device = XSensDeserializer.deserialize(obj);
-
-      if(device != null) {
-        devices.add(device);
-      }
     }
     return devices;
   }
