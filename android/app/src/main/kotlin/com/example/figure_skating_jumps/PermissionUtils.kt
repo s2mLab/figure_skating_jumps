@@ -24,17 +24,48 @@ object PermissionUtils {
 
     fun checkBluetoothAndPermission(activity: MainActivity): Boolean {
         val isBluetoothEnabled = isBluetoothAdapterEnabled(activity)
-        val isPermissionGranted = isLocationPermissionGranted(activity)
+        val isFineLocationGranted = isFineLocationPermissionGranted(activity)
+        val isCoarseLocationGranted = isCoarseLocationGranted(activity)
+        val isBackgroundLocationGranted = isBackgroundLocationGranted(activity)
         val isScanGranted = isBluetoothScanPermissionGranted(activity)
         val isConnectGranted = isBluetoothConnectPermissionGranted(activity)
+        val isAdminGranted = isBluetoothAdminPermissionGranted(activity)
+        val isBluetoothGranted = isBluetoothPermissionGranted(activity)
         if (!isBluetoothEnabled) {
             requestEnableBluetooth(activity)
         }
-        if (!isPermissionGranted) requestLocationPermission(activity)
-        if (!isScanGranted) requestBluetoothScanPermission(activity)
-        if (!isConnectGranted) requestBluetoothConnectPermission(activity)
 
-        val status = isBluetoothEnabled && isPermissionGranted
+        /*if (!isPermissionGranted) requestLocationPermission(activity)
+        if (!isScanGranted) requestBluetoothScanPermission(activity)
+        if (!isConnectGranted) requestBluetoothConnectPermission(activity)*/
+
+        Log.i("Android", "Bluetooth Adapter - ${isBluetoothAdapterEnabled(activity)}")
+        Log.i("Android", "Bluetooth - ${isBluetoothPermissionGranted(activity)}")
+        Log.i("Android", "Admin - ${isBluetoothAdminPermissionGranted(activity)}")
+        Log.i("Android", "Fine - ${isFineLocationPermissionGranted(activity)}")
+        Log.i("Android", "Coarse - ${isCoarseLocationGranted(activity)}")
+        Log.i("Android", "Background - ${isBackgroundLocationGranted(activity)}")
+        Log.i("Android", "Scan - ${isBluetoothScanPermissionGranted(activity)}")
+        Log.i("Android", "Connect - ${isBluetoothConnectPermissionGranted(activity)}")
+
+        var permissions = arrayOf<String>()
+        if(!isBluetoothGranted) permissions = permissions.plus(Manifest.permission.BLUETOOTH)
+        if (!isAdminGranted) permissions = permissions.plus(Manifest.permission.BLUETOOTH_ADMIN)
+        if (!isFineLocationGranted) permissions =
+            permissions.plus(Manifest.permission.ACCESS_FINE_LOCATION)
+        if(!isCoarseLocationGranted) permissions =
+            permissions.plus(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if(!isBackgroundLocationGranted) permissions =
+            permissions.plus(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        if (!isScanGranted) permissions = permissions.plus(Manifest.permission.BLUETOOTH_SCAN)
+        if (!isConnectGranted) permissions = permissions.plus(Manifest.permission.BLUETOOTH_CONNECT)
+
+        requestRequiredBluetoothPermission(activity, permissions)
+
+        val status = isBluetoothAdapterEnabled(activity)
+                && isFineLocationPermissionGranted(activity)
+                && isBluetoothAdminPermissionGranted(activity)
+                && isBluetoothPermissionGranted(activity)
         Log.i("Android", "checkBluetoothAndPermission() - $status")
         return status
     }
@@ -42,10 +73,8 @@ object PermissionUtils {
     private fun isBluetoothAdapterEnabled(context: Context): Boolean {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        if (bluetoothManager != null) {
-            val bluetoothAdapter = bluetoothManager.adapter
-            if (bluetoothAdapter != null) return bluetoothAdapter.isEnabled
-        }
+        val bluetoothAdapter = bluetoothManager.adapter
+        if (bluetoothAdapter != null) return bluetoothAdapter.isEnabled
         return false
     }
 
@@ -60,12 +89,26 @@ object PermissionUtils {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             activity.startActivityForResult(intent, requestCode)
-
         }
     }
 
-    private fun isLocationPermissionGranted(activity: Activity): Boolean {
+    private fun isBluetoothPermissionGranted(activity: Activity): Boolean {
+        return activity.checkSelfPermission(Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun isBluetoothAdminPermissionGranted(activity: Activity): Boolean {
+        return activity.checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun isFineLocationPermissionGranted(activity: Activity): Boolean {
         return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun isCoarseLocationGranted(activity: Activity): Boolean {
+        return activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun isBackgroundLocationGranted(activity: Activity): Boolean {
+        return activity.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun isBluetoothConnectPermissionGranted(activity: Activity): Boolean {
@@ -74,6 +117,14 @@ object PermissionUtils {
 
     private fun isBluetoothScanPermissionGranted(activity: Activity): Boolean {
         return activity.checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestRequiredBluetoothPermission(
+        activity: Activity,
+        permissions: Array<String>,
+        requestCode: Int = 42
+    ) {
+        if (permissions.isNotEmpty()) activity.requestPermissions(permissions, requestCode)
     }
 
     private fun requestLocationPermission(
