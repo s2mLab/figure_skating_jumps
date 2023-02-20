@@ -6,7 +6,7 @@ class XSensDeserializer {
     List<String> splitObject = rawObject.toString().split("), (");
     splitObject.first = splitObject.first.replaceFirst("[(", "");
     splitObject.last =
-        splitObject.last.replaceFirst(")]", "", splitObject.last.length - 1);
+        splitObject.last.replaceFirst(")]", "", splitObject.last.length - 2);
     for (var stringDevice in splitObject) {
       List<String> splitDevice = stringDevice.split(", ");
       if (splitDevice.length != 2) continue;
