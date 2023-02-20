@@ -32,28 +32,30 @@ class MyApp extends StatelessWidget {
     ]);
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Figure Skating Jump App',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(),
+        '/ManageDevices': (context) => const ConnectionDotView(),
+        //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
+      },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: primaryBackground,
         fontFamily: 'Jost',
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
