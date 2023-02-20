@@ -3,6 +3,8 @@ package com.example.figure_skating_jumps
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import androidx.annotation.NonNull
 import com.example.figure_skating_jumps.PermissionUtils.checkBluetoothAndPermission
@@ -14,12 +16,13 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    private var currentXsensDot: XsensDotDevice? = null
-    private var deviceScanner = DeviceScanner(this)
-
+    private var currentXSensDot: XsensDotDevice? = null
+    private lateinit var deviceScanner: DeviceScanner
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        deviceScanner = DeviceScanner(this)
+
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "xsens-dot-channel"
@@ -64,17 +67,17 @@ class MainActivity : FlutterActivity() {
         val mBluetoothAdapter = bluetoothManager.adapter
         val device: BluetoothDevice = mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
 
-        currentXsensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCB)
+        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCB)
 
-        currentXsensDot?.connect()
+        currentXSensDot?.connect()
 
         result.success(call.argument<String>("address"))
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         try {
-            currentXsensDot?.disconnect()
-            result.success("Successfully disconnected device: ${currentXsensDot?.address}")
+            currentXSensDot?.disconnect()
+            result.success("Successfully disconnected device: ${currentXSensDot?.address}")
         } catch (e : Error) {
             val disconnectErrorCode = "42"
             result.error(disconnectErrorCode, e.message, e.stackTrace )
@@ -82,14 +85,14 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
-        currentXsensDot?.startMeasuring()
+        currentXSensDot?.startMeasuring()
         Log.i("Android", "start")
-        result.success(currentXsensDot?.name)
+        result.success(currentXSensDot?.name)
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
-        currentXsensDot?.stopMeasuring()
+        currentXSensDot?.stopMeasuring()
         Log.i("Android", "stop")
-        result.success(currentXsensDot?.name)
+        result.success(currentXSensDot?.name)
     }
 }
