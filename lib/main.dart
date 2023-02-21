@@ -5,7 +5,6 @@ import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
-import 'package:figure_skating_jumps/widgets/screens/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(),
         '/ManageDevices': (context) => const ConnectionDotView(),
+        '/DemoConnection': (context) => const DemoConnection(),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: true),
-      drawer: const IceDrawerMenu(),
+      drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
       body: Center(
           child: Column(
         children: [
@@ -71,19 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontWeight: FontWeight.bold)),
           TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const ConnectionDotView()),
+                  '/ManageDevices',
                 );
               },
               child: const Text('ConnectionDotView')),
           TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const DemoConnection()),
+                  '/DemoConnection',
                 );
               },
               child: const Text('Demo XSensDot')),
@@ -99,21 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 UserClient().signOut();
               },
               child: const Text('Sign in test')),
-          TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      // TODO: remove periodic stream and instantiate with xsensdot device datastream
-                      builder: (context) => RawDataView(
-                            logStream: Stream.periodic(
-                              const Duration(milliseconds: 300),
-                              (count) => 'Log entry $count',
-                            ).take(50),
-                          )),
-                );
-              },
-              child: const Text('Raw data test')),
         ],
       )),
     );

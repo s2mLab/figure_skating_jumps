@@ -26,7 +26,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
       appBar: const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
-      drawer: const IceDrawerMenu(),
+      drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),

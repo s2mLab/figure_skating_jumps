@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
-import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
@@ -58,11 +57,8 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        const ConnectionDotView())); // TODO: Risk of pushing non stop the screen on top on an already loaded one.
+            Navigator.pushReplacementNamed(context,'/ManageDevices'
+                ); // TODO: Risk of pushing non stop the screen on top on an already loaded one.
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
