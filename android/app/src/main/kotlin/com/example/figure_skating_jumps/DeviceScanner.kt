@@ -17,7 +17,7 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
     override fun onXsensDotScanned(p0: BluetoothDevice?, p1: Int) {
         if (p0?.address != null  && !listDevice.any {it.first == p0.address }) {
             try {
-                listDevice.add(Pair(p0.address, p0.name ))
+                listDevice.add(Pair(p0.address, p0.name))
             }
             catch (e: SecurityException) {
                 Log.e("Android", e.message!!)
