@@ -18,7 +18,16 @@ class DemoConnection extends StatefulWidget {
 
 class _DemoConnectionState extends State<DemoConnection> {
   final XSensDotChannelService _xsensDotService = XSensDotChannelService();
+  List<String> outputRate = ["10", "20", "30", "60"];
+  late String selectedRate = outputRate.last;
   List<String> outputText = [];
+  late TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController();
+  }
 
   setOutput(String text) {
     setState(() {
@@ -65,12 +74,6 @@ class _DemoConnectionState extends State<DemoConnection> {
                               color: Colors.green[200]),
                           child: const Text('Start Scan'),
                         )),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
                     GestureDetector(
                         onTap: () async {
                           List<dynamic> devices =
@@ -86,6 +89,12 @@ class _DemoConnectionState extends State<DemoConnection> {
                               color: Colors.pink[200]),
                           child: const Text('Stop Scan'),
                         )),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
                     GestureDetector(
                         onTap: () async {
                           setOutput(
@@ -98,12 +107,6 @@ class _DemoConnectionState extends State<DemoConnection> {
                               color: Colors.blueGrey[300]),
                           child: const Text('Connect Xsens DOT'),
                         )),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
                     GestureDetector(
                         onTap: () async => _xsensDotService.startMeasuring(),
                         child: Container(
@@ -111,7 +114,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.teal[200]),
-                          child: const Text('Start Measurement'),
+                          child: const Text('Start'),
                         )),
                     GestureDetector(
                         onTap: () async => _xsensDotService.stopMeasuring(),
@@ -120,7 +123,52 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.deepOrange[300]),
-                          child: const Text('Stop Measurement'),
+                          child: const Text('Stop'),
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    DropdownButton<String>(
+                      value: selectedRate,
+                      icon: const Icon(Icons.arrow_downward),
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedRate = value!;
+                          _xsensDotService.setRate(int.parse(selectedRate));
+                        });
+                      },
+                      items: outputRate
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                        height: 20,
+                        width: 200,
+                        child: TextField(
+                          controller: _textController,
+                        )),
+                    GestureDetector(
+                        onTap: () async =>
+                            _xsensDotService.renameSensor(_textController.text),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color.fromARGB(255, 182, 160, 37)),
+                          child: const Text('Rename'),
                         )),
                   ],
                 ),
