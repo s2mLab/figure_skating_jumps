@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/models/xsen_dot_service.dart';
+import 'package:figure_skating_jumps/services/xsens_dot_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 
