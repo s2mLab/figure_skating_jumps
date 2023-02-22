@@ -65,15 +65,6 @@ class XSensDotChannelService {
     }
   }
 
-  renameSensor(String newName) async {
-    try {
-      return await _xSensChannel
-          .invokeMethod('renameSensor', <String, dynamic>{'newName': newName});
-    } on PlatformException catch (e) {
-      return e.message!;
-    }
-  }
-
   Future<String> disconnectXSensDot() async {
     try {
       return await _xSensChannel.invokeMethod('disconnectXSensDot');

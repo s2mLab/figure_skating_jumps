@@ -86,12 +86,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun renameSensor(call: MethodCall, result: MethodChannel.Result) {
-        val newName: String?  = call.argument<String>("newName")
-        Log.i("Android", newName.toString())
-        if (newName != null) {
-            currentXSensDot?.tag = newName
-            return result.success(currentXSensDot?.tag)
-        }
+        // TODO 
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {

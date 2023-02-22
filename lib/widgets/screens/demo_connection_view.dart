@@ -161,8 +161,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           controller: _textController,
                         )),
                     GestureDetector(
-                        onTap: () async =>
-                            _xsensDotService.renameSensor(_textController.text),
+                        onTap: () async => {},
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
