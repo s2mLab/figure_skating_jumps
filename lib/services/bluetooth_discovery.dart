@@ -1,26 +1,25 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 
 class BluetoothDiscovery {
-  static final BluetoothDevice _sampleDevice = BluetoothDevice(
-      'XSens_Dot_A12Xx123A',
-      '00-B0-D0-63-C2-26',
-      0.3); // TODO: remove hardcoded when connexion exists
   static final BluetoothDiscovery _bluetoothDiscovery =
       BluetoothDiscovery._internal();
   final List<IBluetoothDiscoverySubscriber> _subscribers = [];
-  List<BluetoothDevice> _devices = [
-    // TODO: remove hardcoded when connexion exists
-    _sampleDevice,
-    BluetoothDevice.deepClone(_sampleDevice),
-    BluetoothDevice.deepClone(_sampleDevice),
-    BluetoothDevice.deepClone(_sampleDevice)
-  ];
+  List<BluetoothDevice> _devices = [];
+  static const _scanDuration = Duration(seconds: 3);
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory BluetoothDiscovery() {
     return _bluetoothDiscovery;
+  }
+
+  Duration get scanDuration {
+    return _scanDuration;
   }
 
   BluetoothDiscovery._internal();
@@ -37,24 +36,12 @@ class BluetoothDiscovery {
     ]; //Deep copy for now, might be relevant to shallow copy in the end
   }
 
-  // TODO: implement communication with underlying bluetooth channel
-  void refreshFromJavaHandle() {
-    _devices = [
-      ..._devices
-    ]; // Reassigns to itself for now to justify non final device list
-  }
-
-  // Temporarily public for testing purposes
-  // TODO: Privatize and maybe remove
-  void changeList() {
-    _devices.add(BluetoothDevice.deepClone(_sampleDevice));
-    _notifySubscribers(getDevices());
-  }
-
-  // TODO: testing purposes only waiting for connection
-  void removeEntry() {
-    _devices.removeAt(0);
-    _notifySubscribers(getDevices());
+  void refreshFromKotlinHandle() async {
+    await XSensDotChannelService().startScan();
+    Timer(_scanDuration, () async {
+      _devices = await XSensDotChannelService().stopScan();
+      _notifySubscribers(getDevices());
+    });
   }
 
   void _notifySubscribers(List<BluetoothDevice> devices) {

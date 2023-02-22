@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -15,6 +18,7 @@ import '../../constants/lang_fr.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
+
   @override
   State<ConnectionNewXSensDotDialog> createState() =>
       _ConnectionNewXSensDotState();
@@ -23,13 +27,27 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber {
   int _connectionStep = 0;
-  List<BluetoothDevice> devices = [];
-  BluetoothDiscovery discoveryService = BluetoothDiscovery();
+  List<BluetoothDevice> _devices = [];
+  final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
+  final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  late Timer _scanDeviceTimer;
 
   @override
   void initState() {
-    devices = discoveryService.subscribeBluetoothDiscovery(this);
+    _devices = _discoveryService.subscribeBluetoothDiscovery(this);
+    _discoveryService.refreshFromKotlinHandle();
     super.initState();
+    _scanDeviceTimer = Timer.periodic(_discoveryService.scanDuration, (_) {
+      if(_connectionStep == 0) {
+        _discoveryService.refreshFromKotlinHandle();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scanDeviceTimer.cancel();
+    super.dispose();
   }
 
   @override
@@ -106,15 +124,21 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             child: Padding(
           padding: const EdgeInsets.all(20),
           child: ListView.builder(
-              itemCount: devices.length,
+              itemCount: _devices.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: XSensDotListElement(
                     hasLine: true,
-                    text: devices[index].name,
+                    text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
+                    onPressed: () {
+                      _xSensDotConnectionService.connect(_devices[index]);
+                      setState(() {
+                        _connectionStep = 1;
+                      });
+                    },
                   ),
                 );
               }),
@@ -130,7 +154,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                 textColor: primaryColor,
                 color: primaryColor,
                 iceButtonImportance: IceButtonImportance.secondaryAction,
-                iceButtonSize: IceButtonSize.medium)),
+                iceButtonSize: IceButtonSize.large)),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
@@ -185,9 +209,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () {
+                _xSensDotConnectionService.disconnect();
                 setState(() {
-                  _connectionStep =
-                      0; // TODO: Deselect chosen XSensDOT instance when available
+                  _connectionStep = 0;
                 });
               },
               textColor: primaryColor,
@@ -221,10 +245,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
-              text:
-                  completePairing, // TODO: Forbid if frequency hasn't been chosen
+              text: completePairing,
+              // TODO: Forbid if frequency hasn't been chosen
               onPressed: () {
-                // TODO: Pair the device.
+                // TODO: Send the configuration to the device.
               },
               textColor: paleText,
               color: confirm,
@@ -236,8 +260,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () {
-                Navigator.pop(context,
-                    true); // TODO: Delete programmatically assigned XSENS DOT connector value when available
+                _xSensDotConnectionService.disconnect();
+                Navigator.pop(context, true);
               },
               textColor: primaryColor,
               color: primaryColor,
@@ -250,7 +274,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
-    this.devices = devices;
-    setState(() {});
+    if(mounted) {
+      setState(() {
+        _devices = devices;
+      });
+    }
   }
 }
