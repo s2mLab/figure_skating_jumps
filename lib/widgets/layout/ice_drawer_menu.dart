@@ -6,14 +6,15 @@ import '../buttons/nav_menu_element.dart';
 import '../screens/raw_data_view.dart';
 
 class IceDrawerMenu extends StatelessWidget {
-  const IceDrawerMenu({super.key});
+  final bool isUserDebuggingFeature;
+  const IceDrawerMenu({super.key, required this.isUserDebuggingFeature});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 128.0),
       child: Drawer(
-        backgroundColor: primaryColor,
+        backgroundColor: isUserDebuggingFeature ? darkText : primaryColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
