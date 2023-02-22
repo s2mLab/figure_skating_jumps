@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
+import com.xsens.dot.android.example.utils.Utils
 import com.xsens.dot.android.example.utils.Utils.isBluetoothAdapterEnabled
 import com.xsens.dot.android.example.utils.Utils.isBluetoothConnectPermissionGranted
 import com.xsens.dot.android.example.utils.Utils.isBluetoothScanPermissionGranted
@@ -23,6 +24,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     var currentXsensDot: XsensDotDevice? = null
     var deviceScanner = DeviceScanner(this)
+    private var data = mutableListOf<CustomXsensDotData>()
 
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -58,7 +60,7 @@ class MainActivity : FlutterActivity() {
 
     private fun connectXsensDot(call: MethodCall, result: MethodChannel.Result) {
         checkBluetoothAndPermission()
-        val xsensDotDeviceCB = XsensDotDeviceCB()
+        val xsensDotDeviceCB = XsensDotDeviceCB(this.data)
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
@@ -72,15 +74,15 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun startMeasuring(call: MethodCall, result: MethodChannel.Result) {
+        data.clear()
         currentXsensDot?.startMeasuring()
-        Log.i("Android", "start")
-        result.success(currentXsensDot?.name)
+        result.success(currentXsensDot?.tag)
     }
 
     private fun stopMeasuring(call: MethodCall, result: MethodChannel.Result) {
         currentXsensDot?.stopMeasuring()
-        Log.i("Android", "stop")
-        result.success(currentXsensDot?.name)
+        Log.i("Android", data.size.toString())
+        result.success(data)
     }
 
     private fun checkBluetoothAndPermission(): Boolean {
