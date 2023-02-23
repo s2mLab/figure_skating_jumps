@@ -41,3 +41,6 @@ const String connectNewXSensDot = "Connecter un appareil XSens DOT";
 const String rawDataTitle = "Données brutes XSens DOT";
 const String warnRawDataPrompt =
     "Cette page n'a pas pour but de fournir des données compréhensibles. Avant tout, elle vise à permettre de constater les données en temps réel de l'appareil connecté à des fins de recherche ou de débogage.";
+
+// widgets/screens/coach_account_creation_view
+const String coachCreateAccountTitle = "Créer un compte";

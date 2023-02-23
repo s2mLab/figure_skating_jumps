@@ -5,8 +5,14 @@ import '../../constants/colors.dart';
 class IceFieldEditable extends StatefulWidget {
   final String text;
   final Function(String) onEditComplete;
+  final String placeholder;
+  final bool hasEditIcon;
   const IceFieldEditable(
-      {required this.onEditComplete, this.text = '', Key? key})
+      {required this.onEditComplete,
+      this.text = '',
+      this.placeholder = '',
+      this.hasEditIcon = true,
+      Key? key})
       : super(key: key);
   @override
   State<IceFieldEditable> createState() => _IceFieldEditableState();
@@ -42,25 +48,28 @@ class _IceFieldEditableState extends State<IceFieldEditable> {
                       ),
                     )
                   : Text(
-                      baseText,
+                      widget.text.isEmpty ? widget.placeholder : baseText,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 24, overflow: TextOverflow.ellipsis),
+                      style: TextStyle(
+                          fontSize: 24,
+                          overflow: TextOverflow.ellipsis,
+                          color: widget.text.isEmpty ? discreetText : darkText),
                     ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isEditing = !_isEditing;
-                    baseText = controller.text;
-                    if (!_isEditing) widget.onEditComplete(baseText);
-                  });
-                },
-                icon: Icon(
-                    color: secondaryColor,
-                    _isEditing ? Icons.done : Icons.edit),
-                padding: EdgeInsets.zero,
-                iconSize: 32,
-              )
+              if (widget.hasEditIcon)
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isEditing = !_isEditing;
+                      baseText = controller.text;
+                      if (!_isEditing) widget.onEditComplete(baseText);
+                    });
+                  },
+                  icon: Icon(
+                      color: secondaryColor,
+                      _isEditing ? Icons.done : Icons.edit),
+                  padding: EdgeInsets.zero,
+                  iconSize: 32,
+                )
             ],
           ),
         ),
