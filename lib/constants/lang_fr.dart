@@ -44,3 +44,4 @@ const String warnRawDataPrompt =
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
+const String ifNotAnAthletePrompt = "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";

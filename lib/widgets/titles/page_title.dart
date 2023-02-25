@@ -13,6 +13,7 @@ class PageTitle extends StatelessWidget {
             color: primaryColor,
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Jost'));
+            fontFamily:
+                'Jost')); // Haved to specify it here for some reason even if the theme is properly configured
   }
 }

@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/ice_field_editable.dart';
+import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,7 @@ import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
+import '../layout/progression_dots_row.dart';
 
 class CoachAccountCreationView extends StatefulWidget {
   const CoachAccountCreationView({super.key});
@@ -28,7 +30,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     return Scaffold(
       backgroundColor: primaryColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 72.0, horizontal: 54.0),
+        padding: const EdgeInsets.symmetric(vertical: 72.0, horizontal: 32.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -61,16 +63,10 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                               height: 12,
-                              width: 12,
-                              decoration: BoxDecoration(
-                                  color: _pageIndex == 1
-                                      ? primaryColorLight
-                                      : confirm,
-                                  borderRadius: BorderRadius.circular(16)))
+                              child: ProgressionDotsRow(steps: 2, state: 1)),
                         ],
                       ),
                     ),
@@ -78,11 +74,26 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: PageTitle(text: coachCreateAccountTitle),
                     ),
-                    IceFieldEditable(onEditComplete: (s) {}, hasEditIcon: false, placeholder: 'Prénom',),
-                    IceFieldEditable(onEditComplete: (s) {}, hasEditIcon: false, placeholder: 'Nom'),
-                    IceFieldEditable(onEditComplete: (s) {}, hasEditIcon: false, placeholder: 'Adresse courriel'),
-                    IceButton(text: 'Poursuivre', onPressed: () {}, textColor: paleText, color: primaryColor, iceButtonImportance: IceButtonImportance.mainAction, iceButtonSize: IceButtonSize.medium),
-                    IceButton(text: 'J\'ai déjà un compte', onPressed: () {}, textColor: primaryColor, color: primaryColor, iceButtonImportance: IceButtonImportance.secondaryAction, iceButtonSize: IceButtonSize.medium)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: InstructionPrompt(
+                          ifNotAnAthletePrompt, secondaryColor),
+                    ),
+                    IceButton(
+                        text: 'Poursuivre',
+                        onPressed: () {},
+                        textColor: paleText,
+                        color: primaryColor,
+                        iceButtonImportance: IceButtonImportance.mainAction,
+                        iceButtonSize: IceButtonSize.medium),
+                    IceButton(
+                        text: 'J\'ai déjà un compte',
+                        onPressed: () {},
+                        textColor: primaryColor,
+                        color: primaryColor,
+                        iceButtonImportance:
+                            IceButtonImportance.secondaryAction,
+                        iceButtonSize: IceButtonSize.medium)
                   ],
                 ),
               ),

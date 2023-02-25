@@ -5,13 +5,9 @@ import '../../constants/colors.dart';
 class IceFieldEditable extends StatefulWidget {
   final String text;
   final Function(String) onEditComplete;
-  final String placeholder;
-  final bool hasEditIcon;
   const IceFieldEditable(
       {required this.onEditComplete,
       this.text = '',
-      this.placeholder = '',
-      this.hasEditIcon = true,
       Key? key})
       : super(key: key);
   @override
@@ -48,14 +44,13 @@ class _IceFieldEditableState extends State<IceFieldEditable> {
                       ),
                     )
                   : Text(
-                      widget.text.isEmpty ? widget.placeholder : baseText,
+                      baseText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 24,
                           overflow: TextOverflow.ellipsis,
                           color: widget.text.isEmpty ? discreetText : darkText),
                     ),
-              if (widget.hasEditIcon)
                 IconButton(
                   onPressed: () {
                     setState(() {
