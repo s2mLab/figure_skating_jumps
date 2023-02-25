@@ -1,7 +1,9 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:flutter/material.dart';
 
 class XSensDeserializer {
-  static List<BluetoothDevice> deserialize(String rawObject) {
+  static List<BluetoothDevice> deserializeDevice(String rawObject) {
     List<BluetoothDevice> devices = [];
     List<String> splitObject = rawObject.toString().split("), (");
     splitObject.first = splitObject.first.replaceFirst("[(", "");
@@ -16,6 +18,13 @@ class XSensDeserializer {
 
       devices.add(BluetoothDevice(macAddress, name));
     }
+
+    return devices;
+  }
+
+  static List<XSensDotData> deserializeData(String rawObject) {
+    debugPrint(rawObject);
+    List<XSensDotData> devices = [];
 
     return devices;
   }
