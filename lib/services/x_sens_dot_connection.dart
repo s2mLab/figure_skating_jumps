@@ -8,7 +8,7 @@ import '../models/bluetooth_device.dart';
 
 class XSensDotConnection {
   static final XSensDotConnection _xSensDotConnection =
-      XSensDotConnection._internal(XSensConnectionState.reconnecting);
+      XSensDotConnection._internal(XSensConnectionState.disconnected);
   final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
   XSensConnectionState _connectionState;
   BluetoothDevice? _currentXSensDevice = null;
