@@ -47,11 +47,6 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   child: XSensStateIcon(false, XSensConnectionState.connected),
                 ),
               ),
-              Container(
-                color: Colors.pink, //TODO: Frequency configuration
-                height: 60,
-                child: const Text("TODO: Frequency configuration"),
-              ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: IceButton(
