@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:figure_skating_jumps/Utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +11,7 @@ class XSensDotChannelService {
   static const _xSensChannel = MethodChannel('xsens-dot-channel');
 
   static final XSensDotChannelService _xSensDotChannelService =
-  XSensDotChannelService._internal();
+      XSensDotChannelService._internal();
 
   factory XSensDotChannelService() {
     return _xSensDotChannelService;
@@ -38,7 +39,8 @@ class XSensDotChannelService {
   Future<List<BluetoothDevice>> stopScan() async {
     List<BluetoothDevice> devices = [];
     try {
-      devices = XSensDeserializer.deserialize(await _xSensChannel.invokeMethod('stopScan'));
+      devices = XSensDeserializer.deserializeDevice(
+          await _xSensChannel.invokeMethod('stopScan'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
@@ -71,11 +73,14 @@ class XSensDotChannelService {
     }
   }
 
-  stopMeasuring() async {
+  Future<List<XSensDotData>> stopMeasuring() async {
+    List<XSensDotData> data = [];
     try {
-      debugPrint(await _xSensChannel.invokeMethod('stopMeasuring'));
+      data = XSensDeserializer.deserializeData(
+          await _xSensChannel.invokeMethod('stopMeasuring'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
+    return data;
   }
 }

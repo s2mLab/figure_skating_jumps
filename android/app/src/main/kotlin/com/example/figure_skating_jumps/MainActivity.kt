@@ -95,6 +95,6 @@ class MainActivity : FlutterActivity() {
     private fun stopMeasuring(result: MethodChannel.Result) {
         currentXsensDot?.stopMeasuring()
         Log.i("Android", "stop")
-        result.success(data)
+        result.success(JSON.parse(data))
     }
 }
