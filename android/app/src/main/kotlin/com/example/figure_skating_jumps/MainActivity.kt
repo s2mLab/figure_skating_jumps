@@ -40,7 +40,7 @@ class MainActivity : FlutterActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        PermissionUtils.handlePermissionsRequestResults(requestCode, permissions, grantResults)
+        PermissionUtils.handlePermissionsRequestResults(requestCode, permissions, grantResults, this)
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
