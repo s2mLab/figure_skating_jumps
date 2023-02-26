@@ -311,7 +311,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 onPressed: () async {
                   if (_passwordKey.currentState != null &&
                       _passwordKey.currentState!.validate()) {
-                    if (await createAccount()) {
+                    if (await _createAccount()) {
                       if (mounted) {
                         Navigator.of(context)
                             .pushReplacementNamed('/ManageDevices');
@@ -358,7 +358,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
-  Future<bool> createAccount() async {
+  Future<bool> _createAccount() async {
     try {
       bool result = await UserClient().signUp(_coachEmail, _coachPassword,
           SkatingUser(_coachSurname, _coachName, UserRole.coach));
