@@ -27,6 +27,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   String _coachPassword = '';
   String _coachPassConfirm = '';
   String _coachEmail = '';
+  String _errorStateMessage = '';
   int _pageIndex = 0;
   final _personalInfoKey = GlobalKey<FormState>();
   final _passwordKey = GlobalKey<FormState>();
@@ -147,13 +148,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return pleaseFillField;
-                }
-                if (value.length > 255) {
-                  return reduceCharacter;
-                }
-                return null;
+                return _nameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: surname,
@@ -170,13 +165,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return pleaseFillField;
-                }
-                if (value.length > 255) {
-                  return reduceCharacter;
-                }
-                return null;
+                return _nameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: name,
@@ -193,14 +182,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return pleaseFillField;
-                }
-                if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
-                    .hasMatch(value)) {
-                  return invalidEmailFormat;
-                }
-                return null;
+                return _emailValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: email,
@@ -260,16 +242,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return pleaseFillField;
-                }
-                if (value.length < 10) {
-                  return addCharacters;
-                }
-                if (value.length > 255) {
-                  return reduceCharacter;
-                }
-                return null;
+                return _passValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: password,
@@ -286,13 +259,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return pleaseFillField;
-                }
-                if (value != _coachPassword) {
-                  return passwordMismatch;
-                }
-                return null;
+                return _passConfirmValidator(value, _coachPassword);
               },
               decoration: const InputDecoration(
                 labelText: passConfirmSame,
@@ -309,30 +276,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             IceButton(
                 text: confirmCreateCoachAccount,
                 onPressed: () async {
-                  if (_passwordKey.currentState != null &&
-                      _passwordKey.currentState!.validate()) {
-                    if (await _createAccount()) {
-                      if (mounted) {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/ManageDevices');
-                      }
-                    } else {
-                      if (mounted) {
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return const AlertDialog(
-                                  title: Text(accountCreationError),
-                                  titleTextStyle: TextStyle(
-                                      fontSize: 20,
-                                      color: errorColor,
-                                      fontFamily: 'Jost'),
-                                  content:
-                                      Text(tryLater));
-                            });
-                      }
-                    }
-                  }
+                  await onAccountCreatePressed();
                 },
                 textColor: paleText,
                 color: primaryColor,
@@ -358,12 +302,45 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
+  String? _nameValidator(String? value){
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    if (value.length > 255) {
+      return reduceCharacter;
+    }
+    return null;
+  }
+  String? _emailValidator(String? value){
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$')
+        .hasMatch(value)) {
+      return invalidEmailFormat;
+    }
+    return null;
+  }
+  String? _passValidator(String? value){
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    if (value.length < 10) {
+      return addCharacters;
+    }
+    return null;
+  }
+  String? _passConfirmValidator(String? value, String? password){
+    return value == password ? null : passwordMismatch;
+  }
+
   Future<bool> _createAccount() async {
     try {
-      bool result = await UserClient().signUp(_coachEmail, _coachPassword,
+      await UserClient().signUp(_coachEmail, _coachPassword,
           SkatingUser(_coachSurname, _coachName, UserRole.coach));
-      return Future.value(result);
-    } catch (e) {
+      return Future.value(true);
+    } on Exception catch (e) {
+      _errorStateMessage = e.toString();
       return Future.value(false);
     }
   }
@@ -372,6 +349,33 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     setState(() {
       _pageIndex = 1;
     });
+  }
+
+  Future<void> onAccountCreatePressed() async {
+    if (_passwordKey.currentState != null &&
+        _passwordKey.currentState!.validate()) {
+      if (await _createAccount()) {
+        if (mounted) {
+          Navigator.of(context)
+              .pushReplacementNamed('/ManageDevices');
+        }
+      } else {
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                    title: const Text(accountCreationError),
+                    titleTextStyle: const TextStyle(
+                        fontSize: 20,
+                        color: errorColor,
+                        fontFamily: 'Jost'),
+                    content:
+                    Text('$_errorStateMessage\n$tryLater'));
+              });
+        }
+      }
+    }
   }
 
   void _toAccount() {
