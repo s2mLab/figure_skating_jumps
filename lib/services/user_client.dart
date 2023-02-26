@@ -28,39 +28,45 @@ class UserClient {
     return _currentSkatingUser;
   }
 
-  void signUp(String email, String password, SkatingUser userInfo) {
-    _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((userCreds) {
-      if (userCreds.user == null) {
-        throw Exception('The created user is null');
-      }
-      userInfo.uID = userCreds.user?.uid;
-      _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
-        'firstName': userInfo.firstName,
-        'lastName': userInfo.lastName,
-        'role': userInfo.role.toString(),
-        'captures': jsonEncode(userInfo.captures),
-        'trainees': jsonEncode(userInfo.trainees),
-        'coaches': jsonEncode(userInfo.coaches),
-      });
-    })
-        .catchError((e) {
+  Future<bool> signUp(
+      String email, String password, SkatingUser userInfo) async {
+    UserCredential userCreds;
+    try {
+      userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+    } catch (e) {
       developer.log(e.toString());
-      throw Exception(e);
+      return false;
+    }
+
+    if (userCreds.user == null) {
+      throw Exception('The created user is null');
+    }
+    userInfo.uID = userCreds.user?.uid;
+    _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
+      'firstName': userInfo.firstName,
+      'lastName': userInfo.lastName,
+      'role': userInfo.role.toString(),
+      'captures': jsonEncode(userInfo.captures),
+      'trainees': jsonEncode(userInfo.trainees),
+      'coaches': jsonEncode(userInfo.coaches),
     });
+    return true;
   }
 
   void signIn(String email, String password) {
-    _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)
+    _firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: password)
         .then((userCreds) {
       if (userCreds.user == null) {
         throw Exception('The signed in user is null');
       }
-      _firestore.collection(_userCollectionString)
+      _firestore
+          .collection(_userCollectionString)
           .doc(userCreds.user?.uid)
           .get()
-          .then((userInfo) => _currentSkatingUser = SkatingUser.fromFirestore(userCreds.user?.uid, userInfo));
+          .then((userInfo) => _currentSkatingUser =
+              SkatingUser.fromFirestore(userCreds.user?.uid, userInfo));
     }).catchError((e) {
       developer.log(e.toString());
       throw Exception(e);
