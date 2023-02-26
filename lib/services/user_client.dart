@@ -28,7 +28,7 @@ class UserClient {
     return _currentSkatingUser;
   }
 
-  Future<bool> signUp(
+  Future<void> signUp(
       String email, String password, SkatingUser userInfo) async {
     UserCredential userCreds;
     try {
@@ -36,22 +36,27 @@ class UserClient {
           email: email, password: password);
     } catch (e) {
       developer.log(e.toString());
-      return false;
+      rethrow;
     }
 
     if (userCreds.user == null) {
       throw Exception('The created user is null');
     }
     userInfo.uID = userCreds.user?.uid;
-    _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
-      'firstName': userInfo.firstName,
-      'lastName': userInfo.lastName,
-      'role': userInfo.role.toString(),
-      'captures': jsonEncode(userInfo.captures),
-      'trainees': jsonEncode(userInfo.trainees),
-      'coaches': jsonEncode(userInfo.coaches),
-    });
-    return true;
+    try {
+      _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
+        'firstName': userInfo.firstName,
+        'lastName': userInfo.lastName,
+        'role': userInfo.role.toString(),
+        'captures': jsonEncode(userInfo.captures),
+        'trainees': jsonEncode(userInfo.trainees),
+        'coaches': jsonEncode(userInfo.coaches),
+      });
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+
   }
 
   void signIn(String email, String password) {
