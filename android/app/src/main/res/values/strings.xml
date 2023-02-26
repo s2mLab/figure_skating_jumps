@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bluetooth_required_dialog_title">Message Important</string>
+    <string name="bluetooth_disabled_message">Afin de communiquer avec les capteurs XSens DOT, l\'application nécessite que le Bluetooth soit activé. Vous pouvez activer le Bluetooth dans les paramètres de l\'appareil.</string>
+    <string name="location_permission_message">Afin de détecter les capteurs XSens DOT, l\'application nécessite que d\'avoir accès à votre position. Vous pouvez activer la permission de localisation dans les paramètres de l\'appareil.</string>
+    <string name="devices_permission_message">Afin de détecter et de communiquer avec les XSens DOT, l\'application nécessite que d\'avoir accès aux appareils à proximité. Vous pouvez activer la permission d\'appareil à proximité dans les paramètres de l\'appareil.</string>
+</resources>

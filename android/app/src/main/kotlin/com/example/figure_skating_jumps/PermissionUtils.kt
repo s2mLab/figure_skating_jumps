@@ -1,9 +1,10 @@
 //Inspired by the code given by the Movella Team
 package com.example.figure_skating_jumps
 
-import android.Manifest
+import android.Manifest.permission
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
@@ -27,33 +28,44 @@ object PermissionUtils {
      */
     fun manageBluetoothRequirements(activity: MainActivity) {
         val isBluetoothEnabled = isBluetoothAdapterEnabled(activity)
+        Log.i("Android", "Bluetooth Adapter - $isBluetoothEnabled")
+        Log.i("Android", "Bluetooth Adapter - ${isBluetoothAdapterEnabled(activity)}")
         if (!isBluetoothEnabled) {
             requestEnableBluetooth(activity)
-        }
-        else {
+        } else {
             manageBluetoothPermissions(activity)
         }
         Log.i("Android", "Bluetooth Adapter - ${isBluetoothAdapterEnabled(activity)}")
     }
 
-    fun handleBluetoothRequestResults(requestCode: Int, resultCode: Int, activity: MainActivity){
-        if(requestCode == bluetoothEnableRequestCode && resultCode == RESULT_OK){
+    fun handleBluetoothRequestResults(requestCode: Int, resultCode: Int, activity: MainActivity) {
+        if(requestCode != bluetoothEnableRequestCode) return
+        if (resultCode == RESULT_OK) {
             manageBluetoothPermissions(activity)
-        }
-        else {
+        } else {
             Log.i("Android", "Bluetooth Adapter - Bluetooth request denied")
-            //TODO show message to user
+            showRequiredDialog(activity, activity.getString(R.string.bluetooth_disabled_message))
         }
     }
 
-    fun handlePermissionsRequestResults(requestCode: Int,
-                                        permissions: Array<out String>,
-                                        grantResults: IntArray){
-        if(requestCode == requiredBluetoothPermissionsRequestCode) {
-            Log.i("Android", "Hey I was asked permissions!")
-            Log.i("Android", "Here are the results")
-            for((i, perm) in permissions.withIndex()){
-                Log.i("Android", "Result for $perm - Granted: ${grantResults[i] == PackageManager.PERMISSION_GRANTED}")
+    fun handlePermissionsRequestResults(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+        activity: Activity
+    ) {
+        if (requestCode == requiredBluetoothPermissionsRequestCode) {
+            for ((i, perm) in permissions.withIndex()) {
+                Log.i(
+                    "Android",
+                    "Result for $perm - Granted: ${grantResults[i] == PackageManager.PERMISSION_GRANTED}"
+                )
+            }
+            if(grantResults.contains(PackageManager.PERMISSION_DENIED)){
+                if(shouldShowPermissionDialog(activity, permissions)){
+                    showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
+                    return
+                }
             }
         }
     }
@@ -62,19 +74,21 @@ object PermissionUtils {
         val isFineLocationGranted = isFineLocationPermissionGranted(activity)
         val isScanGranted =
             Build.VERSION.SDK_INT > Build.VERSION_CODES.R
-            && isBluetoothScanPermissionGranted(activity)
+                    && isBluetoothScanPermissionGranted(activity)
+
         val isConnectGranted =
             Build.VERSION.SDK_INT > Build.VERSION_CODES.R
-            && isBluetoothConnectPermissionGranted(activity)
+                    && isBluetoothConnectPermissionGranted(activity)
 
         var permissions = arrayOf<String>()
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-            if (!isScanGranted) permissions = permissions.plus(Manifest.permission.BLUETOOTH_SCAN)
-            if (!isConnectGranted) permissions =
-                permissions.plus(Manifest.permission.BLUETOOTH_CONNECT)
-        }
         if (!isFineLocationGranted) permissions =
-            permissions.plus(Manifest.permission.ACCESS_FINE_LOCATION)
+            permissions.plus(permission.ACCESS_FINE_LOCATION)
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            if (!isScanGranted) permissions = permissions.plus(permission.BLUETOOTH_SCAN)
+            if (!isConnectGranted) permissions =
+                permissions.plus(permission.BLUETOOTH_CONNECT)
+        }
 
         requestRequiredBluetoothPermissions(activity, permissions)
     }
@@ -100,17 +114,17 @@ object PermissionUtils {
     }
 
     private fun isFineLocationPermissionGranted(activity: Activity): Boolean {
-        return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return activity.checkSelfPermission(permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun isBluetoothConnectPermissionGranted(activity: Activity): Boolean {
-        return activity.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+        return activity.checkSelfPermission(permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun isBluetoothScanPermissionGranted(activity: Activity): Boolean {
-        return activity.checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+        return activity.checkSelfPermission(permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestRequiredBluetoothPermissions(
@@ -118,19 +132,62 @@ object PermissionUtils {
         permissions: Array<String>,
         requestCode: Int = requiredBluetoothPermissionsRequestCode
     ) {
-        for (perm in permissions) {
-            Log.i("Android", "Permission asked - $perm")
-            Log.i(
-                "Android",
-                "Need for special UI - $perm: ${activity.shouldShowRequestPermissionRationale(perm)}"
-            )
-        }
-        Log.i("Android", "Total permissions asked - ${permissions.size}")
+        if(permissions.isEmpty()) return
 
-        if (permissions.isNotEmpty()) ActivityCompat.requestPermissions(
+        if(shouldShowPermissionDialog(activity, permissions)){
+            showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
+            return
+        }
+
+        ActivityCompat.requestPermissions(
             activity,
             permissions,
             requestCode
         )
+    }
+
+    private fun shouldShowPermissionDialog(activity: Activity, permissions: Array<out String>): Boolean {
+        val shouldShowLocationDialog = shouldShowLocationDialog(activity, permissions)
+        val shouldShowDeviceDialog = shouldShowDeviceDialog(activity, permissions)
+        return shouldShowLocationDialog || shouldShowDeviceDialog
+    }
+
+    private fun shouldShowLocationDialog(activity: Activity, permissions: Array<out String>): Boolean {
+        return permissions.contains(permission.ACCESS_FINE_LOCATION)
+                && activity.shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun shouldShowDeviceDialog(activity: Activity, permissions: Array<out String>): Boolean {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            return (permissions.contains(permission.BLUETOOTH_SCAN)
+                    && activity.shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN))
+                    || (permissions.contains(permission.BLUETOOTH_CONNECT)
+                    && activity.shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT))
+        }
+        return false
+    }
+
+    private fun buildPermissionMessage(activity: Activity, permissions: Array<out String>): String {
+        var message = ""
+
+        if (shouldShowLocationDialog(activity, permissions))
+            message += activity.getString(R.string.location_permission_message)
+        if (shouldShowDeviceDialog(activity, permissions))
+            message += "\n" + activity.getString(R.string.devices_permission_message)
+
+        return message
+    }
+
+    private fun showRequiredDialog(activity: Activity, message: String) {
+        val builder = AlertDialog.Builder(activity)
+        builder.apply {
+            setTitle(R.string.bluetooth_required_dialog_title)
+            setMessage(message)
+            setNeutralButton("Ok") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        builder.create()
+        builder.show()
     }
 }
