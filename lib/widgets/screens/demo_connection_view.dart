@@ -161,12 +161,13 @@ class _DemoConnectionState extends State<DemoConnection> {
                           controller: _textController,
                         )),
                     GestureDetector(
-                        onTap: () async => {},
+                        onTap: () async =>
+                            _xsensDotService.renameSensor(_textController.text),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Color.fromARGB(255, 182, 160, 37)),
+                              color: const Color.fromARGB(255, 182, 160, 37)),
                           child: const Text('Rename'),
                         )),
                   ],

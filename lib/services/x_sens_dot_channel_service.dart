@@ -58,8 +58,17 @@ class XSensDotChannelService {
 
   setRate(int rate) async {
     try {
-      return await _xSensChannel
+      await _xSensChannel
           .invokeMethod('setRate', <String, dynamic>{'rate': rate});
+    } on PlatformException catch (e) {
+      return e.message!;
+    }
+  }
+
+  renameSensor(String newName) async {
+    try {
+      await _xSensChannel
+          .invokeMethod('renameSensor', <String, dynamic>{'newName': newName});
     } on PlatformException catch (e) {
       return e.message!;
     }
