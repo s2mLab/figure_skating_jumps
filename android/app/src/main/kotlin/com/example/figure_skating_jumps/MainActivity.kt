@@ -18,6 +18,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
     private lateinit var deviceScanner: DeviceScanner
+    private var closeDevices: MutableList()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
