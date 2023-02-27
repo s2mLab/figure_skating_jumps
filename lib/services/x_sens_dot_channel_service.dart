@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:figure_skating_jumps/Utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
