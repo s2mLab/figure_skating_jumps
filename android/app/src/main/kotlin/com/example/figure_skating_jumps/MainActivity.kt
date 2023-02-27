@@ -40,7 +40,12 @@ class MainActivity : FlutterActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        PermissionUtils.handlePermissionsRequestResults(requestCode, permissions, grantResults, this)
+        PermissionUtils.handlePermissionsRequestResults(
+            requestCode,
+            permissions,
+            grantResults,
+            this
+        )
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -59,7 +64,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getSDKVersion(result: MethodChannel.Result) {
-       result.success(XsensDotSdk.getSdkVersion())
+        result.success(XsensDotSdk.getSdkVersion())
     }
 
     private fun startScan(result: MethodChannel.Result) {
@@ -74,13 +79,14 @@ class MainActivity : FlutterActivity() {
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
-        val xsensDotDeviceCB = XsensDotDeviceCB()
+        val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
-        val device: BluetoothDevice = mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
+        val device: BluetoothDevice =
+            mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
 
-        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCB)
+        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
 
@@ -88,13 +94,8 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
-        try {
-            currentXSensDot?.disconnect()
-            result.success("Successfully disconnected device: ${currentXSensDot?.address}")
-        } catch (e : Error) {
-            val disconnectErrorCode = "42"
-            result.error(disconnectErrorCode, e.message, e.stackTrace )
-        }
+        currentXSensDot?.disconnect()
+        result.success("Successfully disconnected device: ${currentXSensDot?.address}")
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {

@@ -7,7 +7,6 @@ import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.util.Log
 import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCallback
-import com.xsens.dot.android.sdk.models.XsensDotDevice
 import com.xsens.dot.android.sdk.utils.XsensDotScanner
 
 class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
@@ -19,7 +18,7 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
         if (p0?.address != null  && !devicesInfo.any {it.first == p0.address }) {
             try {
                 devicesInfo.add(Pair(p0.address, p0.name ))
-                val xsensDotDeviceCB = XsensDotDeviceCB()
+                val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
             }
             catch (e: SecurityException) {
                 Log.e("Android", e.message!!)
