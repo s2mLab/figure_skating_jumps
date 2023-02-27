@@ -30,6 +30,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final Duration _refreshDelay = const Duration(seconds: 10);
   late Timer _scanDeviceTimer;
 
   @override
@@ -37,7 +38,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices = _discoveryService.subscribeBluetoothDiscovery(this);
     _discoveryService.refreshFromKotlinHandle();
     super.initState();
-    _scanDeviceTimer = Timer.periodic(_discoveryService.scanDuration, (_) {
+    _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
       if(_connectionStep == 0) {
         _discoveryService.refreshFromKotlinHandle();
       }
@@ -143,18 +144,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                 );
               }),
         )),
-        Center(
-            child: IceButton(
-                text: 'Continuer temporaire',
-                onPressed: () {
-                  setState(() {
-                    _connectionStep = 1;
-                  });
-                },
-                textColor: primaryColor,
-                color: primaryColor,
-                iceButtonImportance: IceButtonImportance.secondaryAction,
-                iceButtonSize: IceButtonSize.large)),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
@@ -249,6 +238,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               // TODO: Forbid if frequency hasn't been chosen
               onPressed: () {
                 // TODO: Send the configuration to the device.
+                Navigator.pop(context);
               },
               textColor: paleText,
               color: confirm,

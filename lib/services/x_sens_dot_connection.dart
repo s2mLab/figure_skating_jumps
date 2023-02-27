@@ -5,13 +5,14 @@ import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 import '../enums/x_sens_connection_state.dart';
 import '../interfaces/i_x_sens_state_subscriber.dart';
 import '../models/bluetooth_device.dart';
+import 'dart:developer' as developer;
 
 class XSensDotConnection {
   static final XSensDotConnection _xSensDotConnection =
       XSensDotConnection._internal(XSensConnectionState.reconnecting);
   final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
   XSensConnectionState _connectionState;
-  BluetoothDevice? _currentXSensDevice = null;
+  BluetoothDevice? _currentXSensDevice;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
