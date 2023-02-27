@@ -21,7 +21,7 @@ object PermissionUtils {
     private const val requiredBluetoothPermissionsRequestCode: Int = 1002
 
     /**
-     * The method controls the bluetooth requirements flow. It verify that the bluetooth is enabled
+     * The method controls the bluetooth requirements flow. It verifies that the bluetooth is enabled
      * and, if enabled, ask for the required runtime permissions.
      *
      * @param activity The main activity of the application

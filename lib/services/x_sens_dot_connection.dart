@@ -42,7 +42,7 @@ class XSensDotConnection {
     return false;
   }
 
-  Future<bool> disconnect() async {
+  Future<void> disconnect() async {
     if(_currentXSensDevice != null){
       String response = await XSensDotChannelService().disconnectXSensDot();
       String? currentMac = _currentXSensDevice?.macAddress;
@@ -50,10 +50,7 @@ class XSensDotConnection {
         _currentXSensDevice = null;
         _changeState(XSensConnectionState.disconnected);
       }
-      return response.contains(currentMac);
     }
-
-    return false;
   }
 
   void _changeState(XSensConnectionState state) {
