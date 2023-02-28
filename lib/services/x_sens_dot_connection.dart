@@ -30,7 +30,7 @@ class XSensDotConnection {
   }
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
-    if(_currentXSensDevice != null){
+    if(_currentXSensDevice == null){
       String response = await XSensDotChannelService().connectXSensDot(macAddress: bluetoothDevice.macAddress);
       if(response == bluetoothDevice.macAddress) {
         _currentXSensDevice = bluetoothDevice;
