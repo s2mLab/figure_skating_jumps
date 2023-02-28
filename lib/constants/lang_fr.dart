@@ -28,6 +28,7 @@ const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
 const String configureFrequency = "Configurer la fréquence de réception";
+const String configureFrequencyDropMenu = "Sélectionner la fréquence : ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
@@ -44,7 +45,8 @@ const String warnRawDataPrompt =
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
-const String ifNotAnAthletePrompt = "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";
+const String ifNotAnAthletePrompt =
+    "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";
 const String pleaseFillField = "Veuillez remplir ce champ.";
 const String reduceCharacter = "Réduire le nombre de caractères (max 255).";
 const String surname = "Prénom";
@@ -52,9 +54,11 @@ const String name = "Nom";
 const String password = "Mot de passe";
 const String passConfirmSame = "Confirmation mot de passe";
 const String email = "Adresse courriel";
-const String invalidEmailFormat = 'L\'adresse courriel n\'est pas de format valide.';
+const String invalidEmailFormat =
+    'L\'adresse courriel n\'est pas de format valide.';
 const String alreadyHaveAccount = "J'ai déjà un compte";
-const String addCharacters = "Le mot de passe doit comporter au moins 10 caractères.";
+const String addCharacters =
+    "Le mot de passe doit comporter au moins 10 caractères.";
 const String passwordMismatch = "Les mots de passe sont différents.";
 const String confirmCreateCoachAccount = "Créer le compte";
 const String accountCreationError = "Erreur de création de compte";

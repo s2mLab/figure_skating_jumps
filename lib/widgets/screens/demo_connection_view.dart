@@ -127,12 +127,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                         height: 2,
                         color: Colors.deepPurpleAccent,
                       ),
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedRate = value!;
-                          _xsensDotService.setRate(int.parse(selectedRate));
-                        });
-                      },
+                      onChanged: (String? value) {},
                       items: outputRate
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
