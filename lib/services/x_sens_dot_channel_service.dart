@@ -55,15 +55,6 @@ class XSensDotChannelService {
     }
   }
 
-  setRate(int rate) async {
-    try {
-      await _xSensChannel
-          .invokeMethod('setRate', <String, dynamic>{'rate': rate});
-    } on PlatformException catch (e) {
-      return e.message!;
-    }
-  }
-
   Future<String> disconnectXSensDot() async {
     try {
       return await _xSensChannel.invokeMethod('disconnectXSensDot');

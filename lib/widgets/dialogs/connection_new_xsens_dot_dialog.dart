@@ -31,6 +31,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
   final Duration _refreshDelay = const Duration(seconds: 10);
+  List<String> outputRate = ["20", "30", "60"];
+  late String selectedRate = outputRate.last;
   late Timer _scanDeviceTimer;
 
   @override
@@ -38,7 +40,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices = _discoveryService.subscribeBluetoothDiscovery(this);
     _discoveryService.refreshFromKotlinHandle();
     _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
-      if(_connectionStep == 0) {
+      if (_connectionStep == 0) {
         _discoveryService.refreshFromKotlinHandle();
       }
     });
@@ -134,7 +136,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
-                    onPressed: () async  {
+                    onPressed: () async {
                       await _onDevicePressed(_devices[index]);
                     },
                   ),
@@ -222,12 +224,39 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: EdgeInsets.only(left: 8.0),
           child: InstructionPrompt('$configureFrequency (2/2)', secondaryColor),
         ),
+        Container(
+            margin: const EdgeInsets.all(16),
+            child: Row(children: [
+              const Text(
+                configureFrequencyDropMenu,
+                style: TextStyle(fontSize: 16),
+              ),
+              DropdownButton<String>(
+                value: selectedRate,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: primaryColorDark),
+                underline: Container(
+                  height: 2,
+                  color: primaryColorDark,
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedRate = value!;
+                    _xSensDotConnectionService.setRate(int.parse(selectedRate));
+                  });
+                },
+                items: outputRate.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              )
+            ])),
         Expanded(
-            child: Container(
-          color: Colors.pink,
-          height: 60,
-          width: 300,
-        )),
+          child: Container(),
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
@@ -261,7 +290,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _devices = devices;
       });
@@ -269,7 +298,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   }
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if(await _xSensDotConnectionService.connect(device)) {
+    if (await _xSensDotConnectionService.connect(device)) {
       setState(() {
         _connectionStep = 1;
       });
