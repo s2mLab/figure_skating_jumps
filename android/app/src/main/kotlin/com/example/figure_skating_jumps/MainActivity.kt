@@ -18,7 +18,6 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
     private lateinit var deviceScanner: DeviceScanner
-    private var closeDevices: MutableList()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -40,7 +39,6 @@ class MainActivity : FlutterActivity() {
             "stopScan" -> stopScan(result)
             "connectXSensDot" -> connectXSensDot(call, result)
             "setRate" -> setRate(call, result)
-            "renameSensor" -> renameSensor(call, result)
             "disconnectXSensDot" -> disconnectXSensDot(result)
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
@@ -84,10 +82,6 @@ class MainActivity : FlutterActivity() {
             return
         }
         currentXSensDot?.setOutputRate(60)
-    }
-
-    private fun renameSensor(call: MethodCall, result: MethodChannel.Result) {
-        // TODO 
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {

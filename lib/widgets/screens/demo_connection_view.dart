@@ -21,13 +21,6 @@ class _DemoConnectionState extends State<DemoConnection> {
   List<String> outputRate = ["10", "20", "30", "60"];
   late String selectedRate = outputRate.last;
   List<String> outputText = [];
-  late TextEditingController _textController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textController = TextEditingController();
-  }
 
   setOutput(String text) {
     setState(() {
@@ -154,22 +147,6 @@ class _DemoConnectionState extends State<DemoConnection> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(
-                        height: 20,
-                        width: 200,
-                        child: TextField(
-                          controller: _textController,
-                        )),
-                    GestureDetector(
-                        onTap: () async =>
-                            _xsensDotService.renameSensor(_textController.text),
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: const Color.fromARGB(255, 182, 160, 37)),
-                          child: const Text('Rename'),
-                        )),
                   ],
                 ),
                 const SizedBox(height: 20),
