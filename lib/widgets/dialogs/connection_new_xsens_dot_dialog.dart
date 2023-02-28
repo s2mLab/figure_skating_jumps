@@ -30,18 +30,19 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final Duration _refreshDelay = const Duration(seconds: 10);
   late Timer _scanDeviceTimer;
 
   @override
   void initState() {
     _devices = _discoveryService.subscribeBluetoothDiscovery(this);
     _discoveryService.refreshFromKotlinHandle();
-    super.initState();
-    _scanDeviceTimer = Timer.periodic(_discoveryService.scanDuration, (_) {
+    _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
       if(_connectionStep == 0) {
         _discoveryService.refreshFromKotlinHandle();
       }
     });
+    super.initState();
   }
 
   @override
@@ -133,28 +134,13 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
-                    onPressed: () {
-                      _xSensDotConnectionService.connect(_devices[index]);
-                      setState(() {
-                        _connectionStep = 1;
-                      });
+                    onPressed: () async  {
+                      await _onDevicePressed(_devices[index]);
                     },
                   ),
                 );
               }),
         )),
-        Center(
-            child: IceButton(
-                text: 'Continuer temporaire',
-                onPressed: () {
-                  setState(() {
-                    _connectionStep = 1;
-                  });
-                },
-                textColor: primaryColor,
-                color: primaryColor,
-                iceButtonImportance: IceButtonImportance.secondaryAction,
-                iceButtonSize: IceButtonSize.large)),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
@@ -208,8 +194,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
               text: cancel,
-              onPressed: () {
-                _xSensDotConnectionService.disconnect();
+              onPressed: () async {
+                await _xSensDotConnectionService.disconnect();
                 setState(() {
                   _connectionStep = 0;
                 });
@@ -249,6 +235,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               // TODO: Forbid if frequency hasn't been chosen
               onPressed: () {
                 // TODO: Send the configuration to the device.
+                Navigator.pop(context);
               },
               textColor: paleText,
               color: confirm,
@@ -259,9 +246,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
               text: cancel,
-              onPressed: () {
-                _xSensDotConnectionService.disconnect();
-                Navigator.pop(context, true);
+              onPressed: () async {
+                Navigator.pop(context);
+                await _xSensDotConnectionService.disconnect();
               },
               textColor: primaryColor,
               color: primaryColor,
@@ -279,5 +266,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         _devices = devices;
       });
     }
+  }
+
+  Future<void> _onDevicePressed(BluetoothDevice device) async {
+    if(await _xSensDotConnectionService.connect(device)) {
+      setState(() {
+        _connectionStep = 1;
+      });
+    }
+    //TODO show error message (when I will have the UI model to do so)
   }
 }

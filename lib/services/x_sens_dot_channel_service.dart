@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:figure_skating_jumps/Utils/x_sens_deserializer.dart';
+import 'package:figure_skating_jumps/utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

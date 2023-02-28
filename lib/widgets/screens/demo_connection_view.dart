@@ -1,13 +1,7 @@
-import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
-import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/bluetooth_device.dart';
 
 class DemoConnection extends StatefulWidget {
   const DemoConnection({Key? key}) : super(key: key);

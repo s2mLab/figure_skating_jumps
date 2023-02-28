@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
+import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,10 @@ class MyApp extends StatelessWidget {
       title: 'Figure Skating Jump App',
       initialRoute: '/',
       routes: {
-        '/': (context) => const MyHomePage(),
+        '/': (context) => const GodView(),
         '/ManageDevices': (context) => const ConnectionDotView(),
         '/DemoConnection': (context) => const DemoConnection(),
+        '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
@@ -48,14 +50,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class GodView extends StatefulWidget {
+  const GodView({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<GodView> createState() => _GodViewState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _GodViewState extends State<GodView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +87,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: const Text('Demo XSensDot')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/CoachAccountCreation',
+                );
+              },
+              child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () async {
                 UserClient().signUp('gary@gary.com', 'A1b!78p',
