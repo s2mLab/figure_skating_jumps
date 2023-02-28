@@ -1,4 +1,5 @@
-import 'package:figure_skating_jumps/models/xsen_dot_service.dart';
+import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class DemoConnection extends StatefulWidget {
 }
 
 class _DemoConnectionState extends State<DemoConnection> {
-  final XsensDotService _xsensDotService = XsensDotService();
+  final XSensDotChannelService _xsensDotService = XSensDotChannelService();
   List<String> outputText = [];
 
   setOutput(String text) {
@@ -45,39 +46,54 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.red[200]),
-                          child: const Text('get SDK Version'),
+                          child: const Text('Get SDK Version'),
                         )),
                     GestureDetector(
                         onTap: () async {
+                          await _xsensDotService.startScan();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.green[200]),
+                          child: const Text('Start Scan'),
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                        onTap: () async {
                           List<dynamic> devices =
-                              await _xsensDotService.getCloseXsensDot();
-                          for (dynamic dev in devices) {
-                            setOutput("available device -> $dev");
+                              await _xsensDotService.stopScan();
+                          for (BluetoothDevice dev in devices) {
+                            setOutput("available device -> ${dev.macAddress}");
                           }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.green[300]),
-                          child: const Text('Scan'),
+                              color: Colors.pink[200]),
+                          child: const Text('Stop Scan'),
+                        )),
+                    GestureDetector(
+                        onTap: () async {
+                          setOutput(
+                              "connection to : ${await _xsensDotService.connectXSensDot()}");
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blueGrey[300]),
+                          child: const Text('Connect Xsens DOT'),
                         )),
                   ],
                 ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                    onTap: () async {
-                      setOutput(
-                          "connection to : ${await _xsensDotService.connectXsensDot()}");
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 3),
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.blueGrey[300]),
-                      child: const Text('Connect XsensDot'),
-                    )),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -89,16 +105,16 @@ class _DemoConnectionState extends State<DemoConnection> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.teal[200]),
-                          child: const Text('start measurment'),
+                          child: const Text('Start Measurement'),
                         )),
                     GestureDetector(
-                        onTap: () async => _xsensDotService.stopmeasuring(),
+                        onTap: () async => _xsensDotService.stopMeasuring(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.deepOrange[300]),
-                          child: const Text('stop measurment'),
+                          child: const Text('Stop Measurement'),
                         )),
                   ],
                 ),
