@@ -25,3 +25,6 @@ const connectedXSensDotButtonForeground = Color(0xFF00BEFF);
 const reconnectingXSensDotButtonIndicator = Color(0xFFEBFF00);
 const connectedXSensDotButtonIndicator = Color(0xFF61FF5E);
 const reconnectingXSensDotButtonBackground = Color(0xFFFF9C40);
+
+const progressionBackgroundCurrent = Color(0xF05A5A5A);
+const progressionBackgroundNext = Color(0xFFC3C3C3);
