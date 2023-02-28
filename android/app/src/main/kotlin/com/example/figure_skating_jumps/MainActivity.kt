@@ -3,16 +3,9 @@ package com.example.figure_skating_jumps
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
-import com.xsens.dot.android.example.utils.Utils.isBluetoothAdapterEnabled
-import com.xsens.dot.android.example.utils.Utils.isBluetoothConnectPermissionGranted
-import com.xsens.dot.android.example.utils.Utils.isBluetoothScanPermissionGranted
-import com.xsens.dot.android.example.utils.Utils.isLocationPermissionGranted
-import com.xsens.dot.android.example.utils.Utils.requestBluetoothConnectPermission
-import com.xsens.dot.android.example.utils.Utils.requestBluetoothScanPermission
-import com.xsens.dot.android.example.utils.Utils.requestEnableBluetooth
-import com.xsens.dot.android.example.utils.Utils.requestLocationPermission
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import io.flutter.embedding.android.FlutterActivity
@@ -21,12 +14,14 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    var currentXsensDot: XsensDotDevice? = null
-    var deviceScanner = DeviceScanner(this)
+    private var currentXSensDot: XsensDotDevice? = null
+    private lateinit var deviceScanner: DeviceScanner
 
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        deviceScanner = DeviceScanner(this)
+
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "xsens-dot-channel"
@@ -35,77 +30,83 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        PermissionUtils.handleBluetoothRequestResults(requestCode, resultCode, this)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        PermissionUtils.handlePermissionsRequestResults(
+            requestCode,
+            permissions,
+            grantResults,
+            this
+        )
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     //Had the supported methods here (the when acts like a switch statement)
     private fun handleXsensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getSDKVersion" -> getSDKVersion(call, result)
-            "getCloseXsensDot" -> getCloseXsensDot(call, result)
-            "connectXsensDot" -> connectXsensDot(call, result)
-            "startMeasuring" -> startMeasuring(call, result)
-            "stopMeasuring" -> stopMeasuring(call, result)
+            "getSDKVersion" -> getSDKVersion(result)
+            "startScan" -> startScan(result)
+            "stopScan" -> stopScan(result)
+            "connectXSensDot" -> connectXSensDot(call, result)
+            "disconnectXSensDot" -> disconnectXSensDot(result)
+            "startMeasuring" -> startMeasuring(result)
+            "stopMeasuring" -> stopMeasuring(result)
             else -> result.notImplemented()
         }
     }
 
-    private fun getSDKVersion(call: MethodCall, result: MethodChannel.Result) {
-       result.success(XsensDotSdk.getSdkVersion())
+    private fun getSDKVersion(result: MethodChannel.Result) {
+        result.success(XsensDotSdk.getSdkVersion())
     }
 
-    private fun getCloseXsensDot(call: MethodCall, result: MethodChannel.Result) {
-        checkBluetoothAndPermission()
-        result.success(deviceScanner.getDevices())
+    private fun startScan(result: MethodChannel.Result) {
+        PermissionUtils.manageBluetoothRequirements(this)
+        deviceScanner.startScan()
+        result.success("Scan Started!")
     }
 
-    private fun connectXsensDot(call: MethodCall, result: MethodChannel.Result) {
-        checkBluetoothAndPermission()
-        val xsensDotDeviceCB = XsensDotDeviceCB()
+    private fun stopScan(result: MethodChannel.Result) {
+        result.success(deviceScanner.stopScan().toString())
+    }
+
+    private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
+        PermissionUtils.manageBluetoothRequirements(this)
+        val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
-        val device: BluetoothDevice = mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
+        val device: BluetoothDevice =
+            mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
 
-        currentXsensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCB)
+        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
 
-        currentXsensDot?.connect()
+        currentXSensDot?.connect()
 
         result.success(call.argument<String>("address"))
     }
 
-    private fun startMeasuring(call: MethodCall, result: MethodChannel.Result) {
-        currentXsensDot?.startMeasuring()
+    private fun disconnectXSensDot(result: MethodChannel.Result) {
+        currentXSensDot?.disconnect()
+        result.success("Successfully disconnected device: ${currentXSensDot?.address}")
+    }
+
+    private fun startMeasuring(result: MethodChannel.Result) {
+        currentXSensDot?.startMeasuring()
         Log.i("Android", "start")
-        result.success(currentXsensDot?.name)
+        result.success(currentXSensDot?.name)
     }
 
-    private fun stopMeasuring(call: MethodCall, result: MethodChannel.Result) {
-        currentXsensDot?.stopMeasuring()
+    private fun stopMeasuring(result: MethodChannel.Result) {
+        currentXSensDot?.stopMeasuring()
         Log.i("Android", "stop")
-        result.success(currentXsensDot?.name)
-    }
-
-    private fun checkBluetoothAndPermission(): Boolean {
-        val isBluetoothEnabled = isBluetoothAdapterEnabled(this)
-        val isPermissionGranted = isLocationPermissionGranted(this)
-        val isScanGranted = isBluetoothScanPermissionGranted(this)
-        val isConnectGranted = isBluetoothConnectPermissionGranted(this)
-        if (!isBluetoothEnabled) {
-            requestEnableBluetooth(this, 1001)
-        }
-        if (!isPermissionGranted) requestLocationPermission(
-            this,
-            1002
-        )
-        if (!isScanGranted) requestBluetoothScanPermission(
-            this,
-            1003
-        )
-        if (!isConnectGranted) requestBluetoothConnectPermission(
-            this,
-            1004
-        )
-
-        val status = isBluetoothEnabled && isPermissionGranted
-        Log.i("Android", "checkBluetoothAndPermission() - $status")
-        return status
+        result.success(currentXSensDot?.name)
     }
 }

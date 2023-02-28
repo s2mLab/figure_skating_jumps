@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -15,6 +18,7 @@ import '../../constants/lang_fr.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
+
   @override
   State<ConnectionNewXSensDotDialog> createState() =>
       _ConnectionNewXSensDotState();
@@ -23,13 +27,28 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber {
   int _connectionStep = 0;
-  List<BluetoothDevice> devices = [];
-  BluetoothDiscovery discoveryService = BluetoothDiscovery();
+  List<BluetoothDevice> _devices = [];
+  final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
+  final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final Duration _refreshDelay = const Duration(seconds: 10);
+  late Timer _scanDeviceTimer;
 
   @override
   void initState() {
-    devices = discoveryService.subscribeBluetoothDiscovery(this);
+    _devices = _discoveryService.subscribeBluetoothDiscovery(this);
+    _discoveryService.refreshFromKotlinHandle();
+    _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
+      if(_connectionStep == 0) {
+        _discoveryService.refreshFromKotlinHandle();
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scanDeviceTimer.cancel();
+    super.dispose();
   }
 
   @override
@@ -106,31 +125,22 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             child: Padding(
           padding: const EdgeInsets.all(20),
           child: ListView.builder(
-              itemCount: devices.length,
+              itemCount: _devices.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: XSensDotListElement(
                     hasLine: true,
-                    text: devices[index].name,
+                    text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
+                    onPressed: () async  {
+                      await _onDevicePressed(_devices[index]);
+                    },
                   ),
                 );
               }),
         )),
-        Center(
-            child: IceButton(
-                text: 'Continuer temporaire',
-                onPressed: () {
-                  setState(() {
-                    _connectionStep = 1;
-                  });
-                },
-                textColor: primaryColor,
-                color: primaryColor,
-                iceButtonImportance: IceButtonImportance.secondaryAction,
-                iceButtonSize: IceButtonSize.medium)),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
@@ -184,10 +194,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
               text: cancel,
-              onPressed: () {
+              onPressed: () async {
+                await _xSensDotConnectionService.disconnect();
                 setState(() {
-                  _connectionStep =
-                      0; // TODO: Deselect chosen XSensDOT instance when available
+                  _connectionStep = 0;
                 });
               },
               textColor: primaryColor,
@@ -221,10 +231,11 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
-              text:
-                  completePairing, // TODO: Forbid if frequency hasn't been chosen
+              text: completePairing,
+              // TODO: Forbid if frequency hasn't been chosen
               onPressed: () {
-                // TODO: Pair the device.
+                // TODO: Send the configuration to the device.
+                Navigator.pop(context);
               },
               textColor: paleText,
               color: confirm,
@@ -235,9 +246,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
               text: cancel,
-              onPressed: () {
-                Navigator.pop(context,
-                    true); // TODO: Delete programmatically assigned XSENS DOT connector value when available
+              onPressed: () async {
+                Navigator.pop(context);
+                await _xSensDotConnectionService.disconnect();
               },
               textColor: primaryColor,
               color: primaryColor,
@@ -250,7 +261,19 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
-    this.devices = devices;
-    setState(() {});
+    if(mounted) {
+      setState(() {
+        _devices = devices;
+      });
+    }
+  }
+
+  Future<void> _onDevicePressed(BluetoothDevice device) async {
+    if(await _xSensDotConnectionService.connect(device)) {
+      setState(() {
+        _connectionStep = 1;
+      });
+    }
+    //TODO show error message (when I will have the UI model to do so)
   }
 }
