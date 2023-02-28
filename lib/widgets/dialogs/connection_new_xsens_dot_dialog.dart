@@ -26,7 +26,7 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber {
-  static const int DEFAULT_FRENQUENCY = 60;
+  static const int defaultFrequency = 60;
 
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
@@ -301,7 +301,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     if (await _xSensDotConnectionService.connect(device)) {
-      _xSensDotConnectionService.setRate(DEFAULT_FRENQUENCY);
+      _xSensDotConnectionService.setRate(defaultFrequency);
       setState(() {
         _connectionStep = 1;
       });
