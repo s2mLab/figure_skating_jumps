@@ -15,12 +15,20 @@ class UserPreferences {
     return _deviceMacAddresses;
   }
 
+  get id {
+    return _id;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': _id,
       'uID': _uID,
       'deviceMacAddresses': _deviceMacAddresses,
     };
+  }
+
+  List<String> getAddresses() {
+    return _deviceMacAddresses.split('|');
   }
 
   void addAddress(String macAddress) {
