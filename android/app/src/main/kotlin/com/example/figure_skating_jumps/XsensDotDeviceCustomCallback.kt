@@ -5,7 +5,7 @@ import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
 import com.xsens.dot.android.sdk.models.FilterProfileInfo
 import java.util.ArrayList
-class XsensDotDeviceCB: XsensDotDeviceCallback {
+class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
     val currentData: CustomXsensDotData? = null
     private var data: MutableList<CustomXsensDotData>
 

@@ -3,11 +3,9 @@ package com.example.figure_skating_jumps
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.os.Bundle
-import android.os.PersistableBundle
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
-import com.example.figure_skating_jumps.PermissionUtils.checkBluetoothAndPermission
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import io.flutter.embedding.android.FlutterActivity
@@ -16,9 +14,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    var currentXsensDot: XsensDotDevice? = null
-    private var data = mutableListOf<CustomXsensDotData>()
+    private var currentXSensDot: XsensDotDevice? = null
     private lateinit var deviceScanner: DeviceScanner
+
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -30,6 +28,25 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, result ->
             handleXsensDotCalls(call, result)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        PermissionUtils.handleBluetoothRequestResults(requestCode, resultCode, this)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        PermissionUtils.handlePermissionsRequestResults(
+            requestCode,
+            permissions,
+            grantResults,
+            this
+        )
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     //Had the supported methods here (the when acts like a switch statement)
@@ -47,11 +64,11 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getSDKVersion(result: MethodChannel.Result) {
-       result.success(XsensDotSdk.getSdkVersion())
+        result.success(XsensDotSdk.getSdkVersion())
     }
 
     private fun startScan(result: MethodChannel.Result) {
-        checkBluetoothAndPermission(this)
+        PermissionUtils.manageBluetoothRequirements(this)
         deviceScanner.startScan()
         result.success("Scan Started!")
     }
@@ -61,40 +78,35 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
-        checkBluetoothAndPermission(this)
-        val xsensDotDeviceCB = XsensDotDeviceCB(data)
+        PermissionUtils.manageBluetoothRequirements(this)
+        val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
-        val device: BluetoothDevice = mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
+        val device: BluetoothDevice =
+            mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
 
-        currentXsensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCB)
+        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
 
-        currentXsensDot?.connect()
+        currentXSensDot?.connect()
 
         result.success(call.argument<String>("address"))
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
-        try {
-            currentXsensDot?.disconnect()
-            result.success("Successfully disconnected device: ${currentXsensDot?.address}")
-        } catch (e : Error) {
-            val disconnectErrorCode = "42"
-            result.error(disconnectErrorCode, e.message, e.stackTrace )
-        }
+        currentXSensDot?.disconnect()
+        result.success("Successfully disconnected device: ${currentXSensDot?.address}")
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
-        data.clear()
-        currentXsensDot?.startMeasuring()
+        currentXSensDot?.startMeasuring()
         Log.i("Android", "start")
-        result.success(currentXsensDot?.name)
+        result.success(currentXSensDot?.name)
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
-        currentXsensDot?.stopMeasuring()
+        currentXSensDot?.stopMeasuring()
         Log.i("Android", "stop")
-        result.success(JSON.parse(data))
+        result.success(currentXSensDot?.name)
     }
 }
