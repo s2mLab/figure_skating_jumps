@@ -7,11 +7,6 @@ import com.xsens.dot.android.sdk.models.FilterProfileInfo
 import java.util.ArrayList
 class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
     val currentData: CustomXsensDotData? = null
-    private var data: MutableList<CustomXsensDotData>
-
-    constructor(data: MutableList<CustomXsensDotData>) {
-        this.data = data
-    }
 
     override fun onXsensDotConnectionChanged(p0: String?, p1: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
@@ -35,7 +30,6 @@ class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotDataChanged(p0: String?, p1: XsensDotData?) {
         val currentData = CustomXsensDotData(p1)
-        data.add(currentData)
         Log.i("XSensDot", p1?.acc?.get(0).toString())
     }
 

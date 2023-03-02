@@ -8,15 +8,17 @@ import android.util.Log
 import androidx.annotation.NonNull
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
+import com.xsens.dot.android.sdk.recording.XsensDotRecordingManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
+
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
+    private var recordingFragment: RecordingFragment? = null
     private lateinit var deviceScanner: DeviceScanner
-
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -89,24 +91,31 @@ class MainActivity : FlutterActivity() {
         currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
+        recordingFragment = RecordingFragment(this.context, currentXSensDot!!)
 
         result.success(call.argument<String>("address"))
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         currentXSensDot?.disconnect()
+        recordingFragment = null
         result.success("Successfully disconnected device: ${currentXSensDot?.address}")
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
-        currentXSensDot?.startMeasuring()
+        if (currentXSensDot == null) {
+            return
+        }
+        recordingFragment?.startRecording()
+
         Log.i("Android", "start")
         result.success(currentXSensDot?.name)
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
-        currentXSensDot?.stopMeasuring()
         Log.i("Android", "stop")
+        recordingFragment?.stopRecording()
+
         result.success(currentXSensDot?.name)
     }
 }
