@@ -1,0 +1,4 @@
+
+class NullUserException implements Exception {
+
+}

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,9 +105,18 @@ class _GodViewState extends State<GodView> {
           TextButton(
               onPressed: () async {
                 UserClient().signIn('gary@gary.com', 'A1b!78p');
-                UserClient().signOut();
               },
               child: const Text('Sign in test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().signOut();
+              },
+              child: const Text('Sign out test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().delete();
+              },
+              child: const Text('Delete user test')),
         ],
       )),
     );
