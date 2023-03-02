@@ -7,9 +7,10 @@ class SkatingUser {
   late String _firstName;
   late String _lastName;
   late UserRole _role;
+  late String _email;
   final List<Capture> _captures = [];
-  final List<SkatingUser> _trainees = []; //TODO when creating skaters -> decides if whe keep a list of User or only their UID
-  final List<SkatingUser> _coaches = [];
+  final List<String> _trainees = [];
+  final List<String> _coaches = [];
 
   String get firstName {
     return _firstName;
@@ -21,6 +22,10 @@ class SkatingUser {
 
   UserRole get role {
     return _role;
+  }
+
+  String get email {
+    return _email;
   }
 
   List<Capture> get captures {
