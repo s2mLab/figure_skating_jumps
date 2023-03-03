@@ -44,55 +44,71 @@ class _CaptureViewState extends State<CaptureView> {
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(
-              _controller,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IceButton(
-                    onPressed: () async {
-                      try {
-                        await _initializeControllerFuture;
-                        await _controller.startVideoRecording();
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    text: "Démarrez la capture d'acquisition",
-                    textColor: primaryColor,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.secondaryAction,
-                    iceButtonSize: IceButtonSize.medium,
-                  ),
-                  IceButton(
-                    onPressed: () async {
-                      try {
-                        await _initializeControllerFuture;
-                        XFile f = await _controller.stopVideoRecording();
-                        f.saveTo("test.mp4");
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    text: "Stop la capture d'acquisition",
-                    textColor: primaryColor,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.secondaryAction,
-                    iceButtonSize: IceButtonSize.medium,
-                  )
-                ],
-              ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        })
-      ]),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FutureBuilder<void>(
+                future: _initializeControllerFuture,
+                builder: _buildCameraPreview),
+            IceButton(
+              onPressed: () async {
+                try {
+                  await _initializeControllerFuture;
+                  await _controller.startVideoRecording();
+                } catch (e) {
+                  print(e);
+                }
+              },
+              text: "Démarrez la capture d'acquisition",
+              textColor: primaryColor,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.medium,
+            ),
+            IceButton(
+              onPressed: () async {
+                try {
+                  await _initializeControllerFuture;
+                  XFile f = await _controller.stopVideoRecording();
+                } catch (e) {
+                  print(e);
+                }
+              },
+              text: "Stop la capture d'acquisition",
+              textColor: primaryColor,
+              color: primaryColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.medium,
+            )
+          ]),
     );
+  }
+
+  Widget _buildCameraPreview(
+      BuildContext context, AsyncSnapshot<void> snapshot) {
+    if (snapshot.connectionState == ConnectionState.done) {
+      Size screenSize = MediaQuery.of(context).size;
+      double cameraHeight = screenSize.height;
+      double cameraWidth = screenSize.height / _controller.value.aspectRatio;
+
+      if (cameraWidth > screenSize.width) {
+        cameraWidth = screenSize.width;
+        cameraHeight = screenSize.width * _controller.value.aspectRatio;
+      }
+      //Reduce size to let place for other UI elements
+      cameraWidth /= 2;
+      cameraHeight /= 2;
+
+      return Center(
+        child: SizedBox(
+          width: cameraWidth,
+          height: cameraHeight,
+          child: _controller.buildPreview(),
+        ),
+      );
+    } else {
+      return const Center(child: CircularProgressIndicator());
+    }
   }
 }
