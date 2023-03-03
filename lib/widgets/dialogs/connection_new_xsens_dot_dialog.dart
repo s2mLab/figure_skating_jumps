@@ -6,6 +6,7 @@ import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
@@ -32,9 +33,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final XSensDotChannelService _xSensDotChannelService =
+      XSensDotChannelService();
   final Duration _refreshDelay = const Duration(seconds: 10);
-  List<String> outputRate = ["20", "30", "60"];
-  late String selectedRate = outputRate.last;
   late Timer _scanDeviceTimer;
 
   @override
@@ -223,7 +224,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     if (await _xSensDotConnectionService.connect(device)) {
-      _xSensDotConnectionService.setRate(defaultFrequency);
+      _xSensDotChannelService.setRate(defaultFrequency);
       setState(() {
         _connectionStep = 1;
       });

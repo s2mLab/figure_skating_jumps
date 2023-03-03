@@ -100,7 +100,7 @@ class MainActivity : FlutterActivity() {
             currentXSensDot?.setOutputRate(rate)
             return
         }
-        currentXSensDot?.setOutputRate(60)
+        result.error("Invalid rate", "Rate is null", null)
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
