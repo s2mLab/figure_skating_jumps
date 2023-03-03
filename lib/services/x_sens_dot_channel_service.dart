@@ -63,12 +63,14 @@ class XSensDotChannelService {
     }
   }
 
-  Future<void> setRate(int rate) async {
+  Future<bool> setRate(int rate) async {
     try {
       await _xSensChannel
           .invokeMethod('setRate', <String, dynamic>{'rate': rate});
+      return true;
     } on PlatformException catch (e) {
       debugPrint(e.message);
+      return false;
     }
   }
 

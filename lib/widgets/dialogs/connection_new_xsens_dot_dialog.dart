@@ -223,8 +223,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   }
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if (await _xSensDotConnectionService.connect(device)) {
-      _xSensDotChannelService.setRate(defaultFrequency);
+    if (await _xSensDotConnectionService.connect(device) &&
+        await _xSensDotChannelService.setRate(defaultFrequency)) {
       setState(() {
         _connectionStep = 1;
       });
