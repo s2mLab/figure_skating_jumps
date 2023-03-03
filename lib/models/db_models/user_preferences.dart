@@ -1,5 +1,6 @@
-class UserPreferences {
-  final int _id;
+import 'abstract_local_db_object.dart';
+
+class UserPreferences extends AbstractLocalDbObject {
   final String _uID;
   String _deviceMacAddresses;
 
@@ -8,20 +9,18 @@ class UserPreferences {
       required String uID,
       required String deviceMacAddresses})
       : _deviceMacAddresses = deviceMacAddresses,
-        _uID = uID,
-        _id = id;
+        _uID = uID {
+    this.id = id;
+  }
 
   get deviceMacAddresses {
     return _deviceMacAddresses;
   }
 
-  get id {
-    return _id;
-  }
-
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'id': _id,
+      'id': id,
       'uID': _uID,
       'deviceMacAddresses': _deviceMacAddresses,
     };
@@ -32,13 +31,12 @@ class UserPreferences {
   }
 
   void addAddress(String macAddress) {
-    _deviceMacAddresses += _deviceMacAddresses.trim().isEmpty ? macAddress : '|$macAddress';
+    _deviceMacAddresses +=
+        _deviceMacAddresses.trim().isEmpty ? macAddress : '|$macAddress';
   }
 
   @override
   String toString() {
-    return 'UserPreferences{id: $_id, uID: $_uID, deviceMacAddresses: $_deviceMacAddresses}';
+    return 'UserPreferences{id: $id, uID: $_uID, deviceMacAddresses: $_deviceMacAddresses}';
   }
-
-
 }
