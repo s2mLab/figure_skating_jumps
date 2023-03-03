@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LocalDbService {
+  static const _databaseName = 'ice_database.db';
   static late Database _database;
   static final LocalDbService _localDbService = LocalDbService._internal();
 
@@ -19,7 +20,7 @@ class LocalDbService {
   Future<void> ensureInitialized() async {
     WidgetsFlutterBinding.ensureInitialized();
     _database = await openDatabase(
-        version: 1, join(await getDatabasesPath(), 'ice_database.db'),
+        version: 1, join(await getDatabasesPath(), _databaseName),
         onCreate: (db, version) {
       return db.execute(
           'CREATE TABLE preferences(id INTEGER PRIMARY KEY, uID TEXT, deviceMacAddresses TEXT);'
