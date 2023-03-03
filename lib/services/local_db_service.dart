@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/models/db_models/user_preferences.dart';
+import 'package:figure_skating_jumps/models/db_models/abstract_local_db_object.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,56 +27,35 @@ class LocalDbService {
     });
   }
 
-  Future<bool> insertUserPreferences(UserPreferences preferences) async {
-    return await _database.insert(
-          'preferences',
-          preferences.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.rollback,
-        ) !=
-        0;
-  }
+  Future<bool> insertOne(AbstractLocalDbObject object, String table) async =>
+      await _database.insert(
+        table,
+        object.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      ) !=
+      0;
 
-  Future<bool> updateUserPreferences(UserPreferences preferences) async {
-    return await _database.update(
-      'preferences',
-      preferences.toMap(),
-      where: 'id = ?',
-      whereArgs: [preferences.id],
-      conflictAlgorithm: ConflictAlgorithm.rollback,
-    ) !=
-        0;
-  }
+  Future<bool> updateOne(AbstractLocalDbObject object, String table) async =>
+      await _database.update(
+        table,
+        object.toMap(),
+        where: 'id = ?',
+        whereArgs: [object.id],
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      ) !=
+      0;
 
-  Future<bool> deleteUserPreferences(String uID) async {
-    return await _database.delete(
-      'preferences',
-      where: 'uID = ?',
-      whereArgs: [uID],
-    ) !=
-        0;
-  }
+  Future<bool> deleteOne(AbstractLocalDbObject object, String table) async =>
+      await _database.delete(
+        table,
+        where: 'id = ?',
+        whereArgs: [object.id],
+      ) !=
+      0;
 
-  Future<List<UserPreferences>> readAllUserPreferences() async {
-    final List<Map<String, dynamic>> maps =
-        await _database.query('preferences');
-    return List.generate(maps.length, (i) {
-      return UserPreferences(
-        id: maps[i]['id'],
-        uID: maps[i]['uID'],
-        deviceMacAddresses: maps[i]['deviceMacAddresses'],
-      );
-    });
-  }
+  Future<List<Map<String, dynamic>>> readAll(String table) async =>
+      await _database.query(table);
 
-  Future<UserPreferences> readUserPreferences(String uID) async {
-    final List<Map<String, dynamic>> maps = await _database
-        .query('preferences', where: 'uID = ?', whereArgs: [uID]);
-    return List.generate(maps.length, (i) {
-      return UserPreferences(
-        id: maps[i]['id'],
-        uID: maps[i]['uID'],
-        deviceMacAddresses: maps[i]['deviceMacAddresses'],
-      );
-    }).first;
-  }
+  Future<Map<String, dynamic>> readOne(String id, String table) async =>
+      (await _database.query(table, where: 'id = ?', whereArgs: [id])).first;
 }
