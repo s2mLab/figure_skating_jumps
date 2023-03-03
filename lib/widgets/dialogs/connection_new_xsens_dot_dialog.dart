@@ -88,7 +88,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               children: [
                 _newPairingStep(),
                 _verifyStep(),
-                _configureAndConfirm(),
               ],
             ),
           )
@@ -172,7 +171,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt('$verifyConnectivity (1/2)', secondaryColor),
+          child: InstructionPrompt(verifyConnectivity, secondaryColor),
         ),
         Expanded(
             child: Container(
@@ -180,85 +179,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           height: 60,
           width: 300,
         )),
-        Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 16),
-          child: IceButton(
-              text: continueTo,
-              onPressed: () {
-                setState(() {
-                  _connectionStep = 2;
-                });
-              },
-              textColor: paleText,
-              color: primaryColor,
-              iceButtonImportance: IceButtonImportance.mainAction,
-              iceButtonSize: IceButtonSize.large),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: IceButton(
-              text: cancel,
-              onPressed: () async {
-                await _xSensDotConnectionService.disconnect();
-                setState(() {
-                  _connectionStep = 0;
-                });
-              },
-              textColor: primaryColor,
-              color: primaryColor,
-              iceButtonImportance: IceButtonImportance.secondaryAction,
-              iceButtonSize: IceButtonSize.large),
-        ),
-      ],
-    );
-  }
-
-  Widget _configureAndConfirm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Center(
-              child: XSensStateIcon(false, XSensConnectionState.connected)),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt('$configureFrequency (2/2)', secondaryColor),
-        ),
-        Container(
-            margin: const EdgeInsets.all(16),
-            child: Row(children: [
-              const Text(
-                configureFrequencyDropMenu,
-                style: TextStyle(fontSize: 16),
-              ),
-              DropdownButton<String>(
-                value: selectedRate,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                style: const TextStyle(color: primaryColorDark),
-                underline: Container(
-                  height: 2,
-                  color: primaryColorDark,
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    selectedRate = value!;
-                    _xSensDotConnectionService.setRate(int.parse(selectedRate));
-                  });
-                },
-                items: outputRate.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )
-            ])),
-        Expanded(
-          child: Container(),
-        ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
@@ -278,8 +198,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () async {
-                Navigator.pop(context);
                 await _xSensDotConnectionService.disconnect();
+                setState(() {
+                  _connectionStep = 0;
+                });
               },
               textColor: primaryColor,
               color: primaryColor,
