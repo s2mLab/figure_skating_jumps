@@ -98,10 +98,9 @@ class MainActivity : FlutterActivity() {
         val rate: Int?  = call.argument<Int>("rate")
         if (rate != null) {
             currentXSensDot?.setOutputRate(rate)
-            result.success(true)
             return
         }
-        result.success(false)
+        result.error("0","Rate not set", null)
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
