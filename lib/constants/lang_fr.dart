@@ -44,9 +44,9 @@ const String warnRawDataPrompt =
     "Cette page n'a pas pour but de fournir des données compréhensibles. Avant tout, elle vise à permettre de constater les données en temps réel de l'appareil connecté à des fins de recherche ou de débogage.";
 
 // widgets/screens/login_view
-const String loginTitle = "Connection";
-const String connectionButton = "Connecter";
-const String createAccount = "Me créer un compte";
+const String loginTitle = "Connexion";
+const String connectionButton = "Connexion";
+const String createAccount = "Créer un compte";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
