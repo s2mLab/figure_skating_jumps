@@ -216,7 +216,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               child: IceButton(
                   text: alreadyHaveAccount,
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginView()),

@@ -1,9 +1,14 @@
+import 'package:figure_skating_jumps/main.dart';
+import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
+import '../../enums/ice_button_importance.dart';
+import '../../enums/ice_button_size.dart';
+import '../buttons/ice_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,6 +22,7 @@ class _LoginViewState extends State<LoginView> {
   String _coachPassword = '';
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  final _personalInfoKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -53,44 +59,82 @@ class _LoginViewState extends State<LoginView> {
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: PageTitle(text: loginTitle),
                         ),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _emailController,
-                          onChanged: (value) {
-                            setState(() {
-                              _coachEmail = value;
-                            });
-                          },
-                          validator: (value) {
-                            return _emailValidator(value);
-                          },
-                          decoration: const InputDecoration(
-                            labelText: email,
-                            labelStyle:
-                                TextStyle(fontSize: 16, color: discreetText),
-                          ),
-                        ),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _passwordController,
-                          obscureText: true,
-                          onChanged: (value) {
-                            setState(() {
-                              _coachPassword = value;
-                            });
-                          },
-                          validator: (value) {
-                            return _passValidator(value);
-                          },
-                          decoration: const InputDecoration(
-                            labelText: password,
-                            labelStyle:
-                                TextStyle(fontSize: 16, color: discreetText),
-                          ),
-                        ),
+                        Form(
+                            key: _personalInfoKey,
+                            child: Column(children: [
+                              TextFormField(
+                                keyboardType: TextInputType.emailAddress,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                controller: _emailController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _coachEmail = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  return _emailValidator(value);
+                                },
+                                decoration: const InputDecoration(
+                                  labelText: email,
+                                  labelStyle: TextStyle(
+                                      fontSize: 16, color: discreetText),
+                                ),
+                              ),
+                              TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                controller: _passwordController,
+                                obscureText: true,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _coachPassword = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  return _passValidator(value);
+                                },
+                                decoration: const InputDecoration(
+                                  labelText: password,
+                                  labelStyle: TextStyle(
+                                      fontSize: 16, color: discreetText),
+                                ),
+                              )
+                            ])),
+                        const SizedBox(height: 32),
+                        IceButton(
+                            text: connectionButton,
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const GodView()),
+                              );
+                            },
+                            textColor: paleText,
+                            color: primaryColor,
+                            iceButtonImportance: IceButtonImportance.mainAction,
+                            iceButtonSize: IceButtonSize.medium),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: IceButton(
+                              text: createAccount,
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CoachAccountCreationView()),
+                                );
+                              },
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance:
+                                  IceButtonImportance.secondaryAction,
+                              iceButtonSize: IceButtonSize.medium),
+                        )
                       ],
-                    )))
+                    ))),
           ],
         )));
   }
