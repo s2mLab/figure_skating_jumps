@@ -9,7 +9,7 @@ class XSensDotChannelService {
   static const _xSensChannel = MethodChannel('xsens-dot-channel');
 
   static final XSensDotChannelService _xSensDotChannelService =
-  XSensDotChannelService._internal();
+      XSensDotChannelService._internal();
 
   factory XSensDotChannelService() {
     return _xSensDotChannelService;
@@ -37,7 +37,8 @@ class XSensDotChannelService {
   Future<List<BluetoothDevice>> stopScan() async {
     List<BluetoothDevice> devices = [];
     try {
-      devices = XSensDeserializer.deserialize(await _xSensChannel.invokeMethod('stopScan'));
+      devices = XSensDeserializer.deserialize(
+          await _xSensChannel.invokeMethod('stopScan'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
@@ -59,6 +60,17 @@ class XSensDotChannelService {
       return await _xSensChannel.invokeMethod('disconnectXSensDot');
     } on PlatformException catch (e) {
       return e.message!;
+    }
+  }
+
+  Future<bool> setRate(int rate) async {
+    try {
+      await _xSensChannel
+          .invokeMethod('setRate', <String, dynamic>{'rate': rate});
+      return true;
+    } on PlatformException catch (e) {
+      debugPrint(e.message);
+      return false;
     }
   }
 
