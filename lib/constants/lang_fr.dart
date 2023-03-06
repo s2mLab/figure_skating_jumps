@@ -45,6 +45,8 @@ const String warnRawDataPrompt =
 
 // widgets/screens/login_view
 const String loginTitle = "Connection";
+const String connectionButton = "Connecter";
+const String createAccount = "Me créer un compte";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
