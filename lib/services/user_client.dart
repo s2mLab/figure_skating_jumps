@@ -56,30 +56,36 @@ class UserClient {
       developer.log(e.toString());
       rethrow;
     }
-
   }
 
-  void signIn(String email, String password) {
-    _firebaseAuth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((userCreds) {
-      if (userCreds.user == null) {
+  Future<void> signIn(String email, String password) async {
+    try {
+      await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      if (_firebaseAuth.currentUser == null) {
         throw Exception('The signed in user is null');
       }
-      _firestore
+
+      DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await _firestore
           .collection(_userCollectionString)
-          .doc(userCreds.user?.uid)
-          .get()
-          .then((userInfo) => _currentSkatingUser =
-              SkatingUser.fromFirestore(userCreds.user?.uid, userInfo));
-    }).catchError((e) {
+          .doc(_firebaseAuth.currentUser?.uid)
+          .get();
+      _currentSkatingUser = SkatingUser.fromFirestore(
+          _firebaseAuth.currentUser?.uid, userInfoSnapshot);
+    } catch (e) {
       developer.log(e.toString());
-      throw Exception(e);
-    });
+      rethrow;
+    }
   }
 
-  void signOut() {
-    _currentSkatingUser = null;
-    _firebaseAuth.signOut();
+  Future<void> signOut() async {
+    try {
+      _firebaseAuth.signOut();
+      _currentSkatingUser = null;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
   }
 }

@@ -97,8 +97,8 @@ class _GodViewState extends State<GodView> {
               child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () async {
-                UserClient().signIn('gary@gary.com', 'A1b!78p');
-                UserClient().signOut();
+                await UserClient().signIn('gary@gary.com', 'A1b!78p');
+                await UserClient().signOut();
               },
               child: const Text('Sign in test')),
         ],
