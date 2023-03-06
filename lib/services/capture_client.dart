@@ -19,5 +19,7 @@ class CaptureClient {
 
   CaptureClient._internal();
 
-
+  void addJump(String captureId, ) {
+    
+  }
 }

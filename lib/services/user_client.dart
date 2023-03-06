@@ -69,7 +69,7 @@ class UserClient {
   void signIn(String email, String password) {
     _firebaseAuth
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((userCreds) {:
+        .then((userCreds) {
       if (userCreds.user == null) {
         throw NullUserException();
       }
@@ -99,7 +99,15 @@ class UserClient {
     _firestore.collection(_userCollectionString).doc(uid).delete();
   }
 
-  void getUserById(String id) {
-    _firestore.collection(_userCollectionString).doc(id).get().then()
+  /// Put in a try catch. Throws an exception when there is an error during the operation
+  Future<SkatingUser> getUserById(String id) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userInfo =
+          await _firestore.collection(_userCollectionString).doc(id).get();
+      return SkatingUser.fromFirestore(id, userInfo);
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
   }
 }

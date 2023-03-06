@@ -32,11 +32,11 @@ class SkatingUser {
     return _captures;
   }
 
-  List<SkatingUser> get trainees {
+  List<String> get trainees {
     return _trainees;
   }
 
-  List<SkatingUser> get coaches {
+  List<String> get coaches {
     return _coaches;
   }
 
