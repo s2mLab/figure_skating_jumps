@@ -13,7 +13,7 @@ class CameraService {
     _rearCamera ??= camera;
   }
 
-  CameraDescription get  rearCamera {
+  CameraDescription get rearCamera {
     return _rearCamera!;
   }
 }
