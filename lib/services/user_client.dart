@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,13 +41,14 @@ class UserClient {
     }
 
     if (userCreds.user == null) {
-      throw Exception('The created user is null');
+      throw NullUserException();
     }
     userInfo.uID = userCreds.user?.uid;
     try {
       _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
         'firstName': userInfo.firstName,
         'lastName': userInfo.lastName,
+        'email': email,
         'role': userInfo.role.toString(),
         'captures': jsonEncode(userInfo.captures),
         'trainees': jsonEncode(userInfo.trainees),
@@ -58,13 +60,14 @@ class UserClient {
     }
   }
 
+  /// Signs in the user with the give [email] and [password].
   Future<void> signIn(String email, String password) async {
     try {
       await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (_firebaseAuth.currentUser == null) {
-        throw Exception('The signed in user is null');
+        throw NullUserException();
       }
 
       DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await _firestore
@@ -83,6 +86,27 @@ class UserClient {
     try {
       _firebaseAuth.signOut();
       _currentSkatingUser = null;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  void delete() {
+    if (_firebaseAuth.currentUser == null) {
+      throw NullUserException();
+    }
+    String? uid = _firebaseAuth.currentUser?.uid;
+    _firebaseAuth.currentUser?.delete();
+    _firestore.collection(_userCollectionString).doc(uid).delete();
+  }
+
+  /// Put in a try catch. Throws an exception when there is an error during the operation
+  Future<SkatingUser> getUserById(String id) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userInfo =
+          await _firestore.collection(_userCollectionString).doc(id).get();
+      return SkatingUser.fromFirestore(id, userInfo);
     } catch (e) {
       developer.log(e.toString());
       rethrow;
