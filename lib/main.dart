@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +40,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/ManageDevices': (context) => const ConnectionDotView(),
         '/DemoConnection': (context) => const DemoConnection(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
+        '/login': (context) => const LoginView(),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
