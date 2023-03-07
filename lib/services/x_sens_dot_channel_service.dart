@@ -46,8 +46,7 @@ class XSensDotChannelService {
     return devices;
   }
 
-  Future<String> connectXSensDot(
-      {String macAddress = 'D4:22:CD:00:19:F4'}) async {
+  Future<String> connectXSensDot({String macAddress = 'D4:22:CD:00:19:F4'}) async {
     try {
       return await _xSensChannel.invokeMethod(
           'connectXSensDot', <String, dynamic>{'address': macAddress});

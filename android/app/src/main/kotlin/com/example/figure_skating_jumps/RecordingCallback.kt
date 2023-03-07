@@ -8,26 +8,22 @@ import com.xsens.dot.android.sdk.models.XsensDotDevice
 import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import com.xsens.dot.android.sdk.models.XsensDotRecordingState
 import com.xsens.dot.android.sdk.recording.XsensDotRecordingManager
-import kotlinx.coroutines.runBlocking
 import java.util.ArrayList
 
-class RecordingFragment: XsensDotRecordingCallback {
+class RecordingCallback(context: Context, xsensDotDevice: XsensDotDevice) : XsensDotRecordingCallback {
     private var mManager: XsensDotRecordingManager
-    private var canGetList: Boolean = false
     private var canRecord: Boolean = false
 
-    constructor(context: Context, xsensDotDevice: XsensDotDevice) {
-        mManager = XsensDotRecordingManager(context, xsensDotDevice, RecordingFragment@this)
+    init {
+        mManager = XsensDotRecordingManager(context, xsensDotDevice, this)
     }
 
     fun startRecording() {
-        mManager.requestFlashInfo()
+        //mManager.requestFlashInfo()
 
-        
-
-        if (canRecord) {
+        //if (canRecord) {
             mManager.startRecording()
-        }
+        //}
     }
 
     fun stopRecording() {
@@ -38,73 +34,71 @@ class RecordingFragment: XsensDotRecordingCallback {
 //        mManager.requestFileInfo()
     }
 
-    override fun onXsensDotRecordingNotification(p0: String?, p1: Boolean) {
+    override fun onXsensDotRecordingNotification(address: String?, isSuccess: Boolean) {
         Log.i("XSensDot", "onXsensDotRecordingNotification")
-        if (p1) {
+        if (isSuccess) {
             mManager.requestFlashInfo();
         }
     }
 
-    override fun onXsensDotEraseDone(p0: String?, p1: Boolean) {
+    override fun onXsensDotEraseDone(address: String?, p1: Boolean) {
         Log.i("XSensDot", "onXsensDotEraseDone")
     }
 
-    override fun onXsensDotRequestFlashInfoDone(p0: String?, p1: Int, p2: Int) {
+    override fun onXsensDotRequestFlashInfoDone(address: String?, usedFlashSpace: Int,totalFlashSpace: Int) {
         Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
-        val usedFlashSpace: Int = p1
-        val totalFlashSpace: Int = p2
         canRecord = usedFlashSpace / totalFlashSpace < 0.9
     }
 
     override fun onXsensDotRecordingAck(
-        p0: String?,
-        p1: Int,
-        p2: Boolean,
-        p3: XsensDotRecordingState?
+        address: String?,
+        recordingId: Int,
+        isSuccess: Boolean,
+        recordingState: XsensDotRecordingState?
     ) {
-        if (p1 == XsensDotRecordingManager.RECORDING_ID_START_RECORDING) {
+        if (recordingId == XsensDotRecordingManager.RECORDING_ID_START_RECORDING) {
             Log.i("XSensDot", "start CallBack")
-        } else if (p1 == XsensDotRecordingManager.RECORDING_ID_STOP_RECORDING) {
+        } else if (recordingId == XsensDotRecordingManager.RECORDING_ID_STOP_RECORDING) {
             Log.i("XSensDot", "stop CallBack")
             mManager.requestFileInfo()
 //            canGetList = true
         }
     }
 
-    override fun onXsensDotGetRecordingTime(p0: String?, p1: Int, p2: Int, p3: Int) {
+    override fun onXsensDotGetRecordingTime(address: String?, startUTCSeconds: Int, totalRecordingSeconds: Int, remainingRecordingSeconds: Int) {
         Log.i("XSensDot", "onXsensDotGetRecordingTime")
     }
 
     override fun onXsensDotRequestFileInfoDone(
-        p0: String?,
-        p1: ArrayList<XsensDotRecordingFileInfo>?,
-        p2: Boolean
+        address: String?,
+        fileInfoList: ArrayList<XsensDotRecordingFileInfo>?,
+        isSuccess: Boolean
     ) {
-        Log.i("XSensDot", p0!!)
-        if (p1 == null || p1!!.isEmpty()) {
-            Log.i("XSensDot", p1?.size.toString())
+        Log.i("XSensDot", address!!)
+        if (fileInfoList == null || fileInfoList.isEmpty()) {
+            Log.i("XSensDot", fileInfoList?.size.toString())
             return
         }
-        Log.i("XSensDot", p1?.get(p1.size - 1)!!.fileName)
+        Log.i("XSensDot", fileInfoList[fileInfoList.size - 1].fileName)
     }
 
     override fun onXsensDotDataExported(
-        p0: String?,
-        p1: XsensDotRecordingFileInfo?,
-        p2: XsensDotData?
+        address: String?,
+        fileInfo: XsensDotRecordingFileInfo?,
+        exportedData: XsensDotData?
     ) {
         Log.i("XSensDot", "onXsensDotDataExported")
     }
 
-    override fun onXsensDotDataExported(p0: String?, p1: XsensDotRecordingFileInfo?) {
+    override fun onXsensDotDataExported(address: String?, fileInfo: XsensDotRecordingFileInfo?) {
         Log.i("XSensDot", "onXsensDotDataExported")
     }
 
-    override fun onXsensDotAllDataExported(p0: String?) {
+    override fun onXsensDotAllDataExported(address: String?) {
         Log.i("XSensDot", "onXsensDotAllDataExported")
     }
 
-    override fun onXsensDotStopExportingData(p0: String?) {
+    override fun onXsensDotStopExportingData(address: String?) {
         Log.i("XSensDot", "onXsensDotStopExportingData")
     }
 }
