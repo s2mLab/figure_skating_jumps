@@ -58,6 +58,7 @@ class MainActivity : FlutterActivity() {
             "startScan" -> startScan(result)
             "stopScan" -> stopScan(result)
             "connectXSensDot" -> connectXSensDot(call, result)
+            "setRate" -> setRate(call, result)
             "disconnectXSensDot" -> disconnectXSensDot(result)
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
@@ -94,6 +95,15 @@ class MainActivity : FlutterActivity() {
         recordingFragment = RecordingFragment(this.context, currentXSensDot!!)
 
         result.success(call.argument<String>("address"))
+    }
+
+    private fun setRate(call: MethodCall, result: MethodChannel.Result) {
+        val rate: Int?  = call.argument<Int>("rate")
+        if (rate != null) {
+            currentXSensDot?.setOutputRate(rate)
+            return
+        }
+        result.error("0","Rate not set", null)
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {

@@ -3,7 +3,7 @@ import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:flutter/material.dart';
 
 class XSensDeserializer {
-  static List<BluetoothDevice> deserializeDevice(String rawObject) {
+  static List<BluetoothDevice> deserializeDevices(String rawObject) {
     List<BluetoothDevice> devices = [];
     List<String> splitObject = rawObject.toString().split("), (");
     splitObject.first = splitObject.first.replaceFirst("[(", "");

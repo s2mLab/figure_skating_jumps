@@ -10,11 +10,14 @@ class NoDotConnected extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Text(
-        noConnectionMessage,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: discreetText,
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 64.0),
+        child: Text(
+          noConnectionMessage,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: discreetText,
+          ),
         ),
       ),
       Container(
