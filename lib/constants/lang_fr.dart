@@ -68,3 +68,9 @@ const String passwordMismatch = "Les mots de passe sont différents.";
 const String confirmCreateCoachAccount = "Créer le compte";
 const String accountCreationError = "Erreur de création de compte";
 const String tryLater = 'Veuillez réessayer plus tard.';
+
+// exceptions
+const String conflictException = "La ressource existe déjà.";
+const String weakPasswordException = "Le mot de passe ne respecte pas les critères minimales.";
+const String invalidEmailException = "L'email n'est pas valide. Veuillez le changer.";
+const String nullUserException = "L'utilisateur n'a pas été trouvé.";
