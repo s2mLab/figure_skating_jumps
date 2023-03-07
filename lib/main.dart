@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
@@ -111,6 +115,13 @@ class _GodViewState extends State<GodView> {
                 UserClient().delete();
               },
               child: const Text('Delete user test')),
+          TextButton(
+              onPressed: () async {
+                Random rnd = Random();
+                Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), 10, JumpType.axel, "TT9qrmqIdRfJGrlTzo7g");
+                CaptureClient().addJump(jump);
+              },
+              child: const Text('Make Him JUMP!')),
         ],
       )),
     );
