@@ -6,6 +6,7 @@ import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
@@ -26,10 +27,14 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber {
+  static const int defaultFrequency = 60;
+
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final XSensDotChannelService _xSensDotChannelService =
+      XSensDotChannelService();
   final Duration _refreshDelay = const Duration(seconds: 10);
   late Timer _scanDeviceTimer;
 
@@ -38,7 +43,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices = _discoveryService.subscribeBluetoothDiscovery(this);
     _discoveryService.refreshFromKotlinHandle();
     _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
-      if(_connectionStep == 0) {
+      if (_connectionStep == 0) {
         _discoveryService.refreshFromKotlinHandle();
       }
     });
@@ -84,7 +89,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               children: [
                 _newPairingStep(),
                 _verifyStep(),
-                _configureAndConfirm(),
               ],
             ),
           )
@@ -134,7 +138,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensConnectionState.disconnected),
-                    onPressed: () async  {
+                    onPressed: () async {
                       await _onDevicePressed(_devices[index]);
                     },
                   ),
@@ -168,59 +172,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt('$verifyConnectivity (1/2)', secondaryColor),
-        ),
-        Expanded(
-            child: Container(
-          color: Colors.pink,
-          height: 60,
-          width: 300,
-        )),
-        Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 16),
-          child: IceButton(
-              text: continueTo,
-              onPressed: () {
-                setState(() {
-                  _connectionStep = 2;
-                });
-              },
-              textColor: paleText,
-              color: primaryColor,
-              iceButtonImportance: IceButtonImportance.mainAction,
-              iceButtonSize: IceButtonSize.large),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: IceButton(
-              text: cancel,
-              onPressed: () async {
-                await _xSensDotConnectionService.disconnect();
-                setState(() {
-                  _connectionStep = 0;
-                });
-              },
-              textColor: primaryColor,
-              color: primaryColor,
-              iceButtonImportance: IceButtonImportance.secondaryAction,
-              iceButtonSize: IceButtonSize.large),
-        ),
-      ],
-    );
-  }
-
-  Widget _configureAndConfirm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Center(
-              child: XSensStateIcon(false, XSensConnectionState.connected)),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt('$configureFrequency (2/2)', secondaryColor),
+          child: InstructionPrompt(verifyConnectivity, secondaryColor),
         ),
         Expanded(
             child: Container(
@@ -247,8 +199,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () async {
-                Navigator.pop(context);
                 await _xSensDotConnectionService.disconnect();
+                setState(() {
+                  _connectionStep = 0;
+                });
               },
               textColor: primaryColor,
               color: primaryColor,
@@ -261,7 +215,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _devices = devices;
       });
@@ -272,7 +226,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   //TODO: That check will have to be implemented
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if(await _xSensDotConnectionService.connect(device)) {
+    if (await _xSensDotConnectionService.connect(device) &&
+        await _xSensDotChannelService.setRate(defaultFrequency)) {
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
         _connectionStep = 1;
