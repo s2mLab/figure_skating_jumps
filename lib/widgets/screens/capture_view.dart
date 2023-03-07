@@ -69,8 +69,30 @@ class _CaptureViewState extends State<CaptureView> {
             IceButton(
               onPressed: () async {
                 try {
+                  //https://stackoverflow.com/questions/66185696/how-to-convert-a-xfile-to-file-in-flutter
                   await _initializeControllerFuture;
                   XFile f = await _controller.stopVideoRecording();
+                  if(mounted) {
+                    showDialog(context: context, barrierDismissible: false, builder: (_) {
+                      return SimpleDialog(
+                        title: const Text("Sauvegarde en mémoire", textAlign: TextAlign.center,),
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: SizedBox(width: 50, child: LinearProgressIndicator(color: primaryColor, backgroundColor: discreetText,)),
+                              ),
+                              Text("Veuillez patienter")
+                            ],
+                          )
+                        ],
+
+                      );
+                    });
+                  }
+
                 } catch (e) {
                   print(e);
                 }
