@@ -4,64 +4,65 @@ import android.util.Log
 import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
 import com.xsens.dot.android.sdk.models.FilterProfileInfo
+import com.xsens.dot.android.sdk.models.XsensDotDevice
 import java.util.ArrayList
 class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
     val currentData: CustomXsensDotData? = null
 
-    override fun onXsensDotConnectionChanged(p0: String?, p1: Int) {
+    override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
     }
 
-    override fun onXsensDotServicesDiscovered(p0: String?, p1: Int) {
+    override fun onXsensDotServicesDiscovered(address: String?, status: Int) {
         Log.i("XSensDot", "onXsensDotServicesDiscovered")
     }
 
-    override fun onXsensDotFirmwareVersionRead(p0: String?, p1: String?) {
+    override fun onXsensDotFirmwareVersionRead(address: String?, version: String?) {
         Log.i("XSensDot", "onXsensDotFirmwareVersionRead")
     }
 
-    override fun onXsensDotTagChanged(p0: String?, p1: String?) {
+    override fun onXsensDotTagChanged(address: String?, tag: String?) {
         Log.i("XSensDot", "onXsensDotTagChanged")
     }
 
-    override fun onXsensDotBatteryChanged(p0: String?, p1: Int, p2: Int) {
+    override fun onXsensDotBatteryChanged(address: String?, status: Int, percentage: Int) {
         Log.i("XSensDot", "onXsensDotBatteryChanged")
     }
 
-    override fun onXsensDotDataChanged(p0: String?, p1: XsensDotData?) {
-        val currentData = CustomXsensDotData(p1)
-        Log.i("XSensDot", p1?.acc?.get(0).toString())
+    override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
+        val currentData = CustomXsensDotData(data)
+        Log.i("XSensDot", data?.acc?.get(0).toString())
     }
 
-    override fun onXsensDotInitDone(p0: String?) {
+    override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "onXsensDotInitDone")
     }
 
-    override fun onXsensDotButtonClicked(p0: String?, p1: Long) {
+    override fun onXsensDotButtonClicked(address: String?, timestamp: Long) {
         Log.i("XSensDot", "onXsensDotButtonClicked")
     }
 
-    override fun onXsensDotPowerSavingTriggered(p0: String?) {
+    override fun onXsensDotPowerSavingTriggered(address: String?) {
         Log.i("XSensDot", "onXsensDotPowerSavingTriggered")
     }
 
-    override fun onReadRemoteRssi(p0: String?, p1: Int) {
+    override fun onReadRemoteRssi(address: String?, rssi: Int) {
         Log.i("XSensDot", "onReadRemoteRssi")
     }
 
-    override fun onXsensDotOutputRateUpdate(p0: String?, p1: Int) {
+    override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
         Log.i("XSensDot", "onXsensDotOutputRateUpdate")
     }
 
-    override fun onXsensDotFilterProfileUpdate(p0: String?, p1: Int) {
+    override fun onXsensDotFilterProfileUpdate(address: String?, filterProfileIndex: Int) {
         Log.i("XSensDot", "onXsensDotFilterProfileUpdate")
     }
 
-    override fun onXsensDotGetFilterProfileInfo(p0: String?, p1: ArrayList<FilterProfileInfo>?) {
+    override fun onXsensDotGetFilterProfileInfo(address: String?, filterProfileInfoList: ArrayList<FilterProfileInfo>?) {
         Log.i("XSensDot", "onXsensDotGetFilterProfileInfo")
     }
 
-    override fun onSyncStatusUpdate(p0: String?, p1: Boolean) {
+    override fun onSyncStatusUpdate(address: String?, isSynced: Boolean) {
         Log.i("XSensDot", "onSyncStatusUpdate")
     }
 }
