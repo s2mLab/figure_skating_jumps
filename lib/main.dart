@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
@@ -11,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,10 +104,26 @@ class _GodViewState extends State<GodView> {
               child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () async {
-                await UserClient().signIn('gary@gary.com', 'A1b!78p');
-                await UserClient().signOut();
+                UserClient().signIn('gary@gary.com', 'A1b!78p');
               },
               child: const Text('Sign in test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().signOut();
+              },
+              child: const Text('Sign out test')),
+          TextButton(
+              onPressed: () async {
+                UserClient().delete();
+              },
+              child: const Text('Delete user test')),
+          TextButton(
+              onPressed: () async {
+                Random rnd = Random();
+                Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), 10, JumpType.axel, "TT9qrmqIdRfJGrlTzo7g");
+                CaptureClient().addJump(jump);
+              },
+              child: const Text('Make Him JUMP!')),
         ],
       )),
     );
