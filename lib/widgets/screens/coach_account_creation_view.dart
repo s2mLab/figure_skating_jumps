@@ -214,7 +214,12 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
                   text: alreadyHaveAccount,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      '/login',
+                    );
+                  },
                   textColor: primaryColor,
                   color: primaryColor,
                   iceButtonImportance: IceButtonImportance.secondaryAction,
@@ -302,7 +307,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
-  String? _nameValidator(String? value){
+  String? _nameValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
@@ -311,17 +316,18 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
     return null;
   }
-  String? _emailValidator(String? value){
+
+  String? _emailValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
-    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$')
-        .hasMatch(value)) {
+    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
       return invalidEmailFormat;
     }
     return null;
   }
-  String? _passValidator(String? value){
+
+  String? _passValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
@@ -330,7 +336,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
     return null;
   }
-  String? _passConfirmValidator(String? value, String? password){
+
+  String? _passConfirmValidator(String? value, String? password) {
     return value == password ? null : passwordMismatch;
   }
 
@@ -356,8 +363,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         _passwordKey.currentState!.validate()) {
       if (await _createAccount()) {
         if (mounted) {
-          Navigator.of(context)
-              .pushReplacementNamed('/ManageDevices');
+          Navigator.of(context).pushReplacementNamed('/ManageDevices');
         }
       } else {
         if (mounted) {
@@ -367,11 +373,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return AlertDialog(
                     title: const Text(accountCreationError),
                     titleTextStyle: const TextStyle(
-                        fontSize: 20,
-                        color: errorColor,
-                        fontFamily: 'Jost'),
-                    content:
-                    Text('$_errorStateMessage\n$tryLater'));
+                        fontSize: 20, color: errorColor, fontFamily: 'Jost'),
+                    content: Text('$_errorStateMessage\n$tryLater'));
               });
         }
       }

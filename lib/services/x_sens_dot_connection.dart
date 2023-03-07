@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
-
 import '../enums/x_sens_connection_state.dart';
 import '../interfaces/i_x_sens_state_subscriber.dart';
 import '../models/bluetooth_device.dart';
@@ -30,9 +29,10 @@ class XSensDotConnection {
   }
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
-    if(_currentXSensDevice == null){
-      String response = await XSensDotChannelService().connectXSensDot(macAddress: bluetoothDevice.macAddress);
-      if(response == bluetoothDevice.macAddress) {
+    if (_currentXSensDevice == null) {
+      String response = await XSensDotChannelService()
+          .connectXSensDot(macAddress: bluetoothDevice.macAddress);
+      if (response == bluetoothDevice.macAddress) {
         _currentXSensDevice = bluetoothDevice;
         _changeState(XSensConnectionState.connected);
       }
@@ -43,10 +43,10 @@ class XSensDotConnection {
   }
 
   Future<void> disconnect() async {
-    if(_currentXSensDevice != null){
+    if (_currentXSensDevice != null) {
       String response = await XSensDotChannelService().disconnectXSensDot();
       String? currentMac = _currentXSensDevice?.macAddress;
-      if(response.contains(currentMac!)) {
+      if (response.contains(currentMac!)) {
         _currentXSensDevice = null;
         _changeState(XSensConnectionState.disconnected);
       }
