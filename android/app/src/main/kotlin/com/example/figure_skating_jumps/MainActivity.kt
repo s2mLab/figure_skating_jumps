@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.annotation.NonNull
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
-import com.xsens.dot.android.sdk.recording.XsensDotRecordingManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -17,7 +16,7 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
-    private var recordingFragment: RecordingFragment? = null
+    private var recordingCallback: RecordingCallback? = null
     private lateinit var deviceScanner: DeviceScanner
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -92,7 +91,7 @@ class MainActivity : FlutterActivity() {
         currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
-        recordingFragment = RecordingFragment(this.context, currentXSensDot!!)
+        recordingCallback = RecordingCallback(this.context, currentXSensDot!!)
 
         result.success(call.argument<String>("address"))
     }
@@ -108,7 +107,7 @@ class MainActivity : FlutterActivity() {
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         currentXSensDot?.disconnect()
-        recordingFragment = null
+        recordingCallback = null
         result.success("Successfully disconnected device: ${currentXSensDot?.address}")
     }
 
@@ -116,7 +115,7 @@ class MainActivity : FlutterActivity() {
         if (currentXSensDot == null) {
             return
         }
-        recordingFragment?.startRecording()
+        recordingCallback?.startRecording()
 
         Log.i("Android", "start")
         result.success(currentXSensDot?.name)
@@ -124,7 +123,7 @@ class MainActivity : FlutterActivity() {
 
     private fun stopMeasuring(result: MethodChannel.Result) {
         Log.i("Android", "stop")
-        recordingFragment?.stopRecording()
+        recordingCallback?.stopRecording()
 
         result.success(currentXSensDot?.name)
     }
