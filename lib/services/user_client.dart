@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
-import 'package:figure_skating_jumps/exceptions/invalid-email-exception.dart';
-import 'package:figure_skating_jumps/exceptions/null-user-exception.dart';
-import 'package:figure_skating_jumps/exceptions/weak-password-exception.dart';
+import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +41,7 @@ class UserClient {
     }
 
     if (userCreds.user == null) {
-      throw Exception('The created user is null');
+      throw NullUserException();
     }
     userInfo.uID = userCreds.user?.uid;
     try {
@@ -97,7 +94,7 @@ class UserClient {
 
   void delete() {
     if (_firebaseAuth.currentUser == null) {
-      throw Exception("No user signed in.");
+      throw NullUserException();
     }
     String? uid = _firebaseAuth.currentUser?.uid;
     _firebaseAuth.currentUser?.delete();
