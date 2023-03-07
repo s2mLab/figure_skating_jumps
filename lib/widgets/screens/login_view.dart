@@ -1,5 +1,3 @@
-import 'package:figure_skating_jumps/main.dart';
-import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
