@@ -14,10 +14,10 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
     private var mXsScanner: XsensDotScanner = XsensDotScanner(mainActivity, this)
     private var devicesInfo = mutableListOf<Pair<String?, String?>>()
 
-    override fun onXsensDotScanned(p0: BluetoothDevice?, p1: Int) {
-        if (p0?.address != null  && !devicesInfo.any {it.first == p0.address }) {
+    override fun onXsensDotScanned(device: BluetoothDevice?, rssi: Int) {
+        if (device?.address != null  && !devicesInfo.any {it.first == device.address }) {
             try {
-                devicesInfo.add(Pair(p0.address, p0.name ))
+                devicesInfo.add(Pair(device.address, device.name ))
                 val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
             }
             catch (e: SecurityException) {
