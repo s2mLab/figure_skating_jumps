@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
+import 'package:figure_skating_jumps/exceptions/invalid_email_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
+import 'package:figure_skating_jumps/exceptions/weak_password_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +38,18 @@ class UserClient {
     try {
       userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "email-already-in-use":
+          throw ConflictException();
+        case "invalid-email":
+          throw InvalidEmailException();
+        case "weak-password":
+          throw WeakPasswordException();
+        default:
+          developer.log(e.toString());
+          rethrow;
+      }
     } catch (e) {
       developer.log(e.toString());
       rethrow;
