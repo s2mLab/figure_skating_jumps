@@ -35,8 +35,8 @@ class Jump {
       this.uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     int time = userInfo.get('time');
     int duration = userInfo.get('duration');
-    double spins = userInfo.get("spins");
-    String capture = userInfo.get("capture");
+    double spins = userInfo.get('spins');
+    String capture = userInfo.get('capture');
 
     String typeStr = userInfo.get('type');
     JumpType type =
