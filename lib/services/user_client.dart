@@ -52,7 +52,7 @@ class UserClient {
     }
     userInfo.uID = userCreds.user?.uid;
     try {
-      _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
+      await _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
         'firstName': userInfo.firstName,
         'lastName': userInfo.lastName,
         'email': email,
@@ -95,7 +95,7 @@ class UserClient {
 
   Future<void> signOut() async {
     try {
-      _firebaseAuth.signOut();
+      await _firebaseAuth.signOut();
       _currentSkatingUser = null;
     } catch (e) {
       developer.log(e.toString());
