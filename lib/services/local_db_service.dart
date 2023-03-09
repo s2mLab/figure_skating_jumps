@@ -23,8 +23,8 @@ class LocalDbService {
         version: 1, join(await getDatabasesPath(), _databaseName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE preferences(id INTEGER PRIMARY KEY, uID TEXT, deviceMacAddresses TEXT);'
-          'CREATE TABLE deviceCustomNames(id INTEGER PRIMARY KEY, uID TEXT, deviceMacAddress TEXT, customName TEXT');
+          'CREATE TABLE preferences(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddresses TEXT);'
+          'CREATE TABLE deviceCustomNames(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
     });
   }
 

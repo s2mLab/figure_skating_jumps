@@ -1,15 +1,15 @@
 import 'abstract_local_db_object.dart';
 
 class UserPreferences extends AbstractLocalDbObject {
-  final String _uID;
+  final String _userID;
   String _deviceMacAddresses;
 
   UserPreferences(
       {required int id,
-      required String uID,
+      required String userID,
       required String deviceMacAddresses})
       : _deviceMacAddresses = deviceMacAddresses,
-        _uID = uID {
+        _userID = userID {
     this.id = id;
   }
 
@@ -21,7 +21,7 @@ class UserPreferences extends AbstractLocalDbObject {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'uID': _uID,
+      'userID': _userID,
       'deviceMacAddresses': _deviceMacAddresses,
     };
   }
@@ -37,6 +37,6 @@ class UserPreferences extends AbstractLocalDbObject {
 
   @override
   String toString() {
-    return 'UserPreferences{id: $id, uID: $_uID, deviceMacAddresses: $_deviceMacAddresses}';
+    return 'UserPreferences{id: $id, userID: $_userID, deviceMacAddresses: $_deviceMacAddresses}';
   }
 }

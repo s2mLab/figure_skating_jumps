@@ -18,9 +18,11 @@ class UserPreferencesManager implements ILocalDbManager<UserPreferences> {
     return List.generate(map.length, (i) {
       return UserPreferences(
         id: map[i]['id'],
-        uID: map[i]['uID'],
+        userID: map[i]['userID'],
         deviceMacAddresses: map[i]['deviceMacAddresses'],
       );
     });
   }
+
+
 }
