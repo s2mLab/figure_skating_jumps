@@ -45,7 +45,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/ManageDevices': (context) => const ConnectionDotView(),
         '/DemoConnection': (context) => const DemoConnection(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
-        '/login': (context) => const LoginView(),
+        '/Login': (context) => const LoginView(),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
