@@ -30,7 +30,9 @@ class UserClient {
   }
 
   Future<void> signUp(
-      {required String email, required String password, required SkatingUser userInfo}) async {
+      {required String email,
+      required String password,
+      required SkatingUser userInfo}) async {
     UserCredential userCreds;
     try {
       userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -81,6 +83,10 @@ class UserClient {
           .get();
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
+    } on FirebaseAuthException catch (e) {
+      ExceptionUtils.handleFirebaseAuthException(e);
+      developer.log(e.toString());
+      rethrow;
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -124,20 +130,21 @@ class UserClient {
   }
 
   Future<void> changeName(
-      {required String user, required String firstName, required String lastName}) async {
+      {required String user,
+      required String firstName,
+      required String lastName}) async {
     try {
-      await _firestore
-          .collection(_userCollectionString)
-          .doc(user)
-          .set({"firstName": firstName, "lastName": lastName},
-              SetOptions(merge: true));
+      await _firestore.collection(_userCollectionString).doc(user).set(
+          {"firstName": firstName, "lastName": lastName},
+          SetOptions(merge: true));
     } catch (e) {
       developer.log(e.toString());
       rethrow;
     }
   }
 
-  Future<void> changePassword({required String user, required String password}) async {
+  Future<void> changePassword(
+      {required String user, required String password}) async {
     try {
       await _firebaseAuth.currentUser?.updatePassword(password);
     } on FirebaseAuthException catch (e) {
@@ -165,7 +172,8 @@ class UserClient {
     }
   }
 
-  Future<void> addSkater({required String skaterId, required String coachId}) async {
+  Future<void> addSkater(
+      {required String skaterId, required String coachId}) async {
     try {
       SkatingUser skater = SkatingUser.fromFirestore(
           skaterId,
@@ -197,7 +205,8 @@ class UserClient {
     }
   }
 
-  Future<void> removeSkater({required String skaterId, required String coachId}) async {
+  Future<void> removeSkater(
+      {required String skaterId, required String coachId}) async {
     try {
       SkatingUser skater = SkatingUser.fromFirestore(
           skaterId,

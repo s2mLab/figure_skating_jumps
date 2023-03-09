@@ -46,6 +46,8 @@ const String warnRawDataPrompt =
 // widgets/screens/login_view
 const String loginTitle = "Connexion";
 const String connectionButton = "Connexion";
+const String connectingButton = "Connexion...";
+const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
 
 // widgets/screens/coach_account_creation_view
@@ -71,6 +73,13 @@ const String tryLater = 'Veuillez réessayer plus tard.';
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";
-const String weakPasswordException = "Le mot de passe ne respecte pas les critères minimales.";
-const String invalidEmailException = "L'email n'est pas valide. Veuillez le changer.";
+const String weakPasswordException =
+    "Le mot de passe ne respecte pas les critères minimaux.";
+const String invalidEmailException =
+    "L'email n'est pas valide. Veuillez le changer.";
 const String nullUserException = "L'utilisateur n'a pas été trouvé.";
+const String userNotFoundException = "L'adresse courriel est invalide.";
+const String wrongPasswordException = "Mot de passe invalide";
+const String emptyFieldException = "Champ(s) vide(s)";
+const String tooManyAttemptsException =
+    "Trop de tentatives. Veuillez réessayer plus tard.";

@@ -50,7 +50,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLight,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -217,7 +217,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                       context,
-                      '/login',
+                      '/Login',
                     );
                   },
                   textColor: primaryColor,
@@ -328,7 +328,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   }
 
   String? _passValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
+    if (value == null || value.isEmpty) {
       return pleaseFillField;
     }
     if (value.length < 10) {
