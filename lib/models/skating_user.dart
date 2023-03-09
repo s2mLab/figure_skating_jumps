@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
 
 class SkatingUser {
   late String? uID;
   late String _firstName;
   late String _lastName;
   late UserRole _role;
-  final List<Capture> _captures = [];
-  final List<SkatingUser> _trainees = []; //TODO when creating skaters -> decides if whe keep a list of User or only their UID
-  final List<SkatingUser> _coaches = [];
+  late String _email;
+  final List<String> _captures = [];
+  final List<String> _trainees = [];
+  final List<String> _coaches = [];
 
   String get firstName {
     return _firstName;
@@ -23,15 +23,19 @@ class SkatingUser {
     return _role;
   }
 
-  List<Capture> get captures {
+  String get email {
+    return _email;
+  }
+
+  List<String> get captures {
     return _captures;
   }
 
-  List<SkatingUser> get trainees {
+  List<String> get trainees {
     return _trainees;
   }
 
-  List<SkatingUser> get coaches {
+  List<String> get coaches {
     return _coaches;
   }
 

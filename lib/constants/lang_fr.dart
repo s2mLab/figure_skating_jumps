@@ -28,6 +28,7 @@ const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
 const String configureFrequency = "Configurer la fréquence de réception";
+const String configureFrequencyDropMenu = "Sélectionner la fréquence : ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
@@ -42,9 +43,17 @@ const String rawDataTitle = "Données brutes XSens DOT";
 const String warnRawDataPrompt =
     "Cette page n'a pas pour but de fournir des données compréhensibles. Avant tout, elle vise à permettre de constater les données en temps réel de l'appareil connecté à des fins de recherche ou de débogage.";
 
+// widgets/screens/login_view
+const String loginTitle = "Connexion";
+const String connectionButton = "Connexion";
+const String connectingButton = "Connexion...";
+const String connectionImpossible = "Connexion impossible";
+const String createAccount = "Créer un compte";
+
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
-const String ifNotAnAthletePrompt = "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";
+const String ifNotAnAthletePrompt =
+    "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";
 const String pleaseFillField = "Veuillez remplir ce champ.";
 const String reduceCharacter = "Réduire le nombre de caractères (max 255).";
 const String surname = "Prénom";
@@ -52,10 +61,25 @@ const String name = "Nom";
 const String password = "Mot de passe";
 const String passConfirmSame = "Confirmation mot de passe";
 const String email = "Adresse courriel";
-const String invalidEmailFormat = 'L\'adresse courriel n\'est pas de format valide.';
+const String invalidEmailFormat =
+    'L\'adresse courriel n\'est pas de format valide.';
 const String alreadyHaveAccount = "J'ai déjà un compte";
-const String addCharacters = "Le mot de passe doit comporter au moins 10 caractères.";
+const String addCharacters =
+    "Le mot de passe doit comporter au moins 10 caractères.";
 const String passwordMismatch = "Les mots de passe sont différents.";
 const String confirmCreateCoachAccount = "Créer le compte";
 const String accountCreationError = "Erreur de création de compte";
 const String tryLater = 'Veuillez réessayer plus tard.';
+
+// exceptions
+const String conflictException = "La ressource existe déjà.";
+const String weakPasswordException =
+    "Le mot de passe ne respecte pas les critères minimaux.";
+const String invalidEmailException =
+    "L'email n'est pas valide. Veuillez le changer.";
+const String nullUserException = "L'utilisateur n'a pas été trouvé.";
+const String userNotFoundException = "L'adresse courriel est invalide.";
+const String wrongPasswordException = "Mot de passe invalide";
+const String emptyFieldException = "Champ(s) vide(s)";
+const String tooManyAttemptsException =
+    "Trop de tentatives. Veuillez réessayer plus tard.";

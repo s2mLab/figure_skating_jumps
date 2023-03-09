@@ -50,7 +50,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColorLight,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -214,7 +214,12 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
                   text: alreadyHaveAccount,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      '/Login',
+                    );
+                  },
                   textColor: primaryColor,
                   color: primaryColor,
                   iceButtonImportance: IceButtonImportance.secondaryAction,
@@ -302,7 +307,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
-  String? _nameValidator(String? value){
+  String? _nameValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
@@ -311,18 +316,19 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
     return null;
   }
-  String? _emailValidator(String? value){
+
+  String? _emailValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
-    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$')
-        .hasMatch(value)) {
+    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
       return invalidEmailFormat;
     }
     return null;
   }
-  String? _passValidator(String? value){
-    if (value == null || value.trim().isEmpty) {
+
+  String? _passValidator(String? value) {
+    if (value == null || value.isEmpty) {
       return pleaseFillField;
     }
     if (value.length < 10) {
@@ -330,14 +336,15 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
     return null;
   }
-  String? _passConfirmValidator(String? value, String? password){
+
+  String? _passConfirmValidator(String? value, String? password) {
     return value == password ? null : passwordMismatch;
   }
 
   Future<bool> _createAccount() async {
     try {
-      await UserClient().signUp(_coachEmail, _coachPassword,
-          SkatingUser(_coachSurname, _coachName, UserRole.coach));
+      await UserClient().signUp(email: _coachEmail, password: _coachPassword,
+          userInfo: SkatingUser(_coachSurname, _coachName, UserRole.coach));
       return Future.value(true);
     } on Exception catch (e) {
       _errorStateMessage = e.toString();
@@ -356,8 +363,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         _passwordKey.currentState!.validate()) {
       if (await _createAccount()) {
         if (mounted) {
-          Navigator.of(context)
-              .pushReplacementNamed('/ManageDevices');
+          Navigator.of(context).pushReplacementNamed('/ManageDevices');
         }
       } else {
         if (mounted) {
@@ -367,11 +373,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return AlertDialog(
                     title: const Text(accountCreationError),
                     titleTextStyle: const TextStyle(
-                        fontSize: 20,
-                        color: errorColor,
-                        fontFamily: 'Jost'),
-                    content:
-                    Text('$_errorStateMessage\n$tryLater'));
+                        fontSize: 20, color: errorColor, fontFamily: 'Jost'),
+                    content: Text('$_errorStateMessage\n$tryLater'));
               });
         }
       }
