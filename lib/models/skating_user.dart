@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
 
 class SkatingUser {
   late String? uID;
@@ -8,7 +7,7 @@ class SkatingUser {
   late String _lastName;
   late UserRole _role;
   late String _email;
-  final List<Capture> _captures = [];
+  final List<String> _captures = [];
   final List<String> _trainees = [];
   final List<String> _coaches = [];
 
@@ -28,7 +27,7 @@ class SkatingUser {
     return _email;
   }
 
-  List<Capture> get captures {
+  List<String> get captures {
     return _captures;
   }
 

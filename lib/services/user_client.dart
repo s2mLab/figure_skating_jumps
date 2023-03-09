@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
-import 'package:figure_skating_jumps/exceptions/invalid_email_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
-import 'package:figure_skating_jumps/exceptions/weak_password_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
@@ -33,23 +30,16 @@ class UserClient {
   }
 
   Future<void> signUp(
-      String email, String password, SkatingUser userInfo) async {
+      {required String email, required String password, required SkatingUser userInfo}) async {
     UserCredential userCreds;
     try {
       userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "email-already-in-use":
-          throw ConflictException();
-        case "invalid-email":
-          throw InvalidEmailException();
-        case "weak-password":
-          throw WeakPasswordException();
-        default:
-          developer.log(e.toString());
-          rethrow;
-      }
+      ExceptionUtils.handleFirebaseAuthException(e);
+      // Should not reach this line but kept in to make sure the exception is handled
+      developer.log(e.toString());
+      rethrow;
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -65,9 +55,9 @@ class UserClient {
         'lastName': userInfo.lastName,
         'email': email,
         'role': userInfo.role.toString(),
-        'captures': jsonEncode(userInfo.captures),
-        'trainees': jsonEncode(userInfo.trainees),
-        'coaches': jsonEncode(userInfo.coaches),
+        'captures': userInfo.captures,
+        'trainees': userInfo.trainees,
+        'coaches': userInfo.coaches,
       });
     } catch (e) {
       developer.log(e.toString());
@@ -76,10 +66,10 @@ class UserClient {
   }
 
   /// Signs in the user with the give [email] and [password].
-  Future<void> signIn(String email, String password) async {
+  Future<void> signIn({required String email, required String password}) async {
     try {
-      await _firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
 
       if (_firebaseAuth.currentUser == null) {
         throw NullUserException();
@@ -107,21 +97,132 @@ class UserClient {
     }
   }
 
-  void delete() {
-    if (_firebaseAuth.currentUser == null) {
-      throw NullUserException();
+  Future<void> delete() async {
+    try {
+      if (_firebaseAuth.currentUser == null) {
+        throw NullUserException();
+      }
+      String? uid = _firebaseAuth.currentUser?.uid;
+      await _firebaseAuth.currentUser?.delete();
+      await _firestore.collection(_userCollectionString).doc(uid).delete();
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
     }
-    String? uid = _firebaseAuth.currentUser?.uid;
-    _firebaseAuth.currentUser?.delete();
-    _firestore.collection(_userCollectionString).doc(uid).delete();
   }
 
   /// Put in a try catch. Throws an exception when there is an error during the operation
-  Future<SkatingUser> getUserById(String id) async {
+  Future<SkatingUser> getUserById({required String id}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> userInfo =
           await _firestore.collection(_userCollectionString).doc(id).get();
       return SkatingUser.fromFirestore(id, userInfo);
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> changeName(
+      {required String user, required String firstName, required String lastName}) async {
+    try {
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(user)
+          .set({"firstName": firstName, "lastName": lastName},
+              SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> changePassword({required String user, required String password}) async {
+    try {
+      await _firebaseAuth.currentUser?.updatePassword(password);
+    } on FirebaseAuthException catch (e) {
+      ExceptionUtils.handleFirebaseAuthException(e);
+      // Should not reach this line but kept in to make sure the exception is handled
+      developer.log(e.toString());
+      rethrow;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      ExceptionUtils.handleFirebaseAuthException(e);
+      // Should not reach this line but kept in to make sure the exception is handled
+      developer.log(e.toString());
+      rethrow;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> addSkater({required String skaterId, required String coachId}) async {
+    try {
+      SkatingUser skater = SkatingUser.fromFirestore(
+          skaterId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(skaterId)
+              .get());
+      SkatingUser coach = SkatingUser.fromFirestore(
+          coachId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(coachId)
+              .get());
+
+      skater.coaches.add(coachId);
+      coach.trainees.add(skaterId);
+
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(skaterId)
+          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(coachId)
+          .set({"trainees": coach.trainees}, SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> removeSkater({required String skaterId, required String coachId}) async {
+    try {
+      SkatingUser skater = SkatingUser.fromFirestore(
+          skaterId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(skaterId)
+              .get());
+      SkatingUser coach = SkatingUser.fromFirestore(
+          coachId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(coachId)
+              .get());
+
+      skater.coaches.removeWhere((element) => element == coachId);
+      coach.trainees.removeWhere((element) => element == skaterId);
+
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(skaterId)
+          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(coachId)
+          .set({"trainees": coach.trainees}, SetOptions(merge: true));
     } catch (e) {
       developer.log(e.toString());
       rethrow;

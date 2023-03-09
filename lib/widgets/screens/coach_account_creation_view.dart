@@ -343,8 +343,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
 
   Future<bool> _createAccount() async {
     try {
-      await UserClient().signUp(_coachEmail, _coachPassword,
-          SkatingUser(_coachSurname, _coachName, UserRole.coach));
+      await UserClient().signUp(email: _coachEmail, password: _coachPassword,
+          userInfo: SkatingUser(_coachSurname, _coachName, UserRole.coach));
       return Future.value(true);
     } on Exception catch (e) {
       _errorStateMessage = e.toString();

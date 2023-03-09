@@ -104,7 +104,7 @@ class _GodViewState extends State<GodView> {
               child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () async {
-                UserClient().signIn('gary@gary.com', 'A1b!78p');
+                UserClient().signIn(email: 'gary@gary.com', password: 'abcdef12345');
               },
               child: const Text('Sign in test')),
           TextButton(
@@ -124,6 +124,16 @@ class _GodViewState extends State<GodView> {
                 CaptureClient().addJump(jump);
               },
               child: const Text('Make Him JUMP!')),
+          TextButton(
+              onPressed: () async {
+                UserClient().addSkater(skaterId: "BNegDj2K1ubkEQ4bb4okGQyrL0O2", coachId: "SDlOvaQOGKMKTKiTTeyvNr9SaVA3");
+              },
+              child: const Text('Add Skater')),
+          TextButton(
+              onPressed: () async {
+                UserClient().removeSkater(skaterId: "BNegDj2K1ubkEQ4bb4okGQyrL0O2", coachId: "SDlOvaQOGKMKTKiTTeyvNr9SaVA3");
+              },
+              child: const Text('Remove Skater')),
         ],
       )),
     );
