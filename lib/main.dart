@@ -121,7 +121,7 @@ class _GodViewState extends State<GodView> {
               onPressed: () async {
                 Random rnd = Random();
                 Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), 10, JumpType.axel, "TT9qrmqIdRfJGrlTzo7g");
-                CaptureClient().addJump(jump);
+                CaptureClient().addJump(jump: jump);
               },
               child: const Text('Make Him JUMP!')),
           TextButton(
