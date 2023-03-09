@@ -17,8 +17,7 @@ class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
     override fun onXsensDotScanned(device: BluetoothDevice?, rssi: Int) {
         if (device?.address != null  && !devicesInfo.any {it.first == device.address }) {
             try {
-                devicesInfo.add(Pair(device.address, device.name ))
-                val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
+                devicesInfo.add(Pair(device.address, device.alias ))
             }
             catch (e: SecurityException) {
                 Log.e("Android", e.message!!)

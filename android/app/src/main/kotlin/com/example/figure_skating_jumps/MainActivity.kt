@@ -4,10 +4,12 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
+import com.xsens.dot.android.sdk.models.XsensDotPayload
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -53,14 +55,15 @@ class MainActivity : FlutterActivity() {
     //Had the supported methods here (the when acts like a switch statement)
     private fun handleXsensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getSDKVersion" -> getSDKVersion(result)
+            "getSDKVersion" -> exportDataFile(result)
             "startScan" -> startScan(result)
             "stopScan" -> stopScan(result)
             "connectXSensDot" -> connectXSensDot(call, result)
             "setRate" -> setRate(call, result)
             "disconnectXSensDot" -> disconnectXSensDot(result)
-            "startMeasuring" -> startMeasuring(result)
-            "stopMeasuring" -> stopMeasuring(result)
+            //TODO add change measuring for recording
+            "startMeasuring" -> startRecording(result)
+            "stopMeasuring" -> stopRecording(result)
             else -> result.notImplemented()
         }
     }
@@ -88,10 +91,13 @@ class MainActivity : FlutterActivity() {
         val device: BluetoothDevice =
             mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
 
-        currentXSensDot = XsensDotDevice(this@MainActivity, device, xsensDotDeviceCustomCallback)
+        currentXSensDot = XsensDotDevice(context, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
-        recordingCallback = RecordingCallback(this.context, currentXSensDot!!)
+        recordingCallback = RecordingCallback(context, currentXSensDot!!)
+
+        SystemClock.sleep(30)
+        recordingCallback?.enableDataRecordingNotification()
 
         result.success(call.argument<String>("address"))
     }
@@ -115,7 +121,7 @@ class MainActivity : FlutterActivity() {
         if (currentXSensDot == null) {
             return
         }
-        recordingCallback?.startRecording()
+        currentXSensDot?.startMeasuring()
 
         Log.i("Android", "start")
         result.success(currentXSensDot?.name)
@@ -123,8 +129,31 @@ class MainActivity : FlutterActivity() {
 
     private fun stopMeasuring(result: MethodChannel.Result) {
         Log.i("Android", "stop")
+        currentXSensDot?.stopMeasuring()
+
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun startRecording(result: MethodChannel.Result){
+        if (currentXSensDot == null) {
+            return
+        }
+        recordingCallback?.startRecording()
+
+        Log.i("Android", "start")
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun stopRecording(result: MethodChannel.Result) {
         recordingCallback?.stopRecording()
 
+        Log.i("Android", "stop")
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun exportDataFile(result: MethodChannel.Result) {
+        recordingCallback?.getFileInfo()
+        Log.i("Android", "File Info")
         result.success(currentXSensDot?.name)
     }
 }

@@ -11,6 +11,28 @@ class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
+        if(state == XsensDotDevice.CONN_STATE_CONNECTED) {
+            Log.i("XSensDot", "Connected to $address")
+        } else if(state == XsensDotDevice.CONN_STATE_DISCONNECTED) {
+            Log.i("XSensDot", "Disconnected from $address")
+        }
+    }
+
+    override fun onXsensDotInitDone(address: String?) {
+        Log.i("XSensDot", "Initialization of device $address complete")
+    }
+
+    override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
+        Log.i("XSensDot", "Updated output rate of device $address to $outputRate Hz")
+    }
+
+    override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
+        val currentData = CustomXsensDotData(data)
+        Log.i("XSensDot", "Acceleration data:${data?.acc} Array Size: ${data?.acc?.size}")
+    }
+
+    override fun onSyncStatusUpdate(address: String?, isSynced: Boolean) {
+        Log.i("XSensDot", "onSyncStatusUpdate")
     }
 
     override fun onXsensDotServicesDiscovered(address: String?, status: Int) {
@@ -29,15 +51,6 @@ class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
         Log.i("XSensDot", "onXsensDotBatteryChanged")
     }
 
-    override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
-        val currentData = CustomXsensDotData(data)
-        Log.i("XSensDot", data?.acc?.get(0).toString())
-    }
-
-    override fun onXsensDotInitDone(address: String?) {
-        Log.i("XSensDot", "onXsensDotInitDone")
-    }
-
     override fun onXsensDotButtonClicked(address: String?, timestamp: Long) {
         Log.i("XSensDot", "onXsensDotButtonClicked")
     }
@@ -50,19 +63,11 @@ class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
         Log.i("XSensDot", "onReadRemoteRssi")
     }
 
-    override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
-        Log.i("XSensDot", "onXsensDotOutputRateUpdate")
-    }
-
     override fun onXsensDotFilterProfileUpdate(address: String?, filterProfileIndex: Int) {
         Log.i("XSensDot", "onXsensDotFilterProfileUpdate")
     }
 
     override fun onXsensDotGetFilterProfileInfo(address: String?, filterProfileInfoList: ArrayList<FilterProfileInfo>?) {
         Log.i("XSensDot", "onXsensDotGetFilterProfileInfo")
-    }
-
-    override fun onSyncStatusUpdate(address: String?, isSynced: Boolean) {
-        Log.i("XSensDot", "onSyncStatusUpdate")
     }
 }
