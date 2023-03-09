@@ -39,10 +39,10 @@ class SkatingUser {
     return _coaches;
   }
 
-  SkatingUser(this._firstName, this._lastName, this._role);
+  SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
 
-  SkatingUser.fromFirestore(
-      this.uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
+  factory SkatingUser.fromFirestore(
+     uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     String firstName = userInfo.get('firstName');
     String lastName = userInfo.get('lastName');
 
@@ -50,7 +50,7 @@ class SkatingUser {
     UserRole role = UserRole.values
         .firstWhere((element) => element.toString() == roleStr);
 
-    SkatingUser(firstName, lastName, role);
+    return SkatingUser(firstName, lastName, role, uID);
     //TODO convert json to list when saving acquisition and when linking trainee and coach
   }
 }
