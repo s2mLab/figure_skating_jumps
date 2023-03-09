@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
@@ -5,6 +7,7 @@ import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import '../layout/ice_drawer_menu.dart';
 import '../layout/topbar.dart';
 
@@ -72,6 +75,8 @@ class _CaptureViewState extends State<CaptureView> {
                   //https://stackoverflow.com/questions/66185696/how-to-convert-a-xfile-to-file-in-flutter
                   await _initializeControllerFuture;
                   XFile f = await _controller.stopVideoRecording();
+                  File f2 = File(f.path);
+                  await f2.copy((await getApplicationDocumentsDirectory()).path + f.path.split('/').last);
                   if(mounted) {
                     showDialog(context: context, barrierDismissible: false, builder: (_) {
                       return SimpleDialog(
