@@ -74,7 +74,7 @@ class XSensDotChannelService {
     }
   }
 
-  startMeasuring() async {
+  Future<void> startMeasuring() async {
     try {
       debugPrint(await _xSensChannel.invokeMethod('startMeasuring'));
     } on PlatformException catch (e) {
