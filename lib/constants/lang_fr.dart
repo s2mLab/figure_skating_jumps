@@ -3,6 +3,7 @@ const String searching = "Recherche en cours";
 const String cancel = "Annuler";
 const String continueTo = "Poursuivre";
 const String goBack = "Retour";
+const String pleaseWait = "Veuillez patienter";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
@@ -50,6 +51,9 @@ const String connectingButton = "Connexion...";
 const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
 
+// widgets/screens/capture_view
+const String savingToMemory = "Sauvegarde en mémoire";
+
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
 const String ifNotAnAthletePrompt =
@@ -83,3 +87,4 @@ const String wrongPasswordException = "Mot de passe invalide";
 const String emptyFieldException = "Champ(s) vide(s)";
 const String tooManyAttemptsException =
     "Trop de tentatives. Veuillez réessayer plus tard.";
+
