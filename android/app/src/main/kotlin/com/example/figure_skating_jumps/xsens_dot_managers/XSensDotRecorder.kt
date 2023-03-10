@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps
+package com.example.figure_skating_jumps.xsens_dot_managers
 
 import android.content.Context
 import android.os.SystemClock
@@ -11,7 +11,7 @@ import com.xsens.dot.android.sdk.models.XsensDotRecordingState
 import com.xsens.dot.android.sdk.recording.XsensDotRecordingManager
 import java.util.ArrayList
 
-class RecordingCallback(context: Context, xsensDotDevice: XsensDotDevice) :
+class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     XsensDotRecordingCallback {
     private var mManager: XsensDotRecordingManager
     private var canRecord: Boolean = false
