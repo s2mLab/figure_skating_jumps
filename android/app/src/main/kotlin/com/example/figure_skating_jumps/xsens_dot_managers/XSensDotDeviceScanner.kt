@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps
+package com.example.figure_skating_jumps.xsens_dot_managers
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -6,10 +6,11 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.util.Log
+import com.example.figure_skating_jumps.MainActivity
 import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCallback
 import com.xsens.dot.android.sdk.utils.XsensDotScanner
 
-class DeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
+class XSensDotDeviceScanner(mainActivity: MainActivity) : XsensDotScannerCallback {
     private var mainActivity: MainActivity? = mainActivity
     private var mXsScanner: XsensDotScanner = XsensDotScanner(mainActivity, this)
     private var devicesInfo = mutableListOf<Pair<String?, String?>>()

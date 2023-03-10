@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps
+package com.example.figure_skating_jumps.xsens_dot_managers
 
 import android.util.Log
 import com.xsens.dot.android.sdk.events.XsensDotData
@@ -7,7 +7,7 @@ import com.xsens.dot.android.sdk.models.FilterProfileInfo
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import java.util.ArrayList
 class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
-    val currentData: CustomXsensDotData? = null
+    val currentData: CustomXSensDotData? = null
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
@@ -27,7 +27,7 @@ class XsensDotDeviceCustomCallback: XsensDotDeviceCallback {
     }
 
     override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
-        val currentData = CustomXsensDotData(data)
+        val currentData = CustomXSensDotData(data)
         Log.i("XSensDot", "Acceleration data:${data?.acc} Array Size: ${data?.acc?.size}")
     }
 
