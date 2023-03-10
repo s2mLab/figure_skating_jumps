@@ -1,15 +1,14 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
+import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import '../layout/ice_drawer_menu.dart';
 import '../layout/topbar.dart';
+import 'dart:developer' as developer;
 
 class CaptureView extends StatefulWidget {
   const CaptureView({
@@ -60,7 +59,7 @@ class _CaptureViewState extends State<CaptureView> {
                   await _initializeControllerFuture;
                   await _controller.startVideoRecording();
                 } catch (e) {
-                  print(e);
+                  developer.log(e.toString());
                 }
               },
               text: "Démarrez la capture d'acquisition",
@@ -72,34 +71,21 @@ class _CaptureViewState extends State<CaptureView> {
             IceButton(
               onPressed: () async {
                 try {
-                  //https://stackoverflow.com/questions/66185696/how-to-convert-a-xfile-to-file-in-flutter
                   await _initializeControllerFuture;
                   XFile f = await _controller.stopVideoRecording();
-                  File f2 = File(f.path);
-                  await f2.copy((await getApplicationDocumentsDirectory()).path + f.path.split('/').last);
-                  if(mounted) {
-                    showDialog(context: context, barrierDismissible: false, builder: (_) {
-                      return SimpleDialog(
-                        title: const Text("Sauvegarde en mémoire", textAlign: TextAlign.center,),
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: SizedBox(width: 50, child: LinearProgressIndicator(color: primaryColor, backgroundColor: discreetText,)),
-                              ),
-                              Text("Veuillez patienter")
-                            ],
-                          )
-                        ],
-
-                      );
-                    });
+                  if (mounted) {
+                    displaySavingDialog();
+                    await ExternalStorageService().saveVideo(
+                        f); // TODO: Save to localDataBase. and eventually Firebase?
                   }
-
+                  if (mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  }
                 } catch (e) {
-                  print(e);
+                  developer.log(e.toString());
+                  if (mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  }
                 }
               },
               text: "Stop la capture d'acquisition",
@@ -137,5 +123,36 @@ class _CaptureViewState extends State<CaptureView> {
     } else {
       return const Center(child: CircularProgressIndicator());
     }
+  }
+
+  void displaySavingDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return SimpleDialog(
+            title: const Text(
+              "Sauvegarde en mémoire",
+              textAlign: TextAlign.center,
+            ),
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: SizedBox(
+                        width: 50,
+                        child: LinearProgressIndicator(
+                          color: primaryColor,
+                          backgroundColor: discreetText,
+                        )),
+                  ),
+                  Text("Veuillez patienter")
+                ],
+              )
+            ],
+          );
+        });
   }
 }
