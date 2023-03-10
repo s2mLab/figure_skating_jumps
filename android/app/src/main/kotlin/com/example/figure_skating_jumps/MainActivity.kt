@@ -5,21 +5,26 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import android.util.JsonWriter
 import android.util.Log
 import androidx.annotation.NonNull
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
-import com.xsens.dot.android.sdk.models.XsensDotPayload
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import com.example.figure_skating_jumps.EventStreamHandler
+import io.flutter.plugin.common.EventChannel.StreamHandler
+import io.flutter.plugin.common.JSONUtil
 
 
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
     private var recordingCallback: RecordingCallback? = null
     private lateinit var deviceScanner: DeviceScanner
+    private lateinit var eventChannel: EventChannel
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -31,6 +36,13 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, result ->
             handleXsensDotCalls(call, result)
         }
+        eventChannel = EventChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "xsens-dot-event-channel"
+        )
+        eventChannel.setStreamHandler(
+            EventStreamHandler
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -55,7 +67,7 @@ class MainActivity : FlutterActivity() {
     //Had the supported methods here (the when acts like a switch statement)
     private fun handleXsensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getSDKVersion" -> exportDataFile(result)
+            "getSDKVersion" -> getSDKVersion(result)
             "startScan" -> startScan(result)
             "stopScan" -> stopScan(result)
             "connectXSensDot" -> connectXSensDot(call, result)
@@ -69,6 +81,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getSDKVersion(result: MethodChannel.Result) {
+        EventStreamHandler.sendEvent("The event stream works!")
         result.success(XsensDotSdk.getSdkVersion())
     }
 
