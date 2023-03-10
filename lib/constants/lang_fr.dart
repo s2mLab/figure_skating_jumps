@@ -50,6 +50,11 @@ const String connectingButton = "Connexion...";
 const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
 
+// widgets/screens/acquisitions_view
+const String capturesTab = "Captures";
+const String progressionTab = "Progression";
+const String optionsTab = "Options";
+
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
 const String ifNotAnAthletePrompt =

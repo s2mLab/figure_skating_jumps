@@ -1,7 +1,11 @@
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/widgets/layout/progression_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
+import '../layout/captures_tab.dart';
 import '../layout/ice_drawer_menu.dart';
+import '../layout/options_tab.dart';
 import '../layout/topbar.dart';
 
 class AcquisitionsView extends StatefulWidget {
@@ -12,7 +16,10 @@ class AcquisitionsView extends StatefulWidget {
 }
 
 class _AcquisitionsViewState extends State<AcquisitionsView> {
-  int switcherIndex = 0;
+  int _switcherIndex = 0;
+  final CapturesTab _capturesTab = const CapturesTab();
+  final ProgressionTab _progressionTab = const ProgressionTab();
+  final OptionsTab _optionsTab = const OptionsTab();
 
   @override
   Widget build(BuildContext context) {
@@ -32,37 +39,42 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
                         color: primaryColor,
                         fontSize: 25,
                         fontWeight: FontWeight.bold))),
-            SlideSwitcher(
-              children: const [
-                Text(
-                  'First',
-                  style: TextStyle(
-                    color: Color.fromRGBO(53, 90, 242, 1),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'Second',
-                  style: TextStyle(
-                    color: Color.fromRGBO(53, 90, 242, 1),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'Third',
-                  style: TextStyle(
-                    color: Color.fromRGBO(53, 90, 242, 1),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-              onSelect: (int index) => setState(() => switcherIndex = index),
-              slidersColors: const [Colors.white],
-              containerHeight: 60,
-              containerWight: 350,
-              indents: 5,
+            Center(
+                child: SlideSwitcher(
+              onSelect: (int index) => setState(() => _switcherIndex = index),
+              slidersColors: const [primaryBackground],
+              containerHeight: 40,
+              containerWight: MediaQuery.of(context).size.width - 32,
+              indents: 2,
               containerColor: primaryColorLight,
-            ),
+              children: const [
+                Text(capturesTab,
+                    style: TextStyle(
+                      color: primaryColorDark,
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text(progressionTab,
+                    style: TextStyle(
+                      color: primaryColorDark,
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text(optionsTab,
+                    style: TextStyle(
+                      color: primaryColorDark,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            )),
+            Expanded(
+              child: IndexedStack(
+                index: _switcherIndex,
+                children: [
+                  _capturesTab,
+                  _progressionTab,
+                  _optionsTab,
+                ],
+              ),
+            )
           ],
         ));
   }
