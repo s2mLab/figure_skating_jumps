@@ -9,7 +9,9 @@ import '../layout/options_tab.dart';
 import '../layout/topbar.dart';
 
 class AcquisitionsView extends StatefulWidget {
-  const AcquisitionsView({Key? key}) : super(key: key);
+  const AcquisitionsView({Key? key, required this.name}) : super(key: key);
+
+  final String name;
 
   @override
   _AcquisitionsViewState createState() => _AcquisitionsViewState();
@@ -34,8 +36,8 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
             Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: const Text('Thomas Beauchamp',
-                    style: TextStyle(
+                child: Text(widget.name,
+                    style: const TextStyle(
                         color: primaryColor,
                         fontSize: 25,
                         fontWeight: FontWeight.bold))),
