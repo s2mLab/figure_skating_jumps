@@ -3,16 +3,22 @@ import 'dart:async';
 import 'package:figure_skating_jumps/utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class XSensDotChannelService {
   static const _xSensChannel = MethodChannel('xsens-dot-channel');
+  static const _xSensEventChannel = EventChannel("xsens-dot-event-channel");
 
   static final XSensDotChannelService _xSensDotChannelService =
       XSensDotChannelService._internal();
 
   factory XSensDotChannelService() {
+    _xSensEventChannel.receiveBroadcastStream().listen((event) {
+      if (kDebugMode) {
+        print(event);
+      }
+    });
     return _xSensDotChannelService;
   }
 
