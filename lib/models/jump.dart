@@ -29,10 +29,10 @@ class Jump {
     return _capture;
   }
 
-  Jump(this._time, this._duration, this._turns, this._type, this._capture);
+  Jump(this._time, this._duration, this._turns, this._type, this._capture, [this.uID]);
 
-  Jump.fromFirestore(
-      this.uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
+  factory Jump.fromFirestore(
+      uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     int time = userInfo.get('time');
     int duration = userInfo.get('duration');
     double spins = userInfo.get('spins');
@@ -42,6 +42,6 @@ class Jump {
     JumpType type =
         JumpType.values.firstWhere((element) => element.toString() == typeStr);
 
-    Jump(time, duration, spins, type, capture);
+    return Jump(time, duration, spins, type, capture, uID);
   }
 }
