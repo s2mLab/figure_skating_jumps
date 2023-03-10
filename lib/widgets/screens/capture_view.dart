@@ -28,7 +28,7 @@ class _CaptureViewState extends State<CaptureView> {
   void initState() {
     _controller = CameraController(
       CameraService().rearCamera,
-      ResolutionPreset.ultraHigh,
+      ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
     super.initState();
