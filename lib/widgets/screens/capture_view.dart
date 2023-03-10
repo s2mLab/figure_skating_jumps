@@ -6,6 +6,7 @@ import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
+import '../../constants/lang_fr.dart';
 import '../layout/ice_drawer_menu.dart';
 import '../layout/topbar.dart';
 import 'dart:developer' as developer;
@@ -132,7 +133,7 @@ class _CaptureViewState extends State<CaptureView> {
         builder: (_) {
           return SimpleDialog(
             title: const Text(
-              "Sauvegarde en mémoire",
+              savingToMemory,
               textAlign: TextAlign.center,
             ),
             children: [
@@ -148,7 +149,7 @@ class _CaptureViewState extends State<CaptureView> {
                           backgroundColor: discreetText,
                         )),
                   ),
-                  Text("Veuillez patienter")
+                  Text(pleaseWait)
                 ],
               )
             ],
