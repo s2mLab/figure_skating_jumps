@@ -121,9 +121,8 @@ class _CaptureViewState extends State<CaptureView> {
           child: _controller.buildPreview(),
         ),
       );
-    } else {
-      return const Center(child: CircularProgressIndicator());
     }
+    return const Center(child: CircularProgressIndicator());
   }
 
   void displaySavingDialog() {
