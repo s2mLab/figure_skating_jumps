@@ -10,6 +10,7 @@ import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/login_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/skater_creation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +47,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/DemoConnection': (context) => const DemoConnection(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         '/Login': (context) => const LoginView(),
+        '/CreateSkater': (context) => const SkaterCreationView(),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
@@ -102,6 +104,14 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('CoachAccountCreation')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/CreateSkater',
+                );
+              },
+              child: const Text('CreateSkaterUI')),
           TextButton(
               onPressed: () async {
                 UserClient().signIn(email: 'gary@gary.com', password: 'abcdef12345');
