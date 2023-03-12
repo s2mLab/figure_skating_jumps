@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,9 @@ class RawDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: true),
+      drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
+      drawerScrimColor: Colors.transparent,
+      drawerEnableOpenDragGesture: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

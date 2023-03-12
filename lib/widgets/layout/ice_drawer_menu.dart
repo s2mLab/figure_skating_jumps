@@ -19,6 +19,24 @@ class IceDrawerMenu extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             NavMenuElement(
+                text: manageDevicesDrawerTile,
+                iconData: Icons.settings_bluetooth_outlined,
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/ManageDevices',
+                  );
+                }),
+            NavMenuElement(
+                text: addSkaterDrawerTile,
+                iconData: Icons.add_reaction_outlined,
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/CreateSkater',
+                  );
+                }),
+            NavMenuElement(
                 text: rawDataDrawerTile,
                 iconData: Icons.terminal,
                 onPressed: () {
@@ -34,6 +52,7 @@ class IceDrawerMenu extends StatelessWidget {
                             )),
                   );
                 }),
+
           ],
         ),
       ),
