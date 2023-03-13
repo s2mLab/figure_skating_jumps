@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -98,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                                         AutovalidateMode.onUserInteraction,
                                     controller: _emailController,
                                     validator: (value) {
-                                      return _emailValidator(value);
+                                      return FieldValidators.loginEmailValidator(value);
                                     },
                                     onChanged: (value) {
                                       setState(() {
@@ -117,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                                     controller: _passwordController,
                                     obscureText: true,
                                     validator: (value) {
-                                      return _passValidator(value);
+                                      return FieldValidators.loginPassValidator(value);
                                     },
                                     onChanged: (value) {
                                       setState(() {
@@ -168,19 +169,5 @@ class _LoginViewState extends State<LoginView> {
                         ))),
               ],
             )))));
-  }
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    return null;
-  }
-
-  String? _passValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return pleaseFillField;
-    }
-    return null;
   }
 }
