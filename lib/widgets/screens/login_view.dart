@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
@@ -80,10 +81,15 @@ class _LoginViewState extends State<LoginView> {
                     width: double.infinity,
                     margin: const EdgeInsets.all(32.0),
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        connectionShadow
+                      ],
+                    ),
                     child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 32.0),
                         child: Column(
                           children: [
                             const Padding(
@@ -99,7 +105,8 @@ class _LoginViewState extends State<LoginView> {
                                         AutovalidateMode.onUserInteraction,
                                     controller: _emailController,
                                     validator: (value) {
-                                      return FieldValidators.loginEmailValidator(value);
+                                      return FieldValidators
+                                          .loginEmailValidator(value);
                                     },
                                     onChanged: (value) {
                                       setState(() {
@@ -118,7 +125,8 @@ class _LoginViewState extends State<LoginView> {
                                     controller: _passwordController,
                                     obscureText: true,
                                     validator: (value) {
-                                      return FieldValidators.loginPassValidator(value);
+                                      return FieldValidators.loginPassValidator(
+                                          value);
                                     },
                                     onChanged: (value) {
                                       setState(() {

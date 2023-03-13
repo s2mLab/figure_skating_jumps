@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
+import '../../constants/styles.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../../enums/user_role.dart';
@@ -90,14 +91,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
-                          // TODO: might want to save the boxshadow value in a style file for future use
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 4), // changes position of shadow
-                          ),
+                          connectionShadow
                         ],
                       ),
                       child: Padding(

@@ -61,18 +61,9 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
             child: Container(
               height: MediaQuery.of(context).size.height - topbarHeight,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: primaryBackground,
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                boxShadow: [
-                  // TODO: might want to save the boxshadow value in a style file for future use
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 4), // changes position of shadow
-                  ),
-                ],
+                borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -82,7 +73,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                     const Padding(
                       padding: EdgeInsets.only(
                           left: 8.0, right: 8.0, bottom: 24.0, top: 8.0),
-                      child: PageTitle(text: "Ajout d'un patineur"),
+                      child: PageTitle(text: addASkaterTitle),
                     ),
                     const InstructionPrompt(
                         createAthleteExplainPrompt, secondaryColor),

@@ -7,12 +7,6 @@ class FieldValidators {
   /// This function takes a [String] value and performs validation checks to ensure
   /// that the value is not null or empty, and that it does not exceed 255 characters.
   ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
-  ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? newNameValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -30,12 +24,6 @@ class FieldValidators {
   /// This function takes a [String] value and performs validation checks to ensure
   /// that the value is not null or empty, and that it is in a valid email format.
   ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
-  ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? newEmailValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -51,12 +39,6 @@ class FieldValidators {
   ///
   /// This function takes a [String] value and performs validation checks to ensure
   /// that the value is not null or empty, and that it contains at least 10 characters.
-  ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
   ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? newPassValidator(String? value) {
@@ -74,12 +56,6 @@ class FieldValidators {
   /// This function takes two [String] values: a `value` to validate and a `password` to compare it against.
   /// It checks whether the `value` matches the `password` and returns an error message if they do not match.
   ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
-  ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? newPassConfirmValidator(String? value, String? password) {
     return value == password ? null : passwordMismatch;
@@ -89,12 +65,6 @@ class FieldValidators {
   ///
   /// This function takes a [String] value and performs validation checks to ensure
   /// that the value is not null or empty.
-  ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
   ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? loginEmailValidator(String? value) {
@@ -109,12 +79,6 @@ class FieldValidators {
   ///
   /// This function takes a [String] value and performs validation checks to ensure
   /// that the value is not null or empty.
-  ///
-  /// If the validation succeeds, this function returns `null`. If the validation fails,
-  /// it returns a [String] error message describing the reason for the failure.
-  ///
-  /// This function is static, so it can be called directly on the class without
-  /// creating an instance of the class.
   ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? loginPassValidator(String? value) {

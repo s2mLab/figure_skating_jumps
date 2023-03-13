@@ -37,7 +37,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
         Expanded(
             child: XSensDotConnection().connectionState == XSensConnectionState.connected
                 ? const DotConnected()
-                : const NoDotConnected()), //TODO : adjust when real connections
+                : const NoDotConnected()),
         Center(
             child: Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
