@@ -28,3 +28,12 @@ const reconnectingXSensDotButtonBackground = Color(0xFFFF9C40);
 
 const progressionBackgroundCurrent = Color(0xF05A5A5A);
 const progressionBackgroundNext = Color(0xFFC3C3C3);
+
+const cardBackground = Color(0xFFC3C3C3);
+
+const axelColor = Color.fromARGB(255, 235, 134, 255);
+const flipColor = Color.fromARGB(255, 119, 226, 226);
+const loopColor = Color.fromARGB(255, 255, 134, 134);
+const lutzColor = Color.fromARGB(255, 134, 136, 255);
+const salchowColor = Color.fromARGB(255, 255, 188, 134);
+const toeColor = Color.fromARGB(255, 128, 221, 151);

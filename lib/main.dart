@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
@@ -11,6 +13,7 @@ import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/login_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,8 +50,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/DemoConnection': (context) => const DemoConnection(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         '/Login': (context) => const LoginView(),
-        '/Acquisitions': (context) =>
-            AcquisitionsView(name: 'Thomas Beauchamp'),
         //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
       },
       debugShowCheckedModeBanner: false,
@@ -68,6 +69,31 @@ class GodView extends StatefulWidget {
 }
 
 class _GodViewState extends State<GodView> {
+  // REMOVE ONCE LIST OF ATHLETE IS DONE. FROM HERE
+  late SkatingUser _skater;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+  _asyncMethod() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await firestore
+        .collection("users")
+        .doc("QbTascjmGwNo28lZPYWCQagIthI3")
+        .get();
+    SkatingUser s = SkatingUser.fromFirestore(
+        firebaseAuth.currentUser?.uid, userInfoSnapshot);
+    _skater = s;
+  }
+  // TO HERE
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,9 +133,10 @@ class _GodViewState extends State<GodView> {
               child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () {
-                Navigator.pushNamed(
+                Navigator.push(
                   context,
-                  '/Acquisitions',
+                  MaterialPageRoute(
+                      builder: (context) => AcquisitionsView(skater: _skater)),
                 );
               },
               child: const Text('Acquisitions')),
