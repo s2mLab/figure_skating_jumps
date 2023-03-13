@@ -110,6 +110,8 @@ class _GodViewState extends State<GodView> {
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: true),
       drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
+      drawerScrimColor: Colors.transparent,
+      drawerEnableOpenDragGesture: false,
       body: Center(
           child: Column(
         children: [
