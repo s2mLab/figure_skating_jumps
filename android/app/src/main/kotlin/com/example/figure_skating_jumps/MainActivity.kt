@@ -19,7 +19,7 @@ import io.flutter.plugin.common.MethodChannel
 import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotRecorder
-import com.example.figure_skating_jumps.xsens_dot_managers.XsensDotDeviceCustomCallback
+import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotDeviceCustomCallback
 import io.flutter.plugin.common.BinaryMessenger
 
 
@@ -127,8 +127,8 @@ class MainActivity : FlutterActivity() {
             "setRate" -> setRate(call, result)
             "disconnectXSensDot" -> disconnectXSensDot(result)
             //TODO add change measuring for recording
-            "startMeasuring" -> startRecording(result)
-            "stopMeasuring" -> stopRecording(result)
+            "startMeasuring" -> startMeasuring(result)
+            "stopMeasuring" -> stopMeasuring(result)
             else -> result.notImplemented()
         }
     }
@@ -150,7 +150,7 @@ class MainActivity : FlutterActivity() {
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
-        val xsensDotDeviceCustomCallback = XsensDotDeviceCustomCallback()
+        val xsensDotDeviceCustomCallback = XSensDotDeviceCustomCallback()
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
@@ -196,7 +196,7 @@ class MainActivity : FlutterActivity() {
     private fun stopMeasuring(result: MethodChannel.Result) {
         Log.i("Android", "stop")
         currentXSensDot?.stopMeasuring()
-
+        //TODO Change that
         result.success(currentXSensDot?.name)
     }
 
