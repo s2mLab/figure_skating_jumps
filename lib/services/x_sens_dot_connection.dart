@@ -21,7 +21,7 @@ class XSensDotConnection {
   XSensConnectionState subscribeConnectionState(
       IXSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
-    return connectionState;
+    return _connectionState;
   }
 
   XSensConnectionState get connectionState {
