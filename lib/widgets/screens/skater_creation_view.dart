@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -46,7 +47,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
         }, child:
           SingleChildScrollView(child:
           Container(
-            height: MediaQuery.of(context).size.height - 128,
+            height: MediaQuery.of(context).size.height - topbarHeight,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: primaryBackground,
