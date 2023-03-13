@@ -21,6 +21,8 @@ const String noConnectionMessage =
 
 // widgets/layout/ice_drawer_menu
 const String rawDataDrawerTile = "Données brutes";
+const String addSkaterDrawerTile = "Ajouter un patineur";
+const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -74,6 +76,10 @@ const String passwordMismatch = "Les mots de passe sont différents.";
 const String confirmCreateCoachAccount = "Créer le compte";
 const String accountCreationError = "Erreur de création de compte";
 const String tryLater = 'Veuillez réessayer plus tard.';
+
+// widgets/screens/skater_creation_view
+const String createAthleteExplainPrompt = "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
+const String addASkaterTitle = "Ajouter un patineur";
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";
