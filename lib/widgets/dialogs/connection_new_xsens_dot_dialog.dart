@@ -226,8 +226,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   //TODO: That check will have to be implemented
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if (await _xSensDotConnectionService.connect(device) &&
-        await _xSensDotChannelService.setRate(defaultFrequency)) {
+    if (await _xSensDotConnectionService.connect(device) /*&&
+        await _xSensDotChannelService.setRate(defaultFrequency)*/) {
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
         _connectionStep = 1;
