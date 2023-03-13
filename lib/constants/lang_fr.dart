@@ -3,6 +3,12 @@ const String searching = "Recherche en cours";
 const String cancel = "Annuler";
 const String continueTo = "Poursuivre";
 const String goBack = "Retour";
+const String axelAbbreviation = "A";
+const String flipAbbreviation = "F";
+const String loopAbbreviation = "Lo";
+const String lutzAbbreviation = "Lz";
+const String salchowAbbreviation = "S";
+const String toeAbbreviation = "T";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
