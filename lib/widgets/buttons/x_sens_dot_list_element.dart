@@ -34,8 +34,15 @@ class XSensDotListElement extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     color: lineColor ?? primaryColorLight),
               )
-            : const Padding(
-                padding: EdgeInsets.only(left: 8),
+            : Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Container(
+                  height: 64,
+                  width: 4,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.transparent),
+                ),
               ),
         graphic,
         Expanded(
