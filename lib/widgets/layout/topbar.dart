@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,7 +12,7 @@ class Topbar extends StatefulWidget implements PreferredSizeWidget {
   State<Topbar> createState() => _TopbarState();
 
   @override
-  final Size preferredSize = const Size.fromHeight(128);
+  final Size preferredSize = const Size.fromHeight(topbarHeight);
 }
 
 class _TopbarState extends State<Topbar> {
@@ -20,7 +21,7 @@ class _TopbarState extends State<Topbar> {
     return Container(
       width: double.infinity,
       color: widget.isUserDebuggingFeature ? darkText : primaryColor,
-      height: 128,
+      height: topbarHeight,
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
         child: Column(
