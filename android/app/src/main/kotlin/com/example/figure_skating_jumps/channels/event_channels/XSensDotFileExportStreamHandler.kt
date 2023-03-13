@@ -1,11 +1,9 @@
 package com.example.figure_skating_jumps.channels.event_channels
 
-import io.flutter.plugin.common.EventChannel
-
-object XSensDotFileExportStreamHandler : IXSensDotEventStreamHandler<String> {
-    override var sink: EventChannel.EventSink? = null
-
+object XSensDotFileExportStreamHandler : XSensDotEventStreamHandler<String>() {
     override fun sendEvent(event: String) {
-        sink?.success(event)
+        handler.post {
+            sink?.success(event)
+        }
     }
 }

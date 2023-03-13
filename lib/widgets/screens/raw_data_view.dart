@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_data_service.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
@@ -44,13 +46,14 @@ class _LoggerView extends StatefulWidget {
 }
 
 class _LoggerViewState extends State<_LoggerView> {
-  final List<String> _logs = [];
+  final List<String> _logs = XSensDotDataService().measuredData.map((el) => el.toString()).toList();
   final ScrollController _scrollController = ScrollController();
   late final StreamSubscription<String>? _subscription;
 
   @override
   void initState() {
     super.initState();
+    XSensDotChannelService().startMeasuring();
     // TODO: remove placeholder long value
     _logs.add(
         'vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
@@ -67,6 +70,7 @@ class _LoggerViewState extends State<_LoggerView> {
 
   @override
   void dispose() {
+    XSensDotChannelService().stopMeasuring();
     _scrollController.dispose();
     _subscription?.cancel();
     super.dispose();

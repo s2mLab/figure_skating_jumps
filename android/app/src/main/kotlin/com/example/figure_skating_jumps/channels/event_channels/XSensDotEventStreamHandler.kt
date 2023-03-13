@@ -1,10 +1,13 @@
 package com.example.figure_skating_jumps.channels.event_channels
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import io.flutter.plugin.common.EventChannel
 
-interface IXSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
-    var sink: EventChannel.EventSink?
+abstract class XSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
+    var sink: EventChannel.EventSink? = null
+    val handler: Handler = Handler(Looper.getMainLooper())
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         sink = events
@@ -15,5 +18,5 @@ interface IXSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
         sink = null
     }
 
-    fun sendEvent(event: T)
+    abstract fun sendEvent(event: T)
 }
