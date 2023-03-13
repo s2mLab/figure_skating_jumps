@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -45,6 +46,16 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     _passwordController = TextEditingController(text: _coachPassword);
     _confirmPassController = TextEditingController(text: _coachPassConfirm);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _surnameController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
   }
 
   @override
@@ -148,7 +159,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _nameValidator(value);
+                return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: surname,
@@ -165,7 +176,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _nameValidator(value);
+                return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: name,
@@ -182,7 +193,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _emailValidator(value);
+                return FieldValidators.newEmailValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: email,
@@ -247,7 +258,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _passValidator(value);
+                return FieldValidators.newPassValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: password,
@@ -264,7 +275,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _passConfirmValidator(value, _coachPassword);
+                return FieldValidators.newPassConfirmValidator(value, _coachPassword);
               },
               decoration: const InputDecoration(
                 labelText: passConfirmSame,
@@ -305,40 +316,6 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         ),
       ),
     ]);
-  }
-
-  String? _nameValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    if (value.length > 255) {
-      return reduceCharacter;
-    }
-    return null;
-  }
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
-      return invalidEmailFormat;
-    }
-    return null;
-  }
-
-  String? _passValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return pleaseFillField;
-    }
-    if (value.length < 10) {
-      return addCharacters;
-    }
-    return null;
-  }
-
-  String? _passConfirmValidator(String? value, String? password) {
-    return value == password ? null : passwordMismatch;
   }
 
   Future<bool> _createAccount() async {
