@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
 
 class BluetoothDiscovery {
+  
   static final BluetoothDiscovery _bluetoothDiscovery =
       BluetoothDiscovery._internal();
   final List<IBluetoothDiscoverySubscriber> _subscribers = [];

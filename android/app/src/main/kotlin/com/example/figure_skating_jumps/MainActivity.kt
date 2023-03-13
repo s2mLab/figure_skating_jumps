@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
+import com.example.figure_skating_jumps.channels.event_channels.*
+import com.example.figure_skating_jumps.channels.method_channels.MethodChannelNames
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import io.flutter.embedding.android.FlutterActivity
@@ -14,35 +16,22 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import com.example.figure_skating_jumps.event_channels.XSensDotConnectionStreamHandler
+import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotRecorder
 import com.example.figure_skating_jumps.xsens_dot_managers.XsensDotDeviceCustomCallback
+import io.flutter.plugin.common.BinaryMessenger
 
 
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
-    private var XSensDotRecorder: XSensDotRecorder? = null
-    private lateinit var XSensDotDeviceScanner: XSensDotDeviceScanner
-    private lateinit var eventChannel: EventChannel
+    private var xSensDotRecorder: XSensDotRecorder? = null
+    private lateinit var xSensDotDeviceScanner: XSensDotDeviceScanner
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        XSensDotDeviceScanner = XSensDotDeviceScanner(this)
-
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "xsens-dot-channel"
-        ).setMethodCallHandler { call, result ->
-            handleXsensDotCalls(call, result)
-        }
-        eventChannel = EventChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "xsens-dot-event-channel"
-        )
-        eventChannel.setStreamHandler(
-            XSensDotConnectionStreamHandler
-        )
+        xSensDotDeviceScanner = XSensDotDeviceScanner(this)
+        setUpChannels(flutterEngine.dartExecutor.binaryMessenger)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -62,6 +51,70 @@ class MainActivity : FlutterActivity() {
             this
         )
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun setUpChannels(messenger: BinaryMessenger){
+        MethodChannel(
+            messenger,
+            MethodChannelNames.XSensDotChannel.channelName
+        ).setMethodCallHandler { call, result ->
+            handleXsensDotCalls(call, result)
+        }
+
+        MethodChannel(
+            messenger,
+            MethodChannelNames.BluetoothChannel.channelName
+        ).setMethodCallHandler { call, result ->
+            handleBluetoothPermissionsCalls(call, result)
+        }
+
+        EventChannel(
+            messenger,
+            EventChannelNames.BluetoothChannel.channelName
+        ).setStreamHandler(
+            BluetoothPermissionStreamHandler
+        )
+
+        EventChannel(
+            messenger,
+            EventChannelNames.ConnectionChannel.channelName
+        ).setStreamHandler(
+            XSensDotConnectionStreamHandler
+        )
+
+        EventChannel(
+            messenger,
+            EventChannelNames.FileExportChannel.channelName
+        ).setStreamHandler(
+            XSensDotFileExportStreamHandler
+        )
+
+        EventChannel(
+            messenger,
+            EventChannelNames.MeasuringChannel.channelName
+        ).setStreamHandler(
+            XSensDotMeasuringStreamHandler
+        )
+
+        EventChannel(
+            messenger,
+            EventChannelNames.RecordingChannel.channelName
+        ).setStreamHandler(
+            XSensDotRecordingStreamHandler
+        )
+
+        EventChannel(
+            messenger,
+            EventChannelNames.ScanChannel.channelName
+        ).setStreamHandler(
+            XSensDotScanStreamHandler
+        )
+    }
+
+    private fun handleBluetoothPermissionsCalls(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            else -> result.notImplemented()
+        }
     }
 
     //Had the supported methods here (the when acts like a switch statement)
@@ -87,12 +140,12 @@ class MainActivity : FlutterActivity() {
 
     private fun startScan(result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
-        XSensDotDeviceScanner.startScan()
+        xSensDotDeviceScanner.startScan()
         result.success("Scan Started!")
     }
 
     private fun stopScan(result: MethodChannel.Result) {
-        result.success(XSensDotDeviceScanner.stopScan().toString())
+        result.success(xSensDotDeviceScanner.stopScan().toString())
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
@@ -107,10 +160,10 @@ class MainActivity : FlutterActivity() {
         currentXSensDot = XsensDotDevice(context, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
-        XSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
+        xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
 
         SystemClock.sleep(30)
-        XSensDotRecorder?.enableDataRecordingNotification()
+        xSensDotRecorder?.enableDataRecordingNotification()
 
         result.success(call.argument<String>("address"))
     }
@@ -126,7 +179,7 @@ class MainActivity : FlutterActivity() {
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         currentXSensDot?.disconnect()
-        XSensDotRecorder = null
+        xSensDotRecorder = null
         result.success("Successfully disconnected device: ${currentXSensDot?.address}")
     }
 
@@ -151,21 +204,21 @@ class MainActivity : FlutterActivity() {
         if (currentXSensDot == null) {
             return
         }
-        XSensDotRecorder?.startRecording()
+        xSensDotRecorder?.startRecording()
 
         Log.i("Android", "start")
         result.success(currentXSensDot?.name)
     }
 
     private fun stopRecording(result: MethodChannel.Result) {
-        XSensDotRecorder?.stopRecording()
+        xSensDotRecorder?.stopRecording()
 
         Log.i("Android", "stop")
         result.success(currentXSensDot?.name)
     }
 
     private fun exportDataFile(result: MethodChannel.Result) {
-        XSensDotRecorder?.getFileInfo()
+        xSensDotRecorder?.getFileInfo()
         Log.i("Android", "File Info")
         result.success(currentXSensDot?.name)
     }

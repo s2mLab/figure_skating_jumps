@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
@@ -7,18 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class XSensDotChannelService {
-  static const _xSensChannel = MethodChannel('xsens-dot-channel');
-  static const _xSensEventChannel = EventChannel("xsens-dot-event-channel");
+  static final _xSensMethodChannel = MethodChannel(MethodChannelNames.xSensDotChannel.channelName);
 
   static final XSensDotChannelService _xSensDotChannelService =
       XSensDotChannelService._internal();
 
   factory XSensDotChannelService() {
-    _xSensEventChannel.receiveBroadcastStream().listen((event) {
-      if (kDebugMode) {
-        print(event);
-      }
-    });
     return _xSensDotChannelService;
   }
 
@@ -26,7 +21,7 @@ class XSensDotChannelService {
 
   Future<String> getSDKVersion() async {
     try {
-      return await _xSensChannel.invokeMethod('getSDKVersion');
+      return await _xSensMethodChannel.invokeMethod('getSDKVersion');
     } on PlatformException catch (e) {
       return e.message!;
     }
@@ -34,7 +29,7 @@ class XSensDotChannelService {
 
   Future<void> startScan() async {
     try {
-      await _xSensChannel.invokeMethod('startScan');
+      await _xSensMethodChannel.invokeMethod('startScan');
     } on PlatformException catch (e) {
       debugPrint("err");
       debugPrint(e.message!);
@@ -45,7 +40,7 @@ class XSensDotChannelService {
     List<BluetoothDevice> devices = [];
     try {
       devices = XSensDeserializer.deserializeDevices(
-          await _xSensChannel.invokeMethod('stopScan'));
+          await _xSensMethodChannel.invokeMethod('stopScan'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
@@ -54,7 +49,7 @@ class XSensDotChannelService {
 
   Future<String> connectXSensDot({String macAddress = 'D4:22:CD:00:19:F4'}) async {
     try {
-      return await _xSensChannel.invokeMethod(
+      return await _xSensMethodChannel.invokeMethod(
           'connectXSensDot', <String, dynamic>{'address': macAddress});
     } on PlatformException catch (e) {
       return e.message!;
@@ -63,7 +58,7 @@ class XSensDotChannelService {
 
   Future<String> disconnectXSensDot() async {
     try {
-      return await _xSensChannel.invokeMethod('disconnectXSensDot');
+      return await _xSensMethodChannel.invokeMethod('disconnectXSensDot');
     } on PlatformException catch (e) {
       return e.message!;
     }
@@ -71,7 +66,7 @@ class XSensDotChannelService {
 
   Future<bool> setRate(int rate) async {
     try {
-      await _xSensChannel
+      await _xSensMethodChannel
           .invokeMethod('setRate', <String, dynamic>{'rate': rate});
       return true;
     } on PlatformException catch (e) {
@@ -82,7 +77,7 @@ class XSensDotChannelService {
 
   Future<void> startMeasuring() async {
     try {
-      debugPrint(await _xSensChannel.invokeMethod('startMeasuring'));
+      debugPrint(await _xSensMethodChannel.invokeMethod('startMeasuring'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
@@ -92,7 +87,7 @@ class XSensDotChannelService {
     List<XSensDotData> data = [];
     try {
       data = XSensDeserializer.deserializeData(
-          await _xSensChannel.invokeMethod('stopMeasuring'));
+          await _xSensMethodChannel.invokeMethod('stopMeasuring'));
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
