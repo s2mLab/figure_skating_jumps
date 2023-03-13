@@ -21,11 +21,16 @@ class XSensDotConnection {
   XSensConnectionState subscribeConnectionState(
       IXSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
-    return getState();
+    return _connectionState;
   }
 
-  XSensConnectionState getState() {
+  XSensConnectionState get connectionState {
     return _connectionState;
+  }
+
+  BluetoothDevice? get currentXSensDevice {
+    if (_currentXSensDevice == null) return null;
+    return BluetoothDevice.deepClone(_currentXSensDevice!);
   }
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
