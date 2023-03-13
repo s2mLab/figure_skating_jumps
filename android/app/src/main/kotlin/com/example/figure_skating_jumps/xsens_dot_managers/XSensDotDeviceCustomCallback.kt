@@ -27,8 +27,9 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
     }
 
     override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
-        XSensDotMeasuringStreamHandler.sendEvent(CustomXSensDotData(data))
-        Log.i("XSensDot", "Acceleration data:${data?.acc} Array Size: ${data?.acc?.size}")
+        val customXSensDotData = CustomXSensDotData(data)
+        XSensDotMeasuringStreamHandler.sendEvent(customXSensDotData)
+        Log.i("XSensDot", "Received live data from $address : $customXSensDotData")
     }
 
     override fun onSyncStatusUpdate(address: String?, isSynced: Boolean) {
