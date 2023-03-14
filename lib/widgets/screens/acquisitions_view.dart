@@ -41,7 +41,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
 
   _loadCapturesData() async {
     for (String captureID in widget.skater.captures) {
-      _captures.add(Capture.fromFirestore(
+      _captures.add(await Capture.create(
           captureID,
           await _firestore
               .collection(_captureCollectionString)
