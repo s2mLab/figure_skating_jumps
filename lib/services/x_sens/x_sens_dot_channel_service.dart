@@ -4,7 +4,6 @@ import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_data_service.dart';
 import 'package:figure_skating_jumps/utils/x_sens_deserializer.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

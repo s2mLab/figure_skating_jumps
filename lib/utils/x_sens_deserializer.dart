@@ -1,6 +1,4 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
-import 'package:flutter/material.dart';
 
 class XSensDeserializer {
   static List<BluetoothDevice> deserializeDevices(String rawObject) {
