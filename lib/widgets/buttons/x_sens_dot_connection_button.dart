@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';

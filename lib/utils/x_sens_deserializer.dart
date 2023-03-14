@@ -1,7 +1,7 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 
 class XSensDeserializer {
-  static List<BluetoothDevice> deserialize(String rawObject) {
+  static List<BluetoothDevice> deserializeDevices(String rawObject) {
     List<BluetoothDevice> devices = [];
     List<String> splitObject = rawObject.toString().split("), (");
     splitObject.first = splitObject.first.replaceFirst("[(", "");
