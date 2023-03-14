@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
