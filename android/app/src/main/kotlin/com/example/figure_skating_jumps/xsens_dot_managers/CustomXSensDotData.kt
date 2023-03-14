@@ -16,15 +16,15 @@ data class CustomXSensDotData(private val data: XsensDotData?) {
     override fun toString(): String {
         val json = buildJsonObject {
             putJsonArray("acc") {
-                for (metric in acc!!) add( JsonPrimitive(metric))
+                for (metric in acc!!) add(JsonPrimitive(metric))
             }
             putJsonArray("gyr") {
-                for (metric in gyr!!) add( JsonPrimitive(metric))
+                for (metric in gyr!!) add(JsonPrimitive(metric))
             }
             putJsonArray("euler") {
-                for (metric in euler!!) add( JsonPrimitive(metric))
+                for (metric in euler!!) add(JsonPrimitive(metric))
             }
-            put("time", JsonPrimitive( time))
+            put("time", JsonPrimitive(time))
             put("id", JsonPrimitive(id))
         }
         return json.toString();

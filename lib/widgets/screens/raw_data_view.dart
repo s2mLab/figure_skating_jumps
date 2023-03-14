@@ -11,7 +11,7 @@ import '../../constants/colors.dart';
 import '../layout/topbar.dart';
 
 class RawDataView extends StatelessWidget {
-  const RawDataView({super.key });
+  const RawDataView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,32 +22,34 @@ class RawDataView extends StatelessWidget {
       drawerEnableOpenDragGesture: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-          Text(rawDataTitle,
-              style: TextStyle(
-                  color: primaryColor,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold)),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 24.0),
-            child: InstructionPrompt(warnRawDataPrompt, secondaryColor),
-          ),
-          _LoggerView()
-        ]),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(rawDataTitle,
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold)),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.0),
+                child: InstructionPrompt(warnRawDataPrompt, secondaryColor),
+              ),
+              _LoggerView()
+            ]),
       ),
     );
   }
 }
 
 class _LoggerView extends StatefulWidget {
-
-  const _LoggerView({Key? key }) : super(key: key);
+  const _LoggerView({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LoggerViewState();
 }
 
-class _LoggerViewState extends State<_LoggerView> implements IXSensDotMeasuringDataSubscriber {
+class _LoggerViewState extends State<_LoggerView>
+    implements IXSensDotMeasuringDataSubscriber {
   final ScrollController _scrollController = ScrollController();
   late List<XSensDotData> _displayedData;
 
@@ -60,8 +62,8 @@ class _LoggerViewState extends State<_LoggerView> implements IXSensDotMeasuringD
 
   @override
   void dispose() {
-    XSensDotChannelService().stopMeasuring();
     _scrollController.dispose();
+    XSensDotChannelService().stopMeasuring();
     super.dispose();
   }
 
@@ -77,9 +79,7 @@ class _LoggerViewState extends State<_LoggerView> implements IXSensDotMeasuringD
                 itemBuilder: (context, i) {
                   return Text(_displayedData[i].toString(),
                       style: const TextStyle(
-                          fontSize: 5,
-                          color: paleText,
-                          fontFamily: 'monospace'));
+                          fontSize: 5, color: paleText, fontFamily: 'monospace'));
                 })),
       );
   }

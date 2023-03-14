@@ -84,11 +84,13 @@ class XSensDotChannelService {
     }
   }
 
-  Future<void> stopMeasuring() async {
+  Future<bool> stopMeasuring() async {
     try {
           await _xSensMethodChannel.invokeMethod('stopMeasuring');
+          return true;
     } on PlatformException catch (e) {
       debugPrint(e.message!);
+      return false;
     }
   }
 }

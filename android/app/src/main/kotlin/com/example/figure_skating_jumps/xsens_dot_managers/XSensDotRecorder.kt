@@ -34,7 +34,8 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     fun enableDataRecordingNotification() {
         Log.i("XSensDot", "Im called")
         while (device.connectionState == XsensDotDevice.CONN_STATE_CONNECTING
-            || device.connectionState == XsensDotDevice.CONN_STATE_RECONNECTING) {
+            || device.connectionState == XsensDotDevice.CONN_STATE_RECONNECTING
+        ) {
             SystemClock.sleep(30)
         }
         if (device.connectionState != XsensDotDevice.CONN_STATE_CONNECTED) {
@@ -43,9 +44,10 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
         }
         mManager.enableDataRecordingNotification()
     }
+
     fun getFileInfo() {
         enableDataRecordingNotification()
-        Log.i("XSensDot", "WTF ${mManager.isActive} ${mManager.recordingState}")
+        Log.i("XSensDot", "isActive ${mManager.isActive} recordState ${mManager.recordingState}")
         Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(30)

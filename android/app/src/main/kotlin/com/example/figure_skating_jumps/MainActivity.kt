@@ -185,6 +185,7 @@ class MainActivity : FlutterActivity() {
 
     private fun startMeasuring(result: MethodChannel.Result) {
         if (currentXSensDot == null) {
+            result.error("1", "Not connected to device", null);
             return
         }
         currentXSensDot?.startMeasuring()
@@ -202,6 +203,7 @@ class MainActivity : FlutterActivity() {
 
     private fun startRecording(result: MethodChannel.Result){
         if (currentXSensDot == null) {
+            result.error("1", "Not connected to device", null);
             return
         }
         xSensDotRecorder?.startRecording()
