@@ -1,5 +1,5 @@
 //Inspired by the code given by the Movella Team
-package com.example.figure_skating_jumps
+package com.example.figure_skating_jumps.permissions
 
 import android.Manifest.permission
 import android.app.Activity
@@ -14,6 +14,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.example.figure_skating_jumps.MainActivity
+import com.example.figure_skating_jumps.R
 
 
 object PermissionUtils {

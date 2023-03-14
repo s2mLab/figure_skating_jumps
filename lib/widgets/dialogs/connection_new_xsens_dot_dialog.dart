@@ -6,8 +6,7 @@ import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
-
-import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -39,7 +38,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void initState() {
-    _devices = _discoveryService.subscribeBluetoothDiscovery(this);
+    _devices = _discoveryService.subscribe(this);
     _discoveryService.refreshFromKotlinHandle();
     _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
       if (_connectionStep == 0) {
