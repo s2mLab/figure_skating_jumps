@@ -44,6 +44,7 @@ dependencies:
     sqflite:
     path:
     slide_switcher: ^1.1.2
+    intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

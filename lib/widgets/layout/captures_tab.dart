@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
@@ -15,6 +16,10 @@ class CapturesTab extends StatefulWidget {
 }
 
 class _CapturesTabState extends State<CapturesTab> {
+  DateTime _currentDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  final dateDisplayFormat = DateFormat('dd/MM/yyyy');
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,44 +34,63 @@ class _CapturesTabState extends State<CapturesTab> {
                 final item = widget.captures[index];
                 final String time = "${item.date.hour}h${item.date.minute}";
                 final int duration = item.duration;
-                return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                        color: cardBackground,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(time,
-                                style: const TextStyle(
-                                    fontSize: 24, color: darkText)),
-                            Row(children: [
-                              const Icon(Icons.schedule),
-                              const SizedBox(width: 5),
-                              Text(
-                                TimeConverter.intToTime(duration),
-                                style: const TextStyle(
-                                    fontSize: 16, color: darkText),
+                DateTime date =
+                    DateTime(item.date.year, item.date.month, item.date.day);
+                bool showDate = !date.isAtSameMomentAs(_currentDate);
+                if (showDate) _currentDate = date;
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      showDate
+                          ? Text(
+                              dateDisplayFormat.format(date),
+                              style: const TextStyle(
+                                  fontSize: 26,
+                                  color: primaryColorLight,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : Container(),
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                              color: cardBackground,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(time,
+                                      style: const TextStyle(
+                                          fontSize: 24, color: darkText)),
+                                  Row(children: [
+                                    const Icon(Icons.schedule),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      TimeConverter.intToTime(duration),
+                                      style: const TextStyle(
+                                          fontSize: 16, color: darkText),
+                                    )
+                                  ])
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: axelColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                ],
                               )
-                            ])
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 12,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                  color: axelColor,
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                          ],
-                        )
-                      ],
-                    ));
+                            ],
+                          ))
+                    ]);
               },
             )),
       ],
