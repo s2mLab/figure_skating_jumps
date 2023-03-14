@@ -3,7 +3,7 @@ import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../buttons/x_sens_dot_connection_button.dart';
+import '../../buttons/x_sens_dot_connection_button.dart';
 
 class Topbar extends StatefulWidget implements PreferredSizeWidget {
   final bool isUserDebuggingFeature;
