@@ -19,7 +19,7 @@ class _CapturesTabState extends State<CapturesTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(margin: const EdgeInsets.all(8), child: LegendMove()),
+        Container(margin: const EdgeInsets.all(8), child: const LegendMove()),
         Container(
             height: MediaQuery.of(context).size.height - 300,
             margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -75,53 +75,74 @@ class _CapturesTabState extends State<CapturesTab> {
 }
 
 class LegendMove extends StatelessWidget {
-  LegendMove({Key? key}) : super(key: key);
-
-  final List<String> _abbreviation = [
-    axelAbbreviation,
-    flipAbbreviation,
-    loopAbbreviation,
-    lutzAbbreviation,
-    salchowAbbreviation,
-    toeAbbreviation
-  ];
-
-  final List<Color> _moveColors = [
-    axelColor,
-    flipColor,
-    loopColor,
-    lutzColor,
-    salchowColor,
-    toeColor
-  ];
+  const LegendMove({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 30,
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: _abbreviation.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Flexible(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                            color: _moveColors[index],
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
-                      Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(_abbreviation[index])),
-                    ],
-                  ));
-            }));
+    return Row(
+      children: [
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: axelColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(axelAbbreviation)),
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: flipColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(flipAbbreviation)),
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: loopColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(loopAbbreviation)),
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: lutzColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(lutzAbbreviation)),
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: salchowColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(salchowAbbreviation)),
+        Expanded(child: Container()),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+              color: toeColor, borderRadius: BorderRadius.circular(10)),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            child: const Text(toeAbbreviation)),
+        Expanded(child: Container()),
+      ],
+    );
   }
 }
