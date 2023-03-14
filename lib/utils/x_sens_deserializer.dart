@@ -21,11 +21,4 @@ class XSensDeserializer {
 
     return devices;
   }
-
-  static List<XSensDotData> deserializeData(String rawObject) {
-    debugPrint(rawObject);
-    List<XSensDotData> devices = [];
-
-    return devices;
-  }
 }

@@ -85,14 +85,11 @@ class XSensDotChannelService {
     }
   }
 
-  Future<List<XSensDotData>> stopMeasuring() async {
-    List<XSensDotData> data = [];
+  Future<void> stopMeasuring() async {
     try {
-      data = XSensDeserializer.deserializeData(
-          await _xSensMethodChannel.invokeMethod('stopMeasuring'));
+          await _xSensMethodChannel.invokeMethod('stopMeasuring');
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
-    return data;
   }
 }
