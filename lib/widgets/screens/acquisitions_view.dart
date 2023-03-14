@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/layout/progression_tab.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
@@ -101,7 +100,12 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
               ],
             )),
             loadingData
-                ? const Center(child: Text("Loading..."))
+                ? const Expanded(
+                    child: Center(
+                        child: GFLoader(
+                    size: 70,
+                    loaderstrokeWidth: 5,
+                  )))
                 : Expanded(
                     child: IndexedStack(
                       index: _switcherIndex,

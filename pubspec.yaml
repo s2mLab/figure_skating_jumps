@@ -45,6 +45,7 @@ dependencies:
     path:
     slide_switcher: ^1.1.2
     intl: ^0.17.0
+    getwidget: ^3.0.1
 
 dev_dependencies:
   flutter_test:
