@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
+import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 
-class BluetoothDiscovery {
+class BluetoothDiscovery implements IObservable<IBluetoothDiscoverySubscriber, List<BluetoothDevice>> {
 
   static final BluetoothDiscovery _bluetoothDiscovery =
       BluetoothDiscovery._internal();
@@ -24,12 +25,6 @@ class BluetoothDiscovery {
 
   BluetoothDiscovery._internal();
 
-  List<BluetoothDevice> subscribeBluetoothDiscovery(
-      IBluetoothDiscoverySubscriber subscriber) {
-    _subscribers.add(subscriber);
-    return getDevices();
-  }
-
   List<BluetoothDevice> getDevices() {
     return [
       ..._devices
@@ -40,13 +35,20 @@ class BluetoothDiscovery {
     await XSensDotChannelService().startScan();
     Timer(_scanDuration, () async {
       _devices = await XSensDotChannelService().stopScan();
-      _notifySubscribers(getDevices());
+      notifySubscribers(getDevices());
     });
   }
 
-  void _notifySubscribers(List<BluetoothDevice> devices) {
+  @override
+  void notifySubscribers(List<BluetoothDevice> devices) {
     for (IBluetoothDiscoverySubscriber s in _subscribers) {
       s.onBluetoothDeviceListChange(devices);
     }
+  }
+
+  @override
+  List<BluetoothDevice> subscribe(IBluetoothDiscoverySubscriber subscriber) {
+    _subscribers.add(subscriber);
+    return getDevices();
   }
 }

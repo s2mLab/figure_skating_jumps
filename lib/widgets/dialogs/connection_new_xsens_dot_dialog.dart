@@ -38,7 +38,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void initState() {
-    _devices = _discoveryService.subscribeBluetoothDiscovery(this);
+    _devices = _discoveryService.subscribe(this);
     _discoveryService.refreshFromKotlinHandle();
     _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
       if (_connectionStep == 0) {

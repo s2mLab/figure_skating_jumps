@@ -44,13 +44,8 @@ class IceDrawerMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        // TODO: remove periodic stream and instantiate with xsensdot device datastream
-                        builder: (context) => RawDataView(
-                              logStream: Stream.periodic(
-                                const Duration(milliseconds: 300),
-                                (count) => 'Log entry $count',
-                              ).take(50),
-                            )),
+                        builder: (context) => const RawDataView()
+                    ),
                   );
                 }),
 
