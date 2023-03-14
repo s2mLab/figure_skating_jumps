@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
 import 'package:intl/intl.dart';
@@ -27,7 +28,7 @@ class _CapturesTabState extends State<CapturesTab> {
         Container(margin: const EdgeInsets.all(8), child: const LegendMove()),
         Container(
             height: MediaQuery.of(context).size.height - 300,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ListView.builder(
               itemCount: widget.captures.length,
               itemBuilder: (context, index) {
@@ -86,6 +87,87 @@ class _CapturesTabState extends State<CapturesTab> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                   ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.axel.index]
+                                          .toString())),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: flipColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.flip.index]
+                                          .toString())),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: loopColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.loop.index]
+                                          .toString())),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: lutzColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.lutz.index]
+                                          .toString())),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: salchowColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.salchow.index]
+                                          .toString())),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                        color: toeColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(item
+                                          .jumpTypeCount[JumpType.toeLoop.index]
+                                          .toString())),
                                 ],
                               )
                             ],

@@ -34,6 +34,10 @@ class Capture {
     return _jumps;
   }
 
+  List<int> get jumpTypeCount {
+    return _jumpTypeCount;
+  }
+
   Capture(this._file, this._userID);
 
   Capture.fromJumps(
