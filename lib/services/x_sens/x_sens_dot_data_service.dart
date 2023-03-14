@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../interfaces/i_observable.dart';
@@ -32,7 +33,7 @@ class XSensDotDataService implements IObservable<IXSensDotMeasuringDataSubscribe
   }
 
   @override
-  void notifySubscribers(List<XSensDotData> data) {
+  @protected void notifySubscribers(List<XSensDotData> data) {
     for (IXSensDotMeasuringDataSubscriber s in _subscribers) {
       s.onDataReceived(data);
     }

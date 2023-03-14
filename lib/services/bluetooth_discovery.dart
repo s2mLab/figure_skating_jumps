@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
+import 'package:flutter/material.dart';
 
 class BluetoothDiscovery implements IObservable<IBluetoothDiscoverySubscriber, List<BluetoothDevice>> {
 
@@ -40,7 +41,7 @@ class BluetoothDiscovery implements IObservable<IBluetoothDiscoverySubscriber, L
   }
 
   @override
-  void notifySubscribers(List<BluetoothDevice> devices) {
+  @protected void notifySubscribers(List<BluetoothDevice> devices) {
     for (IBluetoothDiscoverySubscriber s in _subscribers) {
       s.onBluetoothDeviceListChange(devices);
     }
