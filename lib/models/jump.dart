@@ -29,13 +29,14 @@ class Jump {
     return _capture;
   }
 
-  Jump(this._time, this._duration, this._turns, this._type, this._capture, [this.uID]);
+  Jump(this._time, this._duration, this._turns, this._type, this._capture,
+      [this.uID]);
 
   factory Jump.fromFirestore(
       uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     int time = userInfo.get('time');
     int duration = userInfo.get('duration');
-    double spins = userInfo.get('spins');
+    double spins = userInfo.get('turns');
     String capture = userInfo.get('capture');
 
     String typeStr = userInfo.get('type');
