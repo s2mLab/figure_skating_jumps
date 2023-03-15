@@ -133,6 +133,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    //TODO unify result.success and result.error
     private fun getSDKVersion(result: MethodChannel.Result) {
         XSensDotConnectionStreamHandler.sendEvent("The event stream works!")
         result.success(XsensDotSdk.getSdkVersion())
@@ -141,11 +142,12 @@ class MainActivity : FlutterActivity() {
     private fun startScan(result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
         xSensDotDeviceScanner.startScan()
-        result.success("Scan Started!")
+        result.success("Scan Started")
     }
 
     private fun stopScan(result: MethodChannel.Result) {
-        result.success(xSensDotDeviceScanner.stopScan().toString())
+        xSensDotDeviceScanner.stopScan()
+        result.success("Scan Stopped")
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
@@ -191,14 +193,13 @@ class MainActivity : FlutterActivity() {
         currentXSensDot?.startMeasuring()
 
         Log.i("Android", "start")
-        result.success(currentXSensDot?.name)
+        result.success("Measured Started")
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
         Log.i("Android", "stop")
         currentXSensDot?.stopMeasuring()
-        //TODO Change that
-        result.success(currentXSensDot?.name)
+        result.success("Measured Stopped")
     }
 
     private fun startRecording(result: MethodChannel.Result){

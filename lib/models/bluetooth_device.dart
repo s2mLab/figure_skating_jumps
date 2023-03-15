@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class BluetoothDevice {
   late final String _name;
   late final String _macAddress;
@@ -31,6 +33,15 @@ class BluetoothDevice {
             ['Can\'t create class with empty argument', '_macAddress'])
         : _macAddress = macAddress;
     _assignedName = _name;
+  }
+
+  factory BluetoothDevice.fromEvent(String event) {
+    var splitEvent = event.split(",");
+    if (splitEvent.length != 2) {
+      throw ArgumentError(
+          ['Can\'t create class with wrong format', 'event']);
+    }
+    return BluetoothDevice(splitEvent.first, splitEvent.last);
   }
 
   BluetoothDevice.deepClone(BluetoothDevice toBeDeepClonedDevice) {

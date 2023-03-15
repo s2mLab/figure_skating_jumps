@@ -33,24 +33,16 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
   //final XSensDotChannelService _xSensDotChannelService = XSensDotChannelService(); waiting Christophe MR to override comment
-  final Duration _refreshDelay = const Duration(seconds: 10);
-  late Timer _scanDeviceTimer;
 
   @override
   void initState() {
     _devices = _discoveryService.subscribe(this);
-    _discoveryService.refreshFromKotlinHandle();
-    _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
-      if (_connectionStep == 0) {
-        _discoveryService.refreshFromKotlinHandle();
-      }
-    });
+    _discoveryService.scanDevices();
     super.initState();
   }
 
   @override
   void dispose() {
-    _scanDeviceTimer.cancel();
     super.dispose();
   }
 

@@ -63,8 +63,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                         )),
                     GestureDetector(
                         onTap: () async {
-                          List<dynamic> devices =
-                              await _xsensDotService.stopScan();
+                          List<dynamic> devices = [];
                           for (BluetoothDevice dev in devices) {
                             setOutput("available device -> ${dev.macAddress}");
                           }
