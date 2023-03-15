@@ -19,12 +19,12 @@ class CaptureClient {
 
   Future<void> addJump({required Jump jump}) async {
     try {
-      Capture capture = await Capture.create(
-          jump.capture,
-          await _firestore
-              .collection(_captureCollectionString)
-              .doc(jump.capture)
-              .get());
+      final collectionJump = await _firestore
+          .collection(_captureCollectionString)
+          .doc(jump.capture)
+          .get();
+      Capture capture =
+          await Capture.createFromFireBase(jump.capture, collectionJump);
       capture.jumps.add(jump);
       await _firestore
           .collection(_captureCollectionString)
