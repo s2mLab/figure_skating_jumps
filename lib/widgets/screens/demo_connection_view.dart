@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +85,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                     GestureDetector(
                         onTap: () async {
                           setOutput(
-                              "connection to : ${await _xsensDotService.connectXSensDot()}");
+                              "connection to : ${await _xsensDotService.connectXSensDot(macAddress: 'D4:22:CD:00:14:0E')}");
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -95,7 +95,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Connect Xsens DOT'),
                         )),
                     GestureDetector(
-                        onTap: () async => _xsensDotService.startMeasuring(),
+                        onTap: () async => await _xsensDotService.startMeasuring(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -104,7 +104,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Start'),
                         )),
                     GestureDetector(
-                        onTap: () async => _xsensDotService.stopMeasuring(),
+                        onTap: () async => await _xsensDotService.stopMeasuring(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(

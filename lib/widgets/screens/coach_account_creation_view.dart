@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
+import '../../constants/styles.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../../enums/user_role.dart';
@@ -48,6 +50,16 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   }
 
   @override
+  void dispose() {
+    _surnameController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColorLight,
@@ -79,14 +91,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
-                          // TODO: might want to save the boxshadow value in a style file for future use
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 4), // changes position of shadow
-                          ),
+                          connectionShadow
                         ],
                       ),
                       child: Padding(
@@ -148,7 +153,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _nameValidator(value);
+                return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: surname,
@@ -165,7 +170,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _nameValidator(value);
+                return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: name,
@@ -182,7 +187,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _emailValidator(value);
+                return FieldValidators.newEmailValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: email,
@@ -247,7 +252,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _passValidator(value);
+                return FieldValidators.newPassValidator(value);
               },
               decoration: const InputDecoration(
                 labelText: password,
@@ -264,7 +269,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return _passConfirmValidator(value, _coachPassword);
+                return FieldValidators.newPassConfirmValidator(value, _coachPassword);
               },
               decoration: const InputDecoration(
                 labelText: passConfirmSame,
@@ -305,40 +310,6 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         ),
       ),
     ]);
-  }
-
-  String? _nameValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    if (value.length > 255) {
-      return reduceCharacter;
-    }
-    return null;
-  }
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
-      return invalidEmailFormat;
-    }
-    return null;
-  }
-
-  String? _passValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return pleaseFillField;
-    }
-    if (value.length < 10) {
-      return addCharacters;
-    }
-    return null;
-  }
-
-  String? _passConfirmValidator(String? value, String? password) {
-    return value == password ? null : passwordMismatch;
   }
 
   Future<bool> _createAccount() async {

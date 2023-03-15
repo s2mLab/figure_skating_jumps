@@ -6,8 +6,7 @@ import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
-import 'package:figure_skating_jumps/services/x_sens_dot_channel_service.dart';
-import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -27,20 +26,19 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber {
-  static const int defaultFrequency = 60;
+  // static const int defaultFrequency = 60; waiting Christophe MR to override comment
 
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
-  final XSensDotChannelService _xSensDotChannelService =
-      XSensDotChannelService();
+  //final XSensDotChannelService _xSensDotChannelService = XSensDotChannelService(); waiting Christophe MR to override comment
   final Duration _refreshDelay = const Duration(seconds: 10);
   late Timer _scanDeviceTimer;
 
   @override
   void initState() {
-    _devices = _discoveryService.subscribeBluetoothDiscovery(this);
+    _devices = _discoveryService.subscribe(this);
     _discoveryService.refreshFromKotlinHandle();
     _scanDeviceTimer = Timer.periodic(_refreshDelay, (_) {
       if (_connectionStep == 0) {
@@ -226,8 +224,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   //TODO: That check will have to be implemented
 
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if (await _xSensDotConnectionService.connect(device) &&
-        await _xSensDotChannelService.setRate(defaultFrequency)) {
+    if (await _xSensDotConnectionService.connect(device) /*&&
+        await _xSensDotChannelService.setRate(defaultFrequency)*/) { //waiting Christophe MR to override comment
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
         _connectionStep = 1;
