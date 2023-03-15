@@ -26,14 +26,6 @@ class CaptureClient {
               .collection(_captureCollectionString)
               .doc(jump.capture)
               .get());
-      DocumentReference<Map<String, dynamic>> temp =
-          await _firestore.collection(_jumpCollectionString).add({
-        "capture": jump.capture,
-        "duration": jump.duration,
-        "time": jump.time,
-        "turns": jump.turns,
-        "type": jump.type.toString()
-      });
       capture.jumps.add(jump);
       await _firestore
           .collection(_captureCollectionString)

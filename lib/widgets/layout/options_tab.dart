@@ -4,7 +4,9 @@ class OptionsTab extends StatefulWidget {
   const OptionsTab({Key? key}) : super(key: key);
 
   @override
-  _OptionsTabState createState() => _OptionsTabState();
+  State<OptionsTab> createState() {
+    return _OptionsTabState();
+  }
 }
 
 class _OptionsTabState extends State<OptionsTab> {

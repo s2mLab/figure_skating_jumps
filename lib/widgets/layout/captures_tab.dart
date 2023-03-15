@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +12,9 @@ class CapturesTab extends StatefulWidget {
   final List<Capture> captures;
 
   @override
-  _CapturesTabState createState() => _CapturesTabState();
+  State<CapturesTab> createState() {
+    return _CapturesTabState();
+  }
 }
 
 class _CapturesTabState extends State<CapturesTab> {

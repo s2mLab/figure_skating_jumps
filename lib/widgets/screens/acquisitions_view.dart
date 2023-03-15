@@ -18,7 +18,9 @@ class AcquisitionsView extends StatefulWidget {
   final SkatingUser skater;
 
   @override
-  _AcquisitionsViewState createState() => _AcquisitionsViewState();
+  State<AcquisitionsView> createState() {
+    return _AcquisitionsViewState();
+  }
 }
 
 class _AcquisitionsViewState extends State<AcquisitionsView> {
