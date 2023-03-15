@@ -7,8 +7,9 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
+import com.example.figure_skating_jumps.channels.enums.EventChannelNames
 import com.example.figure_skating_jumps.channels.event_channels.*
-import com.example.figure_skating_jumps.channels.method_channels.MethodChannelNames
+import com.example.figure_skating_jumps.channels.enums.MethodChannelNames
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import io.flutter.embedding.android.FlutterActivity
@@ -17,9 +18,9 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import com.example.figure_skating_jumps.permissions.PermissionUtils
-import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotDeviceScanner
-import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotRecorder
-import com.example.figure_skating_jumps.xsens_dot_managers.XSensDotDeviceCustomCallback
+import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScanner
+import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
+import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceCustomCallback
 import io.flutter.plugin.common.BinaryMessenger
 
 
@@ -135,7 +136,7 @@ class MainActivity : FlutterActivity() {
 
     //TODO unify result.success and result.error
     private fun getSDKVersion(result: MethodChannel.Result) {
-        XSensDotConnectionStreamHandler.sendEvent("The event stream works!")
+        XSensDotConnectionStreamHandler.sendEvent(1)
         result.success(XsensDotSdk.getSdkVersion())
     }
 

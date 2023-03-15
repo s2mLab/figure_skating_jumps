@@ -3,7 +3,7 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart'
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
-import '../../enums/x_sens_connection_state.dart';
+import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
@@ -16,7 +16,7 @@ class XSensDotConnectionButton extends StatefulWidget {
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements IXSensStateSubscriber {
   XSensDotConnection connection = XSensDotConnection();
-  late XSensConnectionState connectionState;
+  late XSensDeviceState connectionState;
   final List<String> _connectionStateMessages = [
     connectionStateMessageConnected,
     connectionStateMessageReconnecting,
@@ -82,7 +82,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
   }
 
   @override
-  void onStateChange(XSensConnectionState state) {
+  void onStateChange(XSensDeviceState state) {
     setState(() {
       connectionState = state;
     });

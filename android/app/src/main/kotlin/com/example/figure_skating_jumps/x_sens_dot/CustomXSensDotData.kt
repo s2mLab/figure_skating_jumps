@@ -1,8 +1,7 @@
-package com.example.figure_skating_jumps.xsens_dot_managers
+package com.example.figure_skating_jumps.x_sens_dot
 
 import com.xsens.dot.android.sdk.events.XsensDotData
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.putJsonArray
 

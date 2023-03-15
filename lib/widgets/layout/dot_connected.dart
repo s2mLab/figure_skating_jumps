@@ -5,7 +5,7 @@ import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
 import 'package:flutter/material.dart';
 
-import '../../enums/x_sens_connection_state.dart';
+import '../../enums/x_sens_device_state.dart';
 import '../buttons/x_sens_dot_list_element.dart';
 import '../dialogs/configure_x_sens_dot_dialog.dart';
 import '../icons/x_sens_state_icon.dart';
@@ -25,9 +25,9 @@ class _DotConnectedState extends State<DotConnected> {
   @override
   void initState() {
     stateIconConnected =
-        const XSensStateIcon(true, XSensConnectionState.connected);
+        const XSensStateIcon(true, XSensDeviceState.connected);
     stateIconDisconnected =
-        const XSensStateIcon(true, XSensConnectionState.disconnected);
+        const XSensStateIcon(true, XSensDeviceState.disconnected);
 
     BluetoothDevice? currentDevice = XSensDotConnection().currentXSensDevice;
     if(currentDevice != null) {
