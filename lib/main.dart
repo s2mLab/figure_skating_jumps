@@ -116,11 +116,11 @@ class _GodViewState extends State<GodView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
+      _loadUser();
     });
   }
 
-  _asyncMethod() async {
+  _loadUser() async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -128,9 +128,9 @@ class _GodViewState extends State<GodView> {
         .collection("users")
         .doc("QbTascjmGwNo28lZPYWCQagIthI3")
         .get();
-    SkatingUser s = SkatingUser.fromFirestore(
+    SkatingUser skater = SkatingUser.fromFirestore(
         firebaseAuth.currentUser?.uid, userInfoSnapshot);
-    _skater = s;
+    _skater = skater;
   }
   // TO HERE
 

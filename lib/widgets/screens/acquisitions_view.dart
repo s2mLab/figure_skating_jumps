@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/layout/progression_tab.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
@@ -26,9 +27,6 @@ class AcquisitionsView extends StatefulWidget {
 class _AcquisitionsViewState extends State<AcquisitionsView> {
   int _switcherIndex = 0;
   bool loadingData = true;
-  late CapturesTab _capturesTab;
-  final ProgressionTab _progressionTab = const ProgressionTab();
-  final OptionsTab _optionsTab = const OptionsTab();
   final List<Capture> _captures = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -42,15 +40,13 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
 
   _loadCapturesData() async {
     for (String captureID in widget.skater.captures) {
-      _captures.add(await Capture.create(
+      _captures.add(await Capture.createFromFireBase(
           captureID,
           await _firestore
               .collection(_captureCollectionString)
               .doc(captureID)
               .get()));
     }
-
-    _capturesTab = CapturesTab(captures: _captures);
 
     setState(() {
       loadingData = false;
@@ -70,11 +66,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
             Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Text(widget.skater.firstName,
-                    style: const TextStyle(
-                        color: primaryColor,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold))),
+                child: PageTitle(text: widget.skater.firstName)),
             Center(
                 child: SlideSwitcher(
               onSelect: (int index) => setState(() => _switcherIndex = index),
@@ -101,23 +93,22 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
                     )),
               ],
             )),
-            loadingData
-                ? const Expanded(
-                    child: Center(
-                        child: GFLoader(
-                    size: 70,
-                    loaderstrokeWidth: 5,
-                  )))
-                : Expanded(
-                    child: IndexedStack(
+            Expanded(
+              child: loadingData
+                  ? const Center(
+                      child: GFLoader(
+                      size: 70,
+                      loaderstrokeWidth: 5,
+                    ))
+                  : IndexedStack(
                       index: _switcherIndex,
                       children: [
-                        _capturesTab,
-                        _progressionTab,
-                        _optionsTab,
+                        CapturesTab(captures: _captures),
+                        const ProgressionTab(),
+                        const OptionsTab(),
                       ],
                     ),
-                  )
+            )
           ],
         ));
   }

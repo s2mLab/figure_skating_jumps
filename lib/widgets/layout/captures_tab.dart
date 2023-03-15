@@ -33,7 +33,7 @@ class _CapturesTabState extends State<CapturesTab> {
             child: ListView.builder(
               itemCount: widget.captures.length,
               itemBuilder: (context, index) {
-                final item = widget.captures[index];
+                final Capture item = widget.captures[index];
                 final String time = "${item.date.hour}h${item.date.minute}";
                 final int duration = item.duration;
                 DateTime date =
@@ -43,15 +43,14 @@ class _CapturesTabState extends State<CapturesTab> {
                 return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      showDate
-                          ? Text(
-                              dateDisplayFormat.format(date),
-                              style: const TextStyle(
-                                  fontSize: 26,
-                                  color: primaryColorLight,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          : Container(),
+                      if (showDate)
+                        Text(
+                          dateDisplayFormat.format(date),
+                          style: const TextStyle(
+                              fontSize: 26,
+                              color: primaryColorLight,
+                              fontWeight: FontWeight.bold),
+                        ),
                       Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           padding: const EdgeInsets.all(16),
@@ -81,7 +80,8 @@ class _CapturesTabState extends State<CapturesTab> {
                               Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: List.generate(6, (index) {
+                                  children: List.generate(
+                                      listTypeabbreviation.length, (index) {
                                     return Row(
                                       children: [
                                         Container(
@@ -118,7 +118,7 @@ class LegendMove extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(6, (index) {
+        children: List.generate(listTypeabbreviation.length, (index) {
           return Row(
             children: [
               Container(
