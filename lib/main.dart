@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
@@ -9,29 +10,59 @@ import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/topbar.dart';
 import 'package:figure_skating_jumps/widgets/screens/acquisitions_view.dart';
+import 'package:figure_skating_jumps/widgets/screens/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/screens/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:figure_skating_jumps/widgets/screens/skater_creation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:media_store_plus/media_store_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'firebase_options.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 
 Future<void> main() async {
+  bool hasNecessaryPermissions = true;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  hasNecessaryPermissions = await initializeStoragePermissions();
+  var cameras = await availableCameras();
+  CameraService().rearCamera = cameras.first;
   await LocalDbService().ensureInitialized();
-  runApp(const FigureSkatingJumpApp());
+  runApp(FigureSkatingJumpApp(canFunction: hasNecessaryPermissions));
+}
+
+Future<bool> initializeStoragePermissions() async {
+  bool permissionState = true;
+  List<Permission> permissions = [];
+
+  if ((await MediaStore().getPlatformSDKInt()) >= 33) {
+    permissions.add(Permission.photos);
+    permissions.add(Permission.audio);
+    permissions.add(Permission.videos);
+  }
+
+  if (permissions.isNotEmpty) {
+    (await permissions.request()).forEach((key, value) {
+      if (!value.isGranted) {
+        permissionState = false;
+      }
+    });
+  }
+  return Future<bool>.value(permissionState);
 }
 
 class FigureSkatingJumpApp extends StatelessWidget {
-  const FigureSkatingJumpApp({super.key});
+  final bool canFunction;
+  const FigureSkatingJumpApp({super.key, required this.canFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +72,32 @@ class FigureSkatingJumpApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return MaterialApp(
-      title: 'Figure Skating Jump App',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const GodView(),
-        '/ManageDevices': (context) => const ConnectionDotView(),
-        '/DemoConnection': (context) => const DemoConnection(),
-        '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
-        '/Login': (context) => const LoginView(),
-        //'/RawData': (context) => const RawDataView(logStream: logStream), TODO : decouple logStream to an external service
-      },
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: primaryBackground,
-        fontFamily: 'Jost',
-      ),
-    );
+    return canFunction
+        ? MaterialApp(
+            title: 'Figure Skating Jump App',
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const GodView(),
+              '/ManageDevices': (context) => const ConnectionDotView(),
+              '/DemoConnection': (context) => const DemoConnection(),
+              '/CoachAccountCreation': (context) =>
+                  const CoachAccountCreationView(),
+              '/CaptureData': (context) => const CaptureView(),
+              '/Login': (context) => const LoginView(),
+              '/CreateSkater': (context) => const SkaterCreationView(),
+            },
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: primaryBackground,
+              fontFamily: 'Jost',
+            ),
+          )
+        : MaterialApp(
+            title: 'Figure Skating Jump App',
+            builder: (context, _) {
+              return const Text("Veuillez autoriser les permissions.");
+            },
+          ); //TODO: Placeholder until we have UI to handle the case when no permissions are granted.
   }
 }
 
@@ -99,6 +139,8 @@ class _GodViewState extends State<GodView> {
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: true),
       drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
+      drawerScrimColor: Colors.transparent,
+      drawerEnableOpenDragGesture: false,
       body: Center(
           child: Column(
         children: [
@@ -115,6 +157,14 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('ConnectionDotView')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/CaptureData',
+                );
+              },
+              child: const Text('CaptureView')),
           TextButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -140,6 +190,14 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('Acquisitions')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/CreateSkater',
+                );
+              },
+              child: const Text('CreateSkaterUI')),
           TextButton(
               onPressed: () async {
                 UserClient()
