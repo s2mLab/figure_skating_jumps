@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps.xsens_dot_managers
+package com.example.figure_skating_jumps.x_sens_dot.callbacks
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter

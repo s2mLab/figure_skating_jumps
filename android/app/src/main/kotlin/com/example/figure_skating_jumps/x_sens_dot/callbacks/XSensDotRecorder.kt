@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps.xsens_dot_managers
+package com.example.figure_skating_jumps.x_sens_dot.callbacks
 
 import android.content.Context
 import android.os.SystemClock

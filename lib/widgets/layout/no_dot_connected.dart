@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:flutter/cupertino.dart';
 import '../../constants/colors.dart';
@@ -22,7 +22,7 @@ class NoDotConnected extends StatelessWidget {
       ),
       Container(
           margin: const EdgeInsets.all(16),
-          child: const XSensStateIcon(false, XSensConnectionState.reconnecting))
+          child: const XSensStateIcon(false, XSensDeviceState.reconnecting))
     ]);
   }
 }

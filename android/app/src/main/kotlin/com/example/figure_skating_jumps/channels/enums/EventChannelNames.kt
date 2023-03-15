@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps.channels.event_channels
+package com.example.figure_skating_jumps.channels.enums
 
 enum class EventChannelNames(val channelName: String) {
     BluetoothChannel("xsens-dot-bluetooth-permission"),

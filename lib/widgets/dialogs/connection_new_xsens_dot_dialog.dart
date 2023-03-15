@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
@@ -127,7 +127,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     hasLine: true,
                     text: _devices[index].name,
                     graphic: const XSensStateIcon(
-                        true, XSensConnectionState.disconnected),
+                        true, XSensDeviceState.disconnected),
                     onPressed: () async {
                       await _onDevicePressed(_devices[index]);
                     },
@@ -158,7 +158,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         const Padding(
           padding: EdgeInsets.all(16),
           child: Center(
-              child: XSensStateIcon(false, XSensConnectionState.reconnecting)),
+              child: XSensStateIcon(false, XSensDeviceState.reconnecting)),
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),

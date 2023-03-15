@@ -1,7 +1,9 @@
-package com.example.figure_skating_jumps.xsens_dot_managers
+package com.example.figure_skating_jumps.x_sens_dot.callbacks
 
 import android.util.Log
+import com.example.figure_skating_jumps.channels.event_channels.XSensDotConnectionStreamHandler
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotMeasuringStreamHandler
+import com.example.figure_skating_jumps.x_sens_dot.CustomXSensDotData
 import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
 import com.xsens.dot.android.sdk.models.FilterProfileInfo
@@ -11,6 +13,7 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
+        XSensDotConnectionStreamHandler.sendEvent(state)
         if(state == XsensDotDevice.CONN_STATE_CONNECTED) {
             Log.i("XSensDot", "Connected to $address")
         } else if(state == XsensDotDevice.CONN_STATE_DISCONNECTED) {
