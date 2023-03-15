@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/progression_tab.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   String _coachPassConfirm = '';
   String _coachEmail = '';
   String _errorStateMessage = '';
-  int _pageIndex = 0;
+  int _pageIndex = 2;
   final _personalInfoKey = GlobalKey<FormState>();
   final _passwordKey = GlobalKey<FormState>();
   late TextEditingController _surnameController;
@@ -120,7 +121,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                             Expanded(
                               child: IndexedStack(
                                 index: _pageIndex,
-                                children: [_informationForm(), _passwordForm()],
+                                children: [_informationForm(), _passwordForm(), ProgressionTab()],
                               ),
                             )
                           ],
