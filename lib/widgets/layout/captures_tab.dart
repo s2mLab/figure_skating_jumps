@@ -186,69 +186,22 @@ class LegendMove extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: axelColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(axelAbbreviation)),
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: flipColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(flipAbbreviation)),
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: loopColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(loopAbbreviation)),
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: lutzColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(lutzAbbreviation)),
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: salchowColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(salchowAbbreviation)),
-        Expanded(child: Container()),
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-              color: toeColor, borderRadius: BorderRadius.circular(10)),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(toeAbbreviation)),
-        Expanded(child: Container()),
-      ],
-    );
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: List.generate(6, (index) {
+          return Row(
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                    color: listTypeColor[index],
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(listTypeabbreviation[index])),
+            ],
+          );
+        }));
   }
 }

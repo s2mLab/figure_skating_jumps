@@ -10,6 +10,15 @@ const String lutzAbbreviation = "Lz";
 const String salchowAbbreviation = "S";
 const String toeAbbreviation = "T";
 
+const listTypeabbreviation = [
+  axelAbbreviation,
+  flipAbbreviation,
+  loopAbbreviation,
+  lutzAbbreviation,
+  salchowAbbreviation,
+  toeAbbreviation,
+];
+
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
