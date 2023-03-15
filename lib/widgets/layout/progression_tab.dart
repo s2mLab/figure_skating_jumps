@@ -4,7 +4,9 @@ class ProgressionTab extends StatefulWidget {
   const ProgressionTab({Key? key}) : super(key: key);
 
   @override
-  _ProgressionTabState createState() => _ProgressionTabState();
+  State<ProgressionTab> createState() {
+    return _ProgressionTabState();
+  }
 }
 
 class _ProgressionTabState extends State<ProgressionTab> {
