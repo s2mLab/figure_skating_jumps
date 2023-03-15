@@ -7,7 +7,6 @@ class CaptureClient {
   static final CaptureClient _userClient = CaptureClient._internal();
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static const String _jumpCollectionString = 'jumps';
   static const String _captureCollectionString = 'captures';
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
