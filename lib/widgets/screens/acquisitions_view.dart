@@ -32,12 +32,6 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _captureCollectionString = 'captures';
 
-  @override
-  void initState() {
-    super.initState();
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _loadCapturesData());
-  }
-
   _loadCapturesData(SkatingUser skater) async {
     List<Capture> captures = [];
     for (String captureID in skater.captures) {
