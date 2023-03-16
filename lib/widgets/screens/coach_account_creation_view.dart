@@ -31,7 +31,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   String _coachPassConfirm = '';
   String _coachEmail = '';
   String _errorStateMessage = '';
-  int _pageIndex = 2;
+  int _pageIndex = 0;
   final _personalInfoKey = GlobalKey<FormState>();
   final _passwordKey = GlobalKey<FormState>();
   late TextEditingController _surnameController;
@@ -121,7 +121,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                             Expanded(
                               child: IndexedStack(
                                 index: _pageIndex,
-                                children: [_informationForm(), _passwordForm(), ProgressionTab()],
+                                children: [_informationForm(), _passwordForm()],
                               ),
                             )
                           ],
