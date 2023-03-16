@@ -6,18 +6,9 @@ import 'package:figure_skating_jumps/widgets/layout/color_circle.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-class CapturesTab extends StatefulWidget {
-  const CapturesTab({Key? key, required this.captures}) : super(key: key);
-
+class CapturesTab extends StatelessWidget {
+  CapturesTab({Key? key, required this.captures}) : super(key: key);
   final Map<String, List<Capture>> captures;
-
-  @override
-  State<CapturesTab> createState() {
-    return _CapturesTabState();
-  }
-}
-
-class _CapturesTabState extends State<CapturesTab> {
   final dateDisplayFormat = DateFormat('dd/MM/yyyy');
   final double heightContainer = 110;
 
@@ -30,10 +21,10 @@ class _CapturesTabState extends State<CapturesTab> {
             height: MediaQuery.of(context).size.height - 300,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ListView.builder(
-              itemCount: widget.captures.length,
+              itemCount: captures.length,
               itemBuilder: (context, dateIndex) {
-                String key = widget.captures.keys.elementAt(dateIndex);
-                List<Capture> capturesToDisplay = widget.captures[key]!;
+                String key = captures.keys.elementAt(dateIndex);
+                List<Capture> capturesToDisplay = captures[key]!;
                 return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
