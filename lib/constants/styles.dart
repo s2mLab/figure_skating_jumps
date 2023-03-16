@@ -6,3 +6,5 @@ BoxShadow connectionShadow = BoxShadow(
   blurRadius: 4,
   offset: const Offset(0, 4), // changes position of shadow
 );
+
+const double promptTextHeight = 1.1;
