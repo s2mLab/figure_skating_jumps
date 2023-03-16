@@ -49,7 +49,7 @@ dependencies:
     getwidget: ^3.0.1
     media_store_plus: ^0.0.5
     permission_handler: ^10.2.0
-    collection: ^1.17.1
+    collection: ^1.17.0
 
 dev_dependencies:
     flutter_test:
