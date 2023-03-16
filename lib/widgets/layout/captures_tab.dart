@@ -1,11 +1,10 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
 import 'package:figure_skating_jumps/widgets/layout/color_circle.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/lang_fr.dart';
 
 class CapturesTab extends StatefulWidget {
   const CapturesTab({Key? key, required this.captures}) : super(key: key);
@@ -82,16 +81,17 @@ class _CapturesTabState extends State<CapturesTab> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                      listTypeabbreviation.length, (index) {
+                                      JumpType.values.length, (index) {
                                     return Row(
                                       children: [
                                         ColorCircle(
-                                            colorCircle: listTypeColor[index]),
+                                            colorCircle:
+                                                JumpType.values[index].color),
                                         Container(
                                             margin: const EdgeInsets.symmetric(
                                                 horizontal: 5),
-                                            child: Text(item
-                                                .jumpTypeCount[index]
+                                            child: Text(item.jumpTypeCount[
+                                                    JumpType.values[index]]
                                                 .toString())),
                                       ],
                                     );
@@ -113,13 +113,13 @@ class LegendMove extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(listTypeabbreviation.length, (index) {
+        children: List.generate(JumpType.values.length, (index) {
           return Row(
             children: [
-              ColorCircle(colorCircle: listTypeColor[index]),
+              ColorCircle(colorCircle: JumpType.values[index].color),
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(listTypeabbreviation[index])),
+                  child: Text(JumpType.values[index].abbreviation)),
             ],
           );
         }));
