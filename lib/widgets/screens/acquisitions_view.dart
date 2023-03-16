@@ -72,7 +72,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
               onSelect: (int index) => setState(() => _switcherIndex = index),
               slidersColors: const [primaryBackground],
               containerHeight: 40,
-              containerWight: MediaQuery.of(context).size.width - 32,
+              containerWight: 390,
               indents: 2,
               containerColor: primaryColorLight,
               children: const [

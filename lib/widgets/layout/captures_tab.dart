@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
+import 'package:figure_skating_jumps/widgets/layout/color_circle.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -84,14 +85,8 @@ class _CapturesTabState extends State<CapturesTab> {
                                       listTypeabbreviation.length, (index) {
                                     return Row(
                                       children: [
-                                        Container(
-                                          width: 12,
-                                          height: 12,
-                                          decoration: BoxDecoration(
-                                              color: listTypeColor[index],
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                        ),
+                                        ColorCircle(
+                                            colorCircle: listTypeColor[index]),
                                         Container(
                                             margin: const EdgeInsets.symmetric(
                                                 horizontal: 5),
@@ -121,13 +116,7 @@ class LegendMove extends StatelessWidget {
         children: List.generate(listTypeabbreviation.length, (index) {
           return Row(
             children: [
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                    color: listTypeColor[index],
-                    borderRadius: BorderRadius.circular(10)),
-              ),
+              ColorCircle(colorCircle: listTypeColor[index]),
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(listTypeabbreviation[index])),
