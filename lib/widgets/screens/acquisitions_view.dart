@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
@@ -26,7 +27,7 @@ class AcquisitionsView extends StatefulWidget {
 class _AcquisitionsViewState extends State<AcquisitionsView> {
   int _switcherIndex = 0;
   bool loadingData = true;
-  final List<Capture> _captures = [];
+  late Map<String, List<Capture>> _capturesSorted;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _captureCollectionString = 'captures';
@@ -38,14 +39,18 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
   }
 
   _loadCapturesData(SkatingUser skater) async {
+    List<Capture> captures = [];
     for (String captureID in skater.captures) {
-      _captures.add(await Capture.createFromFireBase(
+      captures.add(await Capture.createFromFireBase(
           captureID,
           await _firestore
               .collection(_captureCollectionString)
               .doc(captureID)
               .get()));
     }
+
+    _capturesSorted =
+        groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
 
     setState(() {
       loadingData = false;
@@ -93,7 +98,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
                   : IndexedStack(
                       index: _switcherIndex,
                       children: [
-                        CapturesTab(captures: _captures),
+                        CapturesTab(captures: _capturesSorted),
                         const ProgressionTab(),
                         const OptionsTab(),
                       ],

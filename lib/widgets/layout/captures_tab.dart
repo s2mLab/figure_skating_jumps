@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class CapturesTab extends StatefulWidget {
   const CapturesTab({Key? key, required this.captures}) : super(key: key);
 
-  final List<Capture> captures;
+  final Map<String, List<Capture>> captures;
 
   @override
   State<CapturesTab> createState() {
@@ -18,9 +18,8 @@ class CapturesTab extends StatefulWidget {
 }
 
 class _CapturesTabState extends State<CapturesTab> {
-  DateTime _currentDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   final dateDisplayFormat = DateFormat('dd/MM/yyyy');
+  final double heightContainer = 110;
 
   @override
   Widget build(BuildContext context) {
@@ -32,72 +31,85 @@ class _CapturesTabState extends State<CapturesTab> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ListView.builder(
               itemCount: widget.captures.length,
-              itemBuilder: (context, index) {
-                final Capture item = widget.captures[index];
-                final String time = "${item.date.hour}h${item.date.minute}";
-                final int duration = item.duration;
-                DateTime date =
-                    DateTime(item.date.year, item.date.month, item.date.day);
-                bool showDate = !date.isAtSameMomentAs(_currentDate);
-                if (showDate) _currentDate = date;
+              itemBuilder: (context, dateIndex) {
+                String key = widget.captures.keys.elementAt(dateIndex);
+                List<Capture> capturesToDisplay = widget.captures[key]!;
                 return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (showDate)
-                        Text(
-                          dateDisplayFormat.format(date),
-                          style: const TextStyle(
-                              fontSize: 26,
-                              color: primaryColorLight,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color: cardBackground,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(time,
-                                      style: const TextStyle(
-                                          fontSize: 24, color: darkText)),
-                                  Row(children: [
-                                    const Icon(Icons.schedule),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      TimeConverter.intToTime(duration),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: darkText),
-                                    )
-                                  ])
-                                ],
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: List.generate(
-                                      JumpType.values.length, (index) {
-                                    return Row(
+                      Text(
+                        key.replaceAll('-', '/'),
+                        style: const TextStyle(
+                            fontSize: 26,
+                            color: primaryColorLight,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                          height: capturesToDisplay.length * heightContainer,
+                          child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: capturesToDisplay.length,
+                              itemBuilder: (context, index) {
+                                Capture currentCapture =
+                                    capturesToDisplay[index];
+                                return Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                        color: cardBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Column(
                                       children: [
-                                        ColorCircle(
-                                            colorCircle:
-                                                JumpType.values[index].color),
-                                        Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Text(item.jumpTypeCount[
-                                                    JumpType.values[index]]
-                                                .toString())),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                "${currentCapture.date.hour}h${currentCapture.date.minute}",
+                                                style: const TextStyle(
+                                                    fontSize: 24,
+                                                    color: darkText)),
+                                            Row(children: [
+                                              const Icon(Icons.schedule),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                TimeConverter.intToTime(
+                                                    currentCapture.duration),
+                                                style: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: darkText),
+                                              )
+                                            ])
+                                          ],
+                                        ),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: List.generate(
+                                                JumpType.values.length,
+                                                (index) {
+                                              return Row(
+                                                children: [
+                                                  ColorCircle(
+                                                      colorCircle: JumpType
+                                                          .values[index].color),
+                                                  Container(
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 5),
+                                                      child: Text(currentCapture
+                                                          .jumpTypeCount[
+                                                              JumpType.values[
+                                                                  index]]
+                                                          .toString())),
+                                                ],
+                                              );
+                                            }))
                                       ],
-                                    );
-                                  }))
-                            ],
-                          ))
+                                    ));
+                              }))
                     ]);
               },
             )),
