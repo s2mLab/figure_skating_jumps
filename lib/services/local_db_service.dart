@@ -8,6 +8,8 @@ class LocalDbService {
   static late Database _database;
   static final LocalDbService _localDbService = LocalDbService._internal();
 
+  static const preferencesTableName = "preferences";
+
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory LocalDbService() {
@@ -23,8 +25,7 @@ class LocalDbService {
         version: 1, join(await getDatabasesPath(), _databaseName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE preferences(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddresses TEXT);'
-          'CREATE TABLE deviceCustomNames(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
+          'CREATE TABLE $preferencesTableName(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
     });
   }
 
@@ -59,4 +60,7 @@ class LocalDbService {
 
   Future<Map<String, dynamic>> readOne(String id, String table) async =>
       (await _database.query(table, where: 'id = ?', whereArgs: [id])).first;
+
+  Future<List<Map<String, dynamic>>> readWhere(String table, String column, String whereArg) async =>
+      (await _database.query(table, where: '$column = ?', whereArgs: [whereArg]));
 }
