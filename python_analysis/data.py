@@ -47,10 +47,6 @@ def format_csv(source, target):
             for row in data:
                 writer.writerow(row[:valid_columns])
 
-def rotate_matrix(vector, matrix, degrees=True):
-    rot = R.from_rotvec(vector, degrees=degrees)
-    return rot.apply(matrix, inverse=True)
-
 def find_trajectory(name):
     data = pd.read_csv(
         name,
@@ -76,10 +72,6 @@ def find_trajectory(name):
         rot_x = np.array([[1, 0, 0], [0, cos(x), -sin(x)], [0, sin(x), cos(x)]])
         rot_mat = np.matmul(np.matmul(rot_z, rot_y), rot_x)
         
-        # print(row['time'], row['euler_x'], row['euler_y'], row['euler_z'], row['acc_x'], row['acc_y'], row['acc_z'], row['gyr_x'], row['gyr_y'], row['gyr_z'])
-        # print(iter)
-        # print(row['acc_x'], row['acc_y'], row['acc_z'])
-        # print(row['euler_x'], row['euler_y'], row['euler_z'])
         acc = np.array([row['acc_x'], row['acc_y'], row['acc_z']])
         # acc = acc - noise # noise removal
         acc = np.matmul(rot_mat, acc)
@@ -133,10 +125,6 @@ def find_jumps_bad(name):
         rot_x = np.array([[1, 0, 0], [0, cos(x), -sin(x)], [0, sin(x), cos(x)]])
         rot_mat = np.matmul(np.matmul(rot_z, rot_y), rot_x)
         
-        # print(row['time'], row['euler_x'], row['euler_y'], row['euler_z'], row['acc_x'], row['acc_y'], row['acc_z'], row['gyr_x'], row['gyr_y'], row['gyr_z'])
-        # print(iter)
-        # print(row['acc_x'], row['acc_y'], row['acc_z'])
-        # print(row['euler_x'], row['euler_y'], row['euler_z'])
         acc = np.array([row['acc_x'], row['acc_y'], row['acc_z']])
         acc = acc - noise # noise removal
         acc = np.matmul(rot_mat, acc)
