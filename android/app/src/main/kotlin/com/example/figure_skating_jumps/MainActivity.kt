@@ -127,9 +127,10 @@ class MainActivity : FlutterActivity() {
             "connectXSensDot" -> connectXSensDot(call, result)
             "setRate" -> setRate(call, result)
             "disconnectXSensDot" -> disconnectXSensDot(result)
-            //TODO add change measuring for recording
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
+            "startRecording" -> startRecording(result)
+            "stopRecording" -> stopRecording(result)
             else -> result.notImplemented()
         }
     }
