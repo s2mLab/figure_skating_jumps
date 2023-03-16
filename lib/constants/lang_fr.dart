@@ -53,6 +53,11 @@ const String connectingButton = "Connexion...";
 const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
 
+// widgets/screens/acquisitions_view
+const String capturesTab = "Captures";
+const String progressionTab = "Progression";
+const String optionsTab = "Options";
+
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";
 
@@ -78,7 +83,8 @@ const String accountCreationError = "Erreur de création de compte";
 const String tryLater = 'Veuillez réessayer plus tard.';
 
 // widgets/screens/skater_creation_view
-const String createAthleteExplainPrompt = "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
+const String createAthleteExplainPrompt =
+    "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
 const String addASkaterTitle = "Ajouter un patineur";
 
 // exceptions
@@ -93,4 +99,3 @@ const String wrongPasswordException = "Mot de passe invalide";
 const String emptyFieldException = "Champ(s) vide(s)";
 const String tooManyAttemptsException =
     "Trop de tentatives. Veuillez réessayer plus tard.";
-

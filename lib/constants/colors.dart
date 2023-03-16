@@ -28,3 +28,5 @@ const reconnectingXSensDotButtonBackground = Color(0xFFFF9C40);
 
 const progressionBackgroundCurrent = Color(0xF05A5A5A);
 const progressionBackgroundNext = Color(0xFFC3C3C3);
+
+const cardBackground = Color.fromARGB(255, 230, 230, 230);
