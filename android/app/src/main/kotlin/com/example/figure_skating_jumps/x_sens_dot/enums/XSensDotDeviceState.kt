@@ -1,4 +1,4 @@
-package com.example.figure_skating_jumps.x_sens_dot
+package com.example.figure_skating_jumps.x_sens_dot.enums
 
 enum class XSensDotDeviceState(val state: Int) {
     disconnected(0),

@@ -26,6 +26,9 @@ class XSensStateIcon extends StatelessWidget {
       case XSensDeviceState.disconnected:
         return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Deco.svg',
             height: _isSmall ? _smallHeight : _bigHeight);
+      default:
+        return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Missing.svg',
+            height: _isSmall ? _smallHeight : _bigHeight);
     }
   }
 }
