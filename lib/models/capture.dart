@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 
 class Capture {
@@ -11,7 +12,14 @@ class Capture {
   late DateTime _date;
   late List<String> _jumpsID;
   final List<Jump> _jumps = [];
-  final List<int> _jumpTypeCount = [0, 0, 0, 0, 0, 0];
+  final Map<JumpType, int> _jumpTypeCount = {
+    JumpType.axel: 0,
+    JumpType.flip: 0,
+    JumpType.loop: 0,
+    JumpType.lutz: 0,
+    JumpType.salchow: 0,
+    JumpType.toeLoop: 0,
+  };
 
   String get fileName {
     return _file;
@@ -33,7 +41,7 @@ class Capture {
     return _jumps;
   }
 
-  List<int> get jumpTypeCount {
+  Map<JumpType, int> get jumpTypeCount {
     return _jumpTypeCount;
   }
 
@@ -59,7 +67,8 @@ class Capture {
     for (String jumpID in capture._jumpsID) {
       Jump jumpToAdd = Jump.fromFirestore(jumpID,
           await firestore.collection(_jumpsCollectionString).doc(jumpID).get());
-      capture._jumpTypeCount[jumpToAdd.type.index]++;
+      capture.jumpTypeCount[jumpToAdd.type] =
+          capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
     }
 

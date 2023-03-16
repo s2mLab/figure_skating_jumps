@@ -85,6 +85,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/CaptureData': (context) => const CaptureView(),
               '/Login': (context) => const LoginView(),
               '/CreateSkater': (context) => const SkaterCreationView(),
+              '/Acquisitions': (context) => const AcquisitionsView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -183,11 +184,8 @@ class _GodViewState extends State<GodView> {
               child: const Text('CoachAccountCreation')),
           TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AcquisitionsView(skater: _skater)),
-                );
+                Navigator.pushNamed(context, '/Acquisitions',
+                    arguments: _skater);
               },
               child: const Text('Acquisitions')),
           TextButton(
