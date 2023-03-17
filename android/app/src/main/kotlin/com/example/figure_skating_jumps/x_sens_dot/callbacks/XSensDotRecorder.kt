@@ -34,16 +34,19 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     }
 
     fun enableDataRecordingNotification() {
-        Log.i("XSensDot", "Im called")
+        Log.i("XSensDot", "Enable data notification called")
+        //TODO this condition does not seem to work properly
         while (device.connectionState == XsensDotDevice.CONN_STATE_CONNECTING
             || device.connectionState == XsensDotDevice.CONN_STATE_RECONNECTING
         ) {
+            Log.i("XSensDot", "Waiting 30ms for connection...")
             SystemClock.sleep(30)
         }
         if (device.connectionState != XsensDotDevice.CONN_STATE_CONNECTED) {
             Log.i("XSensDot", "Device not connected - ${device.connectionState}")
             return
         }
+        SystemClock.sleep(30)
         recordingManager.enableDataRecordingNotification()
     }
 
@@ -55,15 +58,16 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
             SystemClock.sleep(30)
             recordingManager.requestFileInfo()
         }
-
     }
 
     override fun onXsensDotRecordingNotification(address: String?, isEnabled: Boolean) {
         Log.i("XSensDot", "onXsensDotRecordingNotification")
         Log.i("XSensDot", "Notification Enabled $isEnabled")
+        Log.i("XSensDot", "Recording Notif Recorder state $recorderState")
         isNotificationEnabled = isEnabled
         if (!isEnabled) return
         if(recorderState == RecorderState.preparingExport) {
+            SystemClock.sleep(30)
             recordingManager.requestFileInfo()
         }
     }
@@ -102,6 +106,8 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
             XsensDotRecordingManager.RECORDING_ID_GET_STATE ->
                 Log.i("XSensDot", "Current state $recordingState")
         }
+
+        Log.i("XSensDot", "Recording Ack Recorder state $recorderState")
     }
 
     override fun onXsensDotGetRecordingTime(
@@ -118,6 +124,8 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
         fileInfoList: ArrayList<XsensDotRecordingFileInfo>?,
         isSuccess: Boolean
     ) {
+        //THE MANAGER does not make call to device when in call back...
+        Log.i("XSensDot", "Request File Info Recorder state $recorderState")
         if(!isSuccess) {
             Log.i("XSensDot", "File info request was not successful")
             return
@@ -130,7 +138,7 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
             for (file in fileInfoList) {
                 Log.i("XSensDot", file.fileName)
             }
-            var toExport = arrayListOf<XsensDotRecordingFileInfo>(fileInfoList[0])
+            val toExport = arrayListOf(fileInfoList[0])
             recorderState = RecorderState.exporting
             recordingManager.startExporting(toExport)
         }
@@ -141,16 +149,20 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
         fileInfo: XsensDotRecordingFileInfo?,
         exportedData: XsensDotData?
     ) {
-        Log.i("XSensDot", "onXsensDotDataExported")
+        Log.i("XSensDot", "Data Export (3args) Recorder state $recorderState")
+        Log.i("XSensDot", "Exported this data ${exportedData?.packetCounter}")
+        //TODO remonter event pour faire le fichier dans flutter
     }
 
     override fun onXsensDotDataExported(address: String?, fileInfo: XsensDotRecordingFileInfo?) {
         Log.i("XSensDot", "onXsensDotDataExported")
+        Log.i("XSensDot", "Data Export(2args) Recorder state $recorderState")
         //TODO remonter event pour faire le fichier dans flutter
     }
 
     override fun onXsensDotAllDataExported(address: String?) {
-        Log.i("XSensDot", "I am done!")
+        Log.i("XSensDot", "I am done exporting!")
+        Log.i("XSensDot", "All exportRecorder state $recorderState")
         if(recorderState == RecorderState.exporting) {
             recorderState = RecorderState.idle
             //TODO remonter event pour enregistrer dans flutter
@@ -162,10 +174,15 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     }
 
     private fun prepareDataExport() {
+        Log.i("XSensDot", "Prepare export Recorder state $recorderState")
+        Log.i("XSensDot", "Prepare export Notification status $isNotificationEnabled")
         recorderState = RecorderState.preparingExport
-        if(isNotificationEnabled)
+        if(isNotificationEnabled) {
+            SystemClock.sleep(30)
             recordingManager.requestFileInfo()
-        else
-            recordingManager.enableDataRecordingNotification()
+        }
+        else {
+            enableDataRecordingNotification()
+        }
     }
 }
