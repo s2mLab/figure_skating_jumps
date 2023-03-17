@@ -21,6 +21,8 @@ import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceCustomCallback
+import com.example.figure_skating_jumps.x_sens_dot.utils.XSensFileInfoSerializer
+import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import io.flutter.plugin.common.BinaryMessenger
 
 
@@ -67,6 +69,13 @@ class MainActivity : FlutterActivity() {
             MethodChannelNames.BluetoothChannel.channelName
         ).setMethodCallHandler { call, result ->
             handleBluetoothPermissionsCalls(call, result)
+        }
+
+        MethodChannel(
+            messenger,
+            MethodChannelNames.RecordingChannel.channelName
+        ).setMethodCallHandler { call, result ->
+            handleRecordingCalls(call, result)
         }
 
         EventChannel(
@@ -118,7 +127,16 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    //Had the supported methods here (the when acts like a switch statement)
+    private fun handleRecordingCalls(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "enableRecordingNotification" -> enableRecordingNotification(result)
+            "startRecording" -> startRecording(result)
+            "stopRecording" -> stopRecording(result)
+            "getFileInfo" -> getFileInfo(result)
+            "extractFile" -> extractFile(call, result)
+            else -> result.notImplemented()
+        }
+    }
     private fun handleXsensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "getSDKVersion" -> getSDKVersion(result)
@@ -129,8 +147,6 @@ class MainActivity : FlutterActivity() {
             "disconnectXSensDot" -> disconnectXSensDot(result)
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
-            "startRecording" -> startRecording(result)
-            "stopRecording" -> stopRecording(result)
             else -> result.notImplemented()
         }
     }
@@ -205,11 +221,12 @@ class MainActivity : FlutterActivity() {
         result.success("Measured Stopped")
     }
 
+    private fun enableRecordingNotification(result: MethodChannel.Result) {
+        xSensDotRecorder?.enableDataRecordingNotification()
+        result.success(currentXSensDot?.name)
+    }
+
     private fun startRecording(result: MethodChannel.Result){
-        if (currentXSensDot == null) {
-            result.error("1", "Not connected to device", null);
-            return
-        }
         xSensDotRecorder?.startRecording()
 
         Log.i("Android", "start")
@@ -220,6 +237,31 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder?.stopRecording()
 
         Log.i("Android", "stop")
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun getFileInfo(result: MethodChannel.Result) {
+        xSensDotRecorder?.getFileInfo()
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun extractFile(call: MethodCall, result: MethodChannel.Result) {
+        val file: String?  = call.argument<String>("fileInfo")
+
+        if (file == null) {
+            result.error("0","File string not set", null)
+            return
+        }
+
+        val fileInfo: XsensDotRecordingFileInfo? = XSensFileInfoSerializer.deserialize(file)
+
+        if (fileInfo == null) {
+            result.error("0","File info not set", null)
+            return
+        }
+
+        xSensDotRecorder?.extractFile(fileInfo)
+
         result.success(currentXSensDot?.name)
     }
 }
