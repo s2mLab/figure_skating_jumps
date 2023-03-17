@@ -9,7 +9,7 @@ import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
-import 'package:figure_skating_jumps/widgets/views/acquisitions_view.dart';
+import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
