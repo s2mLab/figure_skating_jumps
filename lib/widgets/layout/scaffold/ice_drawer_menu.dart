@@ -1,10 +1,10 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../buttons/nav_menu_element.dart';
-import '../screens/raw_data_view.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/lang_fr.dart';
+import '../../buttons/nav_menu_element.dart';
+import '../../views/raw_data_view.dart';
 
 class IceDrawerMenu extends StatelessWidget {
   final bool isUserDebuggingFeature;
