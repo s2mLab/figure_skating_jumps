@@ -11,7 +11,6 @@ object XSensDotScanStreamHandler : XSensDotEventStreamHandler<BluetoothDevice>()
            } catch (e: SecurityException) {
                sink?.error("security", e.message, e.stackTrace)
            }
-
        }
     }
 }
