@@ -3,14 +3,14 @@ import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
-import 'package:figure_skating_jumps/widgets/layout/progression_tab.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
-import '../layout/captures_tab.dart';
+import '../layout/athlete_view/captures_tab/captures_tab.dart';
+import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
@@ -93,7 +93,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
                       index: _switcherIndex,
                       children: [
                         CapturesTab(captures: _capturesSorted),
-                        const ProgressionTab(),
+                        ProgressionTab(),
                         const OptionsTab(),
                       ],
                     ),
