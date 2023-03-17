@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/progression_tab.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
