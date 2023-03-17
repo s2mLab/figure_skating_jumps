@@ -29,19 +29,20 @@ class Jump {
     return _capture;
   }
 
-  Jump(this._time, this._duration, this._turns, this._type, this._capture, [this.uID]);
+  Jump(this._time, this._duration, this._turns, this._type, this._capture,
+      [this.uID]);
 
   factory Jump.fromFirestore(
       uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     int time = userInfo.get('time');
     int duration = userInfo.get('duration');
-    double spins = userInfo.get('spins');
+    double turns = userInfo.get('turns');
     String capture = userInfo.get('capture');
 
     String typeStr = userInfo.get('type');
     JumpType type =
         JumpType.values.firstWhere((element) => element.toString() == typeStr);
 
-    return Jump(time, duration, spins, type, capture, uID);
+    return Jump(time, duration, turns, type, capture, uID);
   }
 }

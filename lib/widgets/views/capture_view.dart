@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
@@ -10,8 +8,8 @@ import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
-import '../layout/ice_drawer_menu.dart';
-import '../layout/topbar.dart';
+import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
 
 import '../titles/page_title.dart';
@@ -73,15 +71,14 @@ class _CaptureViewState extends State<CaptureView> {
               Center(
                 child: IceButton(
                   onPressed: () async {
-                    displayWaitingDialog("Démarrage...");
+                    // TODO: ADD when eventchannels are merged displayWaitingDialog("Démarrage...");
                     try {
-                      sleep(Duration(seconds: 5));
-                      //await _initializeControllerFuture;
-                      //await _controller.startVideoRecording();
+                      await _initializeControllerFuture;
+                      await _controller.startVideoRecording();
                     } catch (e) {
                       developer.log(e.toString());
                     }
-                    if (!mounted) {
+                    if (mounted) {
                       Navigator.of(context, rootNavigator: true).pop();
                     }
                   },
