@@ -166,6 +166,7 @@ class MainActivity : FlutterActivity() {
         currentXSensDot?.connect()
         xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
 
+        //TODO remonter un event pour enable après le start?
         SystemClock.sleep(30)
         xSensDotRecorder?.enableDataRecordingNotification()
 
@@ -219,12 +220,6 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder?.stopRecording()
 
         Log.i("Android", "stop")
-        result.success(currentXSensDot?.name)
-    }
-
-    private fun exportDataFile(result: MethodChannel.Result) {
-        xSensDotRecorder?.getFileInfo()
-        Log.i("Android", "File Info")
         result.success(currentXSensDot?.name)
     }
 }
