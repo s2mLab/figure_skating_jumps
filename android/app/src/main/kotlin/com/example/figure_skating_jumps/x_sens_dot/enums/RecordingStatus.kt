@@ -7,5 +7,5 @@ enum class RecordingStatus(val status: String) {
     RecordingStopped("RecordingStopped"),
     GetFileInfoDone("GotFileInfo"),
     ExtractingFile("ExtractingFile"),
-    ExtractFileDone("ExtactFileDone")
+    ExtractFileDone("ExtractFileDone")
 }

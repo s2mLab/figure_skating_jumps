@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class BluetoothDevice {
   late final String _name;
   late final String _macAddress;

@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
@@ -15,7 +15,7 @@ class XSensDotConnectionButton extends StatefulWidget {
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements IXSensStateSubscriber {
-  XSensDotConnection connection = XSensDotConnection();
+  XSensDotConnectionService connection = XSensDotConnectionService();
   late XSensDeviceState connectionState;
   final List<String> _connectionStateMessages = [
     connectionStateMessageDisconnected,
