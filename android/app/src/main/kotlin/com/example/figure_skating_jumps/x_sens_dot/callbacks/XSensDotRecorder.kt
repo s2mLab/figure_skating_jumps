@@ -34,20 +34,11 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     }
 
     fun enableDataRecordingNotification() {
-        Log.i("XSensDot", "Enable data notification called")
-        //TODO this condition does not seem to work properly
-        while (device.connectionState == XsensDotDevice.CONN_STATE_CONNECTING
-            || device.connectionState == XsensDotDevice.CONN_STATE_RECONNECTING
-        ) {
-            Log.i("XSensDot", "Waiting 30ms for connection...")
-            SystemClock.sleep(30)
-        }
-        if (device.connectionState != XsensDotDevice.CONN_STATE_CONNECTED) {
-            Log.i("XSensDot", "Device not connected - ${device.connectionState}")
-            return
-        }
-        SystemClock.sleep(30)
         recordingManager.enableDataRecordingNotification()
+    }
+
+    fun extractFile(info: XsensDotRecordingFileInfo) {
+        recordingManager.startExporting(arrayListOf(info))
     }
 
     fun getFileInfo() {
@@ -55,7 +46,6 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
         Log.i("XSensDot", "isActive ${recordingManager.isActive} recordState ${recordingManager.recordingState}")
         Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
-            SystemClock.sleep(30)
             recordingManager.requestFileInfo()
         }
     }

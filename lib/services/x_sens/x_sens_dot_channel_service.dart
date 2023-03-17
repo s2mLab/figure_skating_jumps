@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_data_service.dart';
-import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
