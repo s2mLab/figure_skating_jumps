@@ -158,7 +158,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         const Padding(
           padding: EdgeInsets.all(16),
           child: Center(
-              child: XSensStateIcon(false, XSensDeviceState.reconnecting)),
+            //TODO connecting before changing lists in top XSENS button
+              child: XSensStateIcon(false, XSensDeviceState.connecting)),
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),

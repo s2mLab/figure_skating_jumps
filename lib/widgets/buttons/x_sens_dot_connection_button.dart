@@ -18,24 +18,24 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
   XSensDotConnection connection = XSensDotConnection();
   late XSensDeviceState connectionState;
   final List<String> _connectionStateMessages = [
-    connectionStateMessageConnected,
-    connectionStateMessageReconnecting,
     connectionStateMessageDisconnected,
+    connectionStateMessageReconnecting,
+    connectionStateMessageConnected,
   ];
   final List<TextStyle> _connectionStateStyles = [
     const TextStyle(color: connectedXSensDotButtonForeground),
     const TextStyle(color: darkText),
-    const TextStyle(color: connectedXSensDotButtonForeground)
+    const TextStyle(color: connectedXSensDotButtonForeground),
   ];
   final List<Color> _connectionBackgroundColors = [
-    primaryColorLight,
+    Colors.black,
     reconnectingXSensDotButtonBackground,
-    Colors.black
+    primaryColorLight,
   ];
   final List<Color> _connectionForegroundColors = [
-    connectedXSensDotButtonIndicator,
+    errorColor,
     reconnectingXSensDotButtonIndicator,
-    errorColor
+    connectedXSensDotButtonIndicator,
   ];
 
   @override
