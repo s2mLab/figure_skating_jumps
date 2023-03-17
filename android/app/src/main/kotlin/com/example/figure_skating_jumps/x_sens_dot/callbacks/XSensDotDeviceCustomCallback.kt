@@ -3,7 +3,10 @@ package com.example.figure_skating_jumps.x_sens_dot.callbacks
 import android.util.Log
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotConnectionStreamHandler
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotMeasuringStreamHandler
+import com.example.figure_skating_jumps.channels.event_channels.XSensDotRecordingStreamHandler
+import com.example.figure_skating_jumps.channels.events.RecordingEvent
 import com.example.figure_skating_jumps.x_sens_dot.CustomXSensDotData
+import com.example.figure_skating_jumps.x_sens_dot.enums.RecordingStatus
 import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
 import com.xsens.dot.android.sdk.models.FilterProfileInfo
@@ -23,6 +26,7 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "Initialization of device $address complete")
+        XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.InitDone))
     }
 
     override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {

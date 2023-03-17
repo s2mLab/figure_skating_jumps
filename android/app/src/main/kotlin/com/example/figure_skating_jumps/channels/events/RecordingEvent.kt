@@ -1,6 +1,15 @@
 package com.example.figure_skating_jumps.channels.events
 
-import com.example.figure_skating_jumps.x_sens_dot.CustomXSensDotData
-import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
+import com.example.figure_skating_jumps.x_sens_dot.enums.RecordingStatus
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 
-data class RecordingEvent(val message: String, val data: CustomXSensDotData?, val fileInfo: XsensDotRecordingFileInfo?)
+class RecordingEvent(private val status: RecordingStatus, private val data: String = "") {
+    override fun toString(): String {
+        val json = buildJsonObject {
+            put("status", JsonPrimitive(status.status))
+            if(data.isNotEmpty()) put("data", JsonPrimitive(data))
+        }
+        return json.toString()
+    }
+}
