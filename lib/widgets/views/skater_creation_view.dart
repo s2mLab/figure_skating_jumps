@@ -9,8 +9,8 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../buttons/ice_button.dart';
-import '../layout/ice_drawer_menu.dart';
-import '../layout/topbar.dart';
+import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/topbar.dart';
 import '../prompts/instruction_prompt.dart';
 import '../titles/page_title.dart';
 

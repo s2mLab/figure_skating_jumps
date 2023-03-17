@@ -13,7 +13,7 @@ import '../../enums/ice_button_size.dart';
 import '../../enums/user_role.dart';
 import '../../models/skating_user.dart';
 import '../../services/user_client.dart';
-import '../layout/progression_dots_row.dart';
+import '../utils/progression_dots_row.dart';
 
 class CoachAccountCreationView extends StatefulWidget {
   const CoachAccountCreationView({super.key});
