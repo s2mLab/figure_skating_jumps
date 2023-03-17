@@ -2,7 +2,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_data_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _LoggerViewState extends State<_LoggerView>
   void initState() {
     super.initState();
     XSensDotChannelService().startMeasuring();
-    _displayedData = XSensDotDataService().subscribe(this);
+    _displayedData = XSensDotStreamingDataService().subscribe(this);
   }
 
   @override

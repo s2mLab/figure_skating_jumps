@@ -6,7 +6,7 @@ import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -31,7 +31,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
-  final XSensDotConnection _xSensDotConnectionService = XSensDotConnection();
+  final XSensDotConnectionService _xSensDotConnectionService = XSensDotConnectionService();
   //final XSensDotChannelService _xSensDotChannelService = XSensDotChannelService(); waiting Christophe MR to override comment
 
   @override

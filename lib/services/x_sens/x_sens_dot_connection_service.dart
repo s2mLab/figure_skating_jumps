@@ -3,20 +3,20 @@ import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 import '../../models/bluetooth_device.dart';
 
-class XSensDotConnection {
-  static final XSensDotConnection _xSensDotConnection =
-      XSensDotConnection._internal(XSensDeviceState.disconnected);
+class XSensDotConnectionService {
+  static final XSensDotConnectionService _xSensDotConnection =
+      XSensDotConnectionService._internal(XSensDeviceState.disconnected);
   final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
   XSensDeviceState _connectionState;
   BluetoothDevice? _currentXSensDevice;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
-  factory XSensDotConnection() {
+  factory XSensDotConnectionService() {
     return _xSensDotConnection;
   }
 
-  XSensDotConnection._internal(this._connectionState);
+  XSensDotConnectionService._internal(this._connectionState);
 
   XSensDeviceState subscribeConnectionState(
       IXSensStateSubscriber subscriber) {
