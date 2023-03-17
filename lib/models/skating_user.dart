@@ -7,7 +7,7 @@ class SkatingUser {
   late String _lastName;
   late UserRole _role;
   late String _email;
-  final List<String> _captures = [];
+  late List<String> _captures = [];
   final List<String> _trainees = [];
   final List<String> _coaches = [];
 
@@ -42,15 +42,17 @@ class SkatingUser {
   SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
 
   factory SkatingUser.fromFirestore(
-     uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
+      uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     String firstName = userInfo.get('firstName');
     String lastName = userInfo.get('lastName');
-
     String roleStr = userInfo.get('role');
-    UserRole role = UserRole.values
-        .firstWhere((element) => element.toString() == roleStr);
+    UserRole role =
+        UserRole.values.firstWhere((element) => element.toString() == roleStr);
 
-    return SkatingUser(firstName, lastName, role, uID);
+    SkatingUser skaterUser = SkatingUser(firstName, lastName, role, uID);
+
+    skaterUser._captures = List<String>.from(userInfo.get('captures') as List);
+    return skaterUser;
     //TODO convert json to list when saving acquisition and when linking trainee and coach
   }
 }
