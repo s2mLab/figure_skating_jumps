@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:flutter/material.dart';
 
 import '../layout/scaffold/topbar.dart';
@@ -95,7 +96,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Connect Xsens DOT'),
                         )),
                     GestureDetector(
-                        onTap: () async => await _xsensDotService.startRecording(),
+                        onTap: () async => await XSensDotRecordingService.startRecording(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -104,7 +105,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Start'),
                         )),
                     GestureDetector(
-                        onTap: () async => await _xsensDotService.stopRecording(),
+                        onTap: () async => await XSensDotRecordingService.stopRecording(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(

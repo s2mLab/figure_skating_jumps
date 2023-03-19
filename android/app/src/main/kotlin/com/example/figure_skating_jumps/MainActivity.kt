@@ -132,6 +132,7 @@ class MainActivity : FlutterActivity() {
             "enableRecordingNotification" -> enableRecordingNotification(result)
             "startRecording" -> startRecording(result)
             "stopRecording" -> stopRecording(result)
+            "getFlashInfo" -> getFlashInfo(result)
             "getFileInfo" -> getFileInfo(result)
             "extractFile" -> extractFile(call, result)
             else -> result.notImplemented()
@@ -181,10 +182,6 @@ class MainActivity : FlutterActivity() {
 
         currentXSensDot?.connect()
         xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
-
-        //TODO remonter un event pour enable après le start?
-        SystemClock.sleep(30)
-        xSensDotRecorder?.enableDataRecordingNotification()
 
         result.success(call.argument<String>("address"))
     }
@@ -237,6 +234,11 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder?.stopRecording()
 
         Log.i("Android", "stop")
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun getFlashInfo(result: MethodChannel.Result) {
+        xSensDotRecorder?.getFlashInfo()
         result.success(currentXSensDot?.name)
     }
 
