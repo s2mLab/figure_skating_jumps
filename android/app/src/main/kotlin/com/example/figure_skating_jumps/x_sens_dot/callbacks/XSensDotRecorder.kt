@@ -6,7 +6,6 @@ import android.util.Log
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotRecordingStreamHandler
 import com.example.figure_skating_jumps.channels.events.RecordingEvent
 import com.example.figure_skating_jumps.x_sens_dot.CustomXSensDotData
-import com.example.figure_skating_jumps.x_sens_dot.enums.RecorderState
 import com.example.figure_skating_jumps.x_sens_dot.enums.RecordingStatus
 import com.example.figure_skating_jumps.x_sens_dot.utils.XSensFileInfoSerializer
 import com.xsens.dot.android.sdk.events.XsensDotData
@@ -16,13 +15,13 @@ import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import com.xsens.dot.android.sdk.models.XsensDotRecordingState
 import com.xsens.dot.android.sdk.recording.XsensDotRecordingManager
 import kotlin.collections.ArrayList
-import kotlin.math.exp
 
 class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     XsensDotRecordingCallback {
     private var recordingManager: XsensDotRecordingManager
     private var isNotificationEnabled: Boolean = false
     private var device: XsensDotDevice
+    private val sleepingTimeMs: Long = 30
 
     init {
         device = xsensDotDevice
@@ -30,29 +29,37 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
     }
 
     fun startRecording() {
+        SystemClock.sleep(sleepingTimeMs)
         recordingManager.startRecording()
     }
 
     fun stopRecording() {
+        SystemClock.sleep(sleepingTimeMs)
         recordingManager.stopRecording()
     }
 
     fun enableDataRecordingNotification() {
+        SystemClock.sleep(sleepingTimeMs)
         recordingManager.enableDataRecordingNotification()
     }
 
     fun extractFile(info: XsensDotRecordingFileInfo) {
+        SystemClock.sleep(sleepingTimeMs)
         recordingManager.startExporting(arrayListOf(info))
     }
 
-    fun getFileInfo() {
-        enableDataRecordingNotification()
-        Log.i(
-            "XSensDot",
-            "isActive ${recordingManager.isActive} recordState ${recordingManager.recordingState}"
-        )
+    fun getFlashInfo() {
         Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
+            SystemClock.sleep(sleepingTimeMs)
+            recordingManager.requestFlashInfo()
+        }
+    }
+
+    fun getFileInfo() {
+        Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
+        if (isNotificationEnabled) {
+            SystemClock.sleep(sleepingTimeMs)
             recordingManager.requestFileInfo()
         }
     }
@@ -79,6 +86,7 @@ class XSensDotRecorder(context: Context, xsensDotDevice: XsensDotDevice) :
         totalFlashSpace: Int
     ) {
         Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
+        Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
     }
 
     override fun onXsensDotRecordingAck(

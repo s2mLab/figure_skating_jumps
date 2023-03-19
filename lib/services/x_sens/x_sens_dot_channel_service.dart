@@ -87,21 +87,4 @@ class XSensDotChannelService {
       return false;
     }
   }
-
-  Future<void> startRecording() async {
-    try {
-      XSensDotStreamingDataService().clearMeasuredData();
-      await _xSensMethodChannel.invokeMethod('startRecording');
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
-
-  Future<void> stopRecording() async {
-    try {
-      await _xSensMethodChannel.invokeMethod('stopRecording');
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
-  }
 }
