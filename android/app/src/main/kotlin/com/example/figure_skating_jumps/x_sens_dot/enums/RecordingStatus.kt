@@ -5,6 +5,7 @@ enum class RecordingStatus(val status: String) {
     EnableRecordingNotificationDone("EnableRecordingNotificationDone"),
     RecordingStarted("RecordingStarted"),
     RecordingStopped("RecordingStopped"),
+    GetFlashInfoDone("GotFlashInfo"),
     GetFileInfoDone("GotFileInfo"),
     ExtractingFile("ExtractingFile"),
     ExtractFileDone("ExtractFileDone")
