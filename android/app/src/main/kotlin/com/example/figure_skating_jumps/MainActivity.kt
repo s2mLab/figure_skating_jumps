@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
 import com.example.figure_skating_jumps.channels.enums.EventChannelNames
@@ -21,6 +20,7 @@ import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceCustomCallback
+import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotExporter
 import com.example.figure_skating_jumps.x_sens_dot.utils.XSensFileInfoSerializer
 import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import io.flutter.plugin.common.BinaryMessenger
@@ -29,6 +29,7 @@ import io.flutter.plugin.common.BinaryMessenger
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
     private var xSensDotRecorder: XSensDotRecorder? = null
+    private var xSensDotExporter: XSensDotExporter? = null
     private lateinit var xSensDotDeviceScanner: XSensDotDeviceScanner
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -132,9 +133,10 @@ class MainActivity : FlutterActivity() {
             "enableRecordingNotification" -> enableRecordingNotification(result)
             "startRecording" -> startRecording(result)
             "stopRecording" -> stopRecording(result)
-            "getFlashInfo" -> getFlashInfo(result)
+            "getFlashInfo" -> getFlashInfo(call, result)
             "getFileInfo" -> getFileInfo(result)
             "extractFile" -> extractFile(call, result)
+            "prepareExtract" -> prepareExtract(result)
             else -> result.notImplemented()
         }
     }
@@ -237,13 +239,39 @@ class MainActivity : FlutterActivity() {
         result.success(currentXSensDot?.name)
     }
 
-    private fun getFlashInfo(result: MethodChannel.Result) {
-        xSensDotRecorder?.getFlashInfo()
+    private fun getFlashInfo(call: MethodCall, result: MethodChannel.Result) {
+        val isExporting: Boolean?  = call.argument<Boolean>("isExporting")
+        if(isExporting == null) {
+            result.error("0","isExporting string not set", null)
+            return
+        }
+
+        if(isExporting) {
+            xSensDotExporter?.getFlashInfo()
+        }
+        else {
+            xSensDotRecorder?.getFlashInfo()
+        }
+
         result.success(currentXSensDot?.name)
     }
 
     private fun getFileInfo(result: MethodChannel.Result) {
-        xSensDotRecorder?.getFileInfo()
+        xSensDotExporter?.getFileInfo()
+        result.success(currentXSensDot?.name)
+    }
+
+    private fun prepareExtract(result: MethodChannel.Result) {
+        if(xSensDotExporter != null){
+            xSensDotExporter?.clearManager()
+        }
+        //TODO maybe null check if multiple recording
+        // 1 manager at a time on the device
+        xSensDotRecorder?.clearManager()
+        xSensDotRecorder = null
+
+        xSensDotExporter = XSensDotExporter(context, currentXSensDot!!)
+        xSensDotExporter?.enableDataRecordingNotification()
         result.success(currentXSensDot?.name)
     }
 
@@ -262,7 +290,7 @@ class MainActivity : FlutterActivity() {
             return
         }
 
-        xSensDotRecorder?.extractFile(fileInfo)
+        xSensDotExporter?.extractFile(fileInfo)
 
         result.success(currentXSensDot?.name)
     }

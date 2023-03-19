@@ -3,6 +3,7 @@ enum RecordingStatus {
   enableRecordingNotificationDone("EnableRecordingNotificationDone"),
   recordingStarted("RecordingStarted"),
   recordingStopped("RecordingStopped"),
+  getFlashInfoDone("GotFlashInfo"),
   getFileInfoDone("GotFileInfo"),
   extractingFile("ExtractingFile"),
   extractFileDone("ExtractFileDone");

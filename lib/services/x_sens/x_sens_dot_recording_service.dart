@@ -40,7 +40,10 @@ class XSensDotRecordingService {
         break;
       case RecordingStatus.enableRecordingNotificationDone:
         debugPrint(data['data']);
-        await _recordingMethodChannel.invokeMethod('getFlashInfo');
+        await _recordingMethodChannel.invokeMethod(
+            'getFlashInfo', <String, dynamic>{
+          'isExporting': _recorderState == RecorderState.exporting
+        });
         break;
       case RecordingStatus.recordingStarted:
         if (_recorderState == RecorderState.idle) {
@@ -50,11 +53,19 @@ class XSensDotRecordingService {
       case RecordingStatus.recordingStopped:
         if (_recorderState == RecorderState.recording) {
           _recorderState = RecorderState.exporting;
+          await _recordingMethodChannel.invokeMethod('prepareExtract');
+        }
+        break;
+      case RecordingStatus.getFlashInfoDone:
+        debugPrint("FlashInfo");
+        //TODO Add check before recording
+        if (_recorderState == RecorderState.exporting) {
           await _recordingMethodChannel.invokeMethod('getFileInfo');
         }
         break;
       case RecordingStatus.getFileInfoDone:
         if (_recorderState == RecorderState.exporting) {
+          //TODO call data to extract before calling that
           await _recordingMethodChannel.invokeMethod(
               'extractFile', <String, dynamic>{'fileInfo': data['data']});
         }
@@ -90,6 +101,11 @@ class XSensDotRecordingService {
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
+  }
+
+  //todo remove
+  static Future<void> export() async {
+    await _recordingMethodChannel.invokeMethod('getFileInfo');
   }
 
   void noop() {
