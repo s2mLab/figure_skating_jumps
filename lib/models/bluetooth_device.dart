@@ -36,6 +36,15 @@ class BluetoothDevice {
     _assignedName = _name;
   }
 
+  factory BluetoothDevice.fromEvent(String event) {
+    var splitEvent = event.split(",");
+    if (splitEvent.length != 2) {
+      throw ArgumentError(
+          ['Can\'t create class with wrong format', 'event']);
+    }
+    return BluetoothDevice(splitEvent.first, splitEvent.last);
+  }
+
   BluetoothDevice.deepClone(BluetoothDevice toBeDeepClonedDevice) {
     _name = toBeDeepClonedDevice.name;
     _macAddress = toBeDeepClonedDevice.macAddress;

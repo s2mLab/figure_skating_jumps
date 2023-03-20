@@ -1,1 +1,0 @@
-enum XSensConnectionState { connected, reconnecting, disconnected }

@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
