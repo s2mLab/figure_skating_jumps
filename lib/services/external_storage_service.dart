@@ -27,6 +27,7 @@ class ExternalStorageService {
     String fileName = Uri.parse(f.path).pathSegments.last.trim();
     File file =
         await File(f.path).copy("${directory.path}/$_videoDirPrefix/$fileName");
+
     return Future<String>.value(file.path);
   }
 }
