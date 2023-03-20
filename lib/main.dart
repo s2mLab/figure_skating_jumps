@@ -37,7 +37,6 @@ Future<void> main() async {
   hasNecessaryPermissions = await initializeStoragePermissions();
   var cameras = await availableCameras();
   CameraService().rearCamera = cameras.first;
-  XSensDotRecordingService().noop();
   await LocalDbService().ensureInitialized();
   runApp(FigureSkatingJumpApp(canFunction: hasNecessaryPermissions));
 }

@@ -19,6 +19,8 @@ class XSensDotRecordingService {
   static final XSensDotRecordingService _xSensDotRecordingServiceService =
       XSensDotRecordingService._internal();
 
+  final _recordingOutputRate = 120;
+
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
       await _handleRecordingEvents(event as String);
@@ -35,58 +37,28 @@ class XSensDotRecordingService {
         RecordingStatus.values.firstWhere((el) => el.status == data['status']);
     switch (status) {
       case RecordingStatus.setRate:
-        await _recordingMethodChannel.invokeMethod('prepareRecording');
+        await _handleSetRate();
         break;
       case RecordingStatus.enableRecordingNotificationDone:
-        debugPrint(data['data']);
-        await _recordingMethodChannel.invokeMethod(
-            'getFlashInfo', <String, dynamic>{
-          'isExporting': _recorderState == RecorderState.exporting
-        });
+        await _handleEnableRecordingNotificationDone(data['data']);
         break;
       case RecordingStatus.recordingStarted:
-        if (_recorderState == RecorderState.idle) {
-          _recorderState = RecorderState.recording;
-        }
+        _handleRecordingStarted();
         break;
       case RecordingStatus.recordingStopped:
-        if (_recorderState == RecorderState.recording) {
-          _recorderState = RecorderState.exporting;
-          await _recordingMethodChannel.invokeMethod('prepareExtract');
-        }
+        await _handleRecordingStopped();
         break;
       case RecordingStatus.getFlashInfoDone:
-        debugPrint("FlashInfo");
-        if (_recorderState == RecorderState.idle) {
-          var canRecord = data['data'] == "true";
-          if (canRecord) {
-            try {
-              await _recordingMethodChannel.invokeMethod('startRecording');
-            } on PlatformException catch (e) {
-              debugPrint(e.message!);
-            }
-          }
-        }
-        if (_recorderState == RecorderState.exporting) {
-          await _recordingMethodChannel.invokeMethod('getFileInfo');
-        }
+        await _handleGetFlashInfoDone(data['data']);
         break;
       case RecordingStatus.getFileInfoDone:
-        if (_recorderState == RecorderState.exporting) {
-          await _recordingMethodChannel.invokeMethod(
-              'extractFile', <String, dynamic>{'fileInfo': data['data']});
-        }
+        await _handleGetFileInfoDone(data['data']);
         break;
       case RecordingStatus.extractingFile:
-        if (_recorderState == RecorderState.exporting) {
-          debugPrint(event);
-        }
+        _handleExtractingFile(event);
         break;
       case RecordingStatus.extractFileDone:
-        if (_recorderState == RecorderState.exporting) {
-          debugPrint("Done");
-          _recorderState = RecorderState.idle;
-        }
+        _handleExtractFileDone();
         break;
       default:
         debugPrint("default");
@@ -94,8 +66,8 @@ class XSensDotRecordingService {
     }
   }
 
-  static Future<void> startRecording() async {
-    XSensDotChannelService().setRate(120);
+  Future<void> startRecording() async {
+    await XSensDotChannelService().setRate(_recordingOutputRate);
   }
 
   static Future<void> stopRecording() async {
@@ -106,8 +78,68 @@ class XSensDotRecordingService {
     }
   }
 
-  //TODO remove when the class is integrated in the UI/with the capture save
-  void noop() {
-    debugPrint("noop");
+  static Future<void> _handleSetRate() async {
+    await _recordingMethodChannel.invokeMethod('prepareRecording');
+  }
+
+  static Future<void> _handleEnableRecordingNotificationDone(String data) async {
+    if(data == "true") {
+      await _recordingMethodChannel.invokeMethod(
+          'getFlashInfo', <String, dynamic>{
+        'isExporting': _recorderState == RecorderState.exporting
+      });
+    } else {
+      debugPrint("Recording notifications were not enabled");
+    }
+
+  }
+
+  static void _handleRecordingStarted() {
+    if (_recorderState == RecorderState.idle) {
+      _recorderState = RecorderState.recording;
+    }
+  }
+
+  static Future<void> _handleRecordingStopped() async {
+    if (_recorderState == RecorderState.recording) {
+      _recorderState = RecorderState.exporting;
+      await _recordingMethodChannel.invokeMethod('prepareExtract');
+    }
+  }
+
+  static Future<void> _handleGetFlashInfoDone(String? data) async {
+    if (_recorderState == RecorderState.idle) {
+      var canRecord = data == "true";
+      if (canRecord) {
+        try {
+          await _recordingMethodChannel.invokeMethod('startRecording');
+        } on PlatformException catch (e) {
+          debugPrint(e.message!);
+        }
+      }
+    } else if (_recorderState == RecorderState.exporting) {
+      await _recordingMethodChannel.invokeMethod('getFileInfo');
+    }
+  }
+
+  static Future<void> _handleGetFileInfoDone(String data) async {
+    if (_recorderState == RecorderState.exporting) {
+      await _recordingMethodChannel.invokeMethod(
+          'extractFile', <String, dynamic>{'fileInfo': data});
+    }
+
+  }
+
+  static void _handleExtractingFile(String event) {
+    if (_recorderState == RecorderState.exporting) {
+      debugPrint(event);
+    }
+  }
+
+  static void _handleExtractFileDone() {
+    if (_recorderState == RecorderState.exporting) {
+      debugPrint("Done");
+      _recorderState = RecorderState.idle;
+    }
   }
 }

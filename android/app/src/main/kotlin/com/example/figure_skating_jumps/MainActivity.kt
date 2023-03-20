@@ -33,6 +33,7 @@ class MainActivity : FlutterActivity() {
     private var xSensDotRecorder: XSensDotRecorder? = null
     private var xSensDotExporter: XSensDotExporter? = null
     private lateinit var xSensDotDeviceScanner: XSensDotDeviceScanner
+    private val sleepingTimeMs: Long = 30
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -273,7 +274,7 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder?.clearManager()
         xSensDotRecorder = null
 
-        SystemClock.sleep(30)
+        SystemClock.sleep(sleepingTimeMs)
 
         xSensDotExporter = XSensDotExporter(context, currentXSensDot!!)
         xSensDotExporter?.enableDataRecordingNotification()
@@ -314,7 +315,7 @@ class MainActivity : FlutterActivity() {
         xSensDotExporter?.clearManager()
         xSensDotExporter = null
 
-        SystemClock.sleep(30)
+        SystemClock.sleep(sleepingTimeMs)
 
         xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
         xSensDotRecorder?.enableDataRecordingNotification()
