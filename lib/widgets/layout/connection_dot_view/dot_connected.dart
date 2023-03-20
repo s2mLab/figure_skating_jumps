@@ -31,7 +31,7 @@ class _DotConnectedState extends State<DotConnected> {
 
     BluetoothDevice? currentDevice = XSensDotConnection().currentXSensDevice;
     if(currentDevice != null) {
-      connectedDeviceName = currentDevice.name;
+      connectedDeviceName = currentDevice.assignedName;
     }
 
     super.initState();

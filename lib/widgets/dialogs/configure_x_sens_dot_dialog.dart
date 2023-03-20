@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../services/bluetooth_discovery.dart';
+import '../../services/x_sens/x_sens_dot_connection.dart';
 import '../icons/x_sens_state_icon.dart';
 import '../prompts/ice_field_editable.dart';
 
@@ -31,7 +32,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             children: [
               IceFieldEditable(
                   onEditComplete: (String newText) {
-                    BluetoothDiscovery().getDevices()[0].assignedName = newText;
+                    XSensDotConnection().currentXSensDevice!.assignedName = newText;
                   },
                   text: name),
               IceButton(
