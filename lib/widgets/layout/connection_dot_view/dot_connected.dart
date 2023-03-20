@@ -2,13 +2,13 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
-import 'package:figure_skating_jumps/services/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
 import 'package:flutter/material.dart';
 
-import '../../enums/x_sens_connection_state.dart';
-import '../buttons/x_sens_dot_list_element.dart';
-import '../dialogs/configure_x_sens_dot_dialog.dart';
-import '../icons/x_sens_state_icon.dart';
+import '../../../enums/x_sens_connection_state.dart';
+import '../../buttons/x_sens_dot_list_element.dart';
+import '../../dialogs/configure_x_sens_dot_dialog.dart';
+import '../../icons/x_sens_state_icon.dart';
 
 class DotConnected extends StatefulWidget {
   const DotConnected({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _DotConnectedState extends State<DotConnected> {
                               return ConfigureXSensDotDialog(
                                   name: BluetoothDiscovery()
                                       .getDevices()[0]
-                                      .assignedName);
+                                      .assignedName, close: () { if(mounted) Navigator.of(context).pop(); },);
                             });
                         if (result == null) setState(() {});
                       }),
