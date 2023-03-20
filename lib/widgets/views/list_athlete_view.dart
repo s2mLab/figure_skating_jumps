@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -23,13 +24,34 @@ class ListAthletesView extends StatelessWidget {
         body: Container(
             margin: const EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const PageTitle(text: listAthletesTitle),
-                TextButton(
-                    onPressed: () {
-                      debugPrint(_currentUser.trainees.length.toString());
-                    },
-                    child: const Text('TEST'))
+                Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const PageTitle(text: listAthletesTitle),
+                          Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: cardBackground,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: const Icon(Icons.search))
+                        ])),
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: _currentUser.trainees.length,
+                        itemBuilder: (context, index) {
+                          String item = _currentUser.trainees[index];
+                          return Container(
+                              margin: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: cardBackground,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(item));
+                        }))
               ],
             )));
   }
