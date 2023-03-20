@@ -5,6 +5,7 @@ import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 
 class XSensFileInfoSerializer {
     companion object {
+        private const val nbExpectedParams = 3
         fun serialize(fileInfo: XsensDotRecordingFileInfo): String {
             return "id: ${fileInfo.fileId}, name: ${fileInfo.fileName}, size: ${fileInfo.dataSize}"
         }
@@ -12,7 +13,7 @@ class XSensFileInfoSerializer {
         fun deserialize(serializedFileInfo: String): XsensDotRecordingFileInfo? {
             val splitInfo = serializedFileInfo.split(", ")
 
-            if (splitInfo.size != 3) return null
+            if (splitInfo.size != nbExpectedParams) return null
 
             val id: Int
             val name: String
