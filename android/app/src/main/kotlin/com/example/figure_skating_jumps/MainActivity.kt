@@ -291,8 +291,13 @@ class MainActivity : FlutterActivity() {
             return
         }
 
-        xSensDotExporter?.extractFile(fileInfo)
+        val success = xSensDotExporter?.extractFile(fileInfo)
 
-        result.success(currentXSensDot?.name)
+        if(success!!) {
+            result.success(currentXSensDot?.name)
+        } else {
+            result.error("2", "Failed to start extract", null)
+        }
+
     }
 }
