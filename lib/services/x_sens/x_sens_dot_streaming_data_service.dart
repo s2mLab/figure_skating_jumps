@@ -6,18 +6,18 @@ import 'package:flutter/services.dart';
 import '../../interfaces/i_observable.dart';
 import '../../interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 
-class XSensDotDataService implements IObservable<IXSensDotMeasuringDataSubscriber, List<XSensDotData>> {
-  static final XSensDotDataService _xSensDotDataService = XSensDotDataService._internal();
+class XSensDotStreamingDataService implements IObservable<IXSensDotMeasuringDataSubscriber, List<XSensDotData>> {
+  static final XSensDotStreamingDataService _xSensDotDataService = XSensDotStreamingDataService._internal();
   static final _xSensMeasuringChannel = EventChannel(EventChannelNames.measuringChannel.channelName);
   static final List<XSensDotData> _measuredData = [];
   final List<IXSensDotMeasuringDataSubscriber> _subscribers = [];
 
-  factory XSensDotDataService() {
+  factory XSensDotStreamingDataService() {
     _xSensMeasuringChannel.receiveBroadcastStream().listen((event) {_addData(event as String);});
     return _xSensDotDataService;
   }
 
-  XSensDotDataService._internal();
+  XSensDotStreamingDataService._internal();
 
   List<XSensDotData> get measuredData {
     return _measuredData;
@@ -29,7 +29,7 @@ class XSensDotDataService implements IObservable<IXSensDotMeasuringDataSubscribe
 
   static void _addData(String data) {
     _measuredData.add(XSensDotData.fromEventChannel(data));
-    XSensDotDataService().notifySubscribers(_measuredData);
+    XSensDotStreamingDataService().notifySubscribers(_measuredData);
   }
 
   @override

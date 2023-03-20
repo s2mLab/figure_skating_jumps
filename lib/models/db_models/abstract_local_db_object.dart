@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 abstract class AbstractLocalDbObject {
   late int? _id;
 
