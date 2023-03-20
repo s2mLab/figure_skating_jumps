@@ -74,7 +74,8 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
     ) {
         Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
         Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
-        XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.GetFlashInfoDone))
+        val canRecord = usedFlashSpace.toDouble() / totalFlashSpace.toDouble() < 0.9
+        XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.GetFlashInfoDone, canRecord.toString()))
     }
 
     override fun onXsensDotRecordingAck(

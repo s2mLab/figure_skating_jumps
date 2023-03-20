@@ -43,7 +43,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                   children: [
                     GestureDetector(
                         onTap: () async {
-                          await XSensDotRecordingService.export();
+                          await XSensDotChannelService().getSDKVersion();
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
