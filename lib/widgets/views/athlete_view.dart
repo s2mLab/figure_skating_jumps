@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
@@ -9,53 +7,37 @@ import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
+import '../../services/capture_client.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 
-class AcquisitionsView extends StatefulWidget {
-  const AcquisitionsView({Key? key}) : super(key: key);
+class AthleteView extends StatefulWidget {
+  const AthleteView({Key? key}) : super(key: key);
 
   @override
-  State<AcquisitionsView> createState() {
-    return _AcquisitionsViewState();
+  State<AthleteView> createState() {
+    return _AthleteViewState();
   }
 }
 
-class _AcquisitionsViewState extends State<AcquisitionsView> {
+class _AthleteViewState extends State<AthleteView> {
   int _switcherIndex = 0;
   bool loadingData = true;
   late Map<String, List<Capture>> _capturesSorted;
+  late final SkatingUser skater;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static const String _captureCollectionString = 'captures';
-
-  _loadCapturesData(SkatingUser skater) async {
-    List<Capture> captures = [];
-    for (String captureID in skater.captures) {
-      captures.add(await Capture.createFromFireBase(
-          captureID,
-          await _firestore
-              .collection(_captureCollectionString)
-              .doc(captureID)
-              .get()));
-    }
-
-    _capturesSorted =
-        groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
-
-    setState(() {
-      loadingData = false;
-    });
+  @override
+  void initState() {
+    skater = ModalRoute.of(context)!.settings.arguments as SkatingUser;
+    CaptureClient().loadCapturesData(skater);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final SkatingUser skater =
-        ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _loadCapturesData(skater);
     return Scaffold(
         appBar: const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,

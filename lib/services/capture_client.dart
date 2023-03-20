@@ -1,7 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
+
+import '../models/skating_user.dart';
 
 class CaptureClient {
   static final CaptureClient _userClient = CaptureClient._internal();
@@ -34,5 +37,18 @@ class CaptureClient {
       developer.log(e.toString());
       rethrow;
     }
+  }
+
+  Future<Map<String, List<Capture>>> loadCapturesData(SkatingUser skater) async {
+    List<Capture> captures = [];
+    for (String captureID in skater.captures) {
+      captures.add(await Capture.createFromFireBase(
+          captureID,
+          await _firestore
+              .collection(_captureCollectionString)
+              .doc(captureID)
+              .get()));
+    }
+    return groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
   }
 }
