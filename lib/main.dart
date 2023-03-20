@@ -14,6 +14,7 @@ import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
+import 'package:figure_skating_jumps/widgets/views/list_athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,7 +79,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return canFunction
         ? MaterialApp(
             title: 'Figure Skating Jump App',
@@ -93,6 +93,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/Login': (context) => const LoginView(),
               '/CreateSkater': (context) => const SkaterCreationView(),
               '/Acquisitions': (context) => const AcquisitionsView(),
+              '/ListAthletes': (context) => const ListAthletesView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -195,6 +196,11 @@ class _GodViewState extends State<GodView> {
                     arguments: _skater);
               },
               child: const Text('Acquisitions')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/ListAthletes');
+              },
+              child: const Text('List Athletes')),
           TextButton(
               onPressed: () {
                 Navigator.pushNamed(
