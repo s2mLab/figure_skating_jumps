@@ -30,14 +30,26 @@ import 'package:figure_skating_jumps/services/capture_client.dart';
 
 Future<void> main() async {
   bool hasNecessaryPermissions = true;
+
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  hasNecessaryPermissions = await initializeStoragePermissions();
+
   var cameras = await availableCameras();
   CameraService().rearCamera = cameras.first;
+
+  hasNecessaryPermissions = await initializeStoragePermissions();
+
   await LocalDbService().ensureInitialized();
+
+  // prevent phone rotation
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   runApp(FigureSkatingJumpApp(canFunction: hasNecessaryPermissions));
 }
 
@@ -67,11 +79,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // prevent phone rotation
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
 
     return canFunction
         ? MaterialApp(

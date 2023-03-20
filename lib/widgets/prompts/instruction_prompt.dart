@@ -1,6 +1,8 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/styles.dart';
+
 class InstructionPrompt extends StatelessWidget {
   final String _text;
   final Color _color;
@@ -24,7 +26,7 @@ class InstructionPrompt extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(_text, style: const TextStyle(fontSize: 16, color: darkText), textAlign: TextAlign.left,
+            child: Text(_text, style: const TextStyle(fontSize: 16, color: darkText, height: promptTextHeight), textAlign: TextAlign.left,
               softWrap: true),
           ),
         ]

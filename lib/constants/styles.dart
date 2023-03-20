@@ -9,5 +9,7 @@ BoxShadow connectionShadow = BoxShadow(
   offset: const Offset(0, 4), // changes position of shadow
 );
 
+
+const double promptTextHeight = 1.1;
 TextStyle tabStyle =
     const TextStyle(color: primaryColorDark, fontWeight: FontWeight.bold);

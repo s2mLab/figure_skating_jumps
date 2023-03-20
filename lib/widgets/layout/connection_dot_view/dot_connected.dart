@@ -69,7 +69,7 @@ class _DotConnectedState extends State<DotConnected> {
                               return ConfigureXSensDotDialog(
                                   name: BluetoothDiscovery()
                                       .getDevices()[0]
-                                      .assignedName);
+                                      .assignedName, close: () { if(mounted) Navigator.of(context).pop(); },);
                             });
                         if (result == null) setState(() {});
                       }),
