@@ -22,6 +22,7 @@ import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScann
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceCustomCallback
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotExporter
+import com.example.figure_skating_jumps.x_sens_dot.enums.ErrorCodes
 import com.example.figure_skating_jumps.x_sens_dot.utils.XSensFileInfoSerializer
 import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import io.flutter.plugin.common.BinaryMessenger
@@ -156,94 +157,96 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    //TODO unify result.success and result.error
     private fun getSDKVersion(result: MethodChannel.Result) {
-        XSensDotConnectionStreamHandler.sendEvent(1)
         result.success(XsensDotSdk.getSdkVersion())
     }
 
     private fun startScan(result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
         xSensDotDeviceScanner.startScan()
-        result.success("Scan Started")
+        result.success(null)
     }
 
     private fun stopScan(result: MethodChannel.Result) {
         xSensDotDeviceScanner.stopScan()
-        result.success("Scan Stopped")
+        result.success(null)
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
-        val xsensDotDeviceCustomCallback = XSensDotDeviceCustomCallback()
+        val address = call.argument<String>("address")
+        if(address == null) {
+            result.error(ErrorCodes.ArgNotSet.code, "address argument not set", null);
+            return
+        }
+        val xSensDotDeviceCustomCallback = XSensDotDeviceCustomCallback()
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val mBluetoothAdapter = bluetoothManager.adapter
         val device: BluetoothDevice =
-            mBluetoothAdapter.getRemoteDevice(call.argument<String>("address"))
+            mBluetoothAdapter.getRemoteDevice(address)
 
-        currentXSensDot = XsensDotDevice(context, device, xsensDotDeviceCustomCallback)
+        currentXSensDot = XsensDotDevice(context, device, xSensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
 
-        result.success(call.argument<String>("address"))
+        result.success(null)
     }
 
     private fun setRate(call: MethodCall, result: MethodChannel.Result) {
         val rate: Int?  = call.argument<Int>("rate")
         if (rate != null) {
             currentXSensDot?.setOutputRate(rate)
+            result.success(null)
             return
         }
-        result.error("0","Rate not set", null)
+        result.error(ErrorCodes.ArgNotSet.code,"Rate not set", null)
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         currentXSensDot?.disconnect()
         xSensDotRecorder = null
-        result.success("Successfully disconnected device: ${currentXSensDot?.address}")
+        xSensDotExporter = null
+        currentXSensDot = null
+        result.success(null)
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
-        if (currentXSensDot == null) {
-            result.error("1", "Not connected to device", null);
-            return
-        }
         currentXSensDot?.startMeasuring()
 
         Log.i("Android", "start")
-        result.success("Measured Started")
+        result.success(null)
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
         Log.i("Android", "stop")
         currentXSensDot?.stopMeasuring()
-        result.success("Measured Stopped")
+        result.success(null)
     }
 
     private fun enableRecordingNotification(result: MethodChannel.Result) {
         xSensDotRecorder?.enableDataRecordingNotification()
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun startRecording(result: MethodChannel.Result){
         xSensDotRecorder?.startRecording()
 
         Log.i("Android", "start")
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun stopRecording(result: MethodChannel.Result) {
         xSensDotRecorder?.stopRecording()
 
         Log.i("Android", "stop")
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun getFlashInfo(call: MethodCall, result: MethodChannel.Result) {
         val isExporting: Boolean?  = call.argument<Boolean>("isExporting")
         if(isExporting == null) {
-            result.error("0","isExporting string not set", null)
+            result.error(ErrorCodes.ArgNotSet.code,"isExporting argument not set", null)
             return
         }
 
@@ -254,12 +257,12 @@ class MainActivity : FlutterActivity() {
             xSensDotRecorder?.getFlashInfo()
         }
 
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun getFileInfo(result: MethodChannel.Result) {
         xSensDotExporter?.getFileInfo()
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun prepareExtract(result: MethodChannel.Result) {
@@ -275,30 +278,30 @@ class MainActivity : FlutterActivity() {
         xSensDotExporter = XSensDotExporter(context, currentXSensDot!!)
         xSensDotExporter?.enableDataRecordingNotification()
 
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 
     private fun extractFile(call: MethodCall, result: MethodChannel.Result) {
         val file: String?  = call.argument<String>("fileInfo")
 
         if (file == null) {
-            result.error("0","File string not set", null)
+            result.error(ErrorCodes.ArgNotSet.code,"fileInfo argument not set", null)
             return
         }
 
         val fileInfo: XsensDotRecordingFileInfo? = XSensFileInfoSerializer.deserialize(file)
 
         if (fileInfo == null) {
-            result.error("0","File info not set", null)
+            result.error(ErrorCodes.BadArgFormat.code,"fileInfo does not respect the expected format", null)
             return
         }
 
         val success = xSensDotExporter?.extractFile(fileInfo)
 
         if(success!!) {
-            result.success(currentXSensDot?.name)
+            result.success(null)
         } else {
-            result.error("2", "Failed to start extract", null)
+            result.error(ErrorCodes.ExtractFailed.code, "Failed to start extract", null)
         }
 
     }
@@ -316,6 +319,6 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
         xSensDotRecorder?.enableDataRecordingNotification()
 
-        result.success(currentXSensDot?.name)
+        result.success(null)
     }
 }

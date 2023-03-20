@@ -41,12 +41,14 @@ class XSensDotChannelService {
     }
   }
 
-  Future<String> connectXSensDot({String macAddress = 'D4:22:CD:00:19:F4'}) async {
+  Future<bool> connectXSensDot({String macAddress = 'D4:22:CD:00:19:F4'}) async {
     try {
-      return await _xSensMethodChannel.invokeMethod(
+      await _xSensMethodChannel.invokeMethod(
           'connectXSensDot', <String, dynamic>{'address': macAddress});
+      return true;
     } on PlatformException catch (e) {
-      return e.message!;
+      debugPrint(e.message!);
+      return false;
     }
   }
 
@@ -70,21 +72,11 @@ class XSensDotChannelService {
   }
 
   Future<void> startMeasuring() async {
-    try {
       XSensDotStreamingDataService().clearMeasuredData();
       await _xSensMethodChannel.invokeMethod('startMeasuring');
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
   }
 
-  Future<bool> stopMeasuring() async {
-    try {
-          await _xSensMethodChannel.invokeMethod('stopMeasuring');
-          return true;
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-      return false;
-    }
+  Future<void> stopMeasuring() async {
+    await _xSensMethodChannel.invokeMethod('stopMeasuring');
   }
 }

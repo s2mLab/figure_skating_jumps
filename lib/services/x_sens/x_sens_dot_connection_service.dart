@@ -35,27 +35,22 @@ class XSensDotConnectionService {
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
     if (_currentXSensDevice == null) {
-      String response = await XSensDotChannelService()
+      bool response = await XSensDotChannelService()
           .connectXSensDot(macAddress: bluetoothDevice.macAddress);
-      if (response == bluetoothDevice.macAddress) {
+      if (response) {
         _currentXSensDevice = bluetoothDevice;
         _changeState(XSensDeviceState.connected);
       }
-      return response == bluetoothDevice.macAddress;
+      return response;
     }
 
     return false;
   }
 
   Future<void> disconnect() async {
-    if (_currentXSensDevice != null) {
-      String response = await XSensDotChannelService().disconnectXSensDot();
-      String? currentMac = _currentXSensDevice?.macAddress;
-      if (response.contains(currentMac!)) {
-        _currentXSensDevice = null;
-        _changeState(XSensDeviceState.disconnected);
-      }
-    }
+    await XSensDotChannelService().disconnectXSensDot();
+    _currentXSensDevice = null;
+    _changeState(XSensDeviceState.disconnected);
   }
 
   void _changeState(XSensDeviceState state) {
