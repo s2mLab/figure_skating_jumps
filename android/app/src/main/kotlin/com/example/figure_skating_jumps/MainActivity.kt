@@ -5,10 +5,8 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import android.util.Log
 import androidx.annotation.NonNull
 import com.example.figure_skating_jumps.channels.enums.EventChannelParameters
-import com.example.figure_skating_jumps.channels.event_channels.*
 import com.example.figure_skating_jumps.channels.enums.MethodChannelNames
 import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
@@ -77,7 +75,7 @@ class MainActivity : FlutterActivity() {
 
         for (eventChannelParam in EventChannelParameters.values()) {
             EventChannel(messenger, eventChannelParam.channelName).setStreamHandler(
-                eventChannelParam.steamHandler
+                eventChannelParam.streamHandler
             )
         }
     }

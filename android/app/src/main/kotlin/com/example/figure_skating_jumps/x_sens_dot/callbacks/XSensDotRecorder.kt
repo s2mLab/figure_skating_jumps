@@ -21,6 +21,7 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
     private var recordingManager: XsensDotRecordingManager
     private var isNotificationEnabled: Boolean = false
     private val sleepingTimeMs: Long = 30
+    private val maxUsedSpacePct: Double = 0.9
 
     init {
         recordingManager = XsensDotRecordingManager(context, device, this)
@@ -74,7 +75,7 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
     ) {
         Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
         Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
-        val canRecord = usedFlashSpace.toDouble() / totalFlashSpace.toDouble() < 0.9
+        val canRecord = usedFlashSpace.toDouble() / totalFlashSpace.toDouble() < maxUsedSpacePct
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
                 RecordingStatus.GetFlashInfoDone,
