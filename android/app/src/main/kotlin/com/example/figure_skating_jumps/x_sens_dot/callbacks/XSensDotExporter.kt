@@ -18,29 +18,36 @@ import kotlin.collections.ArrayList
 
 class XSensDotExporter(context: Context, device: XsensDotDevice) :
     XsensDotRecordingCallback {
-    private var recordingManager: XsensDotRecordingManager
+    private var exportingManager: XsensDotRecordingManager
     private var isNotificationEnabled: Boolean = false
     private val sleepingTimeMs: Long = 30
+    private val selectedDataIds = byteArrayOf(
+        XsensDotRecordingManager.RECORDING_DATA_ID_TIMESTAMP,
+        XsensDotRecordingManager.RECORDING_DATA_ID_EULER_ANGLES,
+        XsensDotRecordingManager.RECORDING_DATA_ID_CALIBRATED_ACC,
+        XsensDotRecordingManager.RECORDING_DATA_ID_CALIBRATED_GYR
+    )
 
     init {
-        recordingManager = XsensDotRecordingManager(context, device, this)
+        exportingManager = XsensDotRecordingManager(context, device, this)
     }
 
     fun enableDataRecordingNotification() {
         SystemClock.sleep(sleepingTimeMs)
-        recordingManager.enableDataRecordingNotification()
+        exportingManager.enableDataRecordingNotification()
     }
 
-    fun extractFile(info: XsensDotRecordingFileInfo) {
+    fun extractFile(info: XsensDotRecordingFileInfo): Boolean {
+        if(!selectDataIds()) return false
         SystemClock.sleep(sleepingTimeMs)
-        recordingManager.startExporting(arrayListOf(info))
+        return exportingManager.startExporting(arrayListOf(info))
     }
 
     fun getFlashInfo() {
         Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
-            recordingManager.requestFlashInfo()
+            exportingManager.requestFlashInfo()
         }
     }
 
@@ -48,12 +55,16 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
-            recordingManager.requestFileInfo()
+            exportingManager.requestFileInfo()
         }
     }
 
     fun clearManager() {
-        recordingManager.clear()
+        exportingManager.clear()
+    }
+
+    private fun selectDataIds(): Boolean {
+        return exportingManager.selectExportedData(selectedDataIds)
     }
 
     override fun onXsensDotRecordingNotification(address: String?, isEnabled: Boolean) {
@@ -87,7 +98,8 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         recordingId: Int,
         isSuccess: Boolean,
         recordingState: XsensDotRecordingState?
-    ) {}
+    ) {
+    }
 
     override fun onXsensDotGetRecordingTime(
         address: String?,
