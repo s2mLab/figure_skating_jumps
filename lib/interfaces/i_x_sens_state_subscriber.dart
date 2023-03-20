@@ -1,5 +1,5 @@
-import '../enums/x_sens_connection_state.dart';
+import '../enums/x_sens_device_state.dart';
 
 abstract class IXSensStateSubscriber {
-  void onStateChange(XSensConnectionState state);
+  void onStateChange(XSensDeviceState state);
 }

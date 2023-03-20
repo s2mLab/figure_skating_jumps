@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:flutter/material.dart';
 
 import '../layout/scaffold/topbar.dart';
@@ -42,7 +43,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                   children: [
                     GestureDetector(
                         onTap: () async {
-                          setOutput(await _xsensDotService.getSDKVersion());
+                          await XSensDotChannelService().getSDKVersion();
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -64,8 +65,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                         )),
                     GestureDetector(
                         onTap: () async {
-                          List<dynamic> devices =
-                              await _xsensDotService.stopScan();
+                          List<dynamic> devices = [];
                           for (BluetoothDevice dev in devices) {
                             setOutput("available device -> ${dev.macAddress}");
                           }
@@ -85,8 +85,10 @@ class _DemoConnectionState extends State<DemoConnection> {
                   children: [
                     GestureDetector(
                         onTap: () async {
-                          setOutput(
-                              "connection to : ${await _xsensDotService.connectXSensDot(macAddress: 'D4:22:CD:00:14:0E')}");
+                          var success = await _xsensDotService.connectXSensDot(macAddress: 'D4:22:CD:00:14:0E');
+                          if(success) {
+                            setOutput("connection to : D4:22:CD:00:14:0E");
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -96,7 +98,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Connect Xsens DOT'),
                         )),
                     GestureDetector(
-                        onTap: () async => await _xsensDotService.startMeasuring(),
+                        onTap: () async => await XSensDotRecordingService().startRecording(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -105,7 +107,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Start'),
                         )),
                     GestureDetector(
-                        onTap: () async => await _xsensDotService.stopMeasuring(),
+                        onTap: () async => await XSensDotRecordingService.stopRecording(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(

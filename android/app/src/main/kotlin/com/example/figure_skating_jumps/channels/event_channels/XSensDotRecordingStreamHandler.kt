@@ -1,9 +1,11 @@
 package com.example.figure_skating_jumps.channels.event_channels
 
-object XSensDotRecordingStreamHandler : XSensDotEventStreamHandler<String>() {
-    override fun sendEvent(event: String) {
+import com.example.figure_skating_jumps.channels.events.RecordingEvent
+
+object XSensDotRecordingStreamHandler : XSensDotEventStreamHandler<RecordingEvent>() {
+    override fun sendEvent(event: RecordingEvent) {
         handler.post {
-            sink?.success(event)
+            sink?.success(event.toString())
         }
     }
 }
