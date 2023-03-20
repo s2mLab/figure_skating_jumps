@@ -7,7 +7,6 @@ class CaptureClient {
   static final CaptureClient _userClient = CaptureClient._internal();
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static const String _jumpCollectionString = 'jumps';
   static const String _captureCollectionString = 'captures';
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
@@ -20,16 +19,17 @@ class CaptureClient {
 
   Future<void> addJump({required Jump jump}) async {
     try {
-      Capture capture = Capture.fromFirestore(jump.capture, await _firestore.collection(_captureCollectionString).doc(jump.capture).get());
-      DocumentReference<Map<String, dynamic>> temp = await _firestore.collection(_jumpCollectionString).add({
-        "capture": jump.capture,
-        "duration": jump.duration,
-        "time": jump.time,
-        "turns": jump.turns,
-        "type": jump.type.toString()
-      });
-      capture.jumps.add(temp.id);
-      await _firestore.collection(_captureCollectionString).doc(jump.capture).set({"jumps": capture.jumps}, SetOptions(merge: true));
+      final collectionJump = await _firestore
+          .collection(_captureCollectionString)
+          .doc(jump.capture)
+          .get();
+      Capture capture =
+          await Capture.createFromFireBase(jump.capture, collectionJump);
+      capture.jumps.add(jump);
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(jump.capture)
+          .set({"jumps": capture.jumps}, SetOptions(merge: true));
     } catch (e) {
       developer.log(e.toString());
       rethrow;
