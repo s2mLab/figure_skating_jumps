@@ -13,6 +13,7 @@ import com.xsens.dot.android.sdk.models.FilterProfileInfo
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import java.util.ArrayList
 class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
+    private val maxRecordingOutputRate: Int = 120
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
@@ -30,6 +31,9 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
         Log.i("XSensDot", "Updated output rate of device $address to $outputRate Hz")
+        if(outputRate == maxRecordingOutputRate ) {
+            XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.SetRate))
+        }
     }
 
     override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {

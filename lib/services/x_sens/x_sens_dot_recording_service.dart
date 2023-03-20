@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -33,6 +34,9 @@ class XSensDotRecordingService {
     var status =
         RecordingStatus.values.firstWhere((el) => el.status == data['status']);
     switch (status) {
+      case RecordingStatus.setRate:
+        await _recordingMethodChannel.invokeMethod('prepareRecording');
+        break;
       case RecordingStatus.enableRecordingNotificationDone:
         debugPrint(data['data']);
         await _recordingMethodChannel.invokeMethod(
@@ -91,7 +95,7 @@ class XSensDotRecordingService {
   }
 
   static Future<void> startRecording() async {
-    await _recordingMethodChannel.invokeMethod('prepareRecording');
+    XSensDotChannelService().setRate(120);
   }
 
   static Future<void> stopRecording() async {
