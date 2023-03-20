@@ -6,7 +6,11 @@ import io.flutter.plugin.common.EventChannel
 object XSensDotScanStreamHandler : XSensDotEventStreamHandler<BluetoothDevice>() {
    override fun sendEvent(event: BluetoothDevice) {
        handler.post {
-           sink?.success(event)
+           try {
+               sink?.success("${event.address},${event.alias}")
+           } catch (e: SecurityException) {
+               sink?.error("security", e.message, e.stackTrace)
+           }
        }
     }
 }

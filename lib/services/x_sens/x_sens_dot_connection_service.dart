@@ -1,30 +1,30 @@
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
-import '../../enums/x_sens_connection_state.dart';
+import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 import '../../models/bluetooth_device.dart';
 
-class XSensDotConnection {
-  static final XSensDotConnection _xSensDotConnection =
-      XSensDotConnection._internal(XSensConnectionState.disconnected);
+class XSensDotConnectionService {
+  static final XSensDotConnectionService _xSensDotConnection =
+      XSensDotConnectionService._internal(XSensDeviceState.disconnected);
   final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
-  XSensConnectionState _connectionState;
+  XSensDeviceState _connectionState;
   BluetoothDevice? _currentXSensDevice;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
-  factory XSensDotConnection() {
+  factory XSensDotConnectionService() {
     return _xSensDotConnection;
   }
 
-  XSensDotConnection._internal(this._connectionState);
+  XSensDotConnectionService._internal(this._connectionState);
 
-  XSensConnectionState subscribeConnectionState(
+  XSensDeviceState subscribeConnectionState(
       IXSensStateSubscriber subscriber) {
     _connectionStateSubscribers.add(subscriber);
     return _connectionState;
   }
 
-  XSensConnectionState get connectionState {
+  XSensDeviceState get connectionState {
     return _connectionState;
   }
 
@@ -35,30 +35,25 @@ class XSensDotConnection {
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
     if (_currentXSensDevice == null) {
-      String response = await XSensDotChannelService()
+      bool response = await XSensDotChannelService()
           .connectXSensDot(macAddress: bluetoothDevice.macAddress);
-      if (response == bluetoothDevice.macAddress) {
+      if (response) {
         _currentXSensDevice = bluetoothDevice;
-        _changeState(XSensConnectionState.connected);
+        _changeState(XSensDeviceState.connected);
       }
-      return response == bluetoothDevice.macAddress;
+      return response;
     }
 
     return false;
   }
 
   Future<void> disconnect() async {
-    if (_currentXSensDevice != null) {
-      String response = await XSensDotChannelService().disconnectXSensDot();
-      String? currentMac = _currentXSensDevice?.macAddress;
-      if (response.contains(currentMac!)) {
-        _currentXSensDevice = null;
-        _changeState(XSensConnectionState.disconnected);
-      }
-    }
+    await XSensDotChannelService().disconnectXSensDot();
+    _currentXSensDevice = null;
+    _changeState(XSensDeviceState.disconnected);
   }
 
-  void _changeState(XSensConnectionState state) {
+  void _changeState(XSensDeviceState state) {
     _connectionState = state;
     for (IXSensStateSubscriber s in _connectionStateSubscribers) {
       s.onStateChange(state);
