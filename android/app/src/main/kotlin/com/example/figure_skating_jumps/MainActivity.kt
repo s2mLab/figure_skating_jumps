@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
-import com.example.figure_skating_jumps.channels.enums.EventChannelNames
+import com.example.figure_skating_jumps.channels.enums.EventChannelParameters
 import com.example.figure_skating_jumps.channels.event_channels.*
 import com.example.figure_skating_jumps.channels.enums.MethodChannelNames
 import com.xsens.dot.android.sdk.XsensDotSdk
@@ -17,6 +17,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
@@ -60,69 +61,25 @@ class MainActivity : FlutterActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun setUpChannels(messenger: BinaryMessenger){
-        MethodChannel(
-            messenger,
-            MethodChannelNames.XSensDotChannel.channelName
-        ).setMethodCallHandler { call, result ->
-            handleXSensDotCalls(call, result)
-        }
-
+    private fun setUpChannels(messenger: BinaryMessenger) {
         MethodChannel(
             messenger,
             MethodChannelNames.BluetoothChannel.channelName
-        ).setMethodCallHandler { call, result ->
-            handleBluetoothPermissionsCalls(call, result)
-        }
-
+        ).setMethodCallHandler { call, result -> handleBluetoothPermissionsCalls(call, result) }
         MethodChannel(
             messenger,
             MethodChannelNames.RecordingChannel.channelName
-        ).setMethodCallHandler { call, result ->
-            handleRecordingCalls(call, result)
+        ).setMethodCallHandler { call, result -> handleRecordingCalls(call, result) }
+        MethodChannel(
+            messenger,
+            MethodChannelNames.XSensDotChannel.channelName
+        ).setMethodCallHandler { call, result -> handleXSensDotCalls(call, result) }
+
+        for (eventChannelParam in EventChannelParameters.values()) {
+            EventChannel(messenger, eventChannelParam.channelName).setStreamHandler(
+                eventChannelParam.steamHandler
+            )
         }
-
-        EventChannel(
-            messenger,
-            EventChannelNames.BluetoothChannel.channelName
-        ).setStreamHandler(
-            BluetoothPermissionStreamHandler
-        )
-
-        EventChannel(
-            messenger,
-            EventChannelNames.ConnectionChannel.channelName
-        ).setStreamHandler(
-            XSensDotConnectionStreamHandler
-        )
-
-        EventChannel(
-            messenger,
-            EventChannelNames.FileExportChannel.channelName
-        ).setStreamHandler(
-            XSensDotFileExportStreamHandler
-        )
-
-        EventChannel(
-            messenger,
-            EventChannelNames.MeasuringChannel.channelName
-        ).setStreamHandler(
-            XSensDotMeasuringStreamHandler
-        )
-
-        EventChannel(
-            messenger,
-            EventChannelNames.RecordingChannel.channelName
-        ).setStreamHandler(
-            XSensDotRecordingStreamHandler
-        )
-
-        EventChannel(
-            messenger,
-            EventChannelNames.ScanChannel.channelName
-        ).setStreamHandler(
-            XSensDotScanStreamHandler
-        )
     }
 
     private fun handleBluetoothPermissionsCalls(call: MethodCall, result: MethodChannel.Result) {
@@ -144,6 +101,7 @@ class MainActivity : FlutterActivity() {
             else -> result.notImplemented()
         }
     }
+
     private fun handleXSensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "getSDKVersion" -> getSDKVersion(result)
@@ -176,7 +134,7 @@ class MainActivity : FlutterActivity() {
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         PermissionUtils.manageBluetoothRequirements(this)
         val address = call.argument<String>("address")
-        if(address == null) {
+        if (address == null) {
             result.error(ErrorCodes.ArgNotSet.code, "address argument not set", null);
             return
         }
@@ -195,13 +153,13 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun setRate(call: MethodCall, result: MethodChannel.Result) {
-        val rate: Int?  = call.argument<Int>("rate")
+        val rate: Int? = call.argument<Int>("rate")
         if (rate != null) {
             currentXSensDot?.setOutputRate(rate)
             result.success(null)
             return
         }
-        result.error(ErrorCodes.ArgNotSet.code,"Rate not set", null)
+        result.error(ErrorCodes.ArgNotSet.code, "Rate not set", null)
     }
 
     private fun disconnectXSensDot(result: MethodChannel.Result) {
@@ -214,13 +172,10 @@ class MainActivity : FlutterActivity() {
 
     private fun startMeasuring(result: MethodChannel.Result) {
         currentXSensDot?.startMeasuring()
-
-        Log.i("Android", "start")
         result.success(null)
     }
 
     private fun stopMeasuring(result: MethodChannel.Result) {
-        Log.i("Android", "stop")
         currentXSensDot?.stopMeasuring()
         result.success(null)
     }
@@ -230,31 +185,26 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
-    private fun startRecording(result: MethodChannel.Result){
+    private fun startRecording(result: MethodChannel.Result) {
         xSensDotRecorder?.startRecording()
-
-        Log.i("Android", "start")
         result.success(null)
     }
 
     private fun stopRecording(result: MethodChannel.Result) {
         xSensDotRecorder?.stopRecording()
-
-        Log.i("Android", "stop")
         result.success(null)
     }
 
     private fun getFlashInfo(call: MethodCall, result: MethodChannel.Result) {
-        val isExporting: Boolean?  = call.argument<Boolean>("isExporting")
-        if(isExporting == null) {
-            result.error(ErrorCodes.ArgNotSet.code,"isExporting argument not set", null)
+        val isExporting: Boolean? = call.argument<Boolean>("isExporting")
+        if (isExporting == null) {
+            result.error(ErrorCodes.ArgNotSet.code, "isExporting argument not set", null)
             return
         }
 
-        if(isExporting) {
+        if (isExporting) {
             xSensDotExporter?.getFlashInfo()
-        }
-        else {
+        } else {
             xSensDotRecorder?.getFlashInfo()
         }
 
@@ -267,7 +217,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun prepareExtract(result: MethodChannel.Result) {
-        if(xSensDotExporter != null){
+        if (xSensDotExporter != null) {
             xSensDotExporter?.clearManager()
         }
 
@@ -283,23 +233,27 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun extractFile(call: MethodCall, result: MethodChannel.Result) {
-        val file: String?  = call.argument<String>("fileInfo")
+        val file: String? = call.argument<String>("fileInfo")
 
         if (file == null) {
-            result.error(ErrorCodes.ArgNotSet.code,"fileInfo argument not set", null)
+            result.error(ErrorCodes.ArgNotSet.code, "fileInfo argument not set", null)
             return
         }
 
         val fileInfo: XsensDotRecordingFileInfo? = XSensFileInfoSerializer.deserialize(file)
 
         if (fileInfo == null) {
-            result.error(ErrorCodes.BadArgFormat.code,"fileInfo does not respect the expected format", null)
+            result.error(
+                ErrorCodes.BadArgFormat.code,
+                "fileInfo does not respect the expected format",
+                null
+            )
             return
         }
 
         val success = xSensDotExporter?.extractFile(fileInfo)
 
-        if(success!!) {
+        if (success!!) {
             result.success(null)
         } else {
             result.error(ErrorCodes.ExtractFailed.code, "Failed to start extract", null)
@@ -308,7 +262,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun prepareRecording(result: MethodChannel.Result) {
-        if(xSensDotRecorder != null){
+        if (xSensDotRecorder != null) {
             xSensDotRecorder?.clearManager()
         }
 
