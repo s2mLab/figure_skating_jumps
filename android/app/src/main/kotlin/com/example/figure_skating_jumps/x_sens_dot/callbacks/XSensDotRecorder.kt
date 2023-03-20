@@ -75,7 +75,12 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
         Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
         Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
         val canRecord = usedFlashSpace.toDouble() / totalFlashSpace.toDouble() < 0.9
-        XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.GetFlashInfoDone, canRecord.toString()))
+        XSensDotRecordingStreamHandler.sendEvent(
+            RecordingEvent(
+                RecordingStatus.GetFlashInfoDone,
+                canRecord.toString()
+            )
+        )
     }
 
     override fun onXsensDotRecordingAck(
@@ -121,7 +126,7 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
 
     override fun onXsensDotDataExported(address: String?, fileInfo: XsensDotRecordingFileInfo?) {}
 
-    override fun onXsensDotAllDataExported(address: String?) { }
+    override fun onXsensDotAllDataExported(address: String?) {}
 
-    override fun onXsensDotStopExportingData(address: String?) { }
+    override fun onXsensDotStopExportingData(address: String?) {}
 }

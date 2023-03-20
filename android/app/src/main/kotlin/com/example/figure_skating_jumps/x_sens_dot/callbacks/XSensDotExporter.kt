@@ -38,7 +38,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
     }
 
     fun extractFile(info: XsensDotRecordingFileInfo): Boolean {
-        if(!selectDataIds()) return false
+        if (!selectDataIds()) return false
         SystemClock.sleep(sleepingTimeMs)
         return exportingManager.startExporting(arrayListOf(info))
     }
@@ -98,16 +98,14 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         recordingId: Int,
         isSuccess: Boolean,
         recordingState: XsensDotRecordingState?
-    ) {
-    }
+    ) {}
 
     override fun onXsensDotGetRecordingTime(
         address: String?,
         startUTCSeconds: Int,
         totalRecordingSeconds: Int,
         remainingRecordingSeconds: Int
-    ) {
-    }
+    ) {}
 
     override fun onXsensDotRequestFileInfoDone(
         address: String?,

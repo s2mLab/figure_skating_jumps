@@ -98,7 +98,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                           child: const Text('Connect Xsens DOT'),
                         )),
                     GestureDetector(
-                        onTap: () async => await XSensDotRecordingService.startRecording(),
+                        onTap: () async => await XSensDotRecordingService().startRecording(),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
