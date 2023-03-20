@@ -85,8 +85,10 @@ class _DemoConnectionState extends State<DemoConnection> {
                   children: [
                     GestureDetector(
                         onTap: () async {
-                          setOutput(
-                              "connection to : ${await _xsensDotService.connectXSensDot(macAddress: 'D4:22:CD:00:14:0E')}");
+                          var success = await _xsensDotService.connectXSensDot(macAddress: 'D4:22:CD:00:14:0E');
+                          if(success) {
+                            setOutput("connection to : D4:22:CD:00:14:0E");
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
