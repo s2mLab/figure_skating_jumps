@@ -8,7 +8,7 @@ class SkatingUser {
   late UserRole _role;
   late String _email;
   late List<String> _captures = [];
-  final List<String> _trainees = [];
+  late List<String> _trainees = [];
   final List<String> _coaches = [];
 
   String get firstName {
@@ -52,6 +52,7 @@ class SkatingUser {
     SkatingUser skaterUser = SkatingUser(firstName, lastName, role, uID);
 
     skaterUser._captures = List<String>.from(userInfo.get('captures') as List);
+    skaterUser._trainees = List<String>.from(userInfo.get('trainees') as List);
     return skaterUser;
     //TODO convert json to list when saving acquisition and when linking trainee and coach
   }

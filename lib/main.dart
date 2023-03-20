@@ -93,7 +93,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/Login': (context) => const LoginView(),
               '/CreateSkater': (context) => const SkaterCreationView(),
               '/Acquisitions': (context) => const AcquisitionsView(),
-              '/ListAthletes': (context) => const ListAthletesView(),
+              '/ListAthletes': (context) => ListAthletesView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -197,7 +197,10 @@ class _GodViewState extends State<GodView> {
               },
               child: const Text('Acquisitions')),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
+                // This line is temp. Eventually user will already be logged in. Remove async then.
+                await UserClient()
+                    .signIn(email: 'thomc@thomc.com', password: 'thomc123456');
                 Navigator.pushNamed(context, '/ListAthletes');
               },
               child: const Text('List Athletes')),
