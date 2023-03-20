@@ -59,7 +59,7 @@ const String progressionTab = "Progression";
 const String optionsTab = "Options";
 
 // widgets/screens/list_athletes_view
-const String listAthletesTitle = "Liste d'athlètes";
+const String listAthletesTitle = "Mes athlètes";
 
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";
