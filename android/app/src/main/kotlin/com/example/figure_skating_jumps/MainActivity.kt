@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.NonNull
 import com.example.figure_skating_jumps.channels.enums.EventChannelNames
@@ -269,7 +270,7 @@ class MainActivity : FlutterActivity() {
         // 1 manager at a time on the device
         xSensDotRecorder?.clearManager()
         xSensDotRecorder = null
-
+        SystemClock.sleep(30)
         xSensDotExporter = XSensDotExporter(context, currentXSensDot!!)
         xSensDotExporter?.enableDataRecordingNotification()
         result.success(currentXSensDot?.name)
