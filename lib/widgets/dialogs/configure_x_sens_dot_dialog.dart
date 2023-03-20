@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,8 @@ import '../prompts/ice_field_editable.dart';
 
 class ConfigureXSensDotDialog extends StatelessWidget {
   final String name;
-  const ConfigureXSensDotDialog({required this.name, super.key});
+  final Function() close;
+  const ConfigureXSensDotDialog({required this.name, super.key, required this.close});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +53,10 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: IceButton(
                       text: disconnectDevice,
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        await XSensDotChannelService().disconnectXSensDot();
+                        //TODO: notify UI
+                        close();
                       },
                       textColor: errorColor,
                       color: errorColor,

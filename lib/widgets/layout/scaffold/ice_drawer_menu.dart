@@ -48,6 +48,15 @@ class IceDrawerMenu extends StatelessWidget {
                     ),
                   );
                 }),
+            NavMenuElement(
+                text: "(TEMP) Capture",
+                iconData: Icons.camera,
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/CaptureData',
+                  );
+                }),
 
           ],
         ),
