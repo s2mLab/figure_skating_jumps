@@ -33,11 +33,6 @@ class XSensDotRecordingService {
     var status =
         RecordingStatus.values.firstWhere((el) => el.status == data['status']);
     switch (status) {
-      case RecordingStatus.initDone:
-        debugPrint("Init");
-        await _recordingMethodChannel
-            .invokeMethod('enableRecordingNotification');
-        break;
       case RecordingStatus.enableRecordingNotificationDone:
         debugPrint(data['data']);
         await _recordingMethodChannel.invokeMethod(
@@ -58,14 +53,22 @@ class XSensDotRecordingService {
         break;
       case RecordingStatus.getFlashInfoDone:
         debugPrint("FlashInfo");
-        //TODO Add check before recording
+        if (_recorderState == RecorderState.idle) {
+          var canRecord = data['data'] == "true";
+          if (canRecord) {
+            try {
+              await _recordingMethodChannel.invokeMethod('startRecording');
+            } on PlatformException catch (e) {
+              debugPrint(e.message!);
+            }
+          }
+        }
         if (_recorderState == RecorderState.exporting) {
           await _recordingMethodChannel.invokeMethod('getFileInfo');
         }
         break;
       case RecordingStatus.getFileInfoDone:
         if (_recorderState == RecorderState.exporting) {
-          //TODO call data to extract before calling that
           await _recordingMethodChannel.invokeMethod(
               'extractFile', <String, dynamic>{'fileInfo': data['data']});
         }
@@ -88,11 +91,7 @@ class XSensDotRecordingService {
   }
 
   static Future<void> startRecording() async {
-    try {
-      await _recordingMethodChannel.invokeMethod('startRecording');
-    } on PlatformException catch (e) {
-      debugPrint(e.message!);
-    }
+    await _recordingMethodChannel.invokeMethod('prepareRecording');
   }
 
   static Future<void> stopRecording() async {
@@ -103,11 +102,7 @@ class XSensDotRecordingService {
     }
   }
 
-  //todo remove
-  static Future<void> export() async {
-    await _recordingMethodChannel.invokeMethod('getFileInfo');
-  }
-
+  //TODO remove when the class is integrated in the UI/with the capture save
   void noop() {
     debugPrint("noop");
   }

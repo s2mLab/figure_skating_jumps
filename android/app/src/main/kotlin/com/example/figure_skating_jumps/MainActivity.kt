@@ -63,7 +63,7 @@ class MainActivity : FlutterActivity() {
             messenger,
             MethodChannelNames.XSensDotChannel.channelName
         ).setMethodCallHandler { call, result ->
-            handleXsensDotCalls(call, result)
+            handleXSensDotCalls(call, result)
         }
 
         MethodChannel(
@@ -138,10 +138,11 @@ class MainActivity : FlutterActivity() {
             "getFileInfo" -> getFileInfo(result)
             "extractFile" -> extractFile(call, result)
             "prepareExtract" -> prepareExtract(result)
+            "prepareRecording" -> prepareRecording(result)
             else -> result.notImplemented()
         }
     }
-    private fun handleXsensDotCalls(call: MethodCall, result: MethodChannel.Result) {
+    private fun handleXSensDotCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "getSDKVersion" -> getSDKVersion(result)
             "startScan" -> startScan(result)
@@ -184,7 +185,6 @@ class MainActivity : FlutterActivity() {
         currentXSensDot = XsensDotDevice(context, device, xsensDotDeviceCustomCallback)
 
         currentXSensDot?.connect()
-        xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
 
         result.success(call.argument<String>("address"))
     }
@@ -266,13 +266,15 @@ class MainActivity : FlutterActivity() {
         if(xSensDotExporter != null){
             xSensDotExporter?.clearManager()
         }
-        //TODO maybe null check if multiple recording
-        // 1 manager at a time on the device
+
         xSensDotRecorder?.clearManager()
         xSensDotRecorder = null
+
         SystemClock.sleep(30)
+
         xSensDotExporter = XSensDotExporter(context, currentXSensDot!!)
         xSensDotExporter?.enableDataRecordingNotification()
+
         result.success(currentXSensDot?.name)
     }
 
@@ -299,5 +301,21 @@ class MainActivity : FlutterActivity() {
             result.error("2", "Failed to start extract", null)
         }
 
+    }
+
+    private fun prepareRecording(result: MethodChannel.Result) {
+        if(xSensDotRecorder != null){
+            xSensDotRecorder?.clearManager()
+        }
+
+        xSensDotExporter?.clearManager()
+        xSensDotExporter = null
+
+        SystemClock.sleep(30)
+
+        xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
+        xSensDotRecorder?.enableDataRecordingNotification()
+
+        result.success(currentXSensDot?.name)
     }
 }

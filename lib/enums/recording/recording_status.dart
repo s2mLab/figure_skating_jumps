@@ -1,5 +1,4 @@
 enum RecordingStatus {
-  initDone("InitDone"),
   enableRecordingNotificationDone("EnableRecordingNotificationDone"),
   recordingStarted("RecordingStarted"),
   recordingStopped("RecordingStopped"),

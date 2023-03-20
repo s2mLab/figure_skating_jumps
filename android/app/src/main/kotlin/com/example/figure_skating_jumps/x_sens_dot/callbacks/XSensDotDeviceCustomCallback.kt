@@ -26,7 +26,6 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "Initialization of device $address complete")
-        XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.InitDone))
     }
 
     override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
