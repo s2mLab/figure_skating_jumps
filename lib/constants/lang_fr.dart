@@ -65,6 +65,8 @@ const String captureViewStart = "Commencer une capture";
 const String captureViewInstructions = "Cette page permet de commencer une capture pour l’athlète sélectionné.";
 const String captureViewCameraInstruction = "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
+const String captureStartingPrompt = "Démarrage...";
+const String stopCapture = "Arrêter la capture";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";

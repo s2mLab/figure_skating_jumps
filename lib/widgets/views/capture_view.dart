@@ -7,7 +7,6 @@ import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../constants/lang_fr.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
@@ -28,6 +27,7 @@ class _CaptureViewState extends State<CaptureView> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool _isFullscreen = false;
+  bool _isCameraActivated = true;
 
   @override
   void initState() {
@@ -37,15 +37,11 @@ class _CaptureViewState extends State<CaptureView> {
       ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
-
-    _resetOrientation();
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _resetOrientation();
     _controller.dispose();
     super.dispose();
   }
@@ -63,32 +59,18 @@ class _CaptureViewState extends State<CaptureView> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IceButton(
-                      onPressed: () async {
-                        try {
-                          await _initializeControllerFuture;
-                          XFile f = await _controller.stopVideoRecording();
-                          if (mounted) {
-                            _displayWaitingDialog(pleaseWait);
-                            await ExternalStorageService().saveVideo(
-                                f); // TODO: Save to localDataBase. and eventually Firebase?
-                            _resetOrientation();
-                          }
-                        } catch (e) {
-                          developer.log(e.toString());
-                        }
-                        if (mounted) {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        }
-                        setState(() {
-                          _isFullscreen = false;
-                        });
-                      },
-                      text: "Stop la capture d'acquisition",
-                      textColor: primaryColor,
-                      color: primaryColor,
-                      iceButtonImportance: IceButtonImportance.secondaryAction,
-                      iceButtonSize: IceButtonSize.medium,
+                    Center(
+                      child: IceButton(
+                        onPressed: () async {
+                          await _onCaptureStopPressed(context);
+                        },
+                        text: stopCapture,
+                        textColor: primaryColor,
+                        color: primaryColor,
+                        iceButtonImportance:
+                            IceButtonImportance.secondaryAction,
+                        iceButtonSize: IceButtonSize.medium,
+                      ),
                     ),
                   ],
                 )
@@ -119,26 +101,33 @@ class _CaptureViewState extends State<CaptureView> {
                         child: InstructionPrompt(
                             captureViewCameraInstruction, secondaryColor),
                       ),
-                      FutureBuilder<void>(
-                          future: _initializeControllerFuture,
-                          builder: _buildCameraPreview),
+                      if (_isCameraActivated)
+                        FutureBuilder<void>(
+                            future: _initializeControllerFuture,
+                            builder: _buildCameraPreview),
+                      Expanded(
+                          child: Center(
+                              child: _isCameraActivated
+                                  ? const SizedBox()
+                                  : const Icon(Icons.no_photography_outlined,
+                                      size: 56))),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(captureViewCameraSwitchPrompt),
+                            Switch(
+                                value: _isCameraActivated,
+                                onChanged: (val) {
+                                  setState(() {
+                                    _isCameraActivated = val;
+                                  });
+                                })
+                          ]),
                       Center(
                         child: IceButton(
                           onPressed: () async {
                             // TODO: ADD when eventchannels are merged displayWaitingDialog("Démarrage...");
-                            try {
-                              await _initializeControllerFuture;
-                              _displayWaitingDialog("Démarrage...");
-                              await _controller.startVideoRecording();
-                            } catch (e) {
-                              developer.log(e.toString());
-                            }
-                            if (mounted) {
-                              Navigator.of(context, rootNavigator: true).pop();
-                            }
-                            setState(() {
-                              _isFullscreen = true;
-                            });
+                            await _onCaptureStartPressed(context);
                           },
                           text: captureViewStart,
                           textColor: primaryColor,
@@ -154,15 +143,51 @@ class _CaptureViewState extends State<CaptureView> {
           );
   }
 
+  Future<void> _onCaptureStopPressed(BuildContext context) async {
+    try {
+      await _initializeControllerFuture;
+      XFile f = await _controller.stopVideoRecording();
+      if (mounted) {
+        _displayWaitingDialog(pleaseWait);
+
+        String path = await ExternalStorageService().saveVideo(
+            f); // TODO: Save to localDataBase. and eventually Firebase?
+        path =
+            path; // To ignore the warning of unused variable -> will be used for localDB storage
+      }
+    } catch (e) {
+      developer.log(e.toString());
+    }
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+    setState(() {
+      _isFullscreen = false;
+    });
+  }
+
+  Future<void> _onCaptureStartPressed(BuildContext context) async {
+    try {
+      await _initializeControllerFuture;
+      _displayWaitingDialog(captureStartingPrompt);
+      _isCameraActivated
+          ? await _controller.startVideoRecording()
+          : developer
+              .log("Start camera-free capture placeholder"); //TODO: change
+    } catch (e) {
+      developer.log(e.toString());
+    }
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+    setState(() {
+      _isFullscreen = true;
+    });
+  }
+
   Widget _buildCameraPreview(
       BuildContext context, AsyncSnapshot<void> snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
-      if(_isFullscreen) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-        ]);
-        _controller.unlockCaptureOrientation();
-      }
       Size screenSize = MediaQuery.of(context).size;
       double cameraHeight = screenSize.height;
       double cameraWidth = screenSize.height / _controller.value.aspectRatio;
@@ -180,19 +205,12 @@ class _CaptureViewState extends State<CaptureView> {
       return Center(
         child: SizedBox(
           width: _isFullscreen ? screenSize.width : cameraWidth,
-          height:  _isFullscreen ? screenSize.height : cameraHeight,
+          height: _isFullscreen ? screenSize.height : cameraHeight,
           child: _controller.buildPreview(),
         ),
       );
     }
     return const Center(child: CircularProgressIndicator());
-  }
-
-  Future<void> _resetOrientation() async {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
   }
 
   void _displayWaitingDialog(String message) {
