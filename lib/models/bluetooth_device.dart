@@ -1,3 +1,5 @@
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+
 class BluetoothDevice {
   late final String _name;
   late final String _macAddress;
@@ -18,6 +20,7 @@ class BluetoothDevice {
   set assignedName(String val) {
     if (val.isNotEmpty) {
       _assignedName = val;
+      DeviceNamesManager().changeName(val, this);
     }
   }
 

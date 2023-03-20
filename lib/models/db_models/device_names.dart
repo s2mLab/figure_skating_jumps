@@ -3,11 +3,13 @@ import 'abstract_local_db_object.dart';
 class DeviceNames extends AbstractLocalDbObject {
   final String _userID;
   final String _deviceMacAddress;
+  String name;
 
   DeviceNames(
-      {required int id,
+      {int? id,
       required String userID,
-      required String deviceMacAddress})
+      required String deviceMacAddress,
+      required this.name})
       : _deviceMacAddress = deviceMacAddress,
         _userID = userID {
     this.id = id;

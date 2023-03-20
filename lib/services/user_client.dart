@@ -85,7 +85,7 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
-      await DeviceNamesManager().loadUserPreferences(_firebaseAuth.currentUser!.uid);
+      await DeviceNamesManager().loadDeviceNames(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       developer.log(e.toString());
