@@ -189,7 +189,7 @@ class UserClient {
               .get());
 
       skater.coaches.add(coachId);
-      coach.trainees.add(skaterId);
+      coach.traineesID.add(skaterId);
 
       await _firestore
           .collection(_userCollectionString)
