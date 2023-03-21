@@ -2,16 +2,22 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
 import '../../models/skating_user.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 
-class ListAthletesView extends StatelessWidget {
-  ListAthletesView({Key? key}) : super(key: key);
+class ListAthletesView extends StatefulWidget {
+  const ListAthletesView({Key? key}) : super(key: key);
 
+  @override
+  State<ListAthletesView> createState() {
+    return _ListAthletesViewState();
+  }
+}
+
+class _ListAthletesViewState extends State<ListAthletesView> {
   final SkatingUser _currentUser = UserClient().currentSkatingUser!;
 
   @override
