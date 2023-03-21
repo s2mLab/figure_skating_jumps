@@ -51,6 +51,7 @@ dependencies:
     permission_handler: ^10.2.0
     syncfusion_flutter_charts: ^20.4.53
     collection: ^1.17.0
+    csv: ^5.0.1
 
 dev_dependencies:
     flutter_test:
