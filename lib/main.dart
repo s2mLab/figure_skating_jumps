@@ -14,7 +14,7 @@ import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
-import 'package:figure_skating_jumps/widgets/views/list_athlete_view.dart';
+import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,7 +93,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/Login': (context) => const LoginView(),
               '/CreateSkater': (context) => const SkaterCreationView(),
               '/Acquisitions': (context) => const AcquisitionsView(),
-              '/ListAthletes': (context) => ListAthletesView(),
+              '/ListAthletes': (context) => const ListAthletesView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -118,31 +118,6 @@ class GodView extends StatefulWidget {
 }
 
 class _GodViewState extends State<GodView> {
-  // REMOVE ONCE LIST OF ATHLETE IS DONE. FROM HERE
-  late SkatingUser _skater;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUser();
-    });
-  }
-
-  _loadUser() async {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await firestore
-        .collection("users")
-        .doc("QbTascjmGwNo28lZPYWCQagIthI3")
-        .get();
-    SkatingUser skater = SkatingUser.fromFirestore(
-        firebaseAuth.currentUser?.uid, userInfoSnapshot);
-    _skater = skater;
-  }
-  // TO HERE
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,12 +165,12 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('CoachAccountCreation')),
-          TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Acquisitions',
-                    arguments: _skater);
-              },
-              child: const Text('Acquisitions')),
+          // TextButton(
+          //     onPressed: () {
+          //       Navigator.pushNamed(context, '/Acquisitions',
+          //           arguments: _skater);
+          //     },
+          //     child: const Text('Acquisitions')),
           TextButton(
               onPressed: () async {
                 // This line is temp. Eventually user will already be logged in. Remove async then.
