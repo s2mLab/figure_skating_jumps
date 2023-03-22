@@ -1,51 +1,13 @@
-import csv
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 import pandas as pd
-from scipy.spatial.transform import Rotation as R
 import numpy as np
-import time
-from math import sin, cos, radians
-from dataclasses import dataclass
+import matplotlib as plt
+
 from enum import Enum
+from dataclasses import dataclass
+from math import sin, cos, radians
+from analysis import get_rotation_matrix
 
-# Referential while XSens faces you and is right way up
-# X goes up
-# Y goes left
-# Z goes towards you
-
-@dataclass
-class Jump:
-    start: int = 0
-    end: int = 0
-    first_tick: int = 0
-    tick_duration: int = 0
-
-class State(Enum):
-    SKATING = 1
-    JUMPING = 2
-    FALLING = 3
-    LANDING = 4
-    
-
-def format_csv(source, target):
-    with open(source, 'r') as read_file:
-        data = []
-        reader = csv.reader(read_file)
-        for row in reader:
-            data.append(row)
-        
-        valid_columns = 0
-        for iter, row in enumerate(data):
-            if "PacketCounter" in row:
-                valid_columns = len([iter for iter in row if len(iter) > 0])
-                data = data[iter:]
-                break
-
-        with open(target, "w", newline="") as write_file:
-            writer = csv.writer(write_file)
-            for row in data:
-                writer.writerow(row[:valid_columns])
+#region Trajectory attempt
 
 def find_trajectory(name):
     data = pd.read_csv(
@@ -103,44 +65,24 @@ def show_graph(trajectory):
 
     plt.show()
 
-def find_jumps_bad(name):
-    data = pd.read_csv(
-        name,
-        header=0,
-        names=('counter', 'time', 'euler_x', 'euler_y', 'euler_z', 'acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z')
-    )
+#endregion
 
-    noise = np.array([data.iloc[1]['acc_x'], data.iloc[1]['acc_y'], data.iloc[1]['acc_z']])
+#region Jump detection state machine
 
-    for iter, row in data.iterrows():
-        if iter == 0:
-            continue
-        
-        # Apply referential rotation to work with new axes
-        x = radians(row['euler_x'])
-        y = radians(row['euler_y'])
-        z = radians(row['euler_z'])
-        rot_z = np.array([[cos(z), -sin(z), 0], [sin(z), cos(z), 0], [0, 0, 1]])
-        rot_y = np.array([[cos(y), 0, sin(y)], [0, 1, 0], [-sin(y), 0, cos(y)]])
-        rot_x = np.array([[1, 0, 0], [0, cos(x), -sin(x)], [0, sin(x), cos(x)]])
-        rot_mat = np.matmul(np.matmul(rot_z, rot_y), rot_x)
-        
-        acc = np.array([row['acc_x'], row['acc_y'], row['acc_z']])
-        acc = acc - noise # noise removal
-        acc = np.matmul(rot_mat, acc)
-        acc = np.array([round(acc[0], 1), round(acc[1], 1), round(acc[2], 1)])
-        print(acc)
+@dataclass
+class Jump:
+    start: int = 0
+    end: int = 0
+    first_tick: int = 0
+    tick_duration: int = 0
 
-def get_rotation_matrix(x_deg, y_deg, z_deg):
-    x = radians(x_deg)
-    y = radians(y_deg)
-    z = radians(z_deg)
-    rot_z = np.array([[cos(z), -sin(z), 0], [sin(z), cos(z), 0], [0, 0, 1]])
-    rot_y = np.array([[cos(y), 0, sin(y)], [0, 1, 0], [-sin(y), 0, cos(y)]])
-    rot_x = np.array([[1, 0, 0], [0, cos(x), -sin(x)], [0, sin(x), cos(x)]])
-    return np.matmul(np.matmul(rot_z, rot_y), rot_x)
+class State(Enum):
+    SKATING = 1
+    JUMPING = 2
+    FALLING = 3
+    LANDING = 4
 
-def find_jumps_official(name):
+def find_jumps_v1(name):
     data: pd.DataFrame = pd.read_csv(
         name,
         header=0,
@@ -207,14 +149,64 @@ def find_jumps_official(name):
     #     for row in tester:
     #         writer.writerow(row)
 
-def analyze_jump(jump):
-    pass
+#endregion
 
-start = time.time()
-# format_csv("./recordings/David_Down.csv", "./david_up.csv")
-# trajectory = find_trajectory("./face_up.csv")
-# find_jumps("first")
-jumps = find_jumps_official("./charlotte.csv")
-# find_jumps("./spin.csv")
-print(f"Finished in {time.time() - start} seconds.")
-# show_graph(trajectory)
+#region Zero detection attempt
+
+def find_jumps_v2(name):
+    # Read from the csv
+    data: pd.DataFrame = pd.read_csv(
+        name,
+        header=0,
+        names=('counter', 'time', 'euler_x', 'euler_y', 'euler_z', 'acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z')
+    )
+    
+    # Define constants for the math
+    DELTA_T: int = data.iloc[1]['time'] - data.iloc[0]['time']
+    MIN_FREE_FALL_TIME: int = 0.3 * 10**6 # 0.3 seconds in microseconds
+    MAX_NOISE: int = 3
+    WINDOW_TIME: int = 0.2 * 10**6 # 0.2 seconds in microseconds
+    WINDOW_TICK: int = WINDOW_TIME // DELTA_T # window time in ticks
+    detection_ticks = 0
+    fall_ticks = 0
+    jumps = []
+    
+    # Find the jumps
+    for iter, row in data.iterrows():
+        rot_mat = get_rotation_matrix(row['euler_x'], row['euler_y'], row['euler_z'])
+        acc = np.array([row['acc_x'], row['acc_y'], row['acc_z']])
+        acc = np.matmul(rot_mat, acc)
+        is_noise = abs(acc[2]) < MAX_NOISE
+        
+        # Increase length of detection zone
+        if is_noise:
+            detection_ticks += 1
+        else:
+            detection_ticks = 0
+        
+        # If it has found a fall, keeps counting until it finds no more
+        if fall_ticks > 0:
+            if is_noise:
+                fall_ticks += 1
+            else:
+                jumps.append({'start': int(iter - fall_ticks - WINDOW_TICK), 'end': int(iter + WINDOW_TICK)})
+                fall_ticks = 0
+        # If there is no fall, it will start one
+        elif detection_ticks * DELTA_T >= MIN_FREE_FALL_TIME:
+            fall_ticks = detection_ticks
+    
+    # Merges jumps that are very close to avoid a single wrong value ruining the result
+    index_to_remove = []
+    for i in range(len(jumps) - 1):
+        if jumps[i]['end'] >= jumps[i + 1]['start']:
+            jumps[i]['end'] = jumps[i + 1]['end']
+            index_to_remove.append(i+1)
+    
+    # Flips the array so we can remove without affecting the other indexes
+    index_to_remove.reverse()
+    for iter in index_to_remove:
+        del jumps[iter]
+    
+    return jumps
+
+#endregion
