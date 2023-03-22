@@ -111,7 +111,8 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                             _searching
                                 ? Container(
                                     height: 50,
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.only(
+                                        top: 8, left: 16, bottom: 8),
                                     decoration: BoxDecoration(
                                         color: cardBackground,
                                         borderRadius:
@@ -135,8 +136,8 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                         counterText: ""),
                                               ))),
                                       IconButton(
-                                        icon: const Icon(Icons.cancel),
-                                        color: errorColor,
+                                        icon: const Icon(Icons.cancel_outlined),
+                                        color: discreetText,
                                         padding: const EdgeInsets.all(0),
                                         iconSize: 30,
                                         onPressed: () {
