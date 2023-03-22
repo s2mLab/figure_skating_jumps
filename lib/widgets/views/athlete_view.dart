@@ -2,7 +2,6 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
@@ -25,19 +24,14 @@ class AthleteView extends StatefulWidget {
 
 class _AthleteViewState extends State<AthleteView> {
   int _switcherIndex = 0;
-  bool loadingData = true;
-  late Map<String, List<Capture>> _capturesSorted;
-  late final SkatingUser skater;
-
-  @override
-  void initState() {
-    skater = ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    CaptureClient().loadCapturesData(skater);
-    super.initState();
-  }
+  late SkatingUser skater;
+  Future<Map<String, List<Capture>>>? _futureCaptures;
 
   @override
   Widget build(BuildContext context) {
+    skater = ModalRoute.of(context)!.settings.arguments as SkatingUser;
+    _futureCaptures ??= CaptureClient().loadCapturesData(skater);
+
     return Scaffold(
         appBar: const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
@@ -65,16 +59,13 @@ class _AthleteViewState extends State<AthleteView> {
               ],
             )),
             Expanded(
-              child: loadingData
-                  ? const Center(
-                      child: GFLoader(
-                      size: 70,
-                      loaderstrokeWidth: 5,
-                    ))
-                  : IndexedStack(
+              child: IndexedStack(
                       index: _switcherIndex,
                       children: [
-                        CapturesTab(captures: _capturesSorted),
+                        FutureBuilder(
+                          future: _futureCaptures,
+                            builder: _buildCapturesTab,
+                        ),
                         ProgressionTab(),
                         const OptionsTab(),
                       ],
@@ -83,4 +74,11 @@ class _AthleteViewState extends State<AthleteView> {
           ],
         ));
   }
+  Widget _buildCapturesTab(
+      BuildContext context, AsyncSnapshot<Map<String,List<Capture>>> snapshot) {
+    return snapshot.connectionState == ConnectionState.done ? CapturesTab(captures: snapshot.data!) : const Center(child: Padding(
+      padding: EdgeInsets.all(32.0),
+      child: CircularProgressIndicator(),
+    ));
+    }
 }
