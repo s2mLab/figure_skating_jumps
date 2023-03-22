@@ -1,11 +1,8 @@
 import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
@@ -17,7 +14,6 @@ import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -170,6 +166,7 @@ class _GodViewState extends State<GodView> {
                 // This line is temp. Eventually user will already be logged in. Remove async then.
                 await UserClient()
                     .signIn(email: 'thomc@thomc.com', password: 'thomc123456');
+                // ignore: use_build_context_synchronously
                 Navigator.pushNamed(context, '/ListAthletes');
               },
               child: const Text('List Athletes')),
