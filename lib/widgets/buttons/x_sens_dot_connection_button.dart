@@ -1,9 +1,9 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/lang_fr.dart';
-import '../../enums/x_sens_connection_state.dart';
+import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
@@ -15,27 +15,27 @@ class XSensDotConnectionButton extends StatefulWidget {
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements IXSensStateSubscriber {
-  XSensDotConnection connection = XSensDotConnection();
-  late XSensConnectionState connectionState;
+  XSensDotConnectionService connection = XSensDotConnectionService();
+  late XSensDeviceState connectionState;
   final List<String> _connectionStateMessages = [
-    connectionStateMessageConnected,
-    connectionStateMessageReconnecting,
     connectionStateMessageDisconnected,
+    connectionStateMessageReconnecting,
+    connectionStateMessageConnected,
   ];
   final List<TextStyle> _connectionStateStyles = [
     const TextStyle(color: connectedXSensDotButtonForeground),
     const TextStyle(color: darkText),
-    const TextStyle(color: connectedXSensDotButtonForeground)
+    const TextStyle(color: connectedXSensDotButtonForeground),
   ];
   final List<Color> _connectionBackgroundColors = [
-    primaryColorLight,
+    Colors.black,
     reconnectingXSensDotButtonBackground,
-    Colors.black
+    primaryColorLight,
   ];
   final List<Color> _connectionForegroundColors = [
-    connectedXSensDotButtonIndicator,
+    errorColor,
     reconnectingXSensDotButtonIndicator,
-    errorColor
+    connectedXSensDotButtonIndicator,
   ];
 
   @override
@@ -82,7 +82,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
   }
 
   @override
-  void onStateChange(XSensConnectionState state) {
+  void onStateChange(XSensDeviceState state) {
     setState(() {
       connectionState = state;
     });
