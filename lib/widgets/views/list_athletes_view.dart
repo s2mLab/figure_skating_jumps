@@ -230,7 +230,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                 ],
               ))),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/CreateSkater');
+        },
         backgroundColor: secondaryColor,
         child: const Icon(Icons.add),
       ),
