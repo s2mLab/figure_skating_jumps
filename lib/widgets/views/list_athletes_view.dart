@@ -47,11 +47,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   }
 
   _searchFocusChanged(bool hasFocus) {
-    if (!hasFocus && _searchController.text.isEmpty) {
-      setState(() {
-        _searching = false;
-      });
-    }
+    setState(() {
+      _searching = hasFocus || _searchController.text.isNotEmpty;
+    });
   }
 
   _updateList() {
