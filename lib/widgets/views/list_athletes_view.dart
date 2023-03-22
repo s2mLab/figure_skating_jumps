@@ -198,7 +198,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                   traineesByName[index];
                                               return GestureDetector(
                                                   onTap: () {
-                                                    debugPrint(item.firstName);
+                                                    Navigator.pushNamed(context,
+                                                        '/Acquisitions',
+                                                        arguments: item);
                                                   },
                                                   child: Container(
                                                       margin:
