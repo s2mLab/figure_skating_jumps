@@ -165,12 +165,6 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('CoachAccountCreation')),
-          // TextButton(
-          //     onPressed: () {
-          //       Navigator.pushNamed(context, '/Acquisitions',
-          //           arguments: _skater);
-          //     },
-          //     child: const Text('Acquisitions')),
           TextButton(
               onPressed: () async {
                 // This line is temp. Eventually user will already be logged in. Remove async then.
