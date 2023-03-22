@@ -5,7 +5,6 @@ import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-
 import '../../constants/lang_fr.dart';
 import '../../models/skating_user.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
