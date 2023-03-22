@@ -192,7 +192,7 @@ class UserClient {
               .get());
 
       skater.coaches.add(coachId);
-      coach.trainees.add(skaterId);
+      coach.traineesID.add(skaterId);
 
       await _firestore
           .collection(_userCollectionString)
@@ -225,7 +225,7 @@ class UserClient {
               .get());
 
       skater.coaches.removeWhere((element) => element == coachId);
-      coach.trainees.removeWhere((element) => element == skaterId);
+      coach.trainees.removeWhere((element) => element.uID! == skaterId);
 
       await _firestore
           .collection(_userCollectionString)
