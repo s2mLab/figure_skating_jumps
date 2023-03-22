@@ -26,13 +26,14 @@ class AcquisitionsView extends StatefulWidget {
 
 class _AcquisitionsViewState extends State<AcquisitionsView> {
   int _switcherIndex = 0;
-  bool loadingData = true;
+  bool _loadingData = true;
   late Map<String, List<Capture>> _capturesSorted;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _captureCollectionString = 'captures';
 
   _loadCapturesData(SkatingUser skater) async {
+    if (!_loadingData) return;
     List<Capture> captures = [];
     for (String captureID in skater.captures) {
       captures.add(await Capture.createFromFireBase(
@@ -47,7 +48,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
         groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
 
     setState(() {
-      loadingData = false;
+      _loadingData = false;
     });
   }
 
@@ -83,7 +84,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
               ],
             )),
             Expanded(
-              child: loadingData
+              child: _loadingData
                   ? const Center(
                       child: GFLoader(
                       size: 70,
