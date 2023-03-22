@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/enums/x_sens_connection_state.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/dot_connected.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -35,7 +35,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
           child: const PageTitle(text: managingXSensDotTitle),
         ),
         Expanded(
-            child: XSensDotConnection().connectionState == XSensConnectionState.connected
+            child: XSensDotConnectionService().connectionState == XSensDeviceState.connected
                 ? const DotConnected()
                 : const NoDotConnected()),
         Center(

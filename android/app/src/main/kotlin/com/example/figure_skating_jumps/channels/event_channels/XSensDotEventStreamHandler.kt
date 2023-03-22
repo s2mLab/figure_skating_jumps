@@ -10,11 +10,12 @@ abstract class XSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
     val handler: Handler = Handler(Looper.getMainLooper())
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        Log.i("XSensDotEventStreamHandler", "Listen stream")
         sink = events
     }
 
     override fun onCancel(arguments: Any?) {
-        Log.i("Android", "Canceled stream")
+        Log.i("XSensDotEventStreamHandler", "Cancel stream")
         sink = null
     }
 

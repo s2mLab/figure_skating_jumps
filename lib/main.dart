@@ -1,11 +1,8 @@
 import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
@@ -14,10 +11,11 @@ import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
+
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
+import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -79,7 +77,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return canFunction
         ? MaterialApp(
             title: 'Figure Skating Jump App',
@@ -95,6 +92,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/CreateSkater': (context) => const SkaterCreationView(),
               '/Acquisitions': (context) => const AthleteView(),
               '/EditAnalysis': (context) => const EditAnalysisView(),
+              '/ListAthletes': (context) => const ListAthletesView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -119,31 +117,6 @@ class GodView extends StatefulWidget {
 }
 
 class _GodViewState extends State<GodView> {
-  // REMOVE ONCE LIST OF ATHLETE IS DONE. FROM HERE
-  late SkatingUser _skater;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUser();
-    });
-  }
-
-  _loadUser() async {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await firestore
-        .collection("users")
-        .doc("QbTascjmGwNo28lZPYWCQagIthI3")
-        .get();
-    SkatingUser skater = SkatingUser.fromFirestore(
-        firebaseAuth.currentUser?.uid, userInfoSnapshot);
-    _skater = skater;
-  }
-  // TO HERE
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,11 +165,14 @@ class _GodViewState extends State<GodView> {
               },
               child: const Text('CoachAccountCreation')),
           TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Acquisitions',
-                    arguments: _skater);
+              onPressed: () async {
+                // This line is temp. Eventually user will already be logged in. Remove async then.
+                await UserClient()
+                    .signIn(email: 'thomc@thomc.com', password: 'thomc123456');
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, '/ListAthletes');
               },
-              child: const Text('Acquisitions')),
+              child: const Text('List Athletes')),
           TextButton(
               onPressed: () {
                 Navigator.pushNamed(
