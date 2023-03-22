@@ -1,8 +1,5 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
-import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
