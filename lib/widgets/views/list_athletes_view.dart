@@ -65,83 +65,111 @@ class _ListAthletesViewState extends State<ListAthletesView> {
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-      body: Container(
-          margin: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  margin: const EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const PageTitle(text: listAthletesTitle),
-                        Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: cardBackground,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: const Icon(Icons.search))
-                      ])),
-              Expanded(
-                  child: _loading
-                      ? const Center(
-                          child: GFLoader(
-                          size: 70,
-                          loaderstrokeWidth: 5,
-                        ))
-                      : ListView.builder(
-                          itemCount: _traineesToShow.length,
-                          itemBuilder: (context, letterIndex) {
-                            String key =
-                                _traineesToShow.keys.elementAt(letterIndex);
-                            List<SkatingUser> traineesByName =
-                                _traineesToShow[key]!;
-                            return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    key,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+      body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Container(
+              margin: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const PageTitle(text: listAthletesTitle),
+                            Container(
+                                width: 100,
+                                height: 50,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: cardBackground,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: const TextField(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
                                   ),
-                                  SizedBox(
-                                      height: traineesByName.length *
-                                          _heightContainer,
-                                      child: ListView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: traineesByName.length,
-                                        itemBuilder: (context, index) {
-                                          SkatingUser item =
-                                              traineesByName[index];
-                                          return Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 4,
-                                                  right: 4,
-                                                  bottom: 4,
-                                                  left: 24),
-                                              padding: const EdgeInsets.all(12),
-                                              decoration: BoxDecoration(
-                                                  color: cardBackground,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Text(
-                                                "${item.firstName} ${item.lastName}",
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ));
-                                        },
-                                      ))
-                                ]);
-                          }))
-            ],
-          )),
+                                )),
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: cardBackground,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: IconButton(
+                                    onPressed: () {
+                                      debugPrint("search");
+                                    },
+                                    icon: const Icon(Icons.search)))
+                          ])),
+                  Expanded(
+                      child: _loading
+                          ? const Center(
+                              child: GFLoader(
+                              size: 70,
+                              loaderstrokeWidth: 5,
+                            ))
+                          : ListView.builder(
+                              itemCount: _traineesToShow.length,
+                              itemBuilder: (context, letterIndex) {
+                                String key =
+                                    _traineesToShow.keys.elementAt(letterIndex);
+                                List<SkatingUser> traineesByName =
+                                    _traineesToShow[key]!;
+                                return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        key,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                          height: traineesByName.length *
+                                              _heightContainer,
+                                          child: ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: traineesByName.length,
+                                            itemBuilder: (context, index) {
+                                              SkatingUser item =
+                                                  traineesByName[index];
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    debugPrint(item.firstName);
+                                                  },
+                                                  child: Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 4,
+                                                              right: 4,
+                                                              bottom: 4,
+                                                              left: 24),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12),
+                                                      decoration: BoxDecoration(
+                                                          color: cardBackground,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: Text(
+                                                        "${item.firstName} ${item.lastName}",
+                                                        style: const TextStyle(
+                                                            fontSize: 16),
+                                                      )));
+                                            },
+                                          ))
+                                    ]);
+                              }))
+                ],
+              ))),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: secondaryLight,
+        backgroundColor: secondaryColor,
         child: const Icon(Icons.add),
       ),
     );
