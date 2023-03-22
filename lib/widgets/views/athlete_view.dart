@@ -27,6 +27,7 @@ class _AthleteViewState extends State<AthleteView> {
   late SkatingUser skater;
   Future<Map<String, List<Capture>>>? _futureCaptures;
 
+
   @override
   Widget build(BuildContext context) {
     skater = ModalRoute.of(context)!.settings.arguments as SkatingUser;
