@@ -23,38 +23,67 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   final SkatingUser _currentUser = UserClient().currentSkatingUser!;
   final double _heightContainer = 57;
   late Map<String, List<SkatingUser>> _traineesToShow;
-  String _searchString = "";
+  late TextEditingController _searchController;
+  late String _searchString = "";
+  late FocusNode _focusNode;
+  bool _searching = false;
   bool _loading = true;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController(text: _searchString);
+    _focusNode = FocusNode();
+    super.initState();
+  }
 
   _loadData() async {
     if (!_loading) return;
     await _currentUser.loadTrainees();
-    updateList();
+    _updateList();
     setState(() {
       _loading = false;
     });
   }
 
-  updateList() {
+  _searchFocusChanged(bool hasFocus) {
+    if (!hasFocus && _searchController.text.isEmpty) {
+      setState(() {
+        _searching = false;
+      });
+    }
+  }
+
+  _updateList() {
     _traineesToShow = groupBy(_currentUser.trainees,
         (obj) => obj.firstName.toString().toUpperCase().substring(0, 1));
     _traineesToShow = Map.fromEntries(_traineesToShow.entries.toList()
       ..sort((e1, e2) => e1.key.compareTo(e2.key)));
-    // if (_searchString.isEmpty) return;
-    // for (int i = _traineesToShow.length - 1; i >= 0; i--) {
-    //   bool isInFirstName = _traineesToShow[i]
-    //       .firstName
-    //       .toLowerCase()
-    //       .contains(("bE").toLowerCase());
-    //   bool isInLastName = _traineesToShow[i]
-    //       .lastName
-    //       .toLowerCase()
-    //       .contains(("bE").toLowerCase());
 
-    //   if (!isInFirstName && !isInLastName) {
-    //     _traineesToShow.removeAt(i);
-    //   }
-    // }
+    _searchString = _searchController.text;
+    debugPrint(_searchString);
+    if (_searchString.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    for (String nameIndex in _traineesToShow.keys) {
+      for (int i = _traineesToShow[nameIndex]!.length - 1; i >= 0; i--) {
+        SkatingUser trainee = _traineesToShow[nameIndex]![i];
+        bool isInFirstName = trainee.firstName
+            .toLowerCase()
+            .contains(_searchString.toLowerCase());
+        bool isInLastName = trainee.lastName
+            .toLowerCase()
+            .contains(_searchString.toLowerCase());
+        if (!isInFirstName && !isInLastName) {
+          _traineesToShow[nameIndex]!.removeAt(i);
+          // if (_traineesToShow[nameIndex]!.isEmpty) {
+          //   _traineesToShow.remove(nameIndex);
+          // }
+        }
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -80,27 +109,39 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const PageTitle(text: listAthletesTitle),
-                            Container(
-                                width: 100,
-                                height: 50,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    color: cardBackground,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                )),
-                            Container(
-                                decoration: BoxDecoration(
-                                    color: cardBackground,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: IconButton(
-                                    onPressed: () {
-                                      debugPrint("search");
-                                    },
-                                    icon: const Icon(Icons.search)))
+                            _searching
+                                ? Container(
+                                    width: 200,
+                                    height: 50,
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: cardBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Focus(
+                                        onFocusChange: (hasFocus) =>
+                                            _searchFocusChanged(hasFocus),
+                                        child: TextField(
+                                          focusNode: _focusNode,
+                                          controller: _searchController,
+                                          onChanged: (value) => _updateList(),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                        )))
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        color: cardBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _searching = true;
+                                          });
+                                          _focusNode.requestFocus();
+                                        },
+                                        icon: const Icon(Icons.search)))
                           ])),
                   Expanded(
                       child: _loading
@@ -120,12 +161,13 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        key,
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      if (traineesByName.isNotEmpty)
+                                        Text(
+                                          key,
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       SizedBox(
                                           height: traineesByName.length *
                                               _heightContainer,
