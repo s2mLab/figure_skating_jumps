@@ -20,6 +20,8 @@ class ListAthletesView extends StatefulWidget {
 }
 
 class _ListAthletesViewState extends State<ListAthletesView> {
+  static const int _maxLengthSearch = 11;
+
   final SkatingUser _currentUser = UserClient().currentSkatingUser!;
   final double _heightContainer = 57;
   late Map<String, List<SkatingUser>> _traineesToShow;
@@ -77,9 +79,6 @@ class _ListAthletesViewState extends State<ListAthletesView> {
             .contains(_searchString.toLowerCase());
         if (!isInFirstName && !isInLastName) {
           _traineesToShow[nameIndex]!.removeAt(i);
-          // if (_traineesToShow[nameIndex]!.isEmpty) {
-          //   _traineesToShow.remove(nameIndex);
-          // }
         }
       }
     }
@@ -111,24 +110,42 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                             const PageTitle(text: listAthletesTitle),
                             _searching
                                 ? Container(
-                                    width: 200,
                                     height: 50,
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                         color: cardBackground,
                                         borderRadius:
                                             BorderRadius.circular(30)),
-                                    child: Focus(
-                                        onFocusChange: (hasFocus) =>
-                                            _searchFocusChanged(hasFocus),
-                                        child: TextField(
-                                          focusNode: _focusNode,
-                                          controller: _searchController,
-                                          onChanged: (value) => _updateList(),
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                        )))
+                                    child: Row(children: [
+                                      SizedBox(
+                                          width: 150,
+                                          child: Focus(
+                                              onFocusChange: (hasFocus) =>
+                                                  _searchFocusChanged(hasFocus),
+                                              child: TextField(
+                                                maxLength: _maxLengthSearch,
+                                                focusNode: _focusNode,
+                                                controller: _searchController,
+                                                onChanged: (value) =>
+                                                    _updateList(),
+                                                decoration:
+                                                    const InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        counterText: ""),
+                                              ))),
+                                      IconButton(
+                                        icon: const Icon(Icons.cancel),
+                                        color: errorColor,
+                                        padding: const EdgeInsets.all(0),
+                                        iconSize: 30,
+                                        onPressed: () {
+                                          _searchController.clear();
+                                          _updateList();
+                                          _searchFocusChanged(false);
+                                        },
+                                      )
+                                    ]))
                                 : Container(
                                     decoration: BoxDecoration(
                                         color: cardBackground,
