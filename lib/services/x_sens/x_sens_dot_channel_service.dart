@@ -52,11 +52,11 @@ class XSensDotChannelService {
     }
   }
 
-  Future<String> disconnectXSensDot() async {
+  Future<void> disconnectXSensDot() async {
     try {
-      return await _xSensMethodChannel.invokeMethod('disconnectXSensDot');
+      await _xSensMethodChannel.invokeMethod('disconnectXSensDot');
     } on PlatformException catch (e) {
-      return e.message!;
+      debugPrint(e.message!);
     }
   }
 
