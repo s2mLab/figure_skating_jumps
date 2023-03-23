@@ -81,7 +81,7 @@ class _AthleteViewState extends State<AthleteView> {
         child: IceButton(
             text: captureButton,
             onPressed: () {
-              CaptureClient().capturingSkatingUserUid = skater!.uID!;
+              CaptureClient().capturingSkatingUser = skater!;
               Navigator.pushNamed(
                 context,
                 '/CaptureData',

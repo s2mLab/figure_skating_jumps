@@ -42,7 +42,11 @@ class Capture {
     return _jumps;
   }
 
-  Map<JumpType, int> get jumpTypeCount {
+  List<String> get jumpsID {
+    return _jumpsID;
+  }
+
+    Map<JumpType, int> get jumpTypeCount {
     return _jumpTypeCount;
   }
 
