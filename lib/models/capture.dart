@@ -45,22 +45,23 @@ class Capture {
     return _jumpTypeCount;
   }
 
-  Capture(this._file, this._userID);
-
-  Capture.fromJumps(
+  Capture(
       this._file, this._userID, this._duration, this._date, this._jumpsID,
       [this.uID]);
 
-  Capture._fromFirestore(uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
-    _file = userInfo.get('file');
-    _userID = userInfo.get('user');
-    _duration = userInfo.get('duration');
-    _date = (userInfo.get('date') as Timestamp).toDate();
-    _jumpsID = List<String>.from(userInfo.get('jumps') as List);
+  factory Capture._fromFirestore(
+      String? uID, DocumentSnapshot<Map<String, dynamic>> capture) {
+    return Capture(
+        capture.get('file'),
+        capture.get('user'),
+        capture.get('duration'),
+        (capture.get('date') as Timestamp).toDate(),
+        List<String>.from(capture.get('jumps') as List),
+        uID);
   }
 
   static Future<Capture> createFromFireBase(
-      uID, DocumentSnapshot<Map<String, dynamic>> userInfo) async {
+      String? uID, DocumentSnapshot<Map<String, dynamic>> userInfo) async {
     Capture capture = Capture._fromFirestore(uID, userInfo);
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;

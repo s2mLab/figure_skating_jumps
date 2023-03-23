@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
@@ -58,48 +62,63 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
         ModalRoute.of(context)!.settings.arguments as SkatingUser;
     _loadCapturesData(skater);
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
-        drawerEnableOpenDragGesture: false,
-        drawerScrimColor: Colors.transparent,
-        drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: PageTitle(text: skater.firstName)),
-            Center(
-                child: SlideSwitcher(
-              onSelect: (int index) => setState(() => _switcherIndex = index),
-              slidersColors: const [primaryBackground],
-              containerHeight: 40,
-              containerWight: 390,
-              indents: 2,
-              containerColor: primaryColorLight,
-              children: [
-                Text(capturesTab, style: tabStyle),
-                Text(progressionTab, style: tabStyle),
-                Text(optionsTab, style: tabStyle),
-              ],
-            )),
-            Expanded(
-              child: _loadingData
-                  ? const Center(
-                      child: GFLoader(
-                      size: 70,
-                      loaderstrokeWidth: 5,
-                    ))
-                  : IndexedStack(
-                      index: _switcherIndex,
-                      children: [
-                        CapturesTab(captures: _capturesSorted),
-                        ProgressionTab(),
-                        const OptionsTab(),
-                      ],
-                    ),
-            )
-          ],
-        ));
+      appBar: const Topbar(isUserDebuggingFeature: false),
+      drawerEnableOpenDragGesture: false,
+      drawerScrimColor: Colors.transparent,
+      drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: PageTitle(text: skater.firstName)),
+          Center(
+              child: SlideSwitcher(
+            onSelect: (int index) => setState(() => _switcherIndex = index),
+            slidersColors: const [primaryBackground],
+            containerHeight: 40,
+            containerWight: 390,
+            indents: 2,
+            containerColor: primaryColorLight,
+            children: [
+              Text(capturesTab, style: tabStyle),
+              Text(progressionTab, style: tabStyle),
+              Text(optionsTab, style: tabStyle),
+            ],
+          )),
+          Expanded(
+            child: _loadingData
+                ? const Center(
+                    child: GFLoader(
+                    size: 70,
+                    loaderstrokeWidth: 5,
+                  ))
+                : IndexedStack(
+                    index: _switcherIndex,
+                    children: [
+                      CapturesTab(captures: _capturesSorted),
+                      ProgressionTab(),
+                      const OptionsTab(),
+                    ],
+                  ),
+          )
+        ],
+      ),
+      floatingActionButton: Center(
+        child: IceButton(
+            text: captureButton,
+            onPressed: () {
+              CaptureClient().capturingSkatingUserUid = skater.uID!;
+              Navigator.pushNamed(
+                context,
+                '/CaptureData',
+              );
+            },
+            textColor: paleText,
+            color: secondaryColor,
+            iceButtonImportance: IceButtonImportance.mainAction,
+            iceButtonSize: IceButtonSize.large),
+      ),
+    );
   }
 }
