@@ -21,7 +21,6 @@ class DotConnected extends StatefulWidget {
 class _DotConnectedState extends State<DotConnected> {
   late XSensStateIcon stateIconConnected;
   late XSensStateIcon stateIconDisconnected;
-  String connectedDeviceName = "No device";
 
   @override
   void initState() {
@@ -29,11 +28,6 @@ class _DotConnectedState extends State<DotConnected> {
         const XSensStateIcon(true, XSensDeviceState.connected);
     stateIconDisconnected =
         const XSensStateIcon(true, XSensDeviceState.disconnected);
-
-    BluetoothDevice? currentDevice = XSensDotConnectionService().currentXSensDevice;
-    if(currentDevice != null) {
-      connectedDeviceName = currentDevice.assignedName;
-    }
 
     super.initState();
   }
@@ -60,7 +54,7 @@ class _DotConnectedState extends State<DotConnected> {
                   child: XSensDotListElement(
                       hasLine: true,
                       lineColor: connectedXSensDotButtonIndicator,
-                      text: connectedDeviceName,
+                      text: XSensDotConnectionService().currentXSensDevice == null ? "No device" : XSensDotConnectionService().currentXSensDevice!.assignedName,
                       graphic: stateIconConnected,
                       onPressed: () async {
                         final result = await showDialog(

@@ -1,5 +1,5 @@
 abstract class AbstractLocalDbObject {
-  late int? _id;
+  int? _id;
 
   int? get id => _id;
 

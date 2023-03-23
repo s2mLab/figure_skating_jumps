@@ -1,11 +1,11 @@
 import 'abstract_local_db_object.dart';
 
-class DeviceNames extends AbstractLocalDbObject {
+class DeviceName extends AbstractLocalDbObject {
   final String _userID;
   final String _deviceMacAddress;
   String name;
 
-  DeviceNames(
+  DeviceName(
       {int? id,
       required String userID,
       required String deviceMacAddress,
@@ -22,14 +22,13 @@ class DeviceNames extends AbstractLocalDbObject {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'userID': _userID,
-      'deviceMacAddresses': _deviceMacAddress,
+      'deviceMacAddress': _deviceMacAddress,
     };
   }
 
   @override
   String toString() {
-    return 'DeviceNames{id: $id, userID: $_userID, deviceMacAddresses: $_deviceMacAddress}';
+    return 'DeviceName{id: $id, userID: $_userID, deviceMacAddress: $_deviceMacAddress}';
   }
 }

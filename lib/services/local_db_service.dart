@@ -26,7 +26,7 @@ class LocalDbService {
         version: 1,
         join(await getDatabasesPath(), _databaseName), onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
+          'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
     });
   }
 
@@ -36,6 +36,7 @@ class LocalDbService {
       object.toMap(),
       conflictAlgorithm: ConflictAlgorithm.rollback,
     );
+    print(id);
     if (id == 0) {
       throw ConflictException();
     }
