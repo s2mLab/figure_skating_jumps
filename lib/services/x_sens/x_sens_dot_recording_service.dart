@@ -149,15 +149,10 @@ class XSensDotRecordingService {
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-     await _saveCapture();
+     await CaptureClient().saveCapture(_exportFileName, _exportedData);
       debugPrint("Done");
       _recorderState = RecorderState.idle;
     }
   }
 
-  static Future<void> _saveCapture() async {
-    String fullPath = await ExternalStorageService().saveCaptureCsv(_exportFileName, _exportedData);
-    await CaptureClient().saveCaptureCsv(fullPath, _exportFileName);
-
-  }
 }
