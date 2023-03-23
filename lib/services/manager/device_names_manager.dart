@@ -2,7 +2,6 @@ import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/db_models/device_name.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
 
 class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   static final DeviceNamesManager _userPreferencesManager =
@@ -23,13 +22,13 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   }
 
   @override
-  List<DeviceName> constructObject(List<Map<String, dynamic>> map) {
-    return List.generate(map.length, (i) {
+  List<DeviceName> constructObject(List<Map<String, dynamic>> objMaps) {
+    return List.generate(objMaps.length, (i) {
       return DeviceName(
-        id: map[i]['id'],
-        userID: map[i]['userID'],
-        deviceMacAddress: map[i]['deviceMacAddress'],
-        name: map[i]['customName'] ?? "",
+        id: objMaps[i]['id'],
+        userID: objMaps[i]['userID'],
+        deviceMacAddress: objMaps[i]['deviceMacAddress'],
+        name: objMaps[i]['customName'] ?? "",
       );
     });
   }
@@ -37,10 +36,6 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   Future<void> loadDeviceNames(String userID) async {
     _preferences = constructObject(await LocalDbService()
         .readWhere(LocalDbService.deviceNamesTableName, "userID", userID));
-    print(_preferences);
-    for (DeviceName iter in _preferences) {
-      print("name: ${iter.name}");
-    }
   }
 
   Future<void> addDevice(String userID, BluetoothDevice device) async {
@@ -48,8 +43,6 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
         userID: userID, deviceMacAddress: device.macAddress, name: device.name);
     int id = await LocalDbService()
         .insertOne(deviceToAdd, LocalDbService.deviceNamesTableName);
-    print("================================================================================================================================");
-    print(id);
     deviceToAdd.id = id;
     _preferences.add(deviceToAdd);
   }
