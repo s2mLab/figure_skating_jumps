@@ -35,12 +35,12 @@ class ExternalStorageService {
     return Future<String>.value(file.path);
   }
 
-  Future<String> saveCsv(String fileName, List<XSensDotData> extractedData) async {
+  Future<String> saveCaptureCsv(String fileName, List<XSensDotData> extractedData) async {
     Directory directory = await getApplicationDocumentsDirectory();
     String dirPath = '${directory.path}/csv';
     await Directory(dirPath).create(recursive: true);
 
-    File file = File("$dirPath/$fileName.csv");
+    File file = File("$dirPath/$fileName");
     String csvContent = CsvCreator.createXSensDotCsv(extractedData);
     file.writeAsString(csvContent);
 

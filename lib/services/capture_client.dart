@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 class CaptureClient {
   static final CaptureClient _userClient = CaptureClient._internal();
@@ -35,4 +40,24 @@ class CaptureClient {
       rethrow;
     }
   }
+
+  Future<void> saveCaptureCsv(String fullPath, String fileName) async {
+     var appBucketRef =  FirebaseStorage.instance.ref();
+     var fileRef = appBucketRef.child(fileName);
+     var captureCsvFile = File(fullPath);
+     var fileExist = await captureCsvFile.absolute.exists();
+     var fileExist2 = captureCsvFile.absolute.existsSync();
+
+     debugPrint(fileExist.toString());
+     debugPrint(fileExist2.toString());
+     debugPrint(fullPath);
+
+     try {
+       await fileRef.putFile(captureCsvFile);
+     }
+     catch (e) {
+       debugPrint(e.toString());
+     }
+  }
+
 }
