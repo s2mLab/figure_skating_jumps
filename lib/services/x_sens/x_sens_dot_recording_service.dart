@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -149,7 +150,9 @@ class XSensDotRecordingService {
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-     await CaptureClient().saveCapture(_exportFileName, _exportedData);
+      //TODO next line: Remove - only for testing purpose
+      CaptureClient().capturingSkatingUser = UserClient().currentSkatingUser!;
+      await CaptureClient().saveCapture(_exportFileName, _exportedData);
       debugPrint("Done");
       _recorderState = RecorderState.idle;
     }

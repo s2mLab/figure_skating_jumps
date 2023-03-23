@@ -1,23 +1,14 @@
-<<<<<<< HEAD
 import 'dart:io';
-
-=======
 import 'package:collection/collection.dart';
->>>>>>> main
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:developer' as developer;
-
-<<<<<<< HEAD
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/xsens_dot_data.dart';
 import 'external_storage_service.dart';
-=======
 import '../models/skating_user.dart';
->>>>>>> main
 
 class CaptureClient {
   static final CaptureClient _captureClient = CaptureClient._internal();
@@ -25,7 +16,7 @@ class CaptureClient {
   static final Reference appBucketRef = FirebaseStorage.instance.ref();
 
   static const String _captureCollectionString = 'captures';
-  String _capturingSkatingUserUid = "";
+  SkatingUser? _capturingSkatingUser;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -33,8 +24,8 @@ class CaptureClient {
     return _captureClient;
   }
 
-  set capturingSkatingUserUid(String skatingUserUid) {
-    if (skatingUserUid.isNotEmpty) _capturingSkatingUserUid = skatingUserUid;
+  set capturingSkatingUser(SkatingUser skatingUser) {
+    _capturingSkatingUser = skatingUser;
   }
 
   CaptureClient._internal();
@@ -53,7 +44,7 @@ class CaptureClient {
           .doc(jump.capture)
           .set({"jumps": capture.jumps}, SetOptions(merge: true));
     } catch (e) {
-      developer.log(e.toString());
+      debugPrint(e.toString());
       rethrow;
     }
   }
@@ -62,12 +53,25 @@ class CaptureClient {
     String fullPath = await ExternalStorageService().saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath, exportFileName);
     var duration = exportedData.last.time - exportedData.first.time;
-    var capture = Capture(exportFileName, _capturingSkatingUserUid, duration, DateTime.now(), []);
+    var capture = Capture(exportFileName, _capturingSkatingUser!.uID!, duration, DateTime.now(), []);
     await _addCapture(capture: capture);
   }
 
   Future<void> _addCapture({required Capture capture}) async {
-
+    try {
+      var banana = await _firestore
+          .collection(_captureCollectionString).add({
+          'date': capture.date,
+          'duration': capture.duration,
+          'file': capture.fileName,
+          'jumps': capture.jumpsID,
+          'user': capture.userID
+      });
+      debugPrint(banana.toString());
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   Future<void> _saveCaptureCsv(String fullPath, String fileName) async {
