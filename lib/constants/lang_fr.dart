@@ -62,6 +62,7 @@ const String optionsTab = "Options";
 const String listAthletesTitle = "Mes athlètes";
 
 // widgets/screens/edit_analysis_view
+const String seeVideoAgain = "Revoir la vidéo";
 const String detectedJumps = "Sauts enregistrés";
 const String editAnalysisPageTitle = "Analyse";
 const String analysisDonePrompt = "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
