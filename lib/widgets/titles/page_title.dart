@@ -10,6 +10,7 @@ class PageTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(text,
         style: const TextStyle(
+            overflow: TextOverflow.ellipsis,
             color: primaryColor,
             fontSize: 25,
             fontWeight: FontWeight.bold,

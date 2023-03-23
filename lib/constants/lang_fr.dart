@@ -37,6 +37,9 @@ const String configureFrequencyDropMenu = "Sélectionner la fréquence : ";
 const String forgetDevice = "Oublier";
 const String disconnectDevice = "Déconnecter";
 
+// widgets/layout/edit_analysis_view
+const String jumpType = "Type de saut";
+
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDot = "Connecter un appareil XSens DOT";
@@ -60,6 +63,13 @@ const String optionsTab = "Options";
 
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
+
+// widgets/screens/edit_analysis_view
+const String seeVideoAgain = "Revoir la vidéo";
+const String detectedJumps = "Sauts enregistrés";
+const String editAnalysisPageTitle = "Analyse";
+const String analysisDonePrompt = "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
+const String addAJump = "Ajouter un saut";
 
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";
