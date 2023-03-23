@@ -33,8 +33,7 @@ class XSensDotConnectionService {
   }
 
   BluetoothDevice? get currentXSensDevice {
-    if (_currentXSensDevice == null) return null;
-    return _currentXSensDevice!;
+    return _currentXSensDevice;
   }
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
