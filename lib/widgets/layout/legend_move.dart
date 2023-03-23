@@ -10,7 +10,7 @@ class LegendMove extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(JumpType.values.length, (index) {
+        children: List.generate(JumpType.values.length - 1, (index) {
           return Row(
             children: [
               ColorCircle(colorCircle: JumpType.values[index].color),
