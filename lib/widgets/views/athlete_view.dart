@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
@@ -8,59 +6,36 @@ import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
+import '../../services/capture_client.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 
-class AcquisitionsView extends StatefulWidget {
-  const AcquisitionsView({Key? key}) : super(key: key);
+class AthleteView extends StatefulWidget {
+  const AthleteView({Key? key}) : super(key: key);
 
   @override
-  State<AcquisitionsView> createState() {
-    return _AcquisitionsViewState();
+  State<AthleteView> createState() {
+    return _AthleteViewState();
   }
 }
 
-class _AcquisitionsViewState extends State<AcquisitionsView> {
+class _AthleteViewState extends State<AthleteView> {
   int _switcherIndex = 0;
-  bool _loadingData = true;
-  late Map<String, List<Capture>> _capturesSorted;
-
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static const String _captureCollectionString = 'captures';
-
-  _loadCapturesData(SkatingUser skater) async {
-    if (!_loadingData) return;
-    List<Capture> captures = [];
-    for (String captureID in skater.captures) {
-      captures.add(await Capture.createFromFireBase(
-          captureID,
-          await _firestore
-              .collection(_captureCollectionString)
-              .doc(captureID)
-              .get()));
-    }
-
-    _capturesSorted =
-        groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
-
-    setState(() {
-      _loadingData = false;
-    });
-  }
+  SkatingUser? skater;
+  Future<Map<String, List<Capture>>>? _futureCaptures;
 
   @override
   Widget build(BuildContext context) {
-    final SkatingUser skater =
-        ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _loadCapturesData(skater);
+    skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
+    _futureCaptures ??= CaptureClient().loadCapturesData(skater!);
+
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
@@ -71,7 +46,8 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
         children: [
           Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: PageTitle(text: skater.firstName)),
+              child:
+                  PageTitle(text: '${skater!.firstName} ${skater!.lastName}')),
           Center(
               child: SlideSwitcher(
             onSelect: (int index) => setState(() => _switcherIndex = index),
@@ -87,20 +63,17 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
             ],
           )),
           Expanded(
-            child: _loadingData
-                ? const Center(
-                    child: GFLoader(
-                    size: 70,
-                    loaderstrokeWidth: 5,
-                  ))
-                : IndexedStack(
-                    index: _switcherIndex,
-                    children: [
-                      CapturesTab(captures: _capturesSorted),
-                      ProgressionTab(),
-                      const OptionsTab(),
-                    ],
-                  ),
+            child: IndexedStack(
+              index: _switcherIndex,
+              children: [
+                FutureBuilder(
+                  future: _futureCaptures,
+                  builder: _buildCapturesTab,
+                ),
+                ProgressionTab(),
+                const OptionsTab(),
+              ],
+            ),
           )
         ],
       ),
@@ -108,7 +81,7 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
         child: IceButton(
             text: captureButton,
             onPressed: () {
-              CaptureClient().capturingSkatingUserUid = skater.uID!;
+              CaptureClient().capturingSkatingUserUid = skater!.uID!;
               Navigator.pushNamed(
                 context,
                 '/CaptureData',
@@ -120,5 +93,16 @@ class _AcquisitionsViewState extends State<AcquisitionsView> {
             iceButtonSize: IceButtonSize.large),
       ),
     );
+  }
+
+  Widget _buildCapturesTab(BuildContext context,
+      AsyncSnapshot<Map<String, List<Capture>>> snapshot) {
+    return snapshot.connectionState == ConnectionState.done
+        ? CapturesTab(captures: snapshot.data!)
+        : const Center(
+            child: Padding(
+            padding: EdgeInsets.all(32.0),
+            child: CircularProgressIndicator(),
+          ));
   }
 }

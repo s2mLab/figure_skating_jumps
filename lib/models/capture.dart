@@ -19,6 +19,7 @@ class Capture {
     JumpType.lutz: 0,
     JumpType.salchow: 0,
     JumpType.toeLoop: 0,
+    JumpType.unknown : 0,
   };
 
   String get fileName {
