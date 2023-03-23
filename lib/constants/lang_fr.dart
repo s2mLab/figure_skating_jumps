@@ -61,6 +61,11 @@ const String optionsTab = "Options";
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
 
+// widgets/screens/edit_analysis_view
+const String detectedJumps = "Sauts enregistrés";
+const String editAnalysisPageTitle = "Analyse";
+const String analysisDonePrompt = "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
+
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";
 const String captureViewTitle = "Commencer une capture";
