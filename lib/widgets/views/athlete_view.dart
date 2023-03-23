@@ -30,7 +30,7 @@ class _AthleteViewState extends State<AthleteView> {
 
   @override
   Widget build(BuildContext context) {
-    skater = ModalRoute.of(context)!.settings.arguments as SkatingUser;
+    skater = ModalRoute.of(context)!.settings.arguments as SkatingUser; //TODO: ideally would not reassign everytime it builds
     _futureCaptures ??= CaptureClient().loadCapturesData(skater);
 
     return Scaffold(
@@ -44,7 +44,7 @@ class _AthleteViewState extends State<AthleteView> {
             Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: PageTitle(text: skater.firstName)),
+                child: PageTitle(text: '${skater.firstName} ${skater.lastName}')),
             Center(
                 child: SlideSwitcher(
               onSelect: (int index) => setState(() => _switcherIndex = index),
