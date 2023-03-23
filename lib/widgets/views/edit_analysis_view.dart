@@ -47,7 +47,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     const PageTitle(text: editAnalysisPageTitle),
                     if (true /*hasVideo*/)
                       IceButton(
-                          text: "Revoir la vidéo",
+                          text: seeVideoAgain,
                           onPressed: () {}, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
