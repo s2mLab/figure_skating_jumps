@@ -4,7 +4,7 @@ import 'package:figure_skating_jumps/models/db_models/device_name.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 
 class DeviceNamesManager implements ILocalDbManager<DeviceName> {
-  static final DeviceNamesManager _userPreferencesManager =
+  static final DeviceNamesManager _deviceNamesManager =
       DeviceNamesManager._internal();
 
   List<DeviceName> _preferences = [];
@@ -12,7 +12,7 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory DeviceNamesManager() {
-    return _userPreferencesManager;
+    return _deviceNamesManager;
   }
 
   DeviceNamesManager._internal();
