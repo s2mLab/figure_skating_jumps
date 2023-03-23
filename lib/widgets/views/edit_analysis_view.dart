@@ -9,6 +9,7 @@ import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
 import '../../models/capture.dart';
+import '../../models/jump.dart';
 import '../layout/capture_list_tile.dart';
 import '../layout/edit_analysis_view/jump_panel_content.dart';
 import '../layout/edit_analysis_view/jump_panel_header.dart';
@@ -63,9 +64,23 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       secondaryColor),
                 ),
                 Container(
-                    margin: const EdgeInsets.all(8), child: const LegendMove()),
+                    margin: const EdgeInsets.symmetric(vertical:8), child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
-                const PageTitle(text: detectedJumps),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const PageTitle(text: detectedJumps),
+                    IceButton(
+                        text: addAJump,
+                        onPressed: () {}, // TODO: video preview
+                        textColor: primaryColor,
+                        color: primaryColor,
+                        iceButtonImportance:
+                        IceButtonImportance.secondaryAction,
+                        iceButtonSize: IceButtonSize.small)
+                  ],
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: ClipRRect(
@@ -77,16 +92,19 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           });
                         },
                         elevation: 0,
-                        children: List.generate(_capture!.jumps.length*7, (index) {
+                        children: List.generate(_capture!.jumps.length, (index) {
                           _isPanelsOpen.add(false);
                           return ExpansionPanel(
+                            canTapOnHeader: true,
                             backgroundColor: Colors.transparent,
                               isExpanded: _isPanelsOpen[index],
                               headerBuilder: (BuildContext context, bool isExpanded) {
-                                return JumpPanelHeader(jump: _capture!.jumps[0]);
+                                return JumpPanelHeader(jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
-                                  jumpID: _capture!.jumps[0].uID!));
+                                  jumpID: _capture!.jumps[index].uID!, onModified: (Jump j) {setState(() {
+
+                                  });}));
                         }),
                       ),
                     ),

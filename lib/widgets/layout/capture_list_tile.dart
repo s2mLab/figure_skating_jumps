@@ -37,6 +37,7 @@ class CaptureListTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   color: cardBackground),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +59,7 @@ class CaptureListTile extends StatelessWidget {
               ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(JumpType.values.length, (index) {
+                  children: List.generate(JumpType.values.length - 1, (index) {
                     return Row(
                       children: [
                         ColorCircle(colorCircle: JumpType.values[index].color),

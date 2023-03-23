@@ -4,7 +4,7 @@ import '../../../models/jump.dart';
 
 class JumpPanelContent extends StatefulWidget {
   final String jumpID;
-  const JumpPanelContent({super.key, required this.jumpID});
+  const JumpPanelContent({super.key, required this.jumpID, required void Function(Jump j) onModified});
 
   @override
   State<JumpPanelContent> createState() => _JumpPanelContentState();
