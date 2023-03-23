@@ -36,7 +36,6 @@ class LocalDbService {
       object.toMap(),
       conflictAlgorithm: ConflictAlgorithm.rollback,
     );
-    print(id);
     if (id == 0) {
       throw ConflictException();
     }

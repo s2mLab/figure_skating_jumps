@@ -24,11 +24,12 @@ class DeviceName extends AbstractLocalDbObject {
     return {
       'userID': _userID,
       'deviceMacAddress': _deviceMacAddress,
+      'customName': name,
     };
   }
 
   @override
   String toString() {
-    return 'DeviceName{id: $id, userID: $_userID, deviceMacAddress: $_deviceMacAddress}';
+    return 'DeviceName{id: $id, userID: $_userID, name: $name, deviceMacAddress: $_deviceMacAddress}';
   }
 }
