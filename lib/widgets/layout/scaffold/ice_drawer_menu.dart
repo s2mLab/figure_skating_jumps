@@ -54,7 +54,7 @@ class IceDrawerMenu extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    '/CaptureData',
+                    '/EditAnalysis',
                   );
                 }),
 

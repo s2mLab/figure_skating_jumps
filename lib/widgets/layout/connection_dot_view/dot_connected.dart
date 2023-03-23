@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class DotConnected extends StatefulWidget {
 class _DotConnectedState extends State<DotConnected> {
   late XSensStateIcon stateIconConnected;
   late XSensStateIcon stateIconDisconnected;
-  String connectedDeviceName = "No device";
 
   @override
   void initState() {
@@ -29,11 +27,6 @@ class _DotConnectedState extends State<DotConnected> {
         const XSensStateIcon(true, XSensDeviceState.connected);
     stateIconDisconnected =
         const XSensStateIcon(true, XSensDeviceState.disconnected);
-
-    BluetoothDevice? currentDevice = XSensDotConnectionService().currentXSensDevice;
-    if(currentDevice != null) {
-      connectedDeviceName = currentDevice.name;
-    }
 
     super.initState();
   }
@@ -60,7 +53,7 @@ class _DotConnectedState extends State<DotConnected> {
                   child: XSensDotListElement(
                       hasLine: true,
                       lineColor: connectedXSensDotButtonIndicator,
-                      text: connectedDeviceName,
+                      text: XSensDotConnectionService().currentXSensDevice == null ? "No device" : XSensDotConnectionService().currentXSensDevice!.assignedName,
                       graphic: stateIconConnected,
                       onPressed: () async {
                         final result = await showDialog(

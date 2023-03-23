@@ -1,3 +1,8 @@
+import 'package:collection/collection.dart';
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+
+import 'db_models/device_name.dart';
+
 class BluetoothDevice {
   late final String _name;
   late final String _macAddress;
@@ -18,6 +23,7 @@ class BluetoothDevice {
   set assignedName(String val) {
     if (val.isNotEmpty) {
       _assignedName = val;
+      DeviceNamesManager().changeName(val, this);
     }
   }
 
@@ -30,7 +36,8 @@ class BluetoothDevice {
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_macAddress'])
         : _macAddress = macAddress;
-    _assignedName = _name;
+    DeviceName? savedDevice = DeviceNamesManager().preferences.firstWhereOrNull((el) => el.deviceMacAddress == _macAddress);
+    _assignedName = savedDevice == null ? _name : savedDevice.name;
   }
 
   factory BluetoothDevice.fromEvent(String event) {

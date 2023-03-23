@@ -1,15 +1,23 @@
+<<<<<<< HEAD
 import 'dart:io';
 
+=======
+import 'package:collection/collection.dart';
+>>>>>>> main
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
 
+<<<<<<< HEAD
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/xsens_dot_data.dart';
 import 'external_storage_service.dart';
+=======
+import '../models/skating_user.dart';
+>>>>>>> main
 
 class CaptureClient {
   static final CaptureClient _captureClient = CaptureClient._internal();
@@ -72,5 +80,18 @@ class CaptureClient {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<Map<String, List<Capture>>> loadCapturesData(SkatingUser skater) async {
+    List<Capture> captures = [];
+    for (String captureID in skater.captures) {
+      captures.add(await Capture.createFromFireBase(
+          captureID,
+          await _firestore
+              .collection(_captureCollectionString)
+              .doc(captureID)
+              .get()));
+    }
+    return groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
   }
 }
