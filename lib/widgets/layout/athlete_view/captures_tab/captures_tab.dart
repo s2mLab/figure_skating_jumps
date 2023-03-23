@@ -19,44 +19,36 @@ class CapturesTab extends StatelessWidget {
         Container(margin: const EdgeInsets.all(8), child: const LegendMove()),
         Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                itemCount: captures.length,
-                itemBuilder: (context, dateIndex) {
-                  String key = captures.keys.elementAt(dateIndex);
-                  List<Capture> capturesToDisplay = captures[key]!;
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          key.replaceAll('-', '/'),
-                          style: const TextStyle(
-                              fontSize: 26,
-                              color: primaryColorLight,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                            height: capturesToDisplay.length * heightContainer,
-                            child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: capturesToDisplay.length,
-                                itemBuilder: (context, index) {
-                                  Capture currentCapture =
-                                      capturesToDisplay[index];
-                                  return Container(
-                                      margin:
-                                          const EdgeInsets.symmetric(vertical: 8),
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                          color: cardBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: CaptureListTile(currentCapture: currentCapture));
-                                }))
-                      ]);
-                },
-              ),
-            )),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListView.builder(
+            itemCount: captures.length,
+            itemBuilder: (context, dateIndex) {
+              String key = captures.keys.elementAt(dateIndex);
+              List<Capture> capturesToDisplay = captures[key]!;
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      key.replaceAll('-', '/'),
+                      style: const TextStyle(
+                          fontSize: 26,
+                          color: primaryColorLight,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                        height: capturesToDisplay.length * heightContainer,
+                        child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: capturesToDisplay.length,
+                            itemBuilder: (context, index) {
+                              Capture currentCapture = capturesToDisplay[index];
+                              return CaptureListTile(
+                                  currentCapture: currentCapture);
+                            }))
+                  ]);
+            },
+          ),
+        )),
       ],
     );
   }
