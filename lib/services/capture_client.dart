@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,30 +41,33 @@ class CaptureClient {
       await _firestore
           .collection(_captureCollectionString)
           .doc(jump.capture)
-          .set({"jumps": capture.jumps}, SetOptions(merge: true));
+          .set({"jumps": capture.jumpsID}, SetOptions(merge: true));
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
 
-  Future<void> saveCapture({required String exportFileName, required List<XSensDotData> exportedData}) async {
-    String fullPath = await ExternalStorageService().saveCaptureCsv(exportFileName, exportedData);
+  Future<void> saveCapture(
+      {required String exportFileName,
+      required List<XSensDotData> exportedData}) async {
+    String fullPath = await ExternalStorageService()
+        .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
     int duration = exportedData.last.time - exportedData.first.time;
-    Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!, duration, DateTime.now(), []);
+    Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
+        duration, DateTime.now(), []);
     await _addCapture(capture: capture);
   }
 
   Future<void> _addCapture({required Capture capture}) async {
     try {
-      await _firestore
-          .collection(_captureCollectionString).add({
-          'date': capture.date,
-          'duration': capture.duration,
-          'file': capture.fileName,
-          'jumps': capture.jumpsID,
-          'user': capture.userID
+      await _firestore.collection(_captureCollectionString).add({
+        'date': capture.date,
+        'duration': capture.duration,
+        'file': capture.fileName,
+        'jumps': capture.jumpsID,
+        'user': capture.userID
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -73,7 +75,8 @@ class CaptureClient {
     }
   }
 
-  Future<void> _saveCaptureCsv({required String fullPath, required String fileName}) async {
+  Future<void> _saveCaptureCsv(
+      {required String fullPath, required String fileName}) async {
     Reference fileRef = appBucketRef.child(fileName);
     File captureCsvFile = File(fullPath);
     await captureCsvFile.absolute.exists();
@@ -85,16 +88,8 @@ class CaptureClient {
     }
   }
 
-  Future<Map<String, List<Capture>>> loadCapturesData({required SkatingUser skater}) async {
-    List<Capture> captures = [];
-    for (String captureID in skater.captures) {
-      captures.add(await Capture.createFromFireBase(
-          captureID,
-          await _firestore
-              .collection(_captureCollectionString)
-              .doc(captureID)
-              .get()));
-    }
-    return groupBy(captures, (obj) => obj.date.toString().substring(0, 10));
+  Future<DocumentSnapshot<Map<String, dynamic>>> getCaptureFromID(
+      {required String uid}) async {
+    return await _firestore.collection(_captureCollectionString).doc(uid).get();
   }
 }

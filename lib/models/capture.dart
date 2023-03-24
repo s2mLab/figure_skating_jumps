@@ -55,19 +55,19 @@ class Capture {
       [this.uID]);
 
   factory Capture._fromFirestore(
-      String? uID, DocumentSnapshot<Map<String, dynamic>> capture) {
+      String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) {
     return Capture(
-        capture.get('file'),
-        capture.get('user'),
-        capture.get('duration'),
-        (capture.get('date') as Timestamp).toDate(),
-        List<String>.from(capture.get('jumps') as List),
+        captureInfo.get('file'),
+        captureInfo.get('user'),
+        captureInfo.get('duration'),
+        (captureInfo.get('date') as Timestamp).toDate(),
+        List<String>.from(captureInfo.get('jumps') as List),
         uID);
   }
 
   static Future<Capture> createFromFireBase(
-      String? uID, DocumentSnapshot<Map<String, dynamic>> userInfo) async {
-    Capture capture = Capture._fromFirestore(uID, userInfo);
+      String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
+    Capture capture = Capture._fromFirestore(uID, captureInfo);
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     for (String jumpID in capture._jumpsID) {
