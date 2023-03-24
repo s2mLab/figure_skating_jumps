@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:media_store_plus/media_store_plus.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../models/xsens_dot_data.dart';
 
 class ExternalStorageService {
   static final ExternalStorageService _externalStorageService =
@@ -30,4 +34,18 @@ class ExternalStorageService {
 
     return Future<String>.value(file.path);
   }
+
+  Future<String> saveCaptureCsv(String fileName, List<XSensDotData> extractedData) async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    String dirPath = '${directory.path}/csv';
+    await Directory(dirPath).create(recursive: true);
+
+    File file = File("$dirPath/$fileName");
+    String csvContent = CsvCreator.createXSensDotCsv(extractedData);
+    file.writeAsString(csvContent);
+
+    return Future<String>.value(file.path);
+  }
+
+  
 }

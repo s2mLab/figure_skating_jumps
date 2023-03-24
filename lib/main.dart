@@ -59,6 +59,7 @@ Future<bool> initializeStoragePermissions() async {
     permissions.add(Permission.photos);
     permissions.add(Permission.audio);
     permissions.add(Permission.videos);
+    permissions.add(Permission.storage);
   }
 
   if (permissions.isNotEmpty) {
