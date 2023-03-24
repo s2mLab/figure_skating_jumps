@@ -58,7 +58,7 @@ class UserClient {
         'lastName': userInfo.lastName,
         'email': email,
         'role': userInfo.role.toString(),
-        'captures': userInfo.captures,
+        'captures': userInfo.capturesID,
         'trainees': userInfo.trainees,
         'coaches': userInfo.coaches,
       });

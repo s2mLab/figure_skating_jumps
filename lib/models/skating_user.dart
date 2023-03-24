@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 
 class SkatingUser {
-  static const String _userCollectionString = 'users';
-
   late String? uID;
   late String _firstName;
   late String _lastName;
   late UserRole _role;
   late String _email;
-  late List<String> _captures = [];
+  late List<String> _capturesID = [];
+  late final List<Capture> _captures = [];
   late List<String> _traineesID = [];
   late List<SkatingUser> _trainees = [];
   final List<String> _coaches = [];
@@ -30,8 +33,16 @@ class SkatingUser {
     return _email;
   }
 
-  List<String> get captures {
+  List<String> get capturesID {
+    return _capturesID;
+  }
+
+  List<Capture> get captures {
     return _captures;
+  }
+
+  Map<String, List<Capture>> get groupedCaptures {
+    return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
   }
 
   List<SkatingUser> get trainees {
@@ -46,19 +57,24 @@ class SkatingUser {
     return _coaches;
   }
 
-  loadTrainees() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Future<void> loadTrainees() async {
     _trainees = [];
     for (String id in _traineesID) {
-      SkatingUser trainee = SkatingUser.fromFirestore(
-          id, await firestore.collection(_userCollectionString).doc(id).get());
+      SkatingUser trainee = await UserClient().getUserById(id: id);
       _trainees.add(trainee);
+    }
+  }
+
+  Future<void> loadCapturesData() async {
+    for (String captureID in _capturesID) {
+      _captures.add(await Capture.createFromFireBase(
+          captureID, await CaptureClient().getCaptureFromID(uid: captureID)));
     }
   }
 
   SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
 
-  factory SkatingUser.fromFirestore(
+  factory SkatingUser.fromFirestore (
       uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     String firstName = userInfo.get('firstName');
     String lastName = userInfo.get('lastName');
@@ -68,7 +84,8 @@ class SkatingUser {
 
     SkatingUser skaterUser = SkatingUser(firstName, lastName, role, uID);
 
-    skaterUser._captures = List<String>.from(userInfo.get('captures') as List);
+    skaterUser._capturesID =
+        List<String>.from(userInfo.get('captures') as List);
     skaterUser._traineesID =
         List<String>.from(userInfo.get('trainees') as List);
     return skaterUser;
