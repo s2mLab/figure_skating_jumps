@@ -64,6 +64,9 @@ const String optionsTab = "Options";
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
 
+// widgets/screens/athletes_view
+const String captureButton = "Capturer";
+
 // widgets/screens/edit_analysis_view
 const String seeVideoAgain = "Revoir la vidéo";
 const String detectedJumps = "Sauts enregistrés";
