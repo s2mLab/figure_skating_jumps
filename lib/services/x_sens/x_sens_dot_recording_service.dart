@@ -150,8 +150,6 @@ class XSensDotRecordingService {
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-      //TODO next line: Remove - only for testing purpose
-      CaptureClient().capturingSkatingUser = UserClient().currentSkatingUser!;
       await CaptureClient().saveCapture(_exportFileName, _exportedData);
       debugPrint("Done");
       _recorderState = RecorderState.idle;

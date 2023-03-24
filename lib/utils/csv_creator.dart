@@ -22,19 +22,19 @@ class CsvCreator {
         row.add(xSensDotData.time);
 
         //Euler angles (X, Y, Z)
-        row.add(xSensDotData.euler[0]);
-        row.add(xSensDotData.euler[1]);
-        row.add(xSensDotData.euler[2]);
+        for (var eul in xSensDotData.euler) {
+          row.add(eul);
+        }
 
         //Acceleration (X, Y, Z)
-        row.add(xSensDotData.acc[0]);
-        row.add(xSensDotData.acc[1]);
-        row.add(xSensDotData.acc[2]);
+        for (var acc in xSensDotData.acc) {
+          row.add(acc);
+        }
 
         //Gyr (X, Y, Z)
-        row.add(xSensDotData.gyr[0]);
-        row.add(xSensDotData.gyr[1]);
-        row.add(xSensDotData.gyr[2]);
+        for (var gyr in xSensDotData.gyr) {
+          row.add(gyr);
+        }
 
         rows.add(row);
       }
