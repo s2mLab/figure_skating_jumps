@@ -59,7 +59,7 @@ class CaptureClient {
 
   Future<void> _addCapture({required Capture capture}) async {
     try {
-      var banana = await _firestore
+      await _firestore
           .collection(_captureCollectionString).add({
           'date': capture.date,
           'duration': capture.duration,
@@ -67,7 +67,6 @@ class CaptureClient {
           'jumps': capture.jumpsID,
           'user': capture.userID
       });
-      debugPrint(banana.toString());
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

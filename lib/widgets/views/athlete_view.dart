@@ -74,23 +74,26 @@ class _AthleteViewState extends State<AthleteView> {
                 const OptionsTab(),
               ],
             ),
-          )
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: IceButton(
+                  text: captureButton,
+                  onPressed: () {
+                    CaptureClient().capturingSkatingUser = skater!;
+                    Navigator.pushNamed(
+                      context,
+                      '/CaptureData',
+                    );
+                  },
+                  textColor: paleText,
+                  color: secondaryColor,
+                  iceButtonImportance: IceButtonImportance.mainAction,
+                  iceButtonSize: IceButtonSize.large),
+            ),
+          ),
         ],
-      ),
-      floatingActionButton: Center(
-        child: IceButton(
-            text: captureButton,
-            onPressed: () {
-              CaptureClient().capturingSkatingUser = skater!;
-              Navigator.pushNamed(
-                context,
-                '/CaptureData',
-              );
-            },
-            textColor: paleText,
-            color: secondaryColor,
-            iceButtonImportance: IceButtonImportance.mainAction,
-            iceButtonSize: IceButtonSize.large),
       ),
     );
   }
