@@ -32,7 +32,8 @@ class CaptureClient {
 
   Future<void> createJump({required Jump jump}) async {
     try {
-      DocumentReference<Map<String, dynamic>> jumpInfo = await _firestore.collection(_jumpsCollectionString).add({
+      DocumentReference<Map<String, dynamic>> jumpInfo =
+          await _firestore.collection(_jumpsCollectionString).add({
         'capture': jump.captureID,
         'comment': jump.comment,
         'duration': jump.duration,
@@ -61,16 +62,26 @@ class CaptureClient {
     await _createCapture(capture: capture);
   }
 
-  Future<Capture> getCaptureByID(
-      {required String uid}) async {
-    DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore.collection(_captureCollectionString).doc(uid).get();
-    return await Capture.createFromFireBase(
-        uid, captureInfo);
+  Future<Capture> getCaptureByID({required String uid}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> captureInfo =
+      await _firestore.collection(_captureCollectionString).doc(uid).get();
+      return await Capture.createFromFireBase(uid, captureInfo);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   Future<Jump> getJumpByID({required String uid}) async {
-    DocumentSnapshot<Map<String, dynamic>> jumpInfo = await _firestore.collection(_jumpsCollectionString).doc(uid).get();
-    return Jump.fromFirestore(uid, jumpInfo);
+    try {
+      DocumentSnapshot<Map<String, dynamic>> jumpInfo =
+      await _firestore.collection(_jumpsCollectionString).doc(uid).get();
+      return Jump.fromFirestore(uid, jumpInfo);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   Future<void> _saveCaptureCsv(
@@ -88,7 +99,8 @@ class CaptureClient {
 
   Future<void> _createCapture({required Capture capture}) async {
     try {
-      DocumentReference<Map<String, dynamic>> captureInfo = await _firestore.collection(_captureCollectionString).add({
+      DocumentReference<Map<String, dynamic>> captureInfo =
+          await _firestore.collection(_captureCollectionString).add({
         'date': capture.date,
         'duration': capture.duration,
         'file': capture.fileName,
@@ -102,13 +114,15 @@ class CaptureClient {
     }
   }
 
-  Future<void> _addJump({required String captureID, required String jumpID}) async {
+  Future<void> _addJump(
+      {required String captureID, required String jumpID}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore
           .collection(_captureCollectionString)
           .doc(captureID)
           .get();
-      List<String> jumpsID = List<String>.from(captureInfo.get('jumps') as List);
+      List<String> jumpsID =
+          List<String>.from(captureInfo.get('jumps') as List);
       jumpsID.add(jumpID);
       await _firestore
           .collection(_captureCollectionString)
