@@ -33,7 +33,7 @@ class _AthleteViewState extends State<AthleteView> {
   @override
   Widget build(BuildContext context) {
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _futureCaptures ??= CaptureClient().loadCapturesData(skater!);
+    _futureCaptures ??= CaptureClient().loadCapturesData(skater: skater!);
 
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: false),

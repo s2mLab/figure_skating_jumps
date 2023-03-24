@@ -147,7 +147,7 @@ class XSensDotRecordingService {
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-      await CaptureClient().saveCapture(_exportFileName, _exportedData);
+      await CaptureClient().saveCapture(exportFileName: _exportFileName, exportedData: _exportedData);
       debugPrint("Done");
       _recorderState = RecorderState.idle;
     }
