@@ -12,10 +12,10 @@ class SkatingUser {
   late UserRole _role;
   late String _email;
   late List<String> _capturesID = [];
-  late final List<Capture> _captures = [];
+  late List<Capture> _captures = [];
   late List<String> _traineesID = [];
   late List<SkatingUser> _trainees = [];
-  final List<String> _coaches = [];
+  final List<String> _coachesID = [];
 
   String get firstName {
     return _firstName;
@@ -53,8 +53,8 @@ class SkatingUser {
     return _traineesID;
   }
 
-  List<String> get coaches {
-    return _coaches;
+  List<String> get coachesID {
+    return _coachesID;
   }
 
   Future<void> loadTrainees() async {
@@ -66,9 +66,10 @@ class SkatingUser {
   }
 
   Future<void> loadCapturesData() async {
+    _captures = [];
     for (String captureID in _capturesID) {
-      _captures.add(await Capture.createFromFireBase(
-          captureID, await CaptureClient().getCaptureFromID(uid: captureID)));
+      Capture capture = await CaptureClient().getCaptureByID(uid: captureID);
+      _captures.add(capture);
     }
   }
 
@@ -89,6 +90,5 @@ class SkatingUser {
     skaterUser._traineesID =
         List<String>.from(userInfo.get('trainees') as List);
     return skaterUser;
-    //TODO convert json to list when saving acquisition and when linking trainee and coach
   }
 }
