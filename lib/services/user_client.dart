@@ -240,4 +240,14 @@ class UserClient {
       rethrow;
     }
   }
+
+  Future<void> removeCoach(
+      {required String coachId, required String skaterId}) async {
+    try {
+      removeSkater(skaterId: skaterId, coachId: coachId);
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
 }
