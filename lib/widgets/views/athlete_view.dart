@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
-import '../../services/capture_client.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/options_tab.dart';

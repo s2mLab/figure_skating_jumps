@@ -4,15 +4,12 @@ import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
-import 'package:figure_skating_jumps/services/external_storage_service.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../enums/method_channel_names.dart';
 import '../../models/xsens_dot_data.dart';
-import '../../utils/csv_creator.dart';
 
 class XSensDotRecordingService {
   static final _recordingMethodChannel =
