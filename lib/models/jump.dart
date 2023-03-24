@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:flutter/cupertino.dart';
 
 class Jump {
   late String? uID;
@@ -43,15 +44,15 @@ class Jump {
       [this.uID]);
 
   factory Jump.fromFirestore(
-      uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
-    int time = userInfo.get('time');
-    int duration = userInfo.get('duration');
-    double turns = userInfo.get('turns');
-    String capture = userInfo.get('capture');
-    String comment = userInfo.get('comment');
-    double score = userInfo.get('score');
+      uID, DocumentSnapshot<Map<String, dynamic>> jumpInfo) {
+    int time = jumpInfo.get('time');
+    int duration = jumpInfo.get('duration');
+    double turns = double.parse(jumpInfo.get('turns').toString());
+    String capture = jumpInfo.get('capture');
+    String comment = jumpInfo.get('comment');
+    double score = double.parse(jumpInfo.get('score').toString());
 
-    String typeStr = userInfo.get('type');
+    String typeStr = jumpInfo.get('type');
     JumpType type =
         JumpType.values.firstWhere((element) => element.toString() == typeStr);
 

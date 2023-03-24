@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:flutter/cupertino.dart';
 
 class Capture {
   late String? uID;
@@ -67,7 +68,6 @@ class Capture {
   static Future<Capture> createFromFireBase(
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
     Capture capture = Capture._fromFirestore(uID, captureInfo);
-
     for (String jumpID in capture._jumpsID) {
       Jump jumpToAdd = await CaptureClient().getJumpByID(uid: jumpID);
       capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
