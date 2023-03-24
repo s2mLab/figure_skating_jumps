@@ -50,6 +50,23 @@ class CaptureClient {
     }
   }
 
+  Future<void> updateJump({required Jump jump}) async {
+    try {
+      await _firestore.collection(_jumpsCollectionString).doc(jump.uID!).set({
+        'capture': jump.captureID,
+        'comment': jump.comment,
+        'duration': jump.duration,
+        'score': jump.score,
+        'time': jump.time,
+        'turns': jump.turns,
+        'type': jump.type.toString(),
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> saveCapture(
       {required String exportFileName,
       required List<XSensDotData> exportedData}) async {
@@ -65,7 +82,7 @@ class CaptureClient {
   Future<Capture> getCaptureByID({required String uid}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> captureInfo =
-      await _firestore.collection(_captureCollectionString).doc(uid).get();
+          await _firestore.collection(_captureCollectionString).doc(uid).get();
       return await Capture.createFromFireBase(uid, captureInfo);
     } catch (e) {
       debugPrint(e.toString());
@@ -76,7 +93,7 @@ class CaptureClient {
   Future<Jump> getJumpByID({required String uid}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> jumpInfo =
-      await _firestore.collection(_jumpsCollectionString).doc(uid).get();
+          await _firestore.collection(_jumpsCollectionString).doc(uid).get();
       return Jump.fromFirestore(uid, jumpInfo);
     } catch (e) {
       debugPrint(e.toString());
