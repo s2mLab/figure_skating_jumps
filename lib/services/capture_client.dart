@@ -51,7 +51,7 @@ class CaptureClient {
 
   Future<void> saveCapture({required String exportFileName, required List<XSensDotData> exportedData}) async {
     String fullPath = await ExternalStorageService().saveCaptureCsv(exportFileName, exportedData);
-    await _saveCaptureCsv(fullPath, exportFileName);
+    await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!, duration, DateTime.now(), []);
     await _addCapture(capture: capture);
@@ -73,7 +73,7 @@ class CaptureClient {
     }
   }
 
-  Future<void> _saveCaptureCsv(String fullPath, String fileName) async {
+  Future<void> _saveCaptureCsv({required String fullPath, required String fileName}) async {
     Reference fileRef = appBucketRef.child(fileName);
     File captureCsvFile = File(fullPath);
     await captureCsvFile.absolute.exists();
