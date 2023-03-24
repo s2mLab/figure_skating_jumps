@@ -49,11 +49,11 @@ class CaptureClient {
     }
   }
 
-  Future<void> saveCapture(String exportFileName, List<XSensDotData> exportedData) async {
+  Future<void> saveCapture({required String exportFileName, required List<XSensDotData> exportedData}) async {
     String fullPath = await ExternalStorageService().saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath, exportFileName);
-    var duration = exportedData.last.time - exportedData.first.time;
-    var capture = Capture(exportFileName, _capturingSkatingUser!.uID!, duration, DateTime.now(), []);
+    int duration = exportedData.last.time - exportedData.first.time;
+    Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!, duration, DateTime.now(), []);
     await _addCapture(capture: capture);
   }
 
@@ -74,8 +74,8 @@ class CaptureClient {
   }
 
   Future<void> _saveCaptureCsv(String fullPath, String fileName) async {
-    var fileRef = appBucketRef.child(fileName);
-    var captureCsvFile = File(fullPath);
+    Reference fileRef = appBucketRef.child(fileName);
+    File captureCsvFile = File(fullPath);
     await captureCsvFile.absolute.exists();
 
     try {
@@ -85,7 +85,7 @@ class CaptureClient {
     }
   }
 
-  Future<Map<String, List<Capture>>> loadCapturesData(SkatingUser skater) async {
+  Future<Map<String, List<Capture>>> loadCapturesData({required SkatingUser skater}) async {
     List<Capture> captures = [];
     for (String captureID in skater.captures) {
       captures.add(await Capture.createFromFireBase(
