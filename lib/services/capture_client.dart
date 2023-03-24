@@ -15,6 +15,7 @@ class CaptureClient {
   static final Reference appBucketRef = FirebaseStorage.instance.ref();
 
   static const String _captureCollectionString = 'captures';
+  static const String _jumpsCollectionString = 'jumps';
   SkatingUser? _capturingSkatingUser;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
@@ -29,19 +30,19 @@ class CaptureClient {
 
   CaptureClient._internal();
 
-  Future<void> addJump({required Jump jump}) async {
+  Future<void> createJump({required Jump jump}) async {
     try {
-      final collectionJump = await _firestore
-          .collection(_captureCollectionString)
-          .doc(jump.capture)
-          .get();
-      Capture capture =
-          await Capture.createFromFireBase(jump.capture, collectionJump);
-      capture.jumps.add(jump);
-      await _firestore
-          .collection(_captureCollectionString)
-          .doc(jump.capture)
-          .set({"jumps": capture.jumpsID}, SetOptions(merge: true));
+      DocumentReference<Map<String, dynamic>> jumpInfo = await _firestore.collection(_jumpsCollectionString).add({
+        'capture': jump.captureID,
+        'comment': jump.comment,
+        'duration': jump.duration,
+        'score': jump.score,
+        'time': jump.time,
+        'turns': jump.turns,
+        'type': jump.type.toString()
+      });
+      jump.uID = jumpInfo.id;
+      _addJump(captureID: jump.captureID, jumpID: jumpInfo.id);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -57,22 +58,19 @@ class CaptureClient {
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
         duration, DateTime.now(), []);
-    await _addCapture(capture: capture);
+    await _createCapture(capture: capture);
   }
 
-  Future<void> _addCapture({required Capture capture}) async {
-    try {
-      await _firestore.collection(_captureCollectionString).add({
-        'date': capture.date,
-        'duration': capture.duration,
-        'file': capture.fileName,
-        'jumps': capture.jumpsID,
-        'user': capture.userID
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      rethrow;
-    }
+  Future<Capture> getCaptureByID(
+      {required String uid}) async {
+    DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore.collection(_captureCollectionString).doc(uid).get();
+    return await Capture.createFromFireBase(
+        uid, captureInfo);
+  }
+
+  Future<Jump> getJumpByID({required String uid}) async {
+    DocumentSnapshot<Map<String, dynamic>> jumpInfo = await _firestore.collection(_jumpsCollectionString).doc(uid).get();
+    return Jump.fromFirestore(uid, jumpInfo);
   }
 
   Future<void> _saveCaptureCsv(
@@ -88,8 +86,37 @@ class CaptureClient {
     }
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getCaptureFromID(
-      {required String uid}) async {
-    return await _firestore.collection(_captureCollectionString).doc(uid).get();
+  Future<void> _createCapture({required Capture capture}) async {
+    try {
+      DocumentReference<Map<String, dynamic>> captureInfo = await _firestore.collection(_captureCollectionString).add({
+        'date': capture.date,
+        'duration': capture.duration,
+        'file': capture.fileName,
+        'jumps': capture.jumpsID,
+        'user': capture.userID
+      });
+      capture.uID = captureInfo.id;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> _addJump({required String captureID, required String jumpID}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .get();
+      List<String> jumpsID = List<String>.from(captureInfo.get('jumps') as List);
+      jumpsID.add(jumpID);
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .set({"jumps": jumpsID}, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 }

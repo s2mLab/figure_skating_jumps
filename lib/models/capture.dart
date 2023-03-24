@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 
 class Capture {
-  static const String _jumpsCollectionString = 'jumps';
-
   late String? uID;
   late String _file;
   late String _userID;
@@ -69,12 +68,9 @@ class Capture {
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
     Capture capture = Capture._fromFirestore(uID, captureInfo);
 
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
     for (String jumpID in capture._jumpsID) {
-      Jump jumpToAdd = Jump.fromFirestore(jumpID,
-          await firestore.collection(_jumpsCollectionString).doc(jumpID).get());
-      capture.jumpTypeCount[jumpToAdd.type] =
-          capture.jumpTypeCount[jumpToAdd.type]! + 1;
+      Jump jumpToAdd = await CaptureClient().getJumpByID(uid: jumpID);
+      capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
     }
 

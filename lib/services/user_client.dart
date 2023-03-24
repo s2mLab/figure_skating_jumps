@@ -60,7 +60,7 @@ class UserClient {
         'role': userInfo.role.toString(),
         'captures': userInfo.capturesID,
         'trainees': userInfo.trainees,
-        'coaches': userInfo.coaches,
+        'coaches': userInfo.coachesID,
       });
     } catch (e) {
       developer.log(e.toString());
@@ -191,13 +191,13 @@ class UserClient {
               .doc(coachId)
               .get());
 
-      skater.coaches.add(coachId);
+      skater.coachesID.add(coachId);
       coach.traineesID.add(skaterId);
 
       await _firestore
           .collection(_userCollectionString)
           .doc(skaterId)
-          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
@@ -224,13 +224,13 @@ class UserClient {
               .doc(coachId)
               .get());
 
-      skater.coaches.removeWhere((element) => element == coachId);
+      skater.coachesID.removeWhere((element) => element == coachId);
       coach.trainees.removeWhere((element) => element.uID! == skaterId);
 
       await _firestore
           .collection(_userCollectionString)
           .doc(skaterId)
-          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
