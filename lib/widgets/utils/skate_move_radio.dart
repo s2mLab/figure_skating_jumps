@@ -26,20 +26,18 @@ class SkateMoveRadio extends StatelessWidget {
           _onChanged(_value);
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Column(
-          children: <Widget>[
-            Radio<JumpType>(
-              groupValue: _groupValue,
-              value: _value,
-              onChanged: (JumpType? newValue) {
-                _onChanged(newValue!);
-              },
-            ),
-            Text(_value.abbreviation, style: TextStyle(color: _value.color, fontSize: 12)),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          Radio<JumpType>(
+            activeColor: _value.color,
+            groupValue: _groupValue,
+            value: _value,
+            onChanged: (JumpType? newValue) {
+              _onChanged(newValue!);
+            },
+          ),
+          Text(_value.abbreviation, style: TextStyle(color: _value.color, fontSize: 14, fontWeight: FontWeight.w600)),
+        ],
       ),
     );
   }

@@ -40,7 +40,10 @@ class CaptureClient {
         'score': jump.score,
         'time': jump.time,
         'turns': jump.turns,
-        'type': jump.type.toString()
+        'type': jump.type.toString(),
+        'durationToMaxSpeed': jump.durationToMaxSpeed,
+        'maxSpeed': jump.maxRotationSpeed,
+        'rotation': jump.rotationDegrees,
       });
       jump.uID = jumpInfo.id;
       _addJump(captureID: jump.captureID, jumpID: jumpInfo.id);
@@ -60,6 +63,9 @@ class CaptureClient {
         'time': jump.time,
         'turns': jump.turns,
         'type': jump.type.toString(),
+        'durationToMaxSpeed': jump.durationToMaxSpeed,
+        'maxSpeed': jump.maxRotationSpeed,
+        'rotation': jump.rotationDegrees,
       }, SetOptions(merge: true));
     } catch (e) {
       debugPrint(e.toString());

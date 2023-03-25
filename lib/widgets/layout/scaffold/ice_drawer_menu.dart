@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/lang_fr.dart';
+import '../../../services/user_client.dart';
 import '../../buttons/nav_menu_element.dart';
 import '../../views/raw_data_view.dart';
 
@@ -49,12 +50,21 @@ class IceDrawerMenu extends StatelessWidget {
                   );
                 }),
             NavMenuElement(
-                text: "(TEMP) Capture",
+                text: "(TEMP)",
                 iconData: Icons.camera,
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    '/EditAnalysis',
+                    '/ListAthletes',
+                  );
+                }),
+            NavMenuElement(
+                text: "(TEMP2)",
+                iconData: Icons.camera,
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/Acquisitions', arguments: UserClient().currentSkatingUser!
                   );
                 }),
 
