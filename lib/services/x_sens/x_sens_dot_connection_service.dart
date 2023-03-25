@@ -1,7 +1,11 @@
+import 'package:collection/collection.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 import '../../models/bluetooth_device.dart';
+import '../../models/db_models/device_name.dart';
+import '../manager/device_names_manager.dart';
 
 class XSensDotConnectionService {
   static final XSensDotConnectionService _xSensDotConnection =
@@ -29,8 +33,7 @@ class XSensDotConnectionService {
   }
 
   BluetoothDevice? get currentXSensDevice {
-    if (_currentXSensDevice == null) return null;
-    return BluetoothDevice.deepClone(_currentXSensDevice!);
+    return _currentXSensDevice;
   }
 
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
@@ -39,6 +42,13 @@ class XSensDotConnectionService {
           .connectXSensDot(macAddress: bluetoothDevice.macAddress);
       if (response) {
         _currentXSensDevice = bluetoothDevice;
+
+        DeviceName? deviceName = DeviceNamesManager().preferences.firstWhereOrNull((iter) => _currentXSensDevice!.macAddress == iter.deviceMacAddress);
+        if (deviceName != null) {
+          _currentXSensDevice!.assignedName = deviceName.name;
+        } else {
+          DeviceNamesManager().addDevice(UserClient().currentAuthUser!.uid, _currentXSensDevice!);
+        }
         _changeState(XSensDeviceState.connected);
       }
       return response;

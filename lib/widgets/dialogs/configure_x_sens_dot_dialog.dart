@@ -2,12 +2,12 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
-import '../../services/bluetooth_discovery.dart';
 import '../icons/x_sens_state_icon.dart';
 import '../prompts/ice_field_editable.dart';
 
@@ -31,7 +31,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             children: [
               IceFieldEditable(
                   onEditComplete: (String newText) {
-                    BluetoothDiscovery().getDevices()[0].assignedName = newText;
+                    XSensDotConnectionService().currentXSensDevice!.assignedName = newText;
                   },
                   text: name),
               IceButton(
