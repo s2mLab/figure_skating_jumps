@@ -73,7 +73,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     const PageTitle(text: detectedJumps),
                     IceButton(
                         text: addAJump,
-                        onPressed: () {}, // TODO: video preview
+                        onPressed: () {},
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
@@ -86,6 +86,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: ExpansionPanelList(
+                        expandedHeaderPadding: EdgeInsets.zero,
                         expansionCallback: (i, isOpen) {
                           setState(() {
                             _isPanelsOpen[i] = !isOpen;
@@ -102,7 +103,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                 return JumpPanelHeader(jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
-                                  jumpID: _capture!.jumps[index].uID!, onModified: (Jump j) {setState(() {
+                                  jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
+
 
                                   });}));
                         }),

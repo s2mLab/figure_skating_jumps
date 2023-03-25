@@ -57,22 +57,25 @@ class CaptureListTile extends StatelessWidget {
                   ])
                 ],
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(JumpType.values.length - 1, (index) {
-                    return Row(
-                      children: [
-                        ColorCircle(colorCircle: JumpType.values[index].color),
-                        Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Text(
-                                _currentCapture
-                                    .jumpTypeCount[JumpType.values[index]]
-                                    .toString(),
-                                style: const TextStyle(color: darkText))),
-                      ],
-                    );
-                  }))
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(JumpType.values.length - 1, (index) {
+                      return Row(
+                        children: [
+                          ColorCircle(colorCircle: JumpType.values[index].color),
+                          Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                  _currentCapture
+                                      .jumpTypeCount[JumpType.values[index]]
+                                      .toString(),
+                                  style: const TextStyle(color: darkText))),
+                        ],
+                      );
+                    })),
+              )
             ],
           ),
         ),

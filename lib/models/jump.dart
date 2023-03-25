@@ -6,7 +6,7 @@ class Jump {
   late int _time;
   late int _duration;
   late double _turns;
-  late JumpType _type;
+  late JumpType type;
   late String _capture;
 
   int get time {
@@ -21,15 +21,11 @@ class Jump {
     return _turns;
   }
 
-  JumpType get type {
-    return _type;
-  }
-
   String get capture {
     return _capture;
   }
 
-  Jump(this._time, this._duration, this._turns, this._type, this._capture,
+  Jump(this._time, this._duration, this._turns, this.type, this._capture,
       [this.uID]);
 
   factory Jump.fromFirestore(
