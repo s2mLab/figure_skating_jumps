@@ -22,7 +22,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   static const int _maxLengthSearch = 11;
 
   late final SkatingUser _currentUser;
-  final double _heightContainer = 57;
+  final double _heightContainer = 57; //57?
   late Map<String, List<SkatingUser>> _traineesToShow;
   late TextEditingController _searchController;
   late String _searchString = "";

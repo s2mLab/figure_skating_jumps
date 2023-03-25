@@ -10,6 +10,7 @@ import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
+import '../../enums/user_role.dart';
 import '../buttons/ice_button.dart';
 
 class LoginView extends StatefulWidget {
@@ -46,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       await UserClient().signIn(email: _email, password: _password);
       if (mounted) {
-        Navigator.pushNamed(context, '/ManageDevices');
+        UserClient().currentSkatingUser!.role == UserRole.coach ? Navigator.pushNamed(context, '/ListAthletes') : Navigator.pushNamed(context, '/Acquisitions');
       }
     } on IceException catch (e) {
       setState(() {
