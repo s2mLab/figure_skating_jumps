@@ -59,6 +59,9 @@ Future<bool> initializeStoragePermissions() async {
     permissions.add(Permission.photos);
     permissions.add(Permission.audio);
     permissions.add(Permission.videos);
+  }
+
+  if((await MediaStore().getPlatformSDKInt()) <= 32) {
     permissions.add(Permission.storage);
   }
 
