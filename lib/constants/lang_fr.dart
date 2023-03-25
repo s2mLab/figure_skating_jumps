@@ -42,6 +42,8 @@ const String jumpType = "Type de saut";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
 const String deleteAJump = "Supprimer le saut";
+const String confirmDelete = "Cette action est irréversible, voulez-vous continuer?";
+const String deleteJumpDialogTitle = "Suppression d'un saut";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";

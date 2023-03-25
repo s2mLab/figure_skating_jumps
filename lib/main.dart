@@ -84,7 +84,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
     return canFunction
         ? MaterialApp(
             title: 'Figure Skating Jump App',
-            initialRoute: '/',
+            initialRoute: '/Login',
             routes: {
               '/': (context) => const GodView(),
               '/ManageDevices': (context) => const ConnectionDotView(),

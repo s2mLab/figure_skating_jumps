@@ -50,21 +50,21 @@ class IceDrawerMenu extends StatelessWidget {
                   );
                 }),
             NavMenuElement(
-                text: "(TEMP)",
-                iconData: Icons.camera,
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/ListAthletes',
-                  );
-                }),
-            NavMenuElement(
-                text: "(TEMP2)",
-                iconData: Icons.camera,
+                text: "Mes acquisitions",
+                iconData: Icons.history,
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
                     '/Acquisitions', arguments: UserClient().currentSkatingUser!
+                  );
+                }),
+            NavMenuElement(
+                text: "GodView",
+                iconData: Icons.gavel_outlined,
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      '/',
                   );
                 }),
 

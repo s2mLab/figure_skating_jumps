@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0, top: 2.0),
       child: Container(
-          height: 200,
+          height: 300,
           width: double.infinity,
           decoration: BoxDecoration(
             boxShadow: [connectionShadow],
@@ -70,7 +71,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   Center(
                     child: IceButton(
                         text: deleteAJump,
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(context: context, builder: (context) {
+                            return _confirmDeleteJumpDialog();
+                          });
+                        },
                         textColor: errorColor,
                         color: errorColorDark,
                         iceButtonImportance: IceButtonImportance.secondaryAction,
@@ -80,6 +85,51 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               )),
             ],
           )),
+    );
+  }
+
+  Widget _confirmDeleteJumpDialog() {
+    return SimpleDialog(
+      title: const Text(deleteJumpDialogTitle),
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
+              child: InstructionPrompt(confirmDelete, errorColor),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IceButton(
+                    text: cancel,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    textColor: paleText,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.mainAction,
+                    iceButtonSize: IceButtonSize.small),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: IceButton(
+                      text: continueTo,
+                      onPressed: () {
+                        //TODO: delete jump
+                      },
+                      textColor: errorColor,
+                      color: errorColorDark,
+                      iceButtonImportance: IceButtonImportance.secondaryAction,
+                      iceButtonSize: IceButtonSize.small),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+      ],
     );
   }
 }
