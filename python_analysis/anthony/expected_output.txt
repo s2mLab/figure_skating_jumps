@@ -1,8 +1,75 @@
-First Video
-    tap 04:24 0351-0356
-    jmp 18:27 2035-2090
-    jmp 25:86 2975-3013
+Saut de valse + 1 Axel
+01th Take
+    tap 04.24 0351-0356
+    jmp 18.27 2035-2090
+    jmp 25.86 2975-3013
 
-Second Video
-    tap 00:53 0389-0394
-    jmp 14:71 2090ish
+2 Axel
+02nd Take
+    tap 00.53 0389-0394
+    jmp 14.71 2090
+
+1 Salchow + 2 Salchow
+03rd Take
+    tap 02.82 0384-0396
+    jmp 17.47 2142
+    jmp 29.43 3577
+
+3 Salchow
+04th Take
+    tap 02.25 0315
+    jmp 17.24 2113
+
+1 Toe loop + 2 Toe loop
+05th Take
+    tap 01.49 0236
+    jmp 18.89 2324
+    jmp 29.67 3618
+
+3 Toe loop
+06th Take
+    tap 01.92 0197
+    jmp 20.50 2427
+
+1 Loop + 2 Loop
+07th Take
+    tap 01.87 0324
+    jmp 19.53 2443
+    jmp 35.26 4331
+
+3 Loop
+08th Take
+    tap 01.32 0235
+    jmp 24.38 3002
+
+1 Flip + 2 Flip
+09th Take
+    tap 02.39 0240
+    jmp 20.00 2353
+    jmp 31.38 3719
+
+3 Flip
+10th Take
+    tap 02.93 0289
+    jmp 23.14 2714
+
+1 Lutz + 2 Lutz
+11th Take
+    tap 01.56 0283
+    jmp 23.80 2952
+    jmp 35.46 4351
+
+3 Lutz
+12th Take
+    tap 03.79 0276
+    jmp 25.58 2891
+
+1 Axel (saut ouvert)
+13th Take
+    tap NA
+    jmp NA
+
+3 Axel (chute)
+14th Take
+    tap 01.37 0261
+    jmp 31.10 3829
