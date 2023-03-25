@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,6 +84,8 @@ class UserClient {
           .get();
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
+
+      await DeviceNamesManager().loadDeviceNames(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       developer.log(e.toString());
@@ -189,7 +192,7 @@ class UserClient {
               .get());
 
       skater.coaches.add(coachId);
-      coach.trainees.add(skaterId);
+      coach.traineesID.add(skaterId);
 
       await _firestore
           .collection(_userCollectionString)
@@ -222,7 +225,7 @@ class UserClient {
               .get());
 
       skater.coaches.removeWhere((element) => element == coachId);
-      coach.trainees.removeWhere((element) => element == skaterId);
+      coach.trainees.removeWhere((element) => element.uID! == skaterId);
 
       await _firestore
           .collection(_userCollectionString)
