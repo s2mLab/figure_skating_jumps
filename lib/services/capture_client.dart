@@ -39,6 +39,18 @@ class CaptureClient {
     }
   }
 
+  Future<void> updateCaptureJumps(Capture capture) async {
+    try {
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(capture.uID)
+          .set({"jumps": capture.jumps}, SetOptions(merge: true));
+    } catch (e) {
+
+    }
+
+  }
+
   Future<Map<String, List<Capture>>> loadCapturesData(SkatingUser skater) async {
     List<Capture> captures = [];
     for (String captureID in skater.captures) {
