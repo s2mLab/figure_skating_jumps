@@ -1,7 +1,6 @@
 //Inspired by : https://api.flutter.dev/flutter/material/RadioListTile-class.html
 
 import 'package:figure_skating_jumps/enums/jump_type.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SkateMoveRadio extends StatelessWidget {
