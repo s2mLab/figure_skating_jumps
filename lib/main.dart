@@ -59,6 +59,7 @@ Future<bool> initializeStoragePermissions() async {
     permissions.add(Permission.photos);
     permissions.add(Permission.audio);
     permissions.add(Permission.videos);
+    permissions.add(Permission.storage);
   }
 
   if (permissions.isNotEmpty) {
@@ -201,8 +202,8 @@ class _GodViewState extends State<GodView> {
               onPressed: () async {
                 Random rnd = Random();
                 Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), 10,
-                    JumpType.axel, "TT9qrmqIdRfJGrlTzo7g");
-                CaptureClient().addJump(jump: jump);
+                    JumpType.axel, "Good", 5,"TT9qrmqIdRfJGrlTzo7g");
+                CaptureClient().createJump(jump: jump);
               },
               child: const Text('Make Him JUMP!')),
           TextButton(
