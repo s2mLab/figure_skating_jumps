@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:flutter/cupertino.dart';
 
 class SkatingUser {
   late String? uID;

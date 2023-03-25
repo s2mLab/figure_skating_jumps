@@ -52,6 +52,7 @@ class _LoginViewState extends State<LoginView> {
       setState(() {
         _errorMessage = e.uiMessage;
       });
+      debugPrint(e.devMessage);
     } catch (e) {
       _errorMessage = connectionImpossible;
     }
