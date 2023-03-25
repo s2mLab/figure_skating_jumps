@@ -79,22 +79,22 @@ class CaptureClient {
     await _createCapture(capture: capture);
   }
 
-  Future<Capture> getCaptureByID({required String uid}) async {
+  Future<Capture> getCaptureByID({required String uID}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> captureInfo =
-          await _firestore.collection(_captureCollectionString).doc(uid).get();
-      return await Capture.createFromFireBase(uid, captureInfo);
+          await _firestore.collection(_captureCollectionString).doc(uID).get();
+      return await Capture.createFromFirebase(uID, captureInfo);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
 
-  Future<Jump> getJumpByID({required String uid}) async {
+  Future<Jump> getJumpByID({required String uID}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> jumpInfo =
-          await _firestore.collection(_jumpsCollectionString).doc(uid).get();
-      return Jump.fromFirestore(uid, jumpInfo);
+          await _firestore.collection(_jumpsCollectionString).doc(uID).get();
+      return Jump.fromFirestore(uID, jumpInfo);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

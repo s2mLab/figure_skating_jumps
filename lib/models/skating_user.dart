@@ -68,7 +68,7 @@ class SkatingUser {
   Future<void> loadCapturesData() async {
     _captures.clear();
     for (String captureID in _capturesID) {
-      Capture capture = await CaptureClient().getCaptureByID(uid: captureID);
+      Capture capture = await CaptureClient().getCaptureByID(uID: captureID);
       _captures.add(capture);
     }
   }

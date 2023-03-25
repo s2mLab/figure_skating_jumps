@@ -64,11 +64,11 @@ class Capture {
         uID);
   }
 
-  static Future<Capture> createFromFireBase(
+  static Future<Capture> createFromFirebase(
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
     Capture capture = Capture._fromFirestore(uID, captureInfo);
     for (String jumpID in capture._jumpsID) {
-      Jump jumpToAdd = await CaptureClient().getJumpByID(uid: jumpID);
+      Jump jumpToAdd = await CaptureClient().getJumpByID(uID: jumpID);
       capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
     }

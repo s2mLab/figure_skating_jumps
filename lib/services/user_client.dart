@@ -111,9 +111,9 @@ class UserClient {
       if (_firebaseAuth.currentUser == null) {
         throw NullUserException();
       }
-      String? uid = _firebaseAuth.currentUser?.uid;
+      String? uID = _firebaseAuth.currentUser?.uid;
       await _firebaseAuth.currentUser?.delete();
-      await _firestore.collection(_userCollectionString).doc(uid).delete();
+      await _firestore.collection(_userCollectionString).doc(uID).delete();
     } catch (e) {
       developer.log(e.toString());
       rethrow;
