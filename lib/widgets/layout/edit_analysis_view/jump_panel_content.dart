@@ -57,7 +57,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         onChanged: (JumpType newValue) {
                           setState(() {
                             _selectedType = newValue;
-                            _j?.type = newValue;
+                            //TODO: _j?.type = newValue;
                             widget._onModified(_j!);
                           });
                         });
