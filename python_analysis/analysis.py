@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
-import time
 import analysis_utils
 import click
 
 from enum import Enum
 from math import sqrt
+from os.path import exists
 
 
 # Referential while XSens faces you and is right way up
@@ -327,10 +327,15 @@ def analyze_session(source: str) -> 'list[Jump_Analysis]':
     Args:
         source (str): The path to the file to read from.
 
+    Raises:
+        FileNotFoundError
+
     Returns:
         list[Jump_Analysis]: A list of all jump analysis.
     """
     # Read from the csv
+    if not exists(source):
+        raise FileNotFoundError
     data: pd.DataFrame = analysis_utils.read_raw_csv_to_dataframe(source)
     
     # Assign DELTA_T as soon as we can
