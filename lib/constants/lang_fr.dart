@@ -54,6 +54,10 @@ const String advancedMetricsPrompt = "La modification de ces données ne devrait
 const String irreversibleDataModification = "Les données précédentes seront perdues lors de l'enregistrement.";
 const String turns = "Tours: ";
 const String score = "Score";
+const String durationLabel = "Durée";
+const String startTimeLabel = "Début";
+const String maxSpeedLabel = "Vitesse atteinte";
+const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
