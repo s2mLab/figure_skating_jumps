@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -104,8 +105,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                               },
                               body: JumpPanelContent(
                                   jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
-
-
+                                    _capture!.jumps[index] = j;
+                                    CaptureClient().updateJump(jump: j);
                                   });}));
                         }),
                       ),
