@@ -3,6 +3,8 @@ import numpy as np
 import analysis_utils
 import click
 
+from ice_exceptions import EmptyFileError
+
 from enum import Enum
 from math import sqrt
 from os.path import exists
@@ -33,15 +35,15 @@ class Jump_Analysis:
     start: int
     end: int
     duration: float
-    num_rot: float
+    rot_deg: float
     max_rot_speed: float
     time_to_max: float
     
     def __init__(self, start, end, num_rot, max_rot_speed, time_to_max) -> None:
         self.start = start
         self.end = end
-        self.duration = (end - start) * DELTA_T / SEC_TO_MS_RATIO
-        self.num_rot = num_rot
+        self.duration = end - start
+        self.rot_deg = num_rot
         self.max_rot_speed = max_rot_speed
         self.time_to_max = time_to_max
     
@@ -50,7 +52,7 @@ class Jump_Analysis:
             "start": self.start,
             "end": self.end,
             "duration": self.duration,
-            "numRot": self.num_rot,
+            "numRot": self.rot_deg,
             "maxRotSpeed": self.max_rot_speed,
             "timeToMax": self.time_to_max
         }
@@ -305,6 +307,8 @@ def analyze_jump(jump: Jump, jump_data: pd.DataFrame) -> Jump_Analysis:
         Jump_Analysis
     """
     num_rot = find_num_rot(jump_data)
+    start = jump.start * (8333 / SEC_TO_MS_RATIO)
+    end = jump.end * (8333 / SEC_TO_MS_RATIO)
     max_rot_speed = 0
     time_to_max = 0
     rot_speed = 0
@@ -317,10 +321,8 @@ def analyze_jump(jump: Jump, jump_data: pd.DataFrame) -> Jump_Analysis:
     
     time_to_max -= jump_data.iloc[0]['iter']
     time_to_max *= (8333 / SEC_TO_MS_RATIO)
-    return Jump_Analysis(jump.start, jump.end, num_rot, max_rot_speed, time_to_max)
+    return Jump_Analysis(start, end, num_rot, max_rot_speed, time_to_max)
 
-@click.command()
-@click.argument("source", type=str)
 def analyze_session(source: str) -> 'list[Jump_Analysis]':
     """Reads a raw XSensDot output file and analyzes it.
 
@@ -335,8 +337,11 @@ def analyze_session(source: str) -> 'list[Jump_Analysis]':
     """
     # Read from the csv
     if not exists(source):
-        raise FileNotFoundError
+        raise FileNotFoundError()
     data: pd.DataFrame = analysis_utils.read_raw_csv_to_dataframe(source)
+    
+    if data.size == 0:
+        raise EmptyFileError
     
     # Assign DELTA_T as soon as we can
     global DELTA_T
@@ -351,5 +356,22 @@ def analyze_session(source: str) -> 'list[Jump_Analysis]':
     
     return jump_analysis
 
+@click.command()
+@click.argument("source", type=str)
+def analyze_session_cmd(source: str) -> 'list[Jump_Analysis]':
+    """Reads a raw XSensDot output file and analyzes it.\n
+    This is the command version and should not be called from code, only from a terminal.
+
+    Args:
+        source (str): The path to the file to read from.
+
+    Raises:
+        FileNotFoundError
+
+    Returns:
+        list[Jump_Analysis]: A list of all jump analysis.
+    """
+    return analyze_session(source)
+
 if __name__ == "__main__":
-    analyze_session()
+    analyze_session_cmd()
