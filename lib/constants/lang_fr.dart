@@ -4,6 +4,7 @@ const String cancel = "Annuler";
 const String continueTo = "Poursuivre";
 const String goBack = "Retour";
 const String pleaseWait = "Veuillez patienter";
+const String save = "Enregistrer";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
@@ -44,6 +45,9 @@ const String jumpType = "Type de saut";
 const String deleteAJump = "Supprimer le saut";
 const String confirmDelete = "Cette action est irréversible, voulez-vous continuer?";
 const String deleteJumpDialogTitle = "Suppression d'un saut";
+const String commentDialogTitle = "Voir ou modifier un commentaire";
+const String howToComment = "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
+
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
