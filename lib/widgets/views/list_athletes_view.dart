@@ -106,6 +106,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const PageTitle(text: listAthletesTitle),
+                            if(_traineesToShow.isNotEmpty)
                             _searching
                                 ? Container(
                                     height: 50,

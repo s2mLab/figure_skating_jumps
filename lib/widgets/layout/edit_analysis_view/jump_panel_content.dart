@@ -27,12 +27,16 @@ class JumpPanelContent extends StatefulWidget {
 
 class _JumpPanelContentState extends State<JumpPanelContent> {
   final int maxDigitsForDoubleData = 3;
+  final double labelFontSizeInPanel = 14;
   Jump? _j;
   late JumpType _selectedType;
   late int _selectedScore;
   late TextEditingController _commentController;
   late TextEditingController _durationController;
+  late TextEditingController _startTimeController;
   late TextEditingController _rotationController;
+  late TextEditingController _timeToMaxSpeedController;
+  late TextEditingController _maxSpeedController;
   final _commentFormKey = GlobalKey<FormState>();
   final _metricsFormKey = GlobalKey<FormState>();
 
@@ -41,11 +45,26 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     _j = widget._j;
     _selectedScore = _j!.score;
     _selectedType = _j!.type;
-    _commentController = TextEditingController(text: _j!.comment);
-    _rotationController =
-        TextEditingController(text: _j!.rotationDegrees.toStringAsFixed(maxDigitsForDoubleData));
-    _durationController = TextEditingController(text: _j!.duration.toStringAsFixed(maxDigitsForDoubleData));
+    _initializeAllTextControllers();
     super.initState();
+  }
+
+  void _initializeAllTextControllers() {
+    _initializeCommentController();
+    _rotationController = TextEditingController(
+        text: _j!.rotationDegrees.toStringAsFixed(maxDigitsForDoubleData));
+    _initializeAdvancedMetricsControllers();
+  }
+
+  void _initializeCommentController() {
+    _commentController = TextEditingController(text: _j!.comment);
+  }
+
+  void _initializeAdvancedMetricsControllers() {
+     _durationController = TextEditingController(text: _j!.duration.toString());
+    _startTimeController = TextEditingController(text: _j!.time.toString());
+    _timeToMaxSpeedController = TextEditingController(text: _j!.durationToMaxSpeed.toStringAsFixed(maxDigitsForDoubleData));
+    _maxSpeedController = TextEditingController(text: _j!.maxRotationSpeed.toStringAsFixed(maxDigitsForDoubleData));
   }
 
   @override
@@ -71,8 +90,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             children: [
               Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -112,19 +131,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           text: editTemporalValues,
                           onPressed: () {
                             showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return _temporalValuesDialog();
-                                }).then((value) {
-                              if (value == null) return;
-                              setState(() {
-                                //cahnge
-                                _commentController.text = value;
-                                _j!.comment = value;
-                                widget._onModified(_j!);
-                              });
-                            });
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return _temporalValuesDialog();
+                              },
+                            );
                           }, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
@@ -140,50 +152,6 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
-  Widget _confirmDeleteJumpDialog() {
-    return SimpleDialog(
-      title: const Text(deleteJumpDialogTitle),
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(confirmDelete, errorColor),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IceButton(
-                    text: cancel,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    textColor: paleText,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.mainAction,
-                    iceButtonSize: IceButtonSize.small),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IceButton(
-                      text: continueTo,
-                      onPressed: () {
-                        //TODO: delete jump
-                      },
-                      textColor: errorColor,
-                      color: errorColorDark,
-                      iceButtonImportance: IceButtonImportance.secondaryAction,
-                      iceButtonSize: IceButtonSize.small),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
   Widget _jumpModificationForm() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -194,12 +162,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("$turns${_j!.turns.toStringAsFixed(2)}",
-                  style: const TextStyle(fontSize: 16)),
+                  style: TextStyle(fontSize: labelFontSizeInPanel)),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     score,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: labelFontSizeInPanel),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
@@ -267,9 +235,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 rotationDegrees,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: labelFontSizeInPanel),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -293,6 +261,52 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
           ),
         ],
       ),
+    );
+  }
+
+  //This dialog is kept in this class because it references the jump and modifies its value through it
+  Widget _confirmDeleteJumpDialog() {
+    return SimpleDialog(
+      title: const Text(deleteJumpDialogTitle),
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
+              child: InstructionPrompt(confirmDelete, errorColor),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IceButton(
+                    text: cancel,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    textColor: paleText,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.mainAction,
+                    iceButtonSize: IceButtonSize.small),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: IceButton(
+                      text: continueTo,
+                      onPressed: () {
+                        // TODO : delete jump logic is not yet existing
+                        widget._onModified(_j!);
+                      },
+                      textColor: errorColor,
+                      color: errorColorDark,
+                      iceButtonImportance: IceButtonImportance.secondaryAction,
+                      iceButtonSize: IceButtonSize.small),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -328,8 +342,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 IceButton(
                     text: cancel,
                     onPressed: () {
-                      _commentController.text =
-                          _j!.comment; // todo: refactor when setter in jump
+                      _initializeCommentController();
                       Navigator.pop(context);
                     },
                     textColor: primaryColor,
@@ -362,56 +375,130 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
       Form(
         key: _metricsFormKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(advancedMetricsPrompt, secondaryColor),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child:
-                  InstructionPrompt(irreversibleDataModification, errorColor),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: TextFormField(
-                controller: _durationController,
-                maxLines: 1,
-                onSaved: (val) {
-                  Navigator.pop(context, val);
-                },
-                validator: (val) =>
-                    null, //There is no form of comment that should be filtered out
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 24.0),
+                    child: InstructionPrompt(
+                        advancedMetricsPrompt, secondaryColor),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 24.0),
+                    child: InstructionPrompt(
+                        irreversibleDataModification, errorColor),
+                  ),
+                  Row(
+                    mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("$durationLabel (sec)",
+                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: _durationController,
+                          maxLines: 1,
+                          onSaved: (val) {
+                            _j!.duration = val;
+                          },
+                          validator: (val) =>
+                              FieldValidators.nonNegativeValidator(val),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("$startTimeLabel (sec)",
+                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: _startTimeController,
+                          maxLines: 1,
+                          onSaved: (val) {
+                            _j!.time = val;
+                          },
+                          validator: (val) =>
+                              FieldValidators.nonNegativeValidator(val),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("$timeToMaxSpeedLabel (sec)",
+                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          style: const TextStyle(color:discreetText),
+                          enabled: false,
+                          controller: _timeToMaxSpeedController,
+                          maxLines: 1,
+                          validator: (val) =>
+                              FieldValidators.doubleValidator(val),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("$maxSpeedLabel (sec)",
+                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          style: const TextStyle(color:discreetText),
+                          enabled: false,
+                          controller: _maxSpeedController,
+                          maxLines: 1,
+                          validator: (val) =>
+                              FieldValidators.doubleValidator(val),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IceButton(
                     text: cancel,
                     onPressed: () {
-                      _commentController.text =
-                          _j!.comment; // todo: refactor when setter in jump
+                     _initializeAdvancedMetricsControllers();
                       Navigator.pop(context);
                     },
                     textColor: primaryColor,
                     color: primaryColor,
                     iceButtonImportance: IceButtonImportance.secondaryAction,
                     iceButtonSize: IceButtonSize.small),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IceButton(
-                      text: save,
-                      onPressed: () {
-                        _commentFormKey.currentState?.save();
-                      },
-                      textColor: paleText,
-                      color: primaryColor,
-                      iceButtonImportance: IceButtonImportance.mainAction,
-                      iceButtonSize: IceButtonSize.small),
-                ),
+                IceButton(
+                    text: save,
+                    onPressed: () {
+                      if (_metricsFormKey.currentState!.validate()) {
+                        _metricsFormKey.currentState?.save();
+                        widget._onModified(_j!);
+                        Navigator.pop(context);
+                      }
+                    },
+                    textColor: paleText,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.mainAction,
+                    iceButtonSize: IceButtonSize.small),
               ],
             ),
           ],
