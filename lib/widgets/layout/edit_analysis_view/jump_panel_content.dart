@@ -61,10 +61,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   }
 
   void _initializeAdvancedMetricsControllers() {
-     _durationController = TextEditingController(text: _j!.duration.toString());
+    _durationController = TextEditingController(text: _j!.duration.toString());
     _startTimeController = TextEditingController(text: _j!.time.toString());
-    _timeToMaxSpeedController = TextEditingController(text: _j!.durationToMaxSpeed.toStringAsFixed(maxDigitsForDoubleData));
-    _maxSpeedController = TextEditingController(text: _j!.maxRotationSpeed.toStringAsFixed(maxDigitsForDoubleData));
+    _timeToMaxSpeedController = TextEditingController(
+        text: _j!.durationToMaxSpeed.toStringAsFixed(maxDigitsForDoubleData));
+    _maxSpeedController = TextEditingController(
+        text: _j!.maxRotationSpeed.toStringAsFixed(maxDigitsForDoubleData));
   }
 
   @override
@@ -393,7 +395,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         irreversibleDataModification, errorColor),
                   ),
                   Row(
-                    mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$durationLabel (sec)",
                           style: TextStyle(fontSize: labelFontSizeInPanel)),
@@ -404,7 +406,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           controller: _durationController,
                           maxLines: 1,
                           onSaved: (val) {
-                            _j!.duration = val;
+                            _j!.duration = int.parse(val!);
                           },
                           validator: (val) =>
                               FieldValidators.nonNegativeValidator(val),
@@ -424,7 +426,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           controller: _startTimeController,
                           maxLines: 1,
                           onSaved: (val) {
-                            _j!.time = val;
+                            _j!.time = int.parse(val!);
                           },
                           validator: (val) =>
                               FieldValidators.nonNegativeValidator(val),
@@ -441,7 +443,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         width: 100,
                         child: TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color:discreetText),
+                          style: const TextStyle(color: discreetText),
                           enabled: false,
                           controller: _timeToMaxSpeedController,
                           maxLines: 1,
@@ -460,7 +462,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         width: 100,
                         child: TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color:discreetText),
+                          style: const TextStyle(color: discreetText),
                           enabled: false,
                           controller: _maxSpeedController,
                           maxLines: 1,
@@ -479,7 +481,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 IceButton(
                     text: cancel,
                     onPressed: () {
-                     _initializeAdvancedMetricsControllers();
+                      _initializeAdvancedMetricsControllers();
                       Navigator.pop(context);
                     },
                     textColor: primaryColor,

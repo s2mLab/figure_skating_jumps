@@ -47,7 +47,9 @@ class _LoginViewState extends State<LoginView> {
     try {
       await UserClient().signIn(email: _email, password: _password);
       if (mounted) {
-        UserClient().currentSkatingUser!.role == UserRole.coach ? Navigator.pushReplacementNamed(context, '/ListAthletes') : Navigator.pushReplacementNamed(context, '/Acquisitions');
+        UserClient().currentSkatingUser!.role == UserRole.coach
+            ? Navigator.pushReplacementNamed(context, '/ListAthletes')
+            : Navigator.pushReplacementNamed(context, '/Acquisitions');
       }
     } on IceException catch (e) {
       setState(() {
@@ -85,9 +87,7 @@ class _LoginViewState extends State<LoginView> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        connectionShadow
-                      ],
+                      boxShadow: [connectionShadow],
                     ),
                     child: Container(
                         margin: const EdgeInsets.symmetric(
@@ -175,7 +175,8 @@ class _LoginViewState extends State<LoginView> {
                                       IceButtonImportance.secondaryAction,
                                   iceButtonSize: IceButtonSize.medium),
                             ),
-                            Padding( //TODO: remove in final release
+                            Padding(
+                              //TODO: remove in final release
                               padding: const EdgeInsets.only(top: 8),
                               child: IceButton(
                                   text: "Bypass",
@@ -188,7 +189,7 @@ class _LoginViewState extends State<LoginView> {
                                   textColor: Colors.purpleAccent,
                                   color: Colors.purpleAccent,
                                   iceButtonImportance:
-                                  IceButtonImportance.discreetAction,
+                                      IceButtonImportance.discreetAction,
                                   iceButtonSize: IceButtonSize.medium),
                             )
                           ],

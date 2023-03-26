@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import '../constants/lang_fr.dart';
 
 class FieldValidators {
-
   /// Validates a new name string and returns an error message if the validation fails.
   ///
   /// This function takes a [String] value and performs validation checks to ensure
@@ -19,7 +18,6 @@ class FieldValidators {
     }
     return null;
   }
-
 
   /// Validates a new email string and returns an error message if the validation fails.
   ///
@@ -52,7 +50,9 @@ class FieldValidators {
       return pleaseFillField;
     }
     try {
-      if(int.parse(value) < 0 || !RegExp(r'^(0|[1-9][0-9]*)$').hasMatch(value)) return invalidDigitFormat;
+      if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9][0-9]*)$').hasMatch(value)) {
+        return invalidDigitFormat;
+      }
     } on FormatException catch (e) {
       debugPrint(e.message);
       return invalidDigitFormat;
