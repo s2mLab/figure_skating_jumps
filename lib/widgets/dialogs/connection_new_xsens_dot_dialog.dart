@@ -4,9 +4,12 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
@@ -26,40 +29,20 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 }
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
-    implements IBluetoothDiscoverySubscriber {
-  final List<_DummyTempSkatingData> _data = [
-    _DummyTempSkatingData('23/02', 35),
-    _DummyTempSkatingData('27/02', 28),
-    _DummyTempSkatingData('7/03', 34),
-    _DummyTempSkatingData('8/03', 32),
-    _DummyTempSkatingData('16/03', 40)
-  ];
-  final List<_DummyTempSkatingData> _data2 = [
-    _DummyTempSkatingData('23/02', 15),
-    _DummyTempSkatingData('27/02', 18),
-    _DummyTempSkatingData('7/03', 44),
-    _DummyTempSkatingData('8/03', 12),
-    _DummyTempSkatingData('16/03', 10)
-  ];
-
-  final List<_DummyTempSkatingData> _data3 = [
-    _DummyTempSkatingData('23/02', 25),
-    _DummyTempSkatingData('27/02', 22),
-    _DummyTempSkatingData('7/03', 24),
-    _DummyTempSkatingData('8/03', 21),
-    _DummyTempSkatingData('16/03', 27)
-  ];
+    implements IBluetoothDiscoverySubscriber, IXSensDotMeasuringDataSubscriber {
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
+  List<XSensDotData> _streamedData = [];
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
-
-  //final XSensDotChannelService _xSensDotChannelService = XSensDotChannelService(); waiting Christophe MR to override comment
+  final XSensDotStreamingDataService _xSensDotStreamingDataService =
+      XSensDotStreamingDataService();
 
   @override
   void initState() {
     _devices = _discoveryService.subscribe(this);
+    _streamedData = _xSensDotStreamingDataService.subscribe(this);
     _discoveryService.scanDevices();
     super.initState();
   }
@@ -189,48 +172,60 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: InstructionPrompt(verifyConnectivity, secondaryColor),
         ),
         Expanded(
-          child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              primaryYAxis: NumericAxis(decimalPlaces: 2, rangePadding: ChartRangePadding.round),
-              // Chart title
-              title: ChartTitle(
-                  text: 'Acceleration',
-                  textStyle: const TextStyle(fontSize: 12.0, fontFamily: 'Jost'),
-                  alignment: ChartAlignment.near),
-              // Enable legend
-              legend: Legend(
-                  isVisible: true,
-                  position: LegendPosition.right,
-                  alignment: ChartAlignment.center,
-                  textStyle: const TextStyle(fontSize: 8.0, fontFamily: 'Jost'),
-                  itemPadding: 0.0),
-              series: <ChartSeries<_DummyTempSkatingData, String>>[
-                FastLineSeries<_DummyTempSkatingData, String>(
-                    dataSource: _data,
-                    xValueMapper: (_DummyTempSkatingData data, _) => data.year,
-                    yValueMapper: (_DummyTempSkatingData data, _) => data.score,
-                    name: 'X',
-                    width: 1),
-                FastLineSeries<_DummyTempSkatingData, String>(
-                    dataSource: _data2,
-                    xValueMapper: (_DummyTempSkatingData data, _) => data.year,
-                    yValueMapper: (_DummyTempSkatingData data, _) => data.score,
-                    name: 'Y',
-                    width: 1),
-                FastLineSeries<_DummyTempSkatingData, String>(
-                    dataSource: _data3,
-                    xValueMapper: (_DummyTempSkatingData data, _) => data.year,
-                    yValueMapper: (_DummyTempSkatingData data, _) => data.score,
-                    name: 'Z',
-                    width: 1),
-              ]),
+          child: _streamedData.isNotEmpty
+              ? SfCartesianChart(
+                  primaryXAxis: NumericAxis(),
+                  primaryYAxis: NumericAxis(
+                      decimalPlaces: 2, rangePadding: ChartRangePadding.round),
+                  // Chart title
+                  title: ChartTitle(
+                      text: dataChartTitle,
+                      textStyle:
+                          const TextStyle(fontSize: 12.0, fontFamily: 'Jost'),
+                      alignment: ChartAlignment.near),
+                  // Enable legend
+                  legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.right,
+                      alignment: ChartAlignment.center,
+                      textStyle:
+                          const TextStyle(fontSize: 8.0, fontFamily: 'Jost'),
+                      itemPadding: 0.0),
+                  series: <ChartSeries<XSensDotData, int>>[
+                      FastLineSeries<XSensDotData, int>(
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[0],
+                          name: firstFastLineName,
+                          width: 1),
+                      FastLineSeries<XSensDotData, int>(
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[1],
+                          name: secondFastLineName,
+                          width: 1),
+                      FastLineSeries<XSensDotData, int>(
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[2],
+                          name: lastFastLineName,
+                          width: 1),
+                    ])
+              : const Center(
+                  child: Text(
+                  noData,
+                  style: TextStyle(fontFamily: 'Jost'),
+                )),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
               text: completePairing,
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                await _xSensDotStreamingDataService.stopMeasuring();
+                if (mounted) {
+                  Navigator.pop(context);
+                }
               },
               textColor: paleText,
               color: confirm,
@@ -242,6 +237,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () async {
+                await _xSensDotStreamingDataService.stopMeasuring();
                 await _xSensDotConnectionService.disconnect();
                 setState(() {
                   _connectionStep = 0;
@@ -275,14 +271,17 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       setState(() {
         _connectionStep = 1;
       });
+      await _xSensDotStreamingDataService.startMeasuring(false);
     }
     //TODO show error message (when I will have the UI model to do so)
   }
-}
 
-class _DummyTempSkatingData {
-  _DummyTempSkatingData(this.year, this.score);
-
-  final String year;
-  final double score;
+  @override
+  void onDataReceived(List<XSensDotData> measuredData) {
+    if (mounted) {
+      setState(() {
+        _streamedData.add(measuredData.last);
+      });
+    }
+  }
 }

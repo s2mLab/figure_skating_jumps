@@ -7,6 +7,7 @@ enum class EventChannelParameters(val channelName: String, val streamHandler: St
     BluetoothChannel("xsens-dot-bluetooth-permission", BluetoothPermissionStreamHandler),
     ConnectionChannel("xsens-dot-connection", XSensDotConnectionStreamHandler),
     MeasuringChannel("xsens-dot-measuring", XSensDotMeasuringStreamHandler),
+    MeasuringStatusChannel("xsens-dot-measuring-status", XSensDotMeasuringStatusStreamHandler),
     RecordingChannel("xsens-dot-recording", XSensDotRecordingStreamHandler),
     ScanChannel("xsens-dot-scan", XSensDotScanStreamHandler)
 }
