@@ -47,7 +47,13 @@ const String confirmDelete = "Cette action est irréversible, voulez-vous contin
 const String deleteJumpDialogTitle = "Suppression d'un saut";
 const String commentDialogTitle = "Voir ou modifier un commentaire";
 const String howToComment = "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
-
+const String editTemporalValues = "Métriques avancées";
+const String rotationDegrees = "Degrés de rotation";
+const String metricsDialogTitle = "Voir ou modifier les métriques avancées";
+const String advancedMetricsPrompt = "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
+const String irreversibleDataModification = "Les données précédentes seront perdues lors de l'enregistrement.";
+const String turns = "Tours: ";
+const String score = "Score";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
