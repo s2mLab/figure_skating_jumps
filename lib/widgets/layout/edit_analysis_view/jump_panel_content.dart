@@ -58,7 +58,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
       padding:
           const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0, top: 2.0),
       child: Container(
-          height: 300,
+          height: 248,
           width: double.infinity,
           decoration: BoxDecoration(
             boxShadow: [connectionShadow],
@@ -69,8 +69,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             children: [
               Expanded(
                   child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -89,21 +89,47 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     }),
                   ),
                   _jumpModificationForm(),
-                  Center(
-                    child: IceButton(
-                        text: deleteAJump,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return _confirmDeleteJumpDialog();
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IceButton(
+                          text: deleteAJump,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return _confirmDeleteJumpDialog();
+                                });
+                          },
+                          textColor: errorColor,
+                          color: errorColorDark,
+                          iceButtonImportance:
+                              IceButtonImportance.secondaryAction,
+                          iceButtonSize: IceButtonSize.small),
+                      IceButton(
+                          text: editTemporalValues,
+                          onPressed: () {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return _temporalValuesDialog();
+                                }).then((value) {
+                              if (value == null) return;
+                              setState(() {
+                                //cahnge
+                                _commentController.text = value;
+                                _j!.comment = value;
+                                widget._onModified(_j!);
                               });
-                        },
-                        textColor: errorColor,
-                        color: errorColorDark,
-                        iceButtonImportance:
-                            IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.small),
+                            });
+                          }, // TODO: video preview
+                          textColor: primaryColor,
+                          color: primaryColor,
+                          iceButtonImportance:
+                              IceButtonImportance.secondaryAction,
+                          iceButtonSize: IceButtonSize.small)
+                    ],
                   )
                 ],
               )),
@@ -159,16 +185,18 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   Widget _jumpModificationForm() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Form(
-          key: _metricsFormKey,
-          child: Column(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text("$turns${_j!.turns.toStringAsFixed(2)}",
+                  style: const TextStyle(fontSize: 16)),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    "Score",
+                    score,
                     style: TextStyle(fontSize: 16),
                   ),
                   Padding(
@@ -232,40 +260,37 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                       icon: const Icon(Icons.comment, color: primaryColorLight))
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Degrés de rotation",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: SizedBox(
-                          width: 120,
-                            child: TextFormField(
-                              autovalidateMode: AutovalidateMode.always,
-                              keyboardType: TextInputType.number,
-                          validator: (val) {
-                                return FieldValidators.doubleValidator(val);
-                          },
-                              onEditingComplete: () {
-                                _j!.rotationDegrees = _rotationController.text;
-                                widget._onModified(_j!);
-                              },
-                          controller: _rotationController,
-                        )),
-                      ),
-                    ],
-                  ),
-                ],
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                rotationDegrees,
+                style: TextStyle(fontSize: 16),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: SizedBox(
+                    width: 120,
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.always,
+                      keyboardType: TextInputType.number,
+                      validator: (val) {
+                        return FieldValidators.doubleValidator(val);
+                      },
+                      onEditingComplete: () {
+                        _j!.rotationDegrees =
+                            double.parse(_rotationController.text);
+                        widget._onModified(_j!);
+                      },
+                      controller: _rotationController,
+                    )),
               ),
             ],
-          )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -280,6 +305,70 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             const Padding(
               padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
               child: InstructionPrompt(howToComment, secondaryColor),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: TextFormField(
+                controller: _commentController,
+                minLines: 2,
+                maxLines: 5,
+                onSaved: (val) {
+                  Navigator.pop(context, val);
+                },
+                validator: (val) =>
+                    null, //There is no form of comment that should be filtered out
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IceButton(
+                    text: cancel,
+                    onPressed: () {
+                      _commentController.text =
+                          _j!.comment; // todo: refactor when setter in jump
+                      Navigator.pop(context);
+                    },
+                    textColor: primaryColor,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.secondaryAction,
+                    iceButtonSize: IceButtonSize.small),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: IceButton(
+                      text: save,
+                      onPressed: () {
+                        _commentFormKey.currentState?.save();
+                      },
+                      textColor: paleText,
+                      color: primaryColor,
+                      iceButtonImportance: IceButtonImportance.mainAction,
+                      iceButtonSize: IceButtonSize.small),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ]);
+  }
+
+  Widget _temporalValuesDialog() {
+    return SimpleDialog(title: const Text(metricsDialogTitle), children: [
+      Form(
+        key: _metricsFormKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
+              child: InstructionPrompt(howToComment, secondaryColor),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
+              child:
+                  InstructionPrompt(irreversibleDataModification, errorColor),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),

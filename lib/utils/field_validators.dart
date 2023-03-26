@@ -39,7 +39,7 @@ class FieldValidators {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
     }
-    if (!RegExp(r'^(?!0\d)\d*\.\d*[0-9]+(?:0)?(?<!\.)$').hasMatch(value)) {
+    if (!RegExp(r'^(0|[1-9]\d*)(\.\d+)?$').hasMatch(value)) {
       return invalidDigitFormat;
     }
     return null;
