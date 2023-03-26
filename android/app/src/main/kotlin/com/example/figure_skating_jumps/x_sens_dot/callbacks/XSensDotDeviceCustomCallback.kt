@@ -2,10 +2,12 @@ package com.example.figure_skating_jumps.x_sens_dot.callbacks
 
 import android.util.Log
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotConnectionStreamHandler
+import com.example.figure_skating_jumps.channels.event_channels.XSensDotMeasuringStatusStreamHandler
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotMeasuringStreamHandler
 import com.example.figure_skating_jumps.channels.event_channels.XSensDotRecordingStreamHandler
 import com.example.figure_skating_jumps.channels.events.RecordingEvent
 import com.example.figure_skating_jumps.x_sens_dot.CustomXSensDotData
+import com.example.figure_skating_jumps.x_sens_dot.enums.MeasuringStatus
 import com.example.figure_skating_jumps.x_sens_dot.enums.RecordingStatus
 import com.xsens.dot.android.sdk.events.XsensDotData
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback
@@ -14,6 +16,7 @@ import com.xsens.dot.android.sdk.models.XsensDotDevice
 import java.util.ArrayList
 class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
     private val maxRecordingOutputRate: Int = 120
+    private val measuringOutputRate: Int = 1
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
@@ -27,12 +30,16 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "Initialization of device $address complete")
+        XSensDotMeasuringStatusStreamHandler.sendEvent(MeasuringStatus.InitDone);
     }
 
     override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
         Log.i("XSensDot", "Updated output rate of device $address to $outputRate Hz")
         if(outputRate == maxRecordingOutputRate ) {
             XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.SetRate))
+        }
+        if(outputRate == measuringOutputRate) {
+            XSensDotMeasuringStatusStreamHandler.sendEvent(MeasuringStatus.SetRate);
         }
     }
 
