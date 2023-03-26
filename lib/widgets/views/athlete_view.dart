@@ -1,7 +1,6 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -28,12 +27,12 @@ class AthleteView extends StatefulWidget {
 class _AthleteViewState extends State<AthleteView> {
   int _switcherIndex = 0;
   SkatingUser? skater;
-  Future<Map<String, List<Capture>>>? _futureCaptures;
+  Future<void>? _futureCaptures;
 
   @override
   Widget build(BuildContext context) {
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _futureCaptures ??= CaptureClient().loadCapturesData(skater: skater!);
+    _futureCaptures ??= skater?.loadCapturesData(); //TODO load before
 
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: false),
@@ -98,9 +97,9 @@ class _AthleteViewState extends State<AthleteView> {
   }
 
   Widget _buildCapturesTab(BuildContext context,
-      AsyncSnapshot<Map<String, List<Capture>>> snapshot) {
+      AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
-        ? CapturesTab(captures: snapshot.data!)
+        ? CapturesTab(captures: skater!.groupedCaptures)
         : const Center(
             child: Padding(
             padding: EdgeInsets.all(32.0),

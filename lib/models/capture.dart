@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 
 class Capture {
-  static const String _jumpsCollectionString = 'jumps';
-
   late String? uID;
   late String _file;
   late String _userID;
@@ -55,26 +54,22 @@ class Capture {
       [this.uID]);
 
   factory Capture._fromFirestore(
-      String? uID, DocumentSnapshot<Map<String, dynamic>> capture) {
+      String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) {
     return Capture(
-        capture.get('file'),
-        capture.get('user'),
-        capture.get('duration'),
-        (capture.get('date') as Timestamp).toDate(),
-        List<String>.from(capture.get('jumps') as List),
+        captureInfo.get('file'),
+        captureInfo.get('user'),
+        captureInfo.get('duration'),
+        (captureInfo.get('date') as Timestamp).toDate(),
+        List<String>.from(captureInfo.get('jumps') as List),
         uID);
   }
 
-  static Future<Capture> createFromFireBase(
-      String? uID, DocumentSnapshot<Map<String, dynamic>> userInfo) async {
-    Capture capture = Capture._fromFirestore(uID, userInfo);
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static Future<Capture> createFromFirebase(
+      String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
+    Capture capture = Capture._fromFirestore(uID, captureInfo);
     for (String jumpID in capture._jumpsID) {
-      Jump jumpToAdd = Jump.fromFirestore(jumpID,
-          await firestore.collection(_jumpsCollectionString).doc(jumpID).get());
-      capture.jumpTypeCount[jumpToAdd.type] =
-          capture.jumpTypeCount[jumpToAdd.type]! + 1;
+      Jump jumpToAdd = await CaptureClient().getJumpByID(uID: jumpID);
+      capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
     }
 
