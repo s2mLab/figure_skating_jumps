@@ -45,6 +45,7 @@ class CaptureListTile extends StatelessWidget {
                   Text(
                       "${_currentCapture.date.hour}h${_currentCapture.date.minute}",
                       style: const TextStyle(fontSize: 24, color: darkText)),
+                  Icon(_currentCapture.hasVideo ? Icons.videocam : Icons.videocam_off, color: darkText),
                   Row(children: [
                     const Padding(
                       padding: EdgeInsets.only(left: 4.0),

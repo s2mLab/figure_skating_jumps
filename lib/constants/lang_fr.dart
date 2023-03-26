@@ -106,6 +106,7 @@ const String name = "Nom";
 const String password = "Mot de passe";
 const String passConfirmSame = "Confirmation mot de passe";
 const String email = "Adresse courriel";
+const String invalidDigitFormat = "Format de nombre incorrect.";
 const String invalidEmailFormat =
     'L\'adresse courriel n\'est pas de format valide.';
 const String alreadyHaveAccount = "J'ai déjà un compte";
