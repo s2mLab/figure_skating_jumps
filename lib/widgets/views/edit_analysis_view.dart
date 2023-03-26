@@ -47,10 +47,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const PageTitle(text: editAnalysisPageTitle),
-                    if (true /*hasVideo*/)
+                    if (_capture!.hasVideo)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {}, // TODO: video preview
+                          onPressed: () {
+                          }, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:

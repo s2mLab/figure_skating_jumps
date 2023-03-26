@@ -73,13 +73,13 @@ class CaptureClient {
 
   Future<void> saveCapture(
       {required String exportFileName,
-      required List<XSensDotData> exportedData}) async {
+      required List<XSensDotData> exportedData, required bool hasVideo}) async {
     String fullPath = await ExternalStorageService()
         .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
-        duration, DateTime.now(), []);
+        duration, hasVideo, DateTime.now(), []);
     await _createCapture(capture: capture);
   }
 

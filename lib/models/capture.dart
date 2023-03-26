@@ -10,6 +10,7 @@ class Capture {
   late int _duration;
   late DateTime _date;
   late List<String> _jumpsID;
+  late bool _hasVideo;
   final List<Jump> _jumps = [];
   final Map<JumpType, int> _jumpTypeCount = {
     JumpType.axel: 0,
@@ -37,6 +38,10 @@ class Capture {
     return _date;
   }
 
+  bool get hasVideo {
+    return _hasVideo;
+  }
+
   List<Jump> get jumps {
     return _jumps;
   }
@@ -50,7 +55,7 @@ class Capture {
   }
 
   Capture(
-      this._file, this._userID, this._duration, this._date, this._jumpsID,
+      this._file, this._userID, this._duration, this._hasVideo, this._date, this._jumpsID,
       [this.uID]);
 
   factory Capture._fromFirestore(
@@ -59,6 +64,7 @@ class Capture {
         captureInfo.get('file'),
         captureInfo.get('user'),
         captureInfo.get('duration'),
+        captureInfo.get('hasVideo'),
         (captureInfo.get('date') as Timestamp).toDate(),
         List<String>.from(captureInfo.get('jumps') as List),
         uID);

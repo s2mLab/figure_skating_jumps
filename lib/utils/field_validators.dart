@@ -35,6 +35,16 @@ class FieldValidators {
     return null;
   }
 
+  static String? doubleValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    if (!RegExp(r'^(?!0\d)\d*\.\d*[0-9]+(?:0)?(?<!\.)$').hasMatch(value)) {
+      return invalidDigitFormat;
+    }
+    return null;
+  }
+
   /// Validates a new password string and returns an error message if the validation fails.
   ///
   /// This function takes a [String] value and performs validation checks to ensure

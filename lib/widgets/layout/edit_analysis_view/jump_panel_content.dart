@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   late JumpType _selectedType;
   late int _selectedScore;
   late TextEditingController _commentController;
+  //late Controller _durationController;
+  late TextEditingController _rotationController;
   final _commentFormKey = GlobalKey<FormState>();
   final _metricsFormKey = GlobalKey<FormState>();
 
@@ -38,12 +41,14 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     _selectedScore = _j!.score;
     _selectedType = _j!.type;
     _commentController = TextEditingController(text: _j!.comment);
+    _rotationController =
+        TextEditingController(text: _j!.rotationDegrees.toString());
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _commentController.dispose();
     super.dispose();
   }
 
@@ -155,80 +160,112 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Form(
+          key: _metricsFormKey,
           child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                "Score",
-                style: TextStyle(fontSize: 16),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: DropdownButton<int>(
-                    selectedItemBuilder: (context) {
-                      return jumpScores.map<Widget>((int item) {
-                        // This is the widget that will be shown when you select an item.
-                        // Here custom text style, alignment and layout size can be applied
-                        // to selected item string.
-                        return Container(
-                          constraints: const BoxConstraints(minWidth: 50),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                item.toString(),
-                                style: const TextStyle(
-                                    color: darkText,
-                                    fontWeight: FontWeight.w600),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Score",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: DropdownButton<int>(
+                        selectedItemBuilder: (context) {
+                          return jumpScores.map<Widget>((int item) {
+                            // This is the widget that will be shown when you select an item.
+                            // Here custom text style, alignment and layout size can be applied
+                            // to selected item string.
+                            return Container(
+                              constraints: const BoxConstraints(minWidth: 50),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    item.toString(),
+                                    style: const TextStyle(
+                                        color: darkText,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      }).toList();
-                    },
-                    value: _selectedScore,
-                    menuMaxHeight: 300,
-                    items: List.generate(jumpScores.length, (index) {
-                      return DropdownMenuItem<int>(
-                        value: jumpScores[index],
-                        child: Text(jumpScores[index].toString()),
-                      );
-                    }),
-                    onChanged: (val) {
-                      setState(() {
-                        _selectedScore = val!;
-                        _j!.score = _selectedScore;
-                        widget._onModified(_j!);
-                        //TODO: toast
-                      });
-                    }),
+                            );
+                          }).toList();
+                        },
+                        value: _selectedScore,
+                        menuMaxHeight: 300,
+                        items: List.generate(jumpScores.length, (index) {
+                          return DropdownMenuItem<int>(
+                            value: jumpScores[index],
+                            child: Text(jumpScores[index].toString()),
+                          );
+                        }),
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedScore = val!;
+                            _j!.score = _selectedScore;
+                            widget._onModified(_j!);
+                            //TODO: toast
+                          });
+                        }),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return _commentDialog();
+                            }).then((value) {
+                          if (value == null) return;
+                          setState(() {
+                            _commentController.text = value;
+                            _j!.comment = value;
+                            widget._onModified(_j!);
+                          });
+                        });
+                      },
+                      icon: const Icon(Icons.comment, color: primaryColorLight))
+                ],
               ),
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                      barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return _commentDialog();
-                        }).then((value) {
-                          if(value == null) return;
-                      setState(() {
-                        _commentController.text = value;
-                        _j!.comment = value;
-                        widget._onModified(_j!);
-                      });
-                    });
-                  },
-                  icon: const Icon(Icons.comment, color: primaryColorLight))
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Degrés de rotation",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: SizedBox(
+                          width: 120,
+                            child: TextFormField(
+                              autovalidateMode: AutovalidateMode.always,
+                              keyboardType: TextInputType.number,
+                          validator: (val) {
+                                return FieldValidators.doubleValidator(val);
+                          },
+                              onEditingComplete: () {
+                                _j!.rotationDegrees = _rotationController.text;
+                                widget._onModified(_j!);
+                              },
+                          controller: _rotationController,
+                        )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
-          ),
-          Row()
-        ],
-      )),
+          )),
     );
   }
 
@@ -263,7 +300,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 IceButton(
                     text: cancel,
                     onPressed: () {
-                      _commentController.text = _j!.comment; // todo: refactor when setter in jump
+                      _commentController.text =
+                          _j!.comment; // todo: refactor when setter in jump
                       Navigator.pop(context);
                     },
                     textColor: primaryColor,
