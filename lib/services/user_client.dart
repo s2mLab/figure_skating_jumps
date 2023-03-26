@@ -58,9 +58,9 @@ class UserClient {
         'lastName': userInfo.lastName,
         'email': email,
         'role': userInfo.role.toString(),
-        'captures': userInfo.captures,
+        'captures': userInfo.capturesID,
         'trainees': userInfo.trainees,
-        'coaches': userInfo.coaches,
+        'coaches': userInfo.coachesID,
       });
     } catch (e) {
       developer.log(e.toString());
@@ -111,9 +111,9 @@ class UserClient {
       if (_firebaseAuth.currentUser == null) {
         throw NullUserException();
       }
-      String? uid = _firebaseAuth.currentUser?.uid;
+      String? uID = _firebaseAuth.currentUser?.uid;
       await _firebaseAuth.currentUser?.delete();
-      await _firestore.collection(_userCollectionString).doc(uid).delete();
+      await _firestore.collection(_userCollectionString).doc(uID).delete();
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -191,13 +191,13 @@ class UserClient {
               .doc(coachId)
               .get());
 
-      skater.coaches.add(coachId);
+      skater.coachesID.add(coachId);
       coach.traineesID.add(skaterId);
 
       await _firestore
           .collection(_userCollectionString)
           .doc(skaterId)
-          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
@@ -224,17 +224,27 @@ class UserClient {
               .doc(coachId)
               .get());
 
-      skater.coaches.removeWhere((element) => element == coachId);
+      skater.coachesID.removeWhere((element) => element == coachId);
       coach.trainees.removeWhere((element) => element.uID! == skaterId);
 
       await _firestore
           .collection(_userCollectionString)
           .doc(skaterId)
-          .set({"coaches": skater.coaches}, SetOptions(merge: true));
+          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
           .set({"trainees": coach.trainees}, SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> removeCoach(
+      {required String coachId, required String skaterId}) async {
+    try {
+      removeSkater(skaterId: skaterId, coachId: coachId);
     } catch (e) {
       developer.log(e.toString());
       rethrow;
