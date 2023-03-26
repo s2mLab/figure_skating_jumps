@@ -5,7 +5,6 @@ from ice_exceptions import EmptyFileError, InvalidFormatError
 
 from flask import Flask, request
 from flask_api import status
-# from app import app
 
 app = Flask(__name__)
 
