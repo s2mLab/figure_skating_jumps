@@ -26,11 +26,12 @@ class JumpPanelContent extends StatefulWidget {
 }
 
 class _JumpPanelContentState extends State<JumpPanelContent> {
+  final int maxDigitsForDoubleData = 3;
   Jump? _j;
   late JumpType _selectedType;
   late int _selectedScore;
   late TextEditingController _commentController;
-  //late Controller _durationController;
+  late TextEditingController _durationController;
   late TextEditingController _rotationController;
   final _commentFormKey = GlobalKey<FormState>();
   final _metricsFormKey = GlobalKey<FormState>();
@@ -42,7 +43,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     _selectedType = _j!.type;
     _commentController = TextEditingController(text: _j!.comment);
     _rotationController =
-        TextEditingController(text: _j!.rotationDegrees.toString());
+        TextEditingController(text: _j!.rotationDegrees.toStringAsFixed(maxDigitsForDoubleData));
+    _durationController = TextEditingController(text: _j!.duration.toStringAsFixed(maxDigitsForDoubleData));
     super.initState();
   }
 
@@ -294,6 +296,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
+  //This dialog is kept in this class because it references the context and returns a value through it
   Widget _commentDialog() {
     return SimpleDialog(title: const Text(commentDialogTitle), children: [
       Form(
@@ -353,6 +356,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     ]);
   }
 
+  //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _temporalValuesDialog() {
     return SimpleDialog(title: const Text(metricsDialogTitle), children: [
       Form(
@@ -363,7 +367,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
           children: [
             const Padding(
               padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(howToComment, secondaryColor),
+              child: InstructionPrompt(advancedMetricsPrompt, secondaryColor),
             ),
             const Padding(
               padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
@@ -373,9 +377,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: TextFormField(
-                controller: _commentController,
-                minLines: 2,
-                maxLines: 5,
+                controller: _durationController,
+                maxLines: 1,
                 onSaved: (val) {
                   Navigator.pop(context, val);
                 },
