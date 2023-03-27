@@ -15,7 +15,7 @@ class XSensDotConnectionButton extends StatefulWidget {
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements IXSensStateSubscriber {
-  XSensDotConnectionService connection = XSensDotConnectionService();
+  XSensDotConnectionService connectionService = XSensDotConnectionService();
   late XSensDeviceState connectionState;
   final List<String> _connectionStateMessages = [
     connectionStateMessageDisconnected,
@@ -40,8 +40,14 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
 
   @override
   void initState() {
-    connectionState = connection.subscribeConnectionState(this);
+    connectionState = connectionService.subscribe(this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    connectionService.unsubscribe(this);
+    super.dispose();
   }
 
   @override
@@ -83,8 +89,10 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
 
   @override
   void onStateChange(XSensDeviceState state) {
-    setState(() {
-      connectionState = state;
-    });
+    if(mounted) {
+      setState(() {
+        connectionState = state;
+      });
+    }
   }
 }
