@@ -85,7 +85,8 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
-      await DeviceNamesManager().loadDeviceNames(_firebaseAuth.currentUser!.uid);
+      await DeviceNamesManager()
+          .loadDeviceNames(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       developer.log(e.toString());
@@ -133,13 +134,15 @@ class UserClient {
   }
 
   Future<void> changeName(
-      {required String user,
+      {required String userID,
       required String firstName,
       required String lastName}) async {
     try {
-      await _firestore.collection(_userCollectionString).doc(user).set(
+      await _firestore.collection(_userCollectionString).doc(userID).set(
           {"firstName": firstName, "lastName": lastName},
           SetOptions(merge: true));
+      _currentSkatingUser!.firstName = firstName;
+      _currentSkatingUser!.lastName = lastName;
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -147,7 +150,7 @@ class UserClient {
   }
 
   Future<void> changePassword(
-      {required String user, required String password}) async {
+      {required String userID, required String password}) async {
     try {
       await _firebaseAuth.currentUser?.updatePassword(password);
     } on FirebaseAuthException catch (e) {
@@ -226,6 +229,8 @@ class UserClient {
 
       skater.coachesID.removeWhere((element) => element == coachId);
       coach.trainees.removeWhere((element) => element.uID! == skaterId);
+      _currentSkatingUser!.coachesID
+          .removeWhere((element) => element == coachId);
 
       await _firestore
           .collection(_userCollectionString)

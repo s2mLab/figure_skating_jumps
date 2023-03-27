@@ -14,8 +14,9 @@ class SkatingUser {
   late List<String> _capturesID = [];
   late final List<Capture> _captures = [];
   late List<String> _traineesID = [];
-  late final List<SkatingUser> _trainees = [];
+  final List<SkatingUser> _trainees = [];
   late List<String> _coachesID = [];
+  final List<SkatingUser> _coaches = [];
 
   String get firstName {
     return _firstName;
@@ -23,6 +24,18 @@ class SkatingUser {
 
   String get lastName {
     return _lastName;
+  }
+
+  set firstName(String newName) {
+    if (newName.isNotEmpty) {
+      _firstName = newName;
+    }
+  }
+
+  set lastName(String newName) {
+    if (newName.isNotEmpty) {
+      _lastName = newName;
+    }
   }
 
   UserRole get role {
@@ -53,8 +66,20 @@ class SkatingUser {
     return _traineesID;
   }
 
+  List<SkatingUser> get coaches {
+    return _coaches;
+  }
+
   List<String> get coachesID {
     return _coachesID;
+  }
+
+  Future<void> loadCoaches() async {
+    _coaches.clear();
+    for (String id in _coachesID) {
+      SkatingUser coach = await UserClient().getUserById(id: id);
+      _coaches.add(coach);
+    }
   }
 
   Future<void> loadTrainees() async {
@@ -65,6 +90,8 @@ class SkatingUser {
     }
   }
 
+  SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
+
   Future<void> loadCapturesData() async {
     _captures.clear();
     for (String captureID in _capturesID) {
@@ -73,9 +100,7 @@ class SkatingUser {
     }
   }
 
-  SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
-
-  factory SkatingUser.fromFirestore (
+  factory SkatingUser.fromFirestore(
       uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     String firstName = userInfo.get('firstName');
     String lastName = userInfo.get('lastName');
