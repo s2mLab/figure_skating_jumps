@@ -21,8 +21,8 @@ class ListAthletesView extends StatefulWidget {
 class _ListAthletesViewState extends State<ListAthletesView> {
   static const int _maxLengthSearch = 11;
 
-  final SkatingUser _currentUser = UserClient().currentSkatingUser!;
-  final double _heightContainer = 57;
+  late final SkatingUser _currentUser;
+  final double _heightContainer = 57; //57?
   late Map<String, List<SkatingUser>> _traineesToShow;
   late TextEditingController _searchController;
   late String _searchString = "";
@@ -32,6 +32,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
 
   @override
   void initState() {
+    _currentUser = UserClient().currentSkatingUser!;
     _searchController = TextEditingController(text: _searchString);
     _focusNode = FocusNode();
     super.initState();
@@ -105,6 +106,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const PageTitle(text: listAthletesTitle),
+                            if(_loading || _traineesToShow.isNotEmpty)
                             _searching
                                 ? Container(
                                     height: 50,

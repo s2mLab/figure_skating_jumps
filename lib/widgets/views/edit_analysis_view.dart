@@ -1,5 +1,7 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -25,7 +27,14 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
-  final List<bool> _isPanelsOpen = [];
+  List<bool> _isPanelsOpen = [];
+  late ScrollController _jumpListScrollController;
+
+  @override
+  void initState() {
+    _jumpListScrollController = ScrollController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +55,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const PageTitle(text: editAnalysisPageTitle),
-                    if (true /*hasVideo*/)
+                    if (_capture!.hasVideo)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {}, // TODO: video preview
+                          onPressed: () {
+                          }, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
@@ -73,7 +83,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     const PageTitle(text: detectedJumps),
                     IceButton(
                         text: addAJump,
-                        onPressed: () {}, // TODO: video preview
+                        onPressed: () async {
+                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0, _capture!.uID!, 0, 0, 0);
+                          setState(() {
+                            _capture!.jumps.insert(0, newJump);
+                          });
+                          _jumpListScrollController.animateTo(0, duration: const Duration(milliseconds: 400), curve: Curves.ease);
+                          await CaptureClient().createJump(jump: newJump).then((value) {
+                            Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                                arguments: _capture);
+                          });
+                          },
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
@@ -83,9 +103,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _jumpListScrollController,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: ExpansionPanelList(
+                        expandedHeaderPadding: EdgeInsets.zero,
                         expansionCallback: (i, isOpen) {
                           setState(() {
                             _isPanelsOpen[i] = !isOpen;
@@ -95,16 +117,28 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                         children: List.generate(_capture!.jumps.length, (index) {
                           _isPanelsOpen.add(false);
                           return ExpansionPanel(
-                            canTapOnHeader: true,
-                            backgroundColor: Colors.transparent,
+                              canTapOnHeader: true,
+                              backgroundColor: Colors.transparent,
                               isExpanded: _isPanelsOpen[index],
                               headerBuilder: (BuildContext context, bool isExpanded) {
                                 return JumpPanelHeader(jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
-                                  jumpID: _capture!.jumps[index].uID!, onModified: (Jump j) {setState(() {
+                                  jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
+                                _capture!.jumps[index] = j;
+                                CaptureClient().updateJump(jump: j);
+                              });}, onDeleted: (Jump j) {
+                                setState(() {
+                                  _capture!.jumps.remove(j);
+                                  _capture = _capture;
+                                  _isPanelsOpen = [];
+                                });
+                                CaptureClient().deleteJump(jump: j).then((value) {
+                                  Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                                      arguments: _capture);
+                                });//no need to await, done in the background
 
-                                  });}));
+                              }));
                         }),
                       ),
                     ),
