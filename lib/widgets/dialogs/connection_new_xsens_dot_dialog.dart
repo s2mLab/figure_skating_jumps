@@ -4,14 +4,18 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
@@ -25,18 +29,23 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 }
 
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
-    implements IBluetoothDiscoverySubscriber {
-  // static const int defaultFrequency = 60; waiting Christophe MR to override comment
-
+    implements IBluetoothDiscoverySubscriber, IXSensDotMeasuringDataSubscriber {
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
+  final List<XSensDotData> _streamedData = [];
+  ChartSeriesController? _xChartSeriesController;
+  ChartSeriesController? _yChartSeriesController;
+  ChartSeriesController? _zChartSeriesController;
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
-  final XSensDotConnectionService _xSensDotConnectionService = XSensDotConnectionService();
-  //final XSensDotChannelService _xSensDotChannelService = XSensDotChannelService(); waiting Christophe MR to override comment
+  final XSensDotConnectionService _xSensDotConnectionService =
+      XSensDotConnectionService();
+  final XSensDotStreamingDataService _xSensDotStreamingDataService =
+      XSensDotStreamingDataService();
 
   @override
   void initState() {
     _devices = _discoveryService.subscribe(this);
+    _streamedData.addAll(_xSensDotStreamingDataService.subscribe(this));
     _discoveryService.scanDevices();
     super.initState();
   }
@@ -158,7 +167,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         const Padding(
           padding: EdgeInsets.all(16),
           child: Center(
-            //TODO connecting before changing lists in top XSENS button
+              //TODO connecting before changing lists in top XSENS button
               child: XSensStateIcon(false, XSensDeviceState.connecting)),
         ),
         const Padding(
@@ -166,19 +175,72 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: InstructionPrompt(verifyConnectivity, secondaryColor),
         ),
         Expanded(
-            child: Container(
-          color: Colors.pink,
-          height: 60,
-          width: 300,
-        )),
+          child: _streamedData.isNotEmpty
+              ? SfCartesianChart(
+                  primaryXAxis: NumericAxis(),
+                  primaryYAxis: NumericAxis(
+                      decimalPlaces: 2, rangePadding: ChartRangePadding.round),
+                  // Chart title
+                  title: ChartTitle(
+                      text: dataChartTitle,
+                      textStyle:
+                          const TextStyle(fontSize: 12.0, fontFamily: 'Jost'),
+                      alignment: ChartAlignment.near),
+                  // Enable legend
+                  legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.right,
+                      alignment: ChartAlignment.center,
+                      textStyle:
+                          const TextStyle(fontSize: 8.0, fontFamily: 'Jost'),
+                      itemPadding: 0.0),
+                  series: <ChartSeries<XSensDotData, int>>[
+                      FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _xChartSeriesController = controller;
+                          },
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[0],
+                          name: firstFastLineName,
+                          width: 1),
+                      FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _yChartSeriesController = controller;
+                          },
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[1],
+                          name: secondFastLineName,
+                          width: 1),
+                      FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _zChartSeriesController = controller;
+                          },
+                          dataSource: _streamedData,
+                          xValueMapper: (XSensDotData data, _) => data.id,
+                          yValueMapper: (XSensDotData data, _) => data.acc[2],
+                          name: lastFastLineName,
+                          width: 1),
+                    ])
+              : const Center(
+                  child: Text(
+                  noData,
+                  style: TextStyle(fontFamily: 'Jost'),
+                )),
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
               text: completePairing,
-              // TODO: Forbid if frequency hasn't been chosen
-              onPressed: () {
-                // TODO: Send the configuration to the device.
-                Navigator.pop(context);
+              onPressed: () async {
+                await _xSensDotStreamingDataService.stopMeasuring();
+                if (mounted) {
+                  Navigator.pop(context);
+                }
               },
               textColor: paleText,
               color: confirm,
@@ -190,6 +252,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: cancel,
               onPressed: () async {
+                await _xSensDotStreamingDataService.stopMeasuring();
                 await _xSensDotConnectionService.disconnect();
                 setState(() {
                   _connectionStep = 0;
@@ -216,14 +279,40 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   //TODO: Important to understand that this is always a new device, e.g. it isn't already in the users known device list
   //TODO: That check will have to be implemented
 
+  //TODO: Maybe change for connection event when they will be done
   Future<void> _onDevicePressed(BluetoothDevice device) async {
-    if (await _xSensDotConnectionService.connect(device) /*&&
-        await _xSensDotChannelService.setRate(defaultFrequency)*/) { //waiting Christophe MR to override comment
+    if (await _xSensDotConnectionService.connect(device)) {
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
         _connectionStep = 1;
       });
+      await _xSensDotStreamingDataService.startMeasuring(false);
     }
     //TODO show error message (when I will have the UI model to do so)
+  }
+
+  @override
+  void onDataReceived(List<XSensDotData> measuredData) {
+    if (_streamedData.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _streamedData.addAll(measuredData);
+        });
+      }
+    } else {
+      if (_xChartSeriesController == null ||
+          _yChartSeriesController == null ||
+          _zChartSeriesController == null) return;
+      
+      int startIndex = _streamedData.length;
+      int nbAddedData = measuredData.length - _streamedData.length;
+      List<int> addedIndexes = List<int>.generate(nbAddedData, (i) => i + startIndex);
+
+      _streamedData.addAll(measuredData.where((element) => !_streamedData.contains(element)));
+
+      _xChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
+      _yChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
+      _zChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
+    }
   }
 }

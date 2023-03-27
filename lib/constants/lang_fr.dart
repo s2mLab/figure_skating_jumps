@@ -43,6 +43,11 @@ const String jumpType = "Type de saut";
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDot = "Connecter un appareil XSens DOT";
+const String noData = "Aucune donnée n'a été collectée";
+const String dataChartTitle = "Accélération";
+const String firstFastLineName = "X";
+const String secondFastLineName = "Y";
+const String lastFastLineName = "Z";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";

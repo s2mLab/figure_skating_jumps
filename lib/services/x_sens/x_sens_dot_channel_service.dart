@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -72,7 +71,6 @@ class XSensDotChannelService {
   }
 
   Future<void> startMeasuring() async {
-      XSensDotStreamingDataService().clearMeasuredData();
       await _xSensMethodChannel.invokeMethod('startMeasuring');
   }
 
