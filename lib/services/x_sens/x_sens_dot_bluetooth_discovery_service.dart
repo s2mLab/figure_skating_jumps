@@ -3,33 +3,34 @@ import 'dart:async';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../enums/event_channel_names.dart';
+import '../../enums/event_channel_names.dart';
+import '../../enums/method_channel_names.dart';
 
-class BluetoothDiscovery
+class XSensDotBluetoothDiscoveryService
     implements
         IObservable<IBluetoothDiscoverySubscriber, List<BluetoothDevice>> {
-  static final BluetoothDiscovery _bluetoothDiscovery =
-      BluetoothDiscovery._internal();
+  static final XSensDotBluetoothDiscoveryService _bluetoothDiscovery =
+      XSensDotBluetoothDiscoveryService._internal();
   final List<IBluetoothDiscoverySubscriber> _subscribers = [];
   static final List<BluetoothDevice> _devices = [];
   static final _xSensScanChannel =
       EventChannel(EventChannelNames.scanChannel.channelName);
+  static final _xSensScanMethodChannel = MethodChannel(MethodChannelNames.scanChannel.channelName);
   static const _scanDuration = Duration(seconds: 30);
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
-  factory BluetoothDiscovery() {
+  factory XSensDotBluetoothDiscoveryService() {
     _xSensScanChannel.receiveBroadcastStream().listen((event) {
       _addDevice(event as String);
     });
     return _bluetoothDiscovery;
   }
 
-  BluetoothDiscovery._internal();
+  XSensDotBluetoothDiscoveryService._internal();
 
   List<BluetoothDevice> getDevices() {
     return [
@@ -37,12 +38,28 @@ class BluetoothDiscovery
     ]; //Deep copy for now, might be relevant to shallow copy in the end
   }
 
-  void scanDevices() async {
+  Future<void> scanDevices() async {
     _devices.clear();
-    await XSensDotChannelService().startScan();
+    await _startScan();
     Timer(_scanDuration, () async {
-      await XSensDotChannelService().stopScan();
+      await _stopScan();
     });
+  }
+
+  Future<void> _startScan() async {
+    try {
+      await _xSensScanMethodChannel.invokeMethod('startScan');
+    } on PlatformException catch (e) {
+      debugPrint(e.message!);
+    }
+  }
+
+  Future<void> _stopScan() async {
+    try {
+      await _xSensScanMethodChannel.invokeMethod('stopScan');
+    } on PlatformException catch (e) {
+      debugPrint(e.message!);
+    }
   }
 
   static void _addDevice(String eventDevice) {
@@ -51,7 +68,7 @@ class BluetoothDiscovery
       return;
     }
     _devices.add(device);
-    BluetoothDiscovery().notifySubscribers(_devices);
+    XSensDotBluetoothDiscoveryService().notifySubscribers(_devices);
   }
 
   @override
