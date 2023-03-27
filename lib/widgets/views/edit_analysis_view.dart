@@ -125,10 +125,13 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                               },
                               body: JumpPanelContent(
                                   jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
-                                _capture!.jumps[index] = j;
+                                _capture!.jumpTypeCount[_capture!.jumps[index].type] = _capture!.jumpTypeCount[_capture!.jumps[index]]! - 1;
+                                _capture!.jumpTypeCount[j.type] = _capture!.jumpTypeCount[j.type]! + 1;
+                                _capture!.jumps[index] = j; //TODO: Crash.
                                 CaptureClient().updateJump(jump: j);
                               });}, onDeleted: (Jump j) {
                                 setState(() {
+                                  _capture!.jumpTypeCount[j.type] = _capture!.jumpTypeCount[j.type]! - 1;
                                   _capture!.jumps.remove(j);
                                   _capture = _capture;
                                   _isPanelsOpen = [];
