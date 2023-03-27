@@ -307,8 +307,8 @@ def analyze_jump(jump: Jump, jump_data: pd.DataFrame) -> Jump_Analysis:
         Jump_Analysis
     """
     num_rot = find_num_rot(jump_data)
-    start = jump.start * (8333 / SEC_TO_MS_RATIO)
-    end = jump.end * (8333 / SEC_TO_MS_RATIO)
+    start = jump.start * (DELTA_T / SEC_TO_MS_RATIO)
+    end = jump.end * (DELTA_T / SEC_TO_MS_RATIO)
     max_rot_speed = 0
     time_to_max = 0
     rot_speed = 0
@@ -320,7 +320,7 @@ def analyze_jump(jump: Jump, jump_data: pd.DataFrame) -> Jump_Analysis:
             time_to_max = row['iter']
     
     time_to_max -= jump_data.iloc[0]['iter']
-    time_to_max *= (8333 / SEC_TO_MS_RATIO)
+    time_to_max *= (DELTA_T / SEC_TO_MS_RATIO)
     return Jump_Analysis(start, end, num_rot, max_rot_speed, time_to_max)
 
 def analyze_session(source: str) -> 'list[Jump_Analysis]':
