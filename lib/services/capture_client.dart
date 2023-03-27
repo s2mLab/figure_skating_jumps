@@ -45,7 +45,22 @@ class CaptureClient {
         'rotation': jump.rotationDegrees,
       });
       jump.uID = jumpInfo.id;
-      _addJump(captureID: jump.captureID, jumpID: jumpInfo.id);
+      _modifyCaptureJumpList(
+          captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> deleteJump({required Jump jump}) async {
+    try {
+      await _firestore
+          .collection(_jumpsCollectionString)
+          .doc(jump.uID)
+          .delete();
+      _modifyCaptureJumpList(
+          captureID: jump.captureID, jumpID: jump.uID!, linkJump: false);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -135,20 +150,28 @@ class CaptureClient {
     }
   }
 
-  Future<void> _addJump(
-      {required String captureID, required String jumpID}) async {
+  Future<void> _modifyCaptureJumpList(
+      {required String captureID,
+      required String jumpID,
+      required bool linkJump}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore
           .collection(_captureCollectionString)
           .doc(captureID)
           .get();
       List<String> jumpsID =
-          List<String>.from(captureInfo.get('jumps') as List);
-      jumpsID.add(jumpID);
+      List<String>.from(captureInfo.get('jumps') as List);
+
+      if (linkJump) {
+        jumpsID.add(jumpID);
+      } else {
+        jumpsID.remove(jumpID);
+      }
+
       await _firestore
           .collection(_captureCollectionString)
           .doc(captureID)
-          .set({"jumps": jumpsID}, SetOptions(merge: true));
+          .update({"jumps": jumpsID});
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
