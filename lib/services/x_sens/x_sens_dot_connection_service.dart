@@ -43,7 +43,7 @@ class XSensDotConnectionService {
       if (response) {
         _currentXSensDevice = bluetoothDevice;
 
-        DeviceName? deviceName = DeviceNamesManager().preferences.firstWhereOrNull((iter) => _currentXSensDevice!.macAddress == iter.deviceMacAddress);
+        DeviceName? deviceName = DeviceNamesManager().deviceNames.firstWhereOrNull((iter) => _currentXSensDevice!.macAddress == iter.deviceMacAddress);
         if (deviceName != null) {
           _currentXSensDevice!.assignedName = deviceName.name;
         } else {
