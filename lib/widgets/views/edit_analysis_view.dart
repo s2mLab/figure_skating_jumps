@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       IceButton(
                           text: seeVideoAgain,
                           onPressed: () {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const VideoPlayerDialog();
+                                });
                           }, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
@@ -69,12 +75,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 24.0),
-                  child: InstructionPrompt(
-                      analysisDonePrompt,
-                      secondaryColor),
+                  child: InstructionPrompt(analysisDonePrompt, secondaryColor),
                 ),
                 Container(
-                    margin: const EdgeInsets.symmetric(vertical:8), child: const LegendMove()),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,20 +89,26 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     IceButton(
                         text: addAJump,
                         onPressed: () async {
-                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0, _capture!.uID!, 0, 0, 0);
+                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
+                              0, _capture!.uID!, 0, 0, 0);
                           setState(() {
                             _capture!.jumps.insert(0, newJump);
                           });
-                          _jumpListScrollController.animateTo(0, duration: const Duration(milliseconds: 400), curve: Curves.ease);
-                          await CaptureClient().createJump(jump: newJump).then((value) {
-                            Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                          _jumpListScrollController.animateTo(0,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.ease);
+                          await CaptureClient()
+                              .createJump(jump: newJump)
+                              .then((value) {
+                            Navigator.pushReplacementNamed(
+                                context, '/EditAnalysis',
                                 arguments: _capture);
                           });
-                          },
+                        },
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
-                        IceButtonImportance.secondaryAction,
+                            IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small)
                   ],
                 ),
@@ -114,31 +125,40 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           });
                         },
                         elevation: 0,
-                        children: List.generate(_capture!.jumps.length, (index) {
+                        children:
+                            List.generate(_capture!.jumps.length, (index) {
                           _isPanelsOpen.add(false);
                           return ExpansionPanel(
                               canTapOnHeader: true,
                               backgroundColor: Colors.transparent,
                               isExpanded: _isPanelsOpen[index],
-                              headerBuilder: (BuildContext context, bool isExpanded) {
-                                return JumpPanelHeader(jump: _capture!.jumps[index]);
+                              headerBuilder:
+                                  (BuildContext context, bool isExpanded) {
+                                return JumpPanelHeader(
+                                    jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
-                                  jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
-                                _capture!.jumps[index] = j;
-                                CaptureClient().updateJump(jump: j);
-                              });}, onDeleted: (Jump j) {
-                                setState(() {
-                                  _capture!.jumps.remove(j);
-                                  _capture = _capture;
-                                  _isPanelsOpen = [];
-                                });
-                                CaptureClient().deleteJump(jump: j).then((value) {
-                                  Navigator.pushReplacementNamed(context, '/EditAnalysis',
-                                      arguments: _capture);
-                                });//no need to await, done in the background
-
-                              }));
+                                  jump: _capture!.jumps[index],
+                                  onModified: (Jump j) {
+                                    setState(() {
+                                      _capture!.jumps[index] = j;
+                                      CaptureClient().updateJump(jump: j);
+                                    });
+                                  },
+                                  onDeleted: (Jump j) {
+                                    setState(() {
+                                      _capture!.jumps.remove(j);
+                                      _capture = _capture;
+                                      _isPanelsOpen = [];
+                                    });
+                                    CaptureClient()
+                                        .deleteJump(jump: j)
+                                        .then((value) {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/EditAnalysis',
+                                          arguments: _capture);
+                                    }); //no need to await, done in the background
+                                  }));
                         }),
                       ),
                     ),
