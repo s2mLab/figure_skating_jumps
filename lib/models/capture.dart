@@ -77,6 +77,7 @@ class Capture {
       Jump jumpToAdd = await CaptureClient().getJumpByID(uID: jumpID);
       capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
+      capture._jumps.sort((a,b) => a.time.compareTo(b.time));
     }
 
     return capture;
