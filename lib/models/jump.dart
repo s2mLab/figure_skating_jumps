@@ -8,6 +8,7 @@ class Jump {
   late String? uID;
   late int _time;
   late int _duration;
+  late bool isCustom;
   late JumpType type;
   late String _captureID;
   late String comment;
@@ -78,6 +79,7 @@ class Jump {
   Jump(
       this._time,
       this._duration,
+      this.isCustom,
       this.type,
       this.comment,
       this._score,
@@ -92,6 +94,7 @@ class Jump {
     try {
       int time = jumpInfo.get('time');
       int duration = jumpInfo.get('duration');
+      bool isCustom = jumpInfo.get('isCustom');
       String capture = jumpInfo.get('capture');
       String comment = jumpInfo.get('comment');
       int score = int.parse(jumpInfo.get('score').toString());
@@ -103,7 +106,7 @@ class Jump {
       JumpType type =
       JumpType.values.firstWhere((element) => element.toString() == typeStr);
 
-      return Jump(time, duration, type, comment, score, capture,
+      return Jump(time, duration, isCustom, type, comment, score, capture,
           durationToMaxSpeed, maxRotationSpeed, rotationDegrees, uID);
 
     } catch (e) {
