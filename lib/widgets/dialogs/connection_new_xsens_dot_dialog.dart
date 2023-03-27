@@ -32,7 +32,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber, IXSensDotMeasuringDataSubscriber {
   int _connectionStep = 0;
   List<BluetoothDevice> _devices = [];
-  List<XSensDotData> _streamedData = [];
+  final List<XSensDotData> _streamedData = [];
+  ChartSeriesController? _xChartSeriesController;
+  ChartSeriesController? _yChartSeriesController;
+  ChartSeriesController? _zChartSeriesController;
   final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
@@ -42,7 +45,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   @override
   void initState() {
     _devices = _discoveryService.subscribe(this);
-    _streamedData = _xSensDotStreamingDataService.subscribe(this);
+    _streamedData.addAll(_xSensDotStreamingDataService.subscribe(this));
     _discoveryService.scanDevices();
     super.initState();
   }
@@ -193,18 +196,30 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                       itemPadding: 0.0),
                   series: <ChartSeries<XSensDotData, int>>[
                       FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _xChartSeriesController = controller;
+                          },
                           dataSource: _streamedData,
                           xValueMapper: (XSensDotData data, _) => data.id,
                           yValueMapper: (XSensDotData data, _) => data.acc[0],
                           name: firstFastLineName,
                           width: 1),
                       FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _yChartSeriesController = controller;
+                          },
                           dataSource: _streamedData,
                           xValueMapper: (XSensDotData data, _) => data.id,
                           yValueMapper: (XSensDotData data, _) => data.acc[1],
                           name: secondFastLineName,
                           width: 1),
                       FastLineSeries<XSensDotData, int>(
+                          onRendererCreated:
+                              (ChartSeriesController controller) {
+                            _zChartSeriesController = controller;
+                          },
                           dataSource: _streamedData,
                           xValueMapper: (XSensDotData data, _) => data.id,
                           yValueMapper: (XSensDotData data, _) => data.acc[2],
@@ -278,10 +293,26 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void onDataReceived(List<XSensDotData> measuredData) {
-    if (mounted) {
-      setState(() {
-        _streamedData.add(measuredData.last);
-      });
+    if (_streamedData.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _streamedData.addAll(measuredData);
+        });
+      }
+    } else {
+      if (_xChartSeriesController == null ||
+          _yChartSeriesController == null ||
+          _zChartSeriesController == null) return;
+      
+      int startIndex = _streamedData.length;
+      int nbAddedData = measuredData.length - _streamedData.length;
+      List<int> addedIndexes = List<int>.generate(nbAddedData, (i) => i + startIndex);
+
+      _streamedData.addAll(measuredData.where((element) => !_streamedData.contains(element)));
+
+      _xChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
+      _yChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
+      _zChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
     }
   }
 }

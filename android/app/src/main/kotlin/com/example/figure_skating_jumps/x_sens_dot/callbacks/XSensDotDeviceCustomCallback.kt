@@ -16,7 +16,7 @@ import com.xsens.dot.android.sdk.models.XsensDotDevice
 import java.util.ArrayList
 class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
     private val maxRecordingOutputRate: Int = 120
-    private val measuringOutputRate: Int = 1
+    private val measuringOutputRate: Int = 12
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
