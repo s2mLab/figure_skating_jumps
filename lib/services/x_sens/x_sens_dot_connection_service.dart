@@ -66,7 +66,7 @@ class XSensDotConnectionService {
   void _changeState(XSensDeviceState state) {
     _connectionState = state;
     for (IXSensStateSubscriber s in _connectionStateSubscribers) {
-      s.onStateChange(state);
+      s.onStateChange(state); //TODO: BUG
     }
   }
 }

@@ -54,12 +54,19 @@ class IceDrawerMenu extends StatelessWidget {
                         );
                       }),
                   NavMenuElement(
-                      text: "(TEMP) Capture",
-                      iconData: Icons.camera,
+                      text: myAcquisitions,
+                      iconData: Icons.history,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/Acquisitions',
+                            arguments: UserClient().currentSkatingUser!);
+                      }),
+                  NavMenuElement(
+                      text: "GodView",
+                      iconData: Icons.gavel_outlined,
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          '/CaptureData',
+                          '/',
                         );
                       }),
                 ],

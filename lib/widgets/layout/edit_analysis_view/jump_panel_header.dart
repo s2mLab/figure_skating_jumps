@@ -13,7 +13,7 @@ class JumpPanelHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: XSensDotListElement(
         text: _jump.type.abbreviation,
         textColor: _jump.type.color,
@@ -21,12 +21,20 @@ class JumpPanelHeader extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16.0),
           child: Row(
             children: [
-              const Icon(Icons.access_time_rounded, color: darkText),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0),
-                child: SizedBox(width: 100, child: Text(TimeConverter.intToTime(_jump.time),style: const TextStyle(color: darkText))),
+                child: SizedBox(width: 60, child: Text(TimeConverter.printSecondsAndMilli(Duration(seconds: _jump.time)),style: const TextStyle(color: darkText))),
               ),
-              const Text('$jumpType:')
+              const Icon(Icons.access_time_rounded, color: darkText),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SizedBox(width: 70, child: Text(TimeConverter.intToTime(_jump.duration), style: const TextStyle(color: darkText),)),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Text('$jumpType:'),
+              ),
+
             ],
           ),
         ),

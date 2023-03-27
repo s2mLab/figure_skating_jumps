@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 import '../constants/lang_fr.dart';
 
 class FieldValidators {
-
   /// Validates a new name string and returns an error message if the validation fails.
   ///
   /// This function takes a [String] value and performs validation checks to ensure
@@ -18,7 +19,6 @@ class FieldValidators {
     return null;
   }
 
-
   /// Validates a new email string and returns an error message if the validation fails.
   ///
   /// This function takes a [String] value and performs validation checks to ensure
@@ -31,6 +31,31 @@ class FieldValidators {
     }
     if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
       return invalidEmailFormat;
+    }
+    return null;
+  }
+
+  static String? doubleValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    if (!RegExp(r'^(0|[1-9]\d*)(\.\d+)?$').hasMatch(value)) {
+      return invalidDigitFormat;
+    }
+    return null;
+  }
+
+  static String? nonNegativeValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return pleaseFillField;
+    }
+    try {
+      if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9]\d*)$').hasMatch(value)) {
+        return invalidDigitFormat;
+      }
+    } on FormatException catch (e) {
+      debugPrint(e.message);
+      return invalidDigitFormat;
     }
     return null;
   }
