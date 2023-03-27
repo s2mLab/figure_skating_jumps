@@ -7,7 +7,7 @@ class Jump {
   static const degreesPerTurn = 360;
   late String? uID;
   late int _time;
-  late int _duration;
+  late int _duration; //maybe change to double
   late bool isCustom;
   late JumpType type;
   late String _captureID;
@@ -30,7 +30,7 @@ class Jump {
   }
 
   set maxRotationSpeed(value) {
-    _maxRotationSpeed = value < 0 ? 0 : value;
+    _maxRotationSpeed = _maxRotationSpeed.abs();
   }
 
   double get durationToMaxSpeed {
