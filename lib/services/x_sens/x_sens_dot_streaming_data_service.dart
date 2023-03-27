@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/measuring/measurer_state.dart';
 import 'package:figure_skating_jumps/enums/measuring/measuring_status.dart';
@@ -14,7 +12,7 @@ import '../../interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 class XSensDotStreamingDataService
     implements
         IObservable<IXSensDotMeasuringDataSubscriber, List<XSensDotData>> {
-  static const int _streamingRate = 1;
+  static const int _streamingRate = 12;
   static final XSensDotStreamingDataService _xSensDotDataService =
       XSensDotStreamingDataService._internal();
   static final _xSensMeasuringChannel =
