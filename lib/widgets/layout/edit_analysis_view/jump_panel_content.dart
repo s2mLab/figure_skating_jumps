@@ -74,6 +74,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   @override
   void dispose() {
     _commentController.dispose();
+    _durationController.dispose();
+    _startTimeController.dispose();
+    _rotationController.dispose();
+    _timeToMaxSpeedController.dispose();
+    _maxSpeedController.dispose();
     super.dispose();
   }
 
