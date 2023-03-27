@@ -156,6 +156,7 @@ class _GodViewState extends State<GodView> {
               child: const Text('CaptureView')),
           TextButton(
               onPressed: () {
+                CaptureClient().capturingSkatingUser = UserClient().currentSkatingUser!;
                 Navigator.pushNamed(
                   context,
                   '/DemoConnection',
