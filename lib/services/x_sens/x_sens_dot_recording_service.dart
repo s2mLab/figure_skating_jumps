@@ -4,7 +4,6 @@ import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -75,7 +74,13 @@ class XSensDotRecordingService {
   Future<void> startRecording() async {
     _exportedData.clear();
     _exportFileName = "";
-    await XSensDotChannelService().setRate(_recordingOutputRate);
+    try {
+      await _recordingMethodChannel.invokeMethod(
+          'setRate', <String, dynamic>{'rate': _recordingOutputRate});
+    } on PlatformException catch (e) {
+      debugPrint(e.message);
+    }
+
   }
 
   static Future<void> stopRecording(bool hasVideo) async {
