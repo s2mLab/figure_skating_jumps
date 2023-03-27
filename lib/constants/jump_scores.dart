@@ -1,1 +1,3 @@
-const List<int> jumpScores = [5,4,3,2,1,0,-1,-2,-3,-4,-5];
+const int maxScore = 5;
+const int minScore = -5;
+List<int> jumpScores = List.generate(1 + maxScore - minScore, (index) => maxScore - index);

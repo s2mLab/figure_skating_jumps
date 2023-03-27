@@ -50,7 +50,7 @@ class FieldValidators {
       return pleaseFillField;
     }
     try {
-      if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9][0-9]*)$').hasMatch(value)) {
+      if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9]\d*)$').hasMatch(value)) {
         return invalidDigitFormat;
       }
     } on FormatException catch (e) {
