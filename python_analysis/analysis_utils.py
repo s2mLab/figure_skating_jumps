@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import csv
 
+from ice_exceptions import InvalidFormatError
+
 from math import sin, cos, radians
 
 def write_csv_from_dataframe(data: pd.DataFrame, target: str) -> None:
@@ -54,6 +56,9 @@ def read_raw_csv_to_dataframe(source: str) -> pd.DataFrame:
             raw_data = raw_data[iter + 1:]
             break
     headers = [header_converter.get(iter) for iter in headers]
+    
+    if len(headers) != len(header_converter.keys()) or all([iter in headers for iter in header_converter.keys()]):
+        raise InvalidFormatError
     
     for iter, row in enumerate(raw_data):
         raw_data[iter] = [float(iter) for iter in row[:valid_columns]]
