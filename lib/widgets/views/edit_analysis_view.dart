@@ -7,7 +7,6 @@ import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
@@ -65,7 +64,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                 builder: (BuildContext context) {
                                   return const VideoPlayerDialog();
                                 });
-                          }, // TODO: video preview
+                          },
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
