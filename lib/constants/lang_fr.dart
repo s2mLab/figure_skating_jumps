@@ -1,9 +1,21 @@
 // global
 const String searching = "Recherche en cours";
 const String cancel = "Annuler";
+const String confirmText = "Confirmer";
 const String continueTo = "Poursuivre";
 const String goBack = "Retour";
 const String pleaseWait = "Veuillez patienter";
+
+// widgets/alertDialog/modify_full_name
+const String modificationTitle = "Modification";
+const String firstName = "Prénom: ";
+const String lastName = "Nom: ";
+const String confirmLabel = "Modifier";
+
+// widgets/alertDialog/modify_password
+const String modificationPasswordTitle = "Modification mot de passe";
+const String passwordInput = "Mot de passe: ";
+const String passwordConfirmationInput = "Confirmation mot de passe: ";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
@@ -23,6 +35,7 @@ const String noConnectionMessage =
 const String rawDataDrawerTile = "Données brutes";
 const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
+const String disconnect = "Voulez-vous vraiment vous déconnecter";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -48,6 +61,11 @@ const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
 const String secondFastLineName = "Y";
 const String lastFastLineName = "Z";
+
+// widgets/screens/profile_view
+const String profileTitle = "Compte";
+const String modifyPassword = "Modifier le mot de passe";
+const String listCoaches = "Liste de mes entraineurs";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";
@@ -76,7 +94,8 @@ const String captureButton = "Capturer";
 const String seeVideoAgain = "Revoir la vidéo";
 const String detectedJumps = "Sauts enregistrés";
 const String editAnalysisPageTitle = "Analyse";
-const String analysisDonePrompt = "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
+const String analysisDonePrompt =
+    "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
 const String addAJump = "Ajouter un saut";
 
 // widgets/screens/capture_view
