@@ -50,7 +50,7 @@ class IceDrawerMenu extends StatelessWidget {
                   );
                 }),
             NavMenuElement(
-                text: "Mes acquisitions",
+                text: myAcquisitions,
                 iconData: Icons.history,
                 onPressed: () {
                   Navigator.pushNamed(
