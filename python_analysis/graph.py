@@ -22,11 +22,6 @@ def read_abs_csv(source: str) -> pd.DataFrame:
     )
     return data
 
-@click.command()
-@click.argument("source", type=str)
-@click.option("-a", "--is-abs", is_flag=True, default=False, help="Include this flag if csv is treated to be absolute.")
-@click.option("-h", "--height", default=5, type=int, help="The height of the graph.")
-@click.option("-w", "--width", default=10, type=int, help="The width of the graph.")
 def show_treated_data(source: str, is_abs: bool = False, height: int = 5, width: int = 10) -> None:
     """Shows the three metrics used to find jumps.
 
@@ -87,5 +82,22 @@ def show_treated_data(source: str, is_abs: bool = False, height: int = 5, width:
     fig.tight_layout()
     plt.show()
 
+@click.command()
+@click.argument("source", type=str)
+@click.option("-a", "--is-abs", is_flag=True, default=False, help="Include this flag if csv is treated to be absolute.")
+@click.option("-h", "--height", default=5, type=int, help="The height of the graph.")
+@click.option("-w", "--width", default=10, type=int, help="The width of the graph.")
+def show_treated_data_cmd(source: str, is_abs: bool = False, height: int = 5, width: int = 10) -> None:
+    """Shows the three metrics used to find jumps.\n
+    This is the command version and should not be called from code, only from a terminal.    
+
+    Args:
+        source (str): The file to read from.\n
+        is_abs (bool): Whether the csv is absolute.\n
+        height (int): The height of the graph.\n
+        width (int): The width of the graph.
+    """
+    show_treated_data(source, is_abs, height, width)
+
 if __name__ == "__main__":
-    show_treated_data()
+    show_treated_data_cmd()
