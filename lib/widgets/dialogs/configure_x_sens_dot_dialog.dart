@@ -40,7 +40,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   textColor: errorColor,
-                  color: errorColor,
+                  color: errorColorDark,
                   iceButtonImportance: IceButtonImportance.discreetAction,
                   iceButtonSize: IceButtonSize.medium),
               const Padding(
