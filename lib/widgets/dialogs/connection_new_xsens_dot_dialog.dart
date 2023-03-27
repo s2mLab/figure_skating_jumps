@@ -52,6 +52,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void dispose() {
+    _xSensDotStreamingDataService.unsubscribe(this);
+    _discoveryService.unsubscribe(this);
     super.dispose();
   }
 

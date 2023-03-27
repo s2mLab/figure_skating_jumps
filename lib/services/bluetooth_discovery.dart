@@ -67,4 +67,9 @@ class BluetoothDiscovery
     _subscribers.add(subscriber);
     return getDevices();
   }
+
+  @override
+  void unsubscribe(IBluetoothDiscoverySubscriber subscriber) {
+    _subscribers.remove(subscriber);
+  }
 }

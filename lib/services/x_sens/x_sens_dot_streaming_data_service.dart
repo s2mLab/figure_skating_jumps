@@ -89,4 +89,9 @@ class XSensDotStreamingDataService
     _subscribers.add(subscriber);
     return _measuredData;
   }
+
+  @override
+  void unsubscribe(IXSensDotMeasuringDataSubscriber subscriber) {
+    _subscribers.remove(subscriber);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import '../../enums/x_sens_device_state.dart';
@@ -7,10 +8,10 @@ import '../../models/bluetooth_device.dart';
 import '../../models/db_models/device_name.dart';
 import '../manager/device_names_manager.dart';
 
-class XSensDotConnectionService {
+class XSensDotConnectionService implements IObservable<IXSensStateSubscriber, XSensDeviceState> {
   static final XSensDotConnectionService _xSensDotConnection =
       XSensDotConnectionService._internal(XSensDeviceState.disconnected);
-  final List<IXSensStateSubscriber> _connectionStateSubscribers = [];
+  final List<IXSensStateSubscriber> _subscribers = [];
   XSensDeviceState _connectionState;
   BluetoothDevice? _currentXSensDevice;
 
@@ -21,12 +22,6 @@ class XSensDotConnectionService {
   }
 
   XSensDotConnectionService._internal(this._connectionState);
-
-  XSensDeviceState subscribeConnectionState(
-      IXSensStateSubscriber subscriber) {
-    _connectionStateSubscribers.add(subscriber);
-    return _connectionState;
-  }
 
   XSensDeviceState get connectionState {
     return _connectionState;
@@ -49,7 +44,7 @@ class XSensDotConnectionService {
         } else {
           DeviceNamesManager().addDevice(UserClient().currentAuthUser!.uid, _currentXSensDevice!);
         }
-        _changeState(XSensDeviceState.connected);
+        notifySubscribers(XSensDeviceState.connected);
       }
       return response;
     }
@@ -60,13 +55,25 @@ class XSensDotConnectionService {
   Future<void> disconnect() async {
     await XSensDotChannelService().disconnectXSensDot();
     _currentXSensDevice = null;
-    _changeState(XSensDeviceState.disconnected);
+    notifySubscribers(XSensDeviceState.disconnected);
   }
 
-  void _changeState(XSensDeviceState state) {
+  @override
+  void notifySubscribers(XSensDeviceState state) {
     _connectionState = state;
-    for (IXSensStateSubscriber s in _connectionStateSubscribers) {
+    for (IXSensStateSubscriber s in _subscribers) {
       s.onStateChange(state);
     }
+  }
+
+  @override
+  XSensDeviceState subscribe(IXSensStateSubscriber subscriber) {
+    _subscribers.add(subscriber);
+    return _connectionState;
+  }
+
+  @override
+  void unsubscribe(IXSensStateSubscriber subscriber) {
+    _subscribers.remove(subscriber);
   }
 }
