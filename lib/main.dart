@@ -15,6 +15,7 @@ import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
+import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +62,7 @@ Future<bool> initializeStoragePermissions() async {
     permissions.add(Permission.videos);
   }
 
-  if((await MediaStore().getPlatformSDKInt()) <= 32) {
+  if ((await MediaStore().getPlatformSDKInt()) <= 32) {
     permissions.add(Permission.storage);
   }
 
@@ -97,6 +98,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/Acquisitions': (context) => const AthleteView(),
               '/EditAnalysis': (context) => const EditAnalysisView(),
               '/ListAthletes': (context) => const ListAthletesView(),
+              '/ProfileView': (context) => const ProfileView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -154,6 +156,7 @@ class _GodViewState extends State<GodView> {
               child: const Text('CaptureView')),
           TextButton(
               onPressed: () {
+                CaptureClient().capturingSkatingUser = UserClient().currentSkatingUser!;
                 Navigator.pushNamed(
                   context,
                   '/DemoConnection',
@@ -172,7 +175,7 @@ class _GodViewState extends State<GodView> {
               onPressed: () async {
                 // This line is temp. Eventually user will already be logged in. Remove async then.
                 await UserClient()
-                    .signIn(email: 'thomc@thomc.com', password: 'thomc123456');
+                    .signIn(email: 'thomc@thomc.com', password: 'allo123456');
                 // ignore: use_build_context_synchronously
                 Navigator.pushNamed(context, '/ListAthletes');
               },
