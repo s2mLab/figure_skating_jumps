@@ -5,6 +5,7 @@ const String confirmText = "Confirmer";
 const String continueTo = "Poursuivre";
 const String goBack = "Retour";
 const String pleaseWait = "Veuillez patienter";
+const String save = "Enregistrer";
 
 // widgets/alertDialog/modify_full_name
 const String modificationTitle = "Modification";
@@ -35,7 +36,8 @@ const String noConnectionMessage =
 const String rawDataDrawerTile = "Données brutes";
 const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
-const String disconnect = "Voulez-vous vraiment vous déconnecter";
+const String myAcquisitions = "Mes acquisitions";
+const String disconnect = "Voulez-vous vraiment vous déconnecter?";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -50,8 +52,26 @@ const String configureFrequencyDropMenu = "Sélectionner la fréquence : ";
 const String forgetDevice = "Oublier";
 const String disconnectDevice = "Déconnecter";
 
-// widgets/layout/edit_analysis_view
-const String jumpType = "Type de saut";
+// widgets/layout/edit_analysis_view/jump_panel_header
+const String jumpType = "Type";
+
+// widgets/layout/edit_analysis_view/jump_panel_content
+const String deleteAJump = "Supprimer le saut";
+const String confirmDelete = "Cette action est irréversible, voulez-vous continuer?";
+const String deleteJumpDialogTitle = "Suppression d'un saut";
+const String commentDialogTitle = "Voir ou modifier un commentaire";
+const String howToComment = "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
+const String editTemporalValues = "Métriques avancées";
+const String rotationDegrees = "Degrés de rotation";
+const String metricsDialogTitle = "Voir ou modifier les métriques avancées";
+const String advancedMetricsPrompt = "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
+const String irreversibleDataModification = "Les données précédentes seront perdues lors de l'enregistrement.";
+const String turns = "Tours: ";
+const String score = "Score";
+const String durationLabel = "Durée";
+const String startTimeLabel = "Début";
+const String maxSpeedLabel = "Vitesse atteinte";
+const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
@@ -121,6 +141,7 @@ const String name = "Nom";
 const String password = "Mot de passe";
 const String passConfirmSame = "Confirmation mot de passe";
 const String email = "Adresse courriel";
+const String invalidDigitFormat = "Format de nombre incorrect.";
 const String invalidEmailFormat =
     'L\'adresse courriel n\'est pas de format valide.';
 const String alreadyHaveAccount = "J'ai déjà un compte";

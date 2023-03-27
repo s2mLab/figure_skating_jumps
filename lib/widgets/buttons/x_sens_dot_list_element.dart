@@ -47,7 +47,7 @@ class XSensDotListElement extends StatelessWidget {
         graphic,
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
+            padding: const EdgeInsets.only(left: 8.0),
             child: Text(text,
                 style: TextStyle(
                     fontSize: 18,

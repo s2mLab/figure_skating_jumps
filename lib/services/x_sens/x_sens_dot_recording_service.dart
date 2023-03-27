@@ -24,6 +24,8 @@ class XSensDotRecordingService {
   static final List<XSensDotData> _exportedData = [];
   static String _exportFileName = "";
 
+  static bool _currentRecordingHasVideo = false;
+
   final _recordingOutputRate = 120;
 
   factory XSensDotRecordingService() {
@@ -76,7 +78,8 @@ class XSensDotRecordingService {
     await XSensDotChannelService().setRate(_recordingOutputRate);
   }
 
-  static Future<void> stopRecording() async {
+  static Future<void> stopRecording(bool hasVideo) async {
+    _currentRecordingHasVideo = hasVideo;
     try {
       await _recordingMethodChannel.invokeMethod('stopRecording');
     } on PlatformException catch (e) {
@@ -88,8 +91,9 @@ class XSensDotRecordingService {
     await _recordingMethodChannel.invokeMethod('prepareRecording');
   }
 
-  static Future<void> _handleEnableRecordingNotificationDone(String data) async {
-    if(data == "true") {
+  static Future<void> _handleEnableRecordingNotificationDone(
+      String data) async {
+    if (data == "true") {
       await _recordingMethodChannel.invokeMethod(
           'getFlashInfo', <String, dynamic>{
         'isExporting': _recorderState == RecorderState.exporting
@@ -97,7 +101,6 @@ class XSensDotRecordingService {
     } else {
       debugPrint("Recording notifications were not enabled");
     }
-
   }
 
   static void _handleRecordingStarted() {
@@ -131,15 +134,14 @@ class XSensDotRecordingService {
   static Future<void> _handleGetFileInfoDone(String data) async {
     if (_recorderState == RecorderState.exporting) {
       _exportFileName = "${data.split(",")[1].split(": ")[1]}.csv";
-      await _recordingMethodChannel.invokeMethod(
-          'extractFile', <String, dynamic>{'fileInfo': data});
+      await _recordingMethodChannel
+          .invokeMethod('extractFile', <String, dynamic>{'fileInfo': data});
     }
-
   }
 
   static void _handleExtractingFile(String? data) {
     if (_recorderState == RecorderState.exporting) {
-      if(data != null) {
+      if (data != null) {
         _exportedData.add(XSensDotData.fromEventChannel(data));
       }
     }
@@ -147,10 +149,13 @@ class XSensDotRecordingService {
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-      await CaptureClient().saveCapture(exportFileName: _exportFileName, exportedData: _exportedData);
+      await CaptureClient().saveCapture(
+          exportFileName: _exportFileName,
+          exportedData: _exportedData,
+          hasVideo: _currentRecordingHasVideo);
       debugPrint("Done");
+      _currentRecordingHasVideo = false;
       _recorderState = RecorderState.idle;
     }
   }
-
 }

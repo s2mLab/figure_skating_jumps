@@ -10,6 +10,7 @@ import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
+import '../../enums/user_role.dart';
 import '../buttons/ice_button.dart';
 
 class LoginView extends StatefulWidget {
@@ -46,12 +47,15 @@ class _LoginViewState extends State<LoginView> {
     try {
       await UserClient().signIn(email: _email, password: _password);
       if (mounted) {
-        Navigator.pushNamed(context, '/ManageDevices');
+        UserClient().currentSkatingUser!.role == UserRole.coach
+            ? Navigator.pushReplacementNamed(context, '/ListAthletes')
+            : Navigator.pushReplacementNamed(context, '/Acquisitions');
       }
     } on IceException catch (e) {
       setState(() {
         _errorMessage = e.uiMessage;
       });
+      debugPrint(e.devMessage);
     } catch (e) {
       _errorMessage = connectionImpossible;
     }
@@ -83,9 +87,7 @@ class _LoginViewState extends State<LoginView> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        connectionShadow
-                      ],
+                      boxShadow: [connectionShadow],
                     ),
                     child: Container(
                         margin: const EdgeInsets.symmetric(
@@ -171,6 +173,23 @@ class _LoginViewState extends State<LoginView> {
                                   color: primaryColor,
                                   iceButtonImportance:
                                       IceButtonImportance.secondaryAction,
+                                  iceButtonSize: IceButtonSize.medium),
+                            ),
+                            Padding(
+                              //TODO: remove in final release
+                              padding: const EdgeInsets.only(top: 8),
+                              child: IceButton(
+                                  text: "Bypass",
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/',
+                                    );
+                                  },
+                                  textColor: Colors.purpleAccent,
+                                  color: Colors.purpleAccent,
+                                  iceButtonImportance:
+                                      IceButtonImportance.discreetAction,
                                   iceButtonSize: IceButtonSize.medium),
                             )
                           ],
