@@ -204,7 +204,7 @@ class _GodViewState extends State<GodView> {
           TextButton(
               onPressed: () async {
                 Random rnd = Random();
-                Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500),
+                Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), false,
                     JumpType.values[rnd.nextInt(5)], "Good", 5,"TT9qrmqIdRfJGrlTzo7g", 3000.0, 1100.0, 780.0);
                 CaptureClient().createJump(jump: jump);
               },

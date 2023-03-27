@@ -37,6 +37,7 @@ class CaptureClient {
         'capture': jump.captureID,
         'comment': jump.comment,
         'duration': jump.duration,
+        'isCustom': jump.isCustom,
         'score': jump.score,
         'time': jump.time,
         'type': jump.type.toString(),
@@ -73,6 +74,7 @@ class CaptureClient {
         'capture': jump.captureID,
         'comment': jump.comment,
         'duration': jump.duration,
+        'isCustom': jump.isCustom,
         'score': jump.score,
         'time': jump.time,
         'type': jump.type.toString(),
@@ -88,7 +90,8 @@ class CaptureClient {
 
   Future<void> saveCapture(
       {required String exportFileName,
-      required List<XSensDotData> exportedData, required bool hasVideo}) async {
+      required List<XSensDotData> exportedData,
+      required bool hasVideo}) async {
     String fullPath = await ExternalStorageService()
         .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
@@ -160,7 +163,7 @@ class CaptureClient {
           .doc(captureID)
           .get();
       List<String> jumpsID =
-      List<String>.from(captureInfo.get('jumps') as List);
+          List<String>.from(captureInfo.get('jumps') as List);
 
       if (linkJump) {
         jumpsID.add(jumpID);
