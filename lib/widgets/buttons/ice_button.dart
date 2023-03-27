@@ -7,7 +7,6 @@ class IceButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IceButtonSize iceButtonSize;
   final IceButtonImportance iceButtonImportance;
-  final Widget? child;
   final Color textColor;
   final Color color;
   final String text;
@@ -22,7 +21,6 @@ class IceButton extends StatelessWidget {
       required this.color,
       required this.iceButtonImportance,
       required this.iceButtonSize,
-      this.child,
       super.key});
 
   @override

@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
@@ -27,6 +28,13 @@ class EditAnalysisView extends StatefulWidget {
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
   List<bool> _isPanelsOpen = [];
+  late ScrollController _jumpListScrollController;
+
+  @override
+  void initState() {
+    _jumpListScrollController = ScrollController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +83,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     const PageTitle(text: detectedJumps),
                     IceButton(
                         text: addAJump,
-                        onPressed: () {},
+                        onPressed: () async {
+                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0, _capture!.uID!, 0, 0, 0);
+                          setState(() {
+                            _capture!.jumps.insert(0, newJump);
+                          });
+                          _jumpListScrollController.animateTo(0, duration: const Duration(milliseconds: 400), curve: Curves.ease);
+                          await CaptureClient().createJump(jump: newJump).then((value) {
+                            Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                                arguments: _capture);
+                          });
+                          },
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
@@ -85,6 +103,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _jumpListScrollController,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: ExpansionPanelList(
