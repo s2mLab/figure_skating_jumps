@@ -16,10 +16,12 @@ import '../../buttons/ice_button.dart';
 class JumpPanelContent extends StatefulWidget {
   final Jump _j;
   final void Function(Jump j) _onModified;
+  final void Function(Jump j) _onDeleted;
   const JumpPanelContent(
-      {super.key, required jump, required void Function(Jump j) onModified})
+      {super.key, required jump, required void Function(Jump j) onModified, required void Function(Jump j) onDeleted})
       : _j = jump,
-        _onModified = onModified;
+        _onModified = onModified,
+        _onDeleted = onDeleted;
 
   @override
   State<JumpPanelContent> createState() => _JumpPanelContentState();
@@ -296,8 +298,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   child: IceButton(
                       text: continueTo,
                       onPressed: () {
-                        // TODO : delete jump logic is not yet existing
-                        widget._onModified(_j!);
+                        widget._onDeleted(_j!);
+                        Navigator.pop(context);
                       },
                       textColor: errorColor,
                       color: errorColorDark,
@@ -314,7 +316,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   //This dialog is kept in this class because it references the context and returns a value through it
   Widget _commentDialog() {
-    return SimpleDialog(title: const Text(commentDialogTitle), children: [
+    return SimpleDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        title: const Text(commentDialogTitle), children: [
       Form(
         key: _commentFormKey,
         child: Column(
@@ -339,7 +343,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IceButton(
                     text: cancel,
@@ -373,7 +377,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _temporalValuesDialog() {
-    return SimpleDialog(title: const Text(metricsDialogTitle), children: [
+    return SimpleDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        title: const Text(metricsDialogTitle), children: [
       Form(
         key: _metricsFormKey,
         child: Column(
