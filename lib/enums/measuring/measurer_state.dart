@@ -1,0 +1,1 @@
+enum MeasurerState { idle, preparing, measuring}
