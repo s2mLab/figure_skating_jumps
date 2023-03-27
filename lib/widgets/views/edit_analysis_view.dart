@@ -26,7 +26,7 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
-  final List<bool> _isPanelsOpen = [];
+  List<bool> _isPanelsOpen = [];
 
   @override
   Widget build(BuildContext context) {
@@ -98,17 +98,28 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                         children: List.generate(_capture!.jumps.length, (index) {
                           _isPanelsOpen.add(false);
                           return ExpansionPanel(
-                            canTapOnHeader: true,
-                            backgroundColor: Colors.transparent,
+                              canTapOnHeader: true,
+                              backgroundColor: Colors.transparent,
                               isExpanded: _isPanelsOpen[index],
                               headerBuilder: (BuildContext context, bool isExpanded) {
                                 return JumpPanelHeader(jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
                                   jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
-                                    _capture!.jumps[index] = j;
-                                    CaptureClient().updateJump(jump: j);
-                                  });}));
+                                _capture!.jumps[index] = j;
+                                CaptureClient().updateJump(jump: j);
+                              });}, onDeleted: (Jump j) {
+                                setState(() {
+                                  _capture!.jumps.remove(j);
+                                  _capture = _capture;
+                                  _isPanelsOpen = [];
+                                });
+                                CaptureClient().deleteJump(jump: j).then((value) {
+                                  Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                                      arguments: _capture);
+                                });//no need to await, done in the background
+
+                              }));
                         }),
                       ),
                     ),
