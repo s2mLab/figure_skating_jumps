@@ -24,6 +24,7 @@ const String noConnectionMessage =
 const String rawDataDrawerTile = "Données brutes";
 const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
+const String myAcquisitions = "Mes acquisitions";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
