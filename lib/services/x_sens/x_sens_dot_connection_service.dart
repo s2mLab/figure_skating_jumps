@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,19 +15,23 @@ class XSensDotConnectionService
     implements IObservable<IXSensStateSubscriber, XSensDeviceState> {
   static final _xSensConnectionMethodChannel =
       MethodChannel(MethodChannelNames.connectionChannel.channelName);
+  static final _xSensConnectionEventChannel = EventChannel(EventChannelNames.connectionChannel.channelName);
   static final XSensDotConnectionService _xSensDotConnection =
-      XSensDotConnectionService._internal(XSensDeviceState.disconnected);
+      XSensDotConnectionService._internal();
   final List<IXSensStateSubscriber> _subscribers = [];
-  XSensDeviceState _connectionState;
+  static XSensDeviceState _connectionState = XSensDeviceState.disconnected;
   BluetoothDevice? _currentXSensDevice;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory XSensDotConnectionService() {
+    _xSensConnectionEventChannel.receiveBroadcastStream().listen((event) {
+      _changeState(event as int);
+    });
     return _xSensDotConnection;
   }
 
-  XSensDotConnectionService._internal(this._connectionState);
+  XSensDotConnectionService._internal();
 
   XSensDeviceState get connectionState {
     return _connectionState;
@@ -59,7 +64,6 @@ class XSensDotConnectionService
           DeviceNamesManager().addDevice(
               UserClient().currentAuthUser!.uid, _currentXSensDevice!);
         }
-        notifySubscribers(XSensDeviceState.connected);
       }
       return response;
     }
@@ -74,7 +78,12 @@ class XSensDotConnectionService
       debugPrint(e.message!);
     }
     _currentXSensDevice = null;
-    notifySubscribers(XSensDeviceState.disconnected);
+  }
+
+  static void _changeState(int state) {
+    XSensDeviceState? newState = XSensDeviceState.values.firstWhereOrNull((element) => element.state == state);
+    if(newState == null) return;
+    XSensDotConnectionService().notifySubscribers(newState);
   }
 
   @override
