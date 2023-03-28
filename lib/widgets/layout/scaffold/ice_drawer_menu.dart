@@ -88,10 +88,7 @@ class IceDrawerMenu extends StatelessWidget {
                                         description: disconnect,
                                         confirmAction: () {
                                           UserClient().signOut();
-                                          Navigator.pushNamed(
-                                            context,
-                                            '/Login',
-                                          );
+                                          Navigator.pushNamedAndRemoveUntil(context, '/Login', (route) => false);
                                         });
                                   });
                             },
@@ -100,11 +97,7 @@ class IceDrawerMenu extends StatelessWidget {
                             color: errorColor,
                           )),
                       IconButton(
-                        onPressed: () async {
-                          // This line is temp. Eventually user will already be logged in. Remove async then.
-                          await UserClient().signIn(
-                              email: 'thomc@thomc.com', password: 'allo123456');
-                          // ignore: use_build_context_synchronously
+                        onPressed: () {
                           Navigator.pushNamed(
                             context,
                             '/ProfileView',
