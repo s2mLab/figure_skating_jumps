@@ -29,6 +29,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
   List<bool> _isPanelsOpen = [];
   late ScrollController _jumpListScrollController;
+  bool _timeWasModified = false;
 
   @override
   void initState() {
@@ -58,8 +59,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     if (_capture!.hasVideo)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {
-                          }, // TODO: video preview
+                          onPressed: () {}, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
@@ -69,12 +69,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 24.0),
-                  child: InstructionPrompt(
-                      analysisDonePrompt,
-                      secondaryColor),
+                  child: InstructionPrompt(analysisDonePrompt, secondaryColor),
                 ),
                 Container(
-                    margin: const EdgeInsets.symmetric(vertical:8), child: const LegendMove()),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,23 +83,44 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     IceButton(
                         text: addAJump,
                         onPressed: () async {
-                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0, _capture!.uID!, 0, 0, 0);
+                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
+                              0, _capture!.uID!, 0, 0, 0);
                           setState(() {
                             _capture!.jumps.insert(0, newJump);
                           });
-                          _jumpListScrollController.animateTo(0, duration: const Duration(milliseconds: 400), curve: Curves.ease);
-                          await CaptureClient().createJump(jump: newJump).then((value) {
-                            Navigator.pushReplacementNamed(context, '/EditAnalysis',
+                          _jumpListScrollController.animateTo(0,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.ease);
+                          await CaptureClient()
+                              .createJump(jump: newJump)
+                              .then((value) {
+                            Navigator.pushReplacementNamed(
+                                context, '/EditAnalysis',
                                 arguments: _capture);
                           });
-                          },
+                        },
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
-                        IceButtonImportance.secondaryAction,
+                            IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small)
                   ],
                 ),
+                if (_timeWasModified)
+                  Center(
+                      child: IceButton(
+                          text: reorderJumpList,
+                          onPressed: () {
+                            Capture.sortJumps(_capture!);
+                            Navigator.pushReplacementNamed(
+                                context, '/EditAnalysis',
+                                arguments: _capture);
+                          },
+                          textColor: secondaryColor,
+                          color: secondaryColor,
+                          iceButtonImportance:
+                              IceButtonImportance.discreetAction,
+                          iceButtonSize: IceButtonSize.small)),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
@@ -114,31 +134,51 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           });
                         },
                         elevation: 0,
-                        children: List.generate(_capture!.jumps.length, (index) {
+                        children:
+                            List.generate(_capture!.jumps.length, (index) {
                           _isPanelsOpen.add(false);
                           return ExpansionPanel(
                               canTapOnHeader: true,
                               backgroundColor: Colors.transparent,
                               isExpanded: _isPanelsOpen[index],
-                              headerBuilder: (BuildContext context, bool isExpanded) {
-                                return JumpPanelHeader(jump: _capture!.jumps[index]);
+                              headerBuilder:
+                                  (BuildContext context, bool isExpanded) {
+                                return JumpPanelHeader(
+                                    jump: _capture!.jumps[index]);
                               },
                               body: JumpPanelContent(
-                                  jump: _capture!.jumps[index], onModified: (Jump j) {setState(() {
-                                _capture!.jumps[index] = j;
-                                CaptureClient().updateJump(jump: j);
-                              });}, onDeleted: (Jump j) {
-                                setState(() {
-                                  _capture!.jumps.remove(j);
-                                  _capture = _capture;
-                                  _isPanelsOpen = [];
-                                });
-                                CaptureClient().deleteJump(jump: j).then((value) {
-                                  Navigator.pushReplacementNamed(context, '/EditAnalysis',
-                                      arguments: _capture);
-                                });//no need to await, done in the background
-
-                              }));
+                                  jump: _capture!.jumps[index],
+                                  onModified: (Jump j, JumpType initialJumpType,
+                                      int initialTime) {
+                                    if (j.time != initialTime) {
+                                      _timeWasModified = true;
+                                    }
+                                    setState(() {
+                                      _capture!.jumpTypeCount[initialJumpType] =
+                                          _capture!.jumpTypeCount[
+                                                  initialJumpType]! -
+                                              1;
+                                      _capture!.jumpTypeCount[j.type] =
+                                          _capture!.jumpTypeCount[j.type]! + 1;
+                                      CaptureClient().updateJump(jump: j);
+                                    });
+                                  },
+                                  onDeleted: (Jump j, JumpType initial) {
+                                    setState(() {
+                                      _capture!.jumpTypeCount[initial] =
+                                          _capture!.jumpTypeCount[initial]! - 1;
+                                      _capture!.jumps.remove(j);
+                                      _capture = _capture;
+                                      _isPanelsOpen = [];
+                                    });
+                                    CaptureClient()
+                                        .deleteJump(jump: j)
+                                        .then((value) {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/EditAnalysis',
+                                          arguments: _capture);
+                                    }); //no need to await, done in the background
+                                  }));
                         }),
                       ),
                     ),
