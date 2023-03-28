@@ -283,6 +283,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   //TODO: Maybe change for connection event when they will be done
   Future<void> _onDevicePressed(BluetoothDevice device) async {
+    _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
