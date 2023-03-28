@@ -54,7 +54,6 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                       text: disconnectDevice,
                       onPressed: () async {
                         await XSensDotConnectionService().disconnect();
-                        //TODO: notify UI
                         close();
                       },
                       textColor: errorColor,
