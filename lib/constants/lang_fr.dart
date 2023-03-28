@@ -20,6 +20,8 @@ const String passwordConfirmationInput = "Confirmation mot de passe: ";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnected = "XSens DOT connecté";
+const String connectionStateMessageInitialized = "XSens DOT prêt";
+const String connectionStateMessageConnecting = "Tentative de connexion";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
 const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 
