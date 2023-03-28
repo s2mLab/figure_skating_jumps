@@ -21,7 +21,7 @@ class Jump {
     return _rotationDegrees;
   }
 
-  set rotationDegrees(value) {
+  set rotationDegrees(double value) {
     _rotationDegrees = value < 0 ? 0 : value;
   }
 
@@ -29,7 +29,7 @@ class Jump {
     return _maxRotationSpeed;
   }
 
-  set maxRotationSpeed(value) {
+  set maxRotationSpeed(double value) {
     _maxRotationSpeed = _maxRotationSpeed.abs();
   }
 
@@ -37,7 +37,7 @@ class Jump {
     return _durationToMaxSpeed;
   }
 
-  set durationToMaxSpeed(value) {
+  set durationToMaxSpeed(double value) {
     _durationToMaxSpeed = value < 0 ? 0 : value;
   }
 
@@ -45,7 +45,7 @@ class Jump {
     return _time;
   }
 
-  set time(value) {
+  set time(int value) {
     _time = value < 0 ? 0 : value;
   }
 
@@ -53,12 +53,16 @@ class Jump {
     return _duration;
   }
 
-  set duration(value) {
+  set duration(int value) {
     _duration = value < 0 ? 0 : value;
   }
 
   double get turns {
     return _rotationDegrees / degreesPerTurn;
+  }
+
+  set turns(double value) {
+    _rotationDegrees = value < 0 ? 0 : value * degreesPerTurn;
   }
 
   int get score {
