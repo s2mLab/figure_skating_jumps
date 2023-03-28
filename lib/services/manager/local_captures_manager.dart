@@ -8,7 +8,7 @@ class LocalCapturesManager implements ILocalDbManager<LocalCapture> {
   static final LocalCapturesManager _localCapturesManager =
       LocalCapturesManager._internal();
 
-  List<LocalCapture> _localCaptures = [];
+  final List<LocalCapture> _localCaptures = [];
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
