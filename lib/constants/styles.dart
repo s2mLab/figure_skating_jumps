@@ -13,3 +13,6 @@ BoxShadow connectionShadow = BoxShadow(
 const double promptTextHeight = 1.1;
 TextStyle tabStyle =
     const TextStyle(color: primaryColorDark, fontWeight: FontWeight.bold);
+
+const TextStyle connectingStyle = TextStyle(color: darkText);
+const TextStyle connectedStyle = TextStyle(color: connectedXSensDotButtonForeground);

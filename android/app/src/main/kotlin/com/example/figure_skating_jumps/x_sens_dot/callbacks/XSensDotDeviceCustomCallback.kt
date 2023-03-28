@@ -17,6 +17,7 @@ import java.util.ArrayList
 class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
     private val maxRecordingOutputRate: Int = 120
     private val measuringOutputRate: Int = 12
+    private val initializedStatus: Int = 3
 
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
@@ -30,6 +31,7 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "Initialization of device $address complete")
+        XSensDotConnectionStreamHandler.sendEvent(initializedStatus)
         XSensDotMeasuringStatusStreamHandler.sendEvent(MeasuringStatus.InitDone);
     }
 
