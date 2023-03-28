@@ -15,10 +15,10 @@ import '../../buttons/ice_button.dart';
 
 class JumpPanelContent extends StatefulWidget {
   final Jump _j;
-  final void Function(Jump j) _onModified;
-  final void Function(Jump j) _onDeleted;
+  final void Function(Jump j, JumpType initialJumpType, int initialTime) _onModified;
+  final void Function(Jump j, JumpType initialJumpType) _onDeleted;
   const JumpPanelContent(
-      {super.key, required jump, required void Function(Jump j) onModified, required void Function(Jump j) onDeleted})
+      {super.key, required jump, required void Function(Jump j, JumpType initialJumpType, int initialTime) onModified, required void Function(Jump j, JumpType initial) onDeleted})
       : _j = jump,
         _onModified = onModified,
         _onDeleted = onDeleted;
@@ -28,8 +28,10 @@ class JumpPanelContent extends StatefulWidget {
 }
 
 class _JumpPanelContentState extends State<JumpPanelContent> {
-  final int maxDigitsForDoubleData = 3;
-  final double labelFontSizeInPanel = 14;
+  final int _maxDigitsForDoubleData = 3;
+  final double _labelFontSizeInPanel = 14;
+  late JumpType _initialJumpType;
+  late int _initialTime;
   Jump? _j;
   late JumpType _selectedType;
   late int _selectedScore;
@@ -45,6 +47,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   @override
   void initState() {
     _j = widget._j;
+    _initialJumpType = _j!.type;
+    _initialTime = _j!.time;
     _selectedScore = _j!.score;
     _selectedType = _j!.type;
     _initializeAllTextControllers();
@@ -54,7 +58,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   void _initializeAllTextControllers() {
     _initializeCommentController();
     _rotationController = TextEditingController(
-        text: _j!.rotationDegrees.toStringAsFixed(maxDigitsForDoubleData));
+        text: _j!.turns.toStringAsFixed(_maxDigitsForDoubleData));
     _initializeAdvancedMetricsControllers();
   }
 
@@ -66,9 +70,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     _durationController = TextEditingController(text: _j!.duration.toString());
     _startTimeController = TextEditingController(text: _j!.time.toString());
     _timeToMaxSpeedController = TextEditingController(
-        text: _j!.durationToMaxSpeed.toStringAsFixed(maxDigitsForDoubleData));
+        text: _j!.durationToMaxSpeed.toStringAsFixed(_maxDigitsForDoubleData));
     _maxSpeedController = TextEditingController(
-        text: _j!.maxRotationSpeed.toStringAsFixed(maxDigitsForDoubleData));
+        text: _j!.maxRotationSpeed.toStringAsFixed(_maxDigitsForDoubleData));
   }
 
   @override
@@ -113,7 +117,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             setState(() {
                               _selectedType = newValue;
                               _j!.type = _selectedType;
-                              widget._onModified(_j!);
+                              widget._onModified(_j!, _initialJumpType, _initialTime);
+                              _initialJumpType = _selectedType;
                             });
                           });
                     }),
@@ -170,13 +175,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("$turns${_j!.turns.toStringAsFixed(2)}",
-                  style: TextStyle(fontSize: labelFontSizeInPanel)),
+              Text("$rotationDegrees${_j!.rotationDegrees.toStringAsFixed(3)}",
+                  style: TextStyle(fontSize: _labelFontSizeInPanel)),
               Row(
                 children: [
                   Text(
                     score,
-                    style: TextStyle(fontSize: labelFontSizeInPanel),
+                    style: TextStyle(fontSize: _labelFontSizeInPanel),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
@@ -215,7 +220,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           setState(() {
                             _selectedScore = val!;
                             _j!.score = _selectedScore;
-                            widget._onModified(_j!);
+                            widget._onModified(_j!, _initialJumpType, _initialTime);
+                            _initialJumpType = _selectedType;
                             //TODO: toast
                           });
                         }),
@@ -232,7 +238,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           setState(() {
                             _commentController.text = value;
                             _j!.comment = value;
-                            widget._onModified(_j!);
+                            widget._onModified(_j!, _initialJumpType, _initialTime);
+                            _initialJumpType = _selectedType;
                           });
                         });
                       },
@@ -245,8 +252,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                rotationDegrees,
-                style: TextStyle(fontSize: labelFontSizeInPanel),
+                turns,
+                style: TextStyle(fontSize: _labelFontSizeInPanel),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -259,9 +266,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         return FieldValidators.doubleValidator(val);
                       },
                       onEditingComplete: () {
-                        _j!.rotationDegrees =
+                        _j!.turns =
                             double.parse(_rotationController.text);
-                        widget._onModified(_j!);
+                        widget._onModified(_j!, _initialJumpType, _initialTime);
+                        _initialJumpType = _selectedType;
                       },
                       controller: _rotationController,
                     )),
@@ -303,7 +311,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   child: IceButton(
                       text: continueTo,
                       onPressed: () {
-                        widget._onDeleted(_j!);
+                        widget._onDeleted(_j!, _initialJumpType);
                         Navigator.pop(context);
                       },
                       textColor: errorColor,
@@ -409,7 +417,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$durationLabel (sec)",
-                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
                       SizedBox(
                         width: 100,
                         child: TextFormField(
@@ -429,7 +437,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$startTimeLabel (sec)",
-                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
                       SizedBox(
                         width: 100,
                         child: TextFormField(
@@ -449,7 +457,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$timeToMaxSpeedLabel (sec)",
-                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
                       SizedBox(
                         width: 100,
                         child: TextFormField(
@@ -468,7 +476,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("$maxSpeedLabel (sec)",
-                          style: TextStyle(fontSize: labelFontSizeInPanel)),
+                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
                       SizedBox(
                         width: 100,
                         child: TextFormField(
@@ -504,7 +512,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     onPressed: () {
                       if (_metricsFormKey.currentState!.validate()) {
                         _metricsFormKey.currentState?.save();
-                        widget._onModified(_j!);
+                        widget._onModified(_j!, _initialJumpType, _initialTime);
+                        _initialJumpType = _selectedType;
                         Navigator.pop(context);
                       }
                     },
