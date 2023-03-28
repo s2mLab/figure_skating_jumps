@@ -70,6 +70,10 @@ class Capture {
         uID);
   }
 
+  static void sortJumps(Capture c) {
+    c._jumps.sort((a,b) => a.time.compareTo(b.time));
+  }
+
   static Future<Capture> createFromFirebase(
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
     Capture capture = Capture._fromFirestore(uID, captureInfo);
@@ -77,7 +81,7 @@ class Capture {
       Jump jumpToAdd = await CaptureClient().getJumpByID(uID: jumpID);
       capture.jumpTypeCount[jumpToAdd.type] = capture.jumpTypeCount[jumpToAdd.type]! + 1;
       capture._jumps.add(jumpToAdd);
-      capture._jumps.sort((a,b) => a.time.compareTo(b.time));
+      Capture.sortJumps(capture);
     }
 
     return capture;
