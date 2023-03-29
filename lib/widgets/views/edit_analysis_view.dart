@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,13 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     if (_capture!.hasVideo)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {}, // TODO: video preview
+                          onPressed: () {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return VideoPlayerDialog();
+                                });
+                          },
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
