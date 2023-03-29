@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
@@ -19,6 +20,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
+import '../../services/user_client.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
@@ -36,7 +38,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   ChartSeriesController? _xChartSeriesController;
   ChartSeriesController? _yChartSeriesController;
   ChartSeriesController? _zChartSeriesController;
-  final XSensDotBluetoothDiscoveryService _discoveryService = XSensDotBluetoothDiscoveryService();
+  final XSensDotBluetoothDiscoveryService _discoveryService =
+      XSensDotBluetoothDiscoveryService();
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
   final XSensDotStreamingDataService _xSensDotStreamingDataService =
@@ -278,20 +281,20 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     }
   }
 
-  //TODO: Important to understand that this is always a new device, e.g. it isn't already in the users known device list
-  //TODO: That check will have to be implemented
-
-  //TODO: Maybe change for connection event when they will be done
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
-      //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
+      await DeviceNamesManager()
+          .addDevice(UserClient().currentAuthUser!.uid, device);
       setState(() {
         _connectionStep = 1;
       });
-      await _xSensDotStreamingDataService.startMeasuring(false);
+      await _xSensDotStreamingDataService
+          .startMeasuring(XSensDotConnectionService().isInitialized);
+    } else {
+      //TODO show error message (when I will have the UI model to do so)
+      debugPrint("Connection to device ${device.macAddress} failed");
     }
-    //TODO show error message (when I will have the UI model to do so)
   }
 
   @override
@@ -306,12 +309,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       if (_xChartSeriesController == null ||
           _yChartSeriesController == null ||
           _zChartSeriesController == null) return;
-      
+
       int startIndex = _streamedData.length;
       int nbAddedData = measuredData.length - _streamedData.length;
-      List<int> addedIndexes = List<int>.generate(nbAddedData, (i) => i + startIndex);
+      List<int> addedIndexes =
+          List<int>.generate(nbAddedData, (i) => i + startIndex);
 
-      _streamedData.addAll(measuredData.where((element) => !_streamedData.contains(element)));
+      _streamedData.addAll(
+          measuredData.where((element) => !_streamedData.contains(element)));
 
       _xChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
       _yChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
