@@ -2,32 +2,32 @@ import 'package:figure_skating_jumps/models/db_models/abstract_local_db_object.d
 
 class LocalCapture extends AbstractLocalDbObject {
   final String _captureID;
-  final String _path;
+  final String _videoPath;
 
   LocalCapture({
     int? id,
     required String captureID,
-    required String path
-  }): _captureID = captureID, _path = path;
+    required String videoPath
+  }): _captureID = captureID, _videoPath = videoPath;
 
   get captureID {
     return _captureID;
   }
 
-  get path {
-    return _path;
+  get videoPath {
+    return _videoPath;
   }
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'captureID': _captureID,
-      'path': _path,
+      'path': _videoPath,
     };
   }
 
   @override
   String toString() {
-    return 'DeviceName{id: $id, captureID: $_captureID, path: $_path}';
+    return 'DeviceName{id: $id, captureID: $_captureID, path: $_videoPath}';
   }
 }

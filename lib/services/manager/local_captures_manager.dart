@@ -28,7 +28,7 @@ class LocalCapturesManager implements ILocalDbManager<LocalCapture> {
       return LocalCapture(
         id: objMaps[i]['id'],
         captureID: objMaps[i]['captureID'],
-        path: objMaps[i]['path'],
+        videoPath: objMaps[i]['path'],
       );
     });
   }
