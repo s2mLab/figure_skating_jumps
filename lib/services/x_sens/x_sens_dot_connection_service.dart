@@ -15,7 +15,8 @@ class XSensDotConnectionService
     implements IObservable<IXSensStateSubscriber, XSensDeviceState> {
   static final _xSensConnectionMethodChannel =
       MethodChannel(MethodChannelNames.connectionChannel.channelName);
-  static final _xSensConnectionEventChannel = EventChannel(EventChannelNames.connectionChannel.channelName);
+  static final _xSensConnectionEventChannel =
+      EventChannel(EventChannelNames.connectionChannel.channelName);
   static final XSensDotConnectionService _xSensDotConnection =
       XSensDotConnectionService._internal();
   final List<IXSensStateSubscriber> _subscribers = [];
@@ -55,9 +56,10 @@ class XSensDotConnectionService
         _currentXSensDevice = bluetoothDevice;
 
         DeviceName? deviceName = DeviceNamesManager()
-            .preferences
+            .deviceNames
             .firstWhereOrNull((iter) =>
                 _currentXSensDevice!.macAddress == iter.deviceMacAddress);
+
         if (deviceName != null) {
           _currentXSensDevice!.assignedName = deviceName.name;
         } else {
@@ -81,8 +83,9 @@ class XSensDotConnectionService
   }
 
   static void _changeState(int state) {
-    XSensDeviceState? newState = XSensDeviceState.values.firstWhereOrNull((element) => element.state == state);
-    if(newState == null) return;
+    XSensDeviceState? newState = XSensDeviceState.values
+        .firstWhereOrNull((element) => element.state == state);
+    if (newState == null) return;
     XSensDotConnectionService().notifySubscribers(newState);
   }
 
