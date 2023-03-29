@@ -63,6 +63,7 @@ class _LoggerViewState extends State<_LoggerView>
   void dispose() {
     _scrollController.dispose();
     XSensDotStreamingDataService().stopMeasuring();
+    XSensDotStreamingDataService().unsubscribe(this);
     super.dispose();
   }
 

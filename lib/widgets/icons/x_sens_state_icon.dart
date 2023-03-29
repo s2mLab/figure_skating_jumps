@@ -17,16 +17,16 @@ class XSensStateIcon extends StatelessWidget {
       size = 'small-';
     }
     switch (_state) {
-      case XSensDeviceState.reconnecting:
-        return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Missing.svg',
-            height: _isSmall ? _smallHeight : _bigHeight);
+      case XSensDeviceState.initialized:
       case XSensDeviceState.connected:
         return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Co.svg',
             height: _isSmall ? _smallHeight : _bigHeight);
       case XSensDeviceState.disconnected:
         return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Deco.svg',
             height: _isSmall ? _smallHeight : _bigHeight);
-      default:
+      case XSensDeviceState.connecting:
+      case XSensDeviceState.startReconnecting:
+      case XSensDeviceState.reconnecting:
         return SvgPicture.asset('assets/vectors/${size}XSens-Ico-Missing.svg',
             height: _isSmall ? _smallHeight : _bigHeight);
     }
