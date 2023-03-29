@@ -70,8 +70,16 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, result -> handleRecordingCalls(call, result) }
         MethodChannel(
             messenger,
-            MethodChannelNames.XSensDotChannel.channelName
-        ).setMethodCallHandler { call, result -> handleXSensDotCalls(call, result) }
+            MethodChannelNames.MeasuringChannel.channelName
+        ).setMethodCallHandler { call, result -> handleMeasuringCalls(call, result) }
+        MethodChannel(
+            messenger,
+            MethodChannelNames.ConnectionChannel.channelName
+        ).setMethodCallHandler { call, result -> handleConnectionCalls(call, result) }
+        MethodChannel(
+            messenger,
+            MethodChannelNames.ScanChannel.channelName
+        ).setMethodCallHandler { call, result -> handleScanCalls(call, result) }
 
         for (eventChannelParam in EventChannelParameters.values()) {
             EventChannel(messenger, eventChannelParam.channelName).setStreamHandler(
@@ -91,6 +99,7 @@ class MainActivity : FlutterActivity() {
             "enableRecordingNotification" -> enableRecordingNotification(result)
             "startRecording" -> startRecording(result)
             "stopRecording" -> stopRecording(result)
+            "setRate" -> setRate(call, result)
             "getFlashInfo" -> getFlashInfo(call, result)
             "getFileInfo" -> getFileInfo(result)
             "extractFile" -> extractFile(call, result)
@@ -100,25 +109,33 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun handleXSensDotCalls(call: MethodCall, result: MethodChannel.Result) {
+    private fun handleMeasuringCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getSDKVersion" -> getSDKVersion(result)
-            "startScan" -> startScan(result)
-            "stopScan" -> stopScan(result)
-            "connectXSensDot" -> connectXSensDot(call, result)
-            "setRate" -> setRate(call, result)
-            "disconnectXSensDot" -> disconnectXSensDot(result)
             "startMeasuring" -> startMeasuring(result)
             "stopMeasuring" -> stopMeasuring(result)
+            "setRate" -> setRate(call, result)
             else -> result.notImplemented()
         }
     }
 
-    private fun getSDKVersion(result: MethodChannel.Result) {
-        result.success(XsensDotSdk.getSdkVersion())
+    private fun handleConnectionCalls(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "connectXSensDot" -> connectXSensDot(call, result)
+            "disconnectXSensDot" -> disconnectXSensDot(result)
+            else -> result.notImplemented()
+        }
+    }
+
+    private fun handleScanCalls(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "startScan" -> startScan(result)
+            "stopScan" -> stopScan(result)
+            else -> result.notImplemented()
+        }
     }
 
     private fun startScan(result: MethodChannel.Result) {
+        // TODO when modifying the bluetooth management permissions: There is a race condition right there
         PermissionUtils.manageBluetoothRequirements(this)
         xSensDotDeviceScanner.startScan()
         result.success(null)

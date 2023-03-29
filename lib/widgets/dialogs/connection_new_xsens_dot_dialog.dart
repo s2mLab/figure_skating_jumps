@@ -7,7 +7,7 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
-import 'package:figure_skating_jumps/services/bluetooth_discovery.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -36,7 +36,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   ChartSeriesController? _xChartSeriesController;
   ChartSeriesController? _yChartSeriesController;
   ChartSeriesController? _zChartSeriesController;
-  final BluetoothDiscovery _discoveryService = BluetoothDiscovery();
+  final XSensDotBluetoothDiscoveryService _discoveryService = XSensDotBluetoothDiscoveryService();
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
   final XSensDotStreamingDataService _xSensDotStreamingDataService =
@@ -52,6 +52,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void dispose() {
+    _xSensDotStreamingDataService.unsubscribe(this);
+    _discoveryService.unsubscribe(this);
     super.dispose();
   }
 
@@ -281,6 +283,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   //TODO: Maybe change for connection event when they will be done
   Future<void> _onDevicePressed(BluetoothDevice device) async {
+    _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
       //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
