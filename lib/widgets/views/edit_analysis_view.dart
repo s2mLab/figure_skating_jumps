@@ -3,10 +3,10 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
+
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
@@ -29,6 +29,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
   List<bool> _isPanelsOpen = [];
   late ScrollController _jumpListScrollController;
+  bool _timeWasModified = false;
 
   @override
   void initState() {
@@ -58,13 +59,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     if (_capture!.hasVideo)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const VideoPlayerDialog();
-                                });
-                          },
+                          onPressed: () {}, // TODO: video preview
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
@@ -111,6 +106,21 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                         iceButtonSize: IceButtonSize.small)
                   ],
                 ),
+                if (_timeWasModified)
+                  Center(
+                      child: IceButton(
+                          text: reorderJumpList,
+                          onPressed: () {
+                            Capture.sortJumps(_capture!);
+                            Navigator.pushReplacementNamed(
+                                context, '/EditAnalysis',
+                                arguments: _capture);
+                          },
+                          textColor: secondaryColor,
+                          color: secondaryColor,
+                          iceButtonImportance:
+                              IceButtonImportance.discreetAction,
+                          iceButtonSize: IceButtonSize.small)),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
@@ -138,14 +148,25 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                               },
                               body: JumpPanelContent(
                                   jump: _capture!.jumps[index],
-                                  onModified: (Jump j) {
+                                  onModified: (Jump j, JumpType initialJumpType,
+                                      int initialTime) {
+                                    if (j.time != initialTime) {
+                                      _timeWasModified = true;
+                                    }
                                     setState(() {
-                                      _capture!.jumps[index] = j;
+                                      _capture!.jumpTypeCount[initialJumpType] =
+                                          _capture!.jumpTypeCount[
+                                                  initialJumpType]! -
+                                              1;
+                                      _capture!.jumpTypeCount[j.type] =
+                                          _capture!.jumpTypeCount[j.type]! + 1;
                                       CaptureClient().updateJump(jump: j);
                                     });
                                   },
-                                  onDeleted: (Jump j) {
+                                  onDeleted: (Jump j, JumpType initial) {
                                     setState(() {
+                                      _capture!.jumpTypeCount[initial] =
+                                          _capture!.jumpTypeCount[initial]! - 1;
                                       _capture!.jumps.remove(j);
                                       _capture = _capture;
                                       _isPanelsOpen = [];
