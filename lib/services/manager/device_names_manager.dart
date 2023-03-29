@@ -7,7 +7,7 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   static final DeviceNamesManager _deviceNamesManager =
       DeviceNamesManager._internal();
 
-  List<DeviceName> _preferences = [];
+  List<DeviceName> _deviceNames = [];
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -17,8 +17,8 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
 
   DeviceNamesManager._internal();
 
-  List<DeviceName> get preferences {
-    return _preferences;
+  List<DeviceName> get deviceNames {
+    return _deviceNames;
   }
 
   @override
@@ -34,7 +34,7 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   }
 
   Future<void> loadDeviceNames(String userID) async {
-    _preferences = constructObject(await LocalDbService()
+    _deviceNames = constructObject(await LocalDbService()
         .readWhere(LocalDbService.deviceNamesTableName, "userID", userID));
   }
 
@@ -44,11 +44,11 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
     int id = await LocalDbService()
         .insertOne(deviceToAdd, LocalDbService.deviceNamesTableName);
     deviceToAdd.id = id;
-    _preferences.add(deviceToAdd);
+    _deviceNames.add(deviceToAdd);
   }
 
   Future<void> changeName(String name, BluetoothDevice device) async {
-    DeviceName deviceName = _preferences
+    DeviceName deviceName = _deviceNames
         .firstWhere((iter) => iter.deviceMacAddress == device.macAddress);
     deviceName.name = name;
     await LocalDbService()

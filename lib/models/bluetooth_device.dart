@@ -36,7 +36,7 @@ class BluetoothDevice {
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_macAddress'])
         : _macAddress = macAddress;
-    DeviceName? savedDevice = DeviceNamesManager().preferences.firstWhereOrNull((el) => el.deviceMacAddress == _macAddress);
+    DeviceName? savedDevice = DeviceNamesManager().deviceNames.firstWhereOrNull((el) => el.deviceMacAddress == _macAddress);
     _assignedName = savedDevice == null ? _name : savedDevice.name;
   }
 

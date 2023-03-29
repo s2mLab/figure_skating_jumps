@@ -150,10 +150,10 @@ class _CaptureViewState extends State<CaptureView> {
       if (mounted) {
         _displayWaitingDialog(pleaseWait);
 
-        String path = await ExternalStorageService().saveVideo(
-            f); // TODO: Save to localDataBase. and eventually Firebase?
-        path =
-            path; // To ignore the warning of unused variable -> will be used for localDB storage
+        String path = await ExternalStorageService().saveVideo(f);
+        // TODO: Save to localDataBase. and eventually Firebase?
+        // To ignore the warning of unused variable -> will be used for localDB storage
+        path = path;
       }
     } catch (e) {
       developer.log(e.toString());
