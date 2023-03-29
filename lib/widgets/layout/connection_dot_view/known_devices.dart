@@ -10,14 +10,14 @@ import '../../buttons/x_sens_dot_list_element.dart';
 import '../../dialogs/configure_x_sens_dot_dialog.dart';
 import '../../icons/x_sens_state_icon.dart';
 
-class DotConnected extends StatefulWidget {
-  const DotConnected({Key? key}) : super(key: key);
+class KnownDevices extends StatefulWidget {
+  const KnownDevices({Key? key}) : super(key: key);
 
   @override
-  State<DotConnected> createState() => _DotConnectedState();
+  State<KnownDevices> createState() => _KnownDevicesState();
 }
 
-class _DotConnectedState extends State<DotConnected> {
+class _KnownDevicesState extends State<KnownDevices> {
   late XSensStateIcon stateIconConnected;
   late XSensStateIcon stateIconDisconnected;
 
