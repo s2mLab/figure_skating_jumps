@@ -1,8 +1,5 @@
-import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/lang_fr.dart';
 import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 
@@ -15,33 +12,19 @@ class XSensDotConnectionButton extends StatefulWidget {
 
 class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     implements IXSensStateSubscriber {
-  XSensDotConnectionService connection = XSensDotConnectionService();
+  XSensDotConnectionService connectionService = XSensDotConnectionService();
   late XSensDeviceState connectionState;
-  final List<String> _connectionStateMessages = [
-    connectionStateMessageDisconnected,
-    connectionStateMessageReconnecting,
-    connectionStateMessageConnected,
-  ];
-  final List<TextStyle> _connectionStateStyles = [
-    const TextStyle(color: connectedXSensDotButtonForeground),
-    const TextStyle(color: darkText),
-    const TextStyle(color: connectedXSensDotButtonForeground),
-  ];
-  final List<Color> _connectionBackgroundColors = [
-    Colors.black,
-    reconnectingXSensDotButtonBackground,
-    primaryColorLight,
-  ];
-  final List<Color> _connectionForegroundColors = [
-    errorColor,
-    reconnectingXSensDotButtonIndicator,
-    connectedXSensDotButtonIndicator,
-  ];
 
   @override
   void initState() {
-    connectionState = connection.subscribeConnectionState(this);
+    connectionState = connectionService.subscribe(this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    connectionService.unsubscribe(this);
+    super.dispose();
   }
 
   @override
@@ -50,7 +33,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
         height: 24,
         width: 230,
         decoration: BoxDecoration(
-          color: _connectionBackgroundColors[connectionState.index],
+          color: connectionState.backgroundColor,
           borderRadius: BorderRadius.circular(8),
         ),
         child: MaterialButton(
@@ -63,15 +46,15 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_connectionStateMessages[connectionState.index],
-                  style: _connectionStateStyles[connectionState.index]),
+              Text(connectionState.message,
+                  style: connectionState.style),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Container(
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: _connectionForegroundColors[connectionState.index],
+                    color: connectionState.foregroundColor,
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
@@ -83,8 +66,10 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
 
   @override
   void onStateChange(XSensDeviceState state) {
-    setState(() {
-      connectionState = state;
-    });
+    if(mounted) {
+      setState(() {
+        connectionState = state;
+      });
+    }
   }
 }
