@@ -1,7 +1,6 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_channel_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
@@ -54,8 +53,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   child: IceButton(
                       text: disconnectDevice,
                       onPressed: () async {
-                        await XSensDotChannelService().disconnectXSensDot();
-                        //TODO: notify UI
+                        await XSensDotConnectionService().disconnect();
                         close();
                       },
                       textColor: errorColor,

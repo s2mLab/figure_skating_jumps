@@ -18,6 +18,18 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
     private val maxRecordingOutputRate: Int = 120
     private val measuringOutputRate: Int = 12
 
+    /*The XSensDotDevice contains 5 connection state (int),
+    * but we need to know when it is ready to use,
+    * hence the initializedState. The 3 was the value that was not used.
+    * CONN_STATE_DISCONNECTED = 0
+    * CONN_STATE_CONNECTING = 1
+    * CONN_STATE_CONNECTED = 2
+    * initializedState = 3
+    * CONN_STATE_RECONNECTING = 4
+    * CONN_STATE_START_RECONNECTING = 5
+    */
+    private val initializedState: Int = 3
+
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
         Log.i("XSensDot", "onXsensDotConnectionChanged")
         XSensDotConnectionStreamHandler.sendEvent(state)
@@ -30,6 +42,7 @@ class XSensDotDeviceCustomCallback: XsensDotDeviceCallback {
 
     override fun onXsensDotInitDone(address: String?) {
         Log.i("XSensDot", "Initialization of device $address complete")
+        XSensDotConnectionStreamHandler.sendEvent(initializedState)
         XSensDotMeasuringStatusStreamHandler.sendEvent(MeasuringStatus.InitDone);
     }
 
