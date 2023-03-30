@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'colors.dart';
 
@@ -16,3 +17,6 @@ TextStyle tabStyle =
 
 const TextStyle connectingStyle = TextStyle(color: darkText);
 const TextStyle connectedStyle = TextStyle(color: connectedXSensDotButtonForeground);
+
+const dateFormatString = 'dd/MM/yyyy';
+final dateDisplayFormat = DateFormat(dateFormatString);
