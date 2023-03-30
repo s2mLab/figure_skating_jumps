@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/db_models/device_name.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
+import 'package:flutter/cupertino.dart';
 
 class DeviceNamesManager implements ILocalDbManager<DeviceName> {
   static final DeviceNamesManager _deviceNamesManager =
@@ -45,6 +47,17 @@ class DeviceNamesManager implements ILocalDbManager<DeviceName> {
         .insertOne(deviceToAdd, LocalDbService.deviceNamesTableName);
     deviceToAdd.id = id;
     _deviceNames.add(deviceToAdd);
+  }
+
+  Future<void> removeDevice(BluetoothDevice device) async {
+    DeviceName? deviceToRemove = _deviceNames
+        .firstWhereOrNull((el) => el.deviceMacAddress == device.macAddress);
+    if(deviceToRemove == null){
+      debugPrint("Could not find device ${device.macAddress} in local storage");
+      return;
+    }
+    await LocalDbService().deleteOne(deviceToRemove, LocalDbService.deviceNamesTableName);
+    _deviceNames.remove(deviceToRemove);
   }
 
   Future<void> changeName(String name, BluetoothDevice device) async {
