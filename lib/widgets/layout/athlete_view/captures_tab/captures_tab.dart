@@ -7,9 +7,8 @@ import '../../capture_list_tile.dart';
 import '../../legend_move.dart';
 
 class CapturesTab extends StatelessWidget {
-  CapturesTab({Key? key, required this.captures}) : super(key: key);
+  const CapturesTab({Key? key, required this.captures}) : super(key: key);
   final Map<String, List<Capture>> captures;
-  final dateDisplayFormat = DateFormat('dd/MM/yyyy');
   final double heightContainer = 110;
 
   @override
