@@ -20,6 +20,7 @@ class XSensDotBluetoothDiscoveryService
       EventChannel(EventChannelNames.scanChannel.channelName);
   static final _xSensScanMethodChannel = MethodChannel(MethodChannelNames.scanChannel.channelName);
   static const _scanDuration = Duration(seconds: 30);
+  Timer? _scanTimer;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -39,9 +40,13 @@ class XSensDotBluetoothDiscoveryService
   }
 
   Future<void> scanDevices() async {
+    if(_scanTimer != null) {
+      _scanTimer?.cancel();
+      await _stopScan();
+    }
     _devices.clear();
     await _startScan();
-    Timer(_scanDuration, () async {
+    _scanTimer = Timer(_scanDuration, () async {
       await _stopScan();
     });
   }
@@ -60,6 +65,7 @@ class XSensDotBluetoothDiscoveryService
     } on PlatformException catch (e) {
       debugPrint(e.message!);
     }
+    _scanTimer = null;
   }
 
   static void _addDevice(String eventDevice) {
