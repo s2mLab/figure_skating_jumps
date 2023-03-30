@@ -53,6 +53,7 @@ const String configureFrequencyDropMenu = "Sélectionner la fréquence : ";
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
 const String disconnectDevice = "Déconnecter";
+const String connectDevice = "Connecter";
 
 // widgets/layout/edit_analysis_view/jump_panel_header
 const String jumpType = "Type";
