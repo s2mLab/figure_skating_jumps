@@ -7,13 +7,16 @@ const String goBack = "Retour";
 const String pleaseWait = "Veuillez patienter";
 const String save = "Enregistrer";
 
-// widgets/alertDialog/modify_full_name
+// widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
 const String firstName = "Prénom: ";
 const String lastName = "Nom: ";
 const String confirmLabel = "Modifier";
 
-// widgets/alertDialog/modify_password
+// widgets/dialogs/modify_password
+const String helperTitle = "Page d'aide";
+
+// widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordInput = "Mot de passe: ";
 const String passwordConfirmationInput = "Confirmation mot de passe: ";
@@ -59,15 +62,19 @@ const String jumpType = "Type";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
 const String deleteAJump = "Supprimer le saut";
-const String confirmDelete = "Cette action est irréversible, voulez-vous continuer?";
+const String confirmDelete =
+    "Cette action est irréversible, voulez-vous continuer?";
 const String deleteJumpDialogTitle = "Suppression d'un saut";
 const String commentDialogTitle = "Voir ou modifier un commentaire";
-const String howToComment = "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
+const String howToComment =
+    "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
 const String editTemporalValues = "Métriques avancées";
 const String rotationDegrees = "Degrés ";
 const String metricsDialogTitle = "Voir ou modifier les métriques avancées";
-const String advancedMetricsPrompt = "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
-const String irreversibleDataModification = "Les données précédentes seront perdues lors de l'enregistrement.";
+const String advancedMetricsPrompt =
+    "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
+const String irreversibleDataModification =
+    "Les données précédentes seront perdues lors de l'enregistrement.";
 const String turns = "Nombre de tours: ";
 const String score = "Score";
 const String durationLabel = "Durée";
