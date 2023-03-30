@@ -1,13 +1,14 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
@@ -38,9 +39,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     super.initState();
   }
 
+  loadVideoData() async {
+    _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
+    LocalCapture? captureInfo =
+        await LocalCapturesManager().getCapture(_capture!.uID!);
+    debugPrint(captureInfo!.videoPath);
+    debugPrint("HEREEEEEEEEEEEEEEEEEEEE");
+  }
+
   @override
   Widget build(BuildContext context) {
-    _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
+    loadVideoData();
     return Scaffold(
         appBar: const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
