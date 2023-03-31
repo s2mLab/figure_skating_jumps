@@ -97,7 +97,6 @@ class ConfigureXSensDotDialog extends StatelessWidget {
         ? IceButton(
             text: connectDevice,
             onPressed: () async {
-              //A possible race condition, to test
               await XSensDotConnectionService().disconnect();
               if (await XSensDotConnectionService().connect(xSensDot)) {
                 close();

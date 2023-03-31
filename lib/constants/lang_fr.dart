@@ -47,7 +47,7 @@ const String bluetoothAuthorizationPrompt =
 const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
-const String connectionErrorMessage = "Erreur lors de la connexion à l\'appareil: ";
+const String connectionErrorMessage = "Erreur lors de la connexion à l'appareil: ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
