@@ -26,6 +26,10 @@ class SkatingUser {
     return _lastName;
   }
 
+  String get name {
+    return "$_firstName $_lastName";
+  }
+
   set firstName(String newName) {
     if (newName.isNotEmpty) {
       _firstName = newName;

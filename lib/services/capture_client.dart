@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:figure_skating_jumps/models/modification.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -97,7 +99,7 @@ class CaptureClient {
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
-        duration, hasVideo, DateTime.now(), []);
+        duration, hasVideo, DateTime.now(), [], []);
     await _createCapture(capture: capture);
   }
 
@@ -117,6 +119,28 @@ class CaptureClient {
       DocumentSnapshot<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).doc(uID).get();
       return Jump.fromFirestore(uID, jumpInfo);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> addModificationToCapture(
+      {required String captureID,
+      required String field,
+      required String oldValue,
+      required String value}) async {
+    try {
+      Capture capture = await getCaptureByID(uID: captureID);
+      String action =
+          "L'utilisateur ${UserClient().currentSkatingUser!.name} a changé la valeur du champ $field de $oldValue pour $value.";
+      capture.modifications.add(Modification(action, DateTime.now()));
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .update({
+        'modifications': capture.modsAsMap,
+      });
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
