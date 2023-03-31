@@ -3,29 +3,34 @@ import 'dart:convert';
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
+import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../enums/method_channel_names.dart';
+import '../../interfaces/i_recorder_state_subscriber.dart';
 import '../../models/xsens_dot_data.dart';
 
-class XSensDotRecordingService {
+class XSensDotRecordingService
+    implements IObservable<IRecorderSubscriber, RecorderState> {
   static final _recordingMethodChannel =
-      MethodChannel(MethodChannelNames.recordingChannel.channelName);
+  MethodChannel(MethodChannelNames.recordingChannel.channelName);
   static final _recordingEventChannel =
-      EventChannel(EventChannelNames.recordingChannel.channelName);
+  EventChannel(EventChannelNames.recordingChannel.channelName);
   static var _recorderState = RecorderState.idle;
+  final List<IRecorderSubscriber> _subscribers = [];
 
   static final XSensDotRecordingService _xSensDotRecordingServiceService =
-      XSensDotRecordingService._internal();
+  XSensDotRecordingService._internal();
 
   static final List<XSensDotData> _exportedData = [];
   static String _exportFileName = "";
 
   static bool _currentRecordingHasVideo = false;
 
-  final _recordingOutputRate = 120;
+  static const _recordingOutputRate = 120;
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
@@ -39,7 +44,7 @@ class XSensDotRecordingService {
   static Future<void> _handleRecordingEvents(String event) async {
     var data = jsonDecode(event);
     var status =
-        RecordingStatus.values.firstWhere((el) => el.status == data['status']);
+    RecordingStatus.values.firstWhere((el) => el.status == data['status']);
     switch (status) {
       case RecordingStatus.setRate:
         await _handleSetRate();
@@ -74,13 +79,8 @@ class XSensDotRecordingService {
   Future<void> startRecording() async {
     _exportedData.clear();
     _exportFileName = "";
-    try {
-      await _recordingMethodChannel.invokeMethod(
-          'setRate', <String, dynamic>{'rate': _recordingOutputRate});
-    } on PlatformException catch (e) {
-      debugPrint(e.message);
-    }
-
+    //TODO: when connexion logic-UI is merged: check if device is initialized
+    await _setRate();
   }
 
   static Future<void> stopRecording(bool hasVideo) async {
@@ -89,6 +89,16 @@ class XSensDotRecordingService {
       await _recordingMethodChannel.invokeMethod('stopRecording');
     } on PlatformException catch (e) {
       debugPrint(e.message!);
+    }
+  }
+
+  static Future<void> _setRate() async {
+    try {
+      await _recordingMethodChannel.invokeMethod(
+          'setRate', <String, dynamic>{'rate': _recordingOutputRate});
+      _changeState(RecorderState.preparing);
+    } on PlatformException catch (e) {
+      debugPrint(e.message);
     }
   }
 
@@ -109,27 +119,29 @@ class XSensDotRecordingService {
   }
 
   static void _handleRecordingStarted() {
-    if (_recorderState == RecorderState.idle) {
-      _recorderState = RecorderState.recording;
+    if (_recorderState == RecorderState.preparing) {
+      _changeState(RecorderState.recording);
     }
   }
 
   static Future<void> _handleRecordingStopped() async {
     if (_recorderState == RecorderState.recording) {
-      _recorderState = RecorderState.exporting;
+      _changeState(RecorderState.exporting);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
   }
 
   static Future<void> _handleGetFlashInfoDone(String? data) async {
-    if (_recorderState == RecorderState.idle) {
-      var canRecord = data == "true";
-      if (canRecord) {
-        try {
-          await _recordingMethodChannel.invokeMethod('startRecording');
-        } on PlatformException catch (e) {
-          debugPrint(e.message!);
-        }
+    if (_recorderState == RecorderState.preparing) {
+      bool canRecord = data == "true";
+      if (!canRecord) {
+        _recorderState == RecorderState.idle;
+        return;
+      }
+      try {
+        await _recordingMethodChannel.invokeMethod('startRecording');
+      } on PlatformException catch (e) {
+        debugPrint(e.message!);
       }
     } else if (_recorderState == RecorderState.exporting) {
       await _recordingMethodChannel.invokeMethod('getFileInfo');
@@ -160,7 +172,30 @@ class XSensDotRecordingService {
           hasVideo: _currentRecordingHasVideo);
       debugPrint("Done");
       _currentRecordingHasVideo = false;
-      _recorderState = RecorderState.idle;
+      _changeState(RecorderState.idle);
     }
+  }
+
+  static void _changeState(RecorderState state) {
+    _recorderState = state;
+    XSensDotRecordingService().notifySubscribers(state);
+  }
+
+  @override
+  void notifySubscribers(RecorderState state) {
+    for (IRecorderSubscriber sub in _subscribers) {
+      sub.onStateChange(state);
+    }
+  }
+
+  @override
+  RecorderState subscribe(IRecorderSubscriber subscriber) {
+    _subscribers.add(subscriber);
+    return _recorderState;
+  }
+
+  @override
+  void unsubscribe(IRecorderSubscriber subscriber) {
+    _subscribers.remove(subscriber);
   }
 }

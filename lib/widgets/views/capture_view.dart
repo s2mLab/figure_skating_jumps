@@ -4,7 +4,9 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/start_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
@@ -24,6 +26,8 @@ class CaptureView extends StatefulWidget {
 }
 
 class _CaptureViewState extends State<CaptureView> {
+  final XSensDotRecordingService _xSensDotRecordingService =
+      XSensDotRecordingService();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool _isFullscreen = false;
@@ -146,6 +150,7 @@ class _CaptureViewState extends State<CaptureView> {
   Future<void> _onCaptureStopPressed(BuildContext context) async {
     try {
       await _initializeControllerFuture;
+      await XSensDotRecordingService.stopRecording(_isCameraActivated);
       XFile f = await _controller.stopVideoRecording();
       if (mounted) {
         _displayWaitingDialog(pleaseWait);
@@ -169,20 +174,15 @@ class _CaptureViewState extends State<CaptureView> {
   Future<void> _onCaptureStartPressed(BuildContext context) async {
     try {
       await _initializeControllerFuture;
-      _displayWaitingDialog(captureStartingPrompt);
-      _isCameraActivated
-          ? await _controller.startVideoRecording()
-          : developer
-              .log("Start camera-free capture placeholder"); //TODO: change
+      _displayStartDialog().then((_) => setState(() {
+            //TODO display something else when there is no camera
+            if (_isCameraActivated) _isFullscreen = true;
+          }));
+      await _xSensDotRecordingService.startRecording();
+      if (_isCameraActivated) await _controller.startVideoRecording();
     } catch (e) {
       developer.log(e.toString());
     }
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pop();
-    }
-    setState(() {
-      _isFullscreen = true;
-    });
   }
 
   Widget _buildCameraPreview(
@@ -211,6 +211,15 @@ class _CaptureViewState extends State<CaptureView> {
       );
     }
     return const Center(child: CircularProgressIndicator());
+  }
+
+  Future<void> _displayStartDialog() async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return const StartRecordingDialog();
+        });
   }
 
   void _displayWaitingDialog(String message) {
