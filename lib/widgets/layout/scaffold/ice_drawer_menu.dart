@@ -82,7 +82,7 @@ class IceDrawerMenu extends StatelessWidget {
                             showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return HelperDialog();
+                                  return const HelperDialog();
                                 });
                           },
                           icon: const Icon(Icons.help_outline),
