@@ -21,7 +21,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
-import '../../services/user_client.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
