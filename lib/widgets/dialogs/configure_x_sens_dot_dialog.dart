@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discov
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
@@ -98,8 +99,14 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             onPressed: () async {
               //A possible race condition, to test
               await XSensDotConnectionService().disconnect();
-              await XSensDotConnectionService().connect(xSensDot);
-              close();
+              if (await XSensDotConnectionService().connect(xSensDot)) {
+                close();
+              } else {
+                Fluttertoast.showToast(
+                    msg: connectionErrorMessage + xSensDot.macAddress);
+                debugPrint(
+                    "Connection to device ${xSensDot.macAddress} failed");
+              }
             },
             textColor: primaryColor,
             color: primaryColor,
