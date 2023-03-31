@@ -1,6 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import '../../capture_list_tile.dart';

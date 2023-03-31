@@ -23,6 +23,9 @@ class CaptureListTile extends StatelessWidget {
         padding: EdgeInsets.zero,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        onLongPress: () {
+          // TODO: Access log for capture
+        },
         onPressed: _isInteractive
             ? () {
                 Navigator.pushNamed(context, '/EditAnalysis',

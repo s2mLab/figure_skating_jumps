@@ -1,83 +1,58 @@
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../models/capture.dart';
+import '../../../../models/graphic_data_classes/value_date_pair.dart';
 
 class ProgressionTab extends StatelessWidget {
-  ProgressionTab({Key? key, required this.captures}) : super(key: key);
+  const ProgressionTab({Key? key, required this.captures}) : super(key: key);
   final Map<String, List<Capture>> captures;
-  final List<_DummyTempSkatingData> _data = [
-    _DummyTempSkatingData('23/02', 35),
-    _DummyTempSkatingData('27/02', 28),
-    _DummyTempSkatingData('7/03', 34),
-    _DummyTempSkatingData('8/03', 32),
-    _DummyTempSkatingData('16/03', 40)
-  ];
-  final List<_DummyTempSkatingData> _data2 = [
-    _DummyTempSkatingData('23/02', 15),
-    _DummyTempSkatingData('27/02', 18),
-    _DummyTempSkatingData('7/03', 44),
-    _DummyTempSkatingData('8/03', 12),
-    _DummyTempSkatingData('16/03', 10)
-  ];
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
             child: SingleChildScrollView(
-              child: Column(
-          children: [
-              Row(
-                children: [
-                  SfCartesianChart(
-                      primaryXAxis: CategoryAxis(),
-                      // Chart title
-                      title: ChartTitle(text: 'Temporary Title', textStyle: const TextStyle(fontFamily: 'Jost')),
-                      // Enable legend
-                      legend: Legend(isVisible: true),
-                      // Enable tooltip
-                      tooltipBehavior: TooltipBehavior(enable: true),
-                      series: <ChartSeries<_DummyTempSkatingData, String>>[
-                        //TODO: Automate the series generation when we have data (Sprint6)
-                        LineSeries<_DummyTempSkatingData, String>(
-                            dataSource: _data,
-                            xValueMapper: (_DummyTempSkatingData data, _) => data.year,
-                            yValueMapper: (_DummyTempSkatingData data, _) => data.score,
-                            name: JumpType.axel.abbreviation,
-                            // Enable data label
-                            dataLabelSettings: const DataLabelSettings(isVisible: false)),
-                        LineSeries<_DummyTempSkatingData, String>(
-                            dataSource: _data2,
-                            xValueMapper: (_DummyTempSkatingData data, _) => data.year,
-                            yValueMapper: (_DummyTempSkatingData data, _) => data.score,
-                            name: JumpType.loop.abbreviation,
-                            // Enable data label
-                            dataLabelSettings: const DataLabelSettings(isVisible: false)),
-                      ]),
-
-                ],
-
-              ),
-              Row(
-                children: const [Text("Test")], //TODO: Change when we decide the exact graphics and have data
-
-              ),
-              Row(
-                children: const [Text("Test")], //TODO: Change when we decide the exact graphics and have data
-
-              )
-          ],
-        ),
-            )),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                _getSucceededJumpsGraphic(),
+                _getSucceededJumpsGraphic(),
+                _getSucceededJumpsGraphic(),
+              ],
+            ),
+          ),
+        )),
       ],
     );
   }
-}
-class _DummyTempSkatingData {
-  _DummyTempSkatingData(this.year, this.score);
 
-  final String year;
-  final double score;
+  Widget _getSucceededJumpsGraphic() {
+    return SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        // Chart title
+        title: ChartTitle(
+            text: 'Score moyen par saut dans le temps',
+            textStyle: const TextStyle(fontFamily: 'Jost')),
+        // Enable legend
+        legend: Legend(isVisible: true),
+        // Enable tooltip
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: List<ChartSeries<ValueDatePair, String>>.generate(
+            JumpType.values.length - 1, (index) {
+          return LineSeries<ValueDatePair, String>(
+              color: JumpType.values[index].color,
+              dataSource: GraphicDataHelper.getJumpScorePerTypeGraphData(
+                  captures, JumpType.values[index]),
+              xValueMapper: (ValueDatePair data, _) => data.day,
+              yValueMapper: (ValueDatePair data, _) => data.value,
+              markerSettings:
+                  const MarkerSettings(isVisible: true, height: 4, width: 4),
+              name: JumpType.values[index].abbreviation);
+        }));
+  }
 }
