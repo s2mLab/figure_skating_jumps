@@ -14,7 +14,10 @@ import '../../dialogs/configure_x_sens_dot_dialog.dart';
 import '../../icons/x_sens_state_icon.dart';
 
 class KnownDevices extends StatefulWidget {
-  const KnownDevices({Key? key}) : super(key: key);
+  final Function refreshParentCallback;
+
+  const KnownDevices({Key? key, required this.refreshParentCallback})
+      : super(key: key);
 
   @override
   State<KnownDevices> createState() => _KnownDevicesState();
@@ -38,14 +41,10 @@ class _KnownDevicesState extends State<KnownDevices>
     _stateIconDisconnected =
         const XSensStateIcon(true, XSensDeviceState.disconnected);
 
-    _knownDevices.addAll(DeviceNamesManager()
-        .deviceNames
-        .map((name) => BluetoothDevice(name.deviceMacAddress, name.name)));
-
-    _filterNearDevices();
-    _filterFarDevices();
+    _updateKnowDevices();
 
     XSensDotBluetoothDiscoveryService().subscribe(this);
+    XSensDotConnectionService().subscribe(this);
     XSensDotBluetoothDiscoveryService().scanDevices();
 
     super.initState();
@@ -53,109 +52,113 @@ class _KnownDevicesState extends State<KnownDevices>
 
   @override
   void dispose() {
+    XSensDotConnectionService().unsubscribe(this);
     XSensDotBluetoothDiscoveryService().unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (XSensDotConnectionService().currentXSensDevice != null)
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (XSensDotConnectionService().currentXSensDevice != null)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text(
+                      connectedDevice,
+                      style: TextStyle(color: primaryColorLight, fontSize: 20),
+                    ),
+                  ),
+                if (XSensDotConnectionService().currentXSensDevice != null)
+                  Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: XSensDotListElement(
+                            hasLine: true,
+                            lineColor: connectedXSensDotButtonIndicator,
+                            text: XSensDotConnectionService()
+                                .currentXSensDevice!
+                                .assignedName,
+                            graphic: _stateIconConnected,
+                            onPressed: () async {
+                              await _onDevicePressed(XSensDotConnectionService()
+                                  .currentXSensDevice);
+                            }),
+                      )),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: const [
+                      Text(
+                        knownDevicesNear,
+                        style:
+                            TextStyle(color: primaryColorLight, fontSize: 20),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: discreetText,
+                            value: null,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _nearDevices.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: XSensDotListElement(
+                            hasLine: true,
+                            text: _nearDevices[index].assignedName,
+                            graphic: _stateIconDisconnected,
+                            onPressed: () async {
+                              await _onDevicePressed(_nearDevices[index]);
+                            },
+                          ));
+                    }),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
                   child: const Text(
-                    connectedDevice,
+                    myDevices,
                     style: TextStyle(color: primaryColorLight, fontSize: 20),
                   ),
                 ),
-              if (XSensDotConnectionService().currentXSensDevice != null)
-                Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: XSensDotListElement(
-                          hasLine: true,
-                          lineColor: connectedXSensDotButtonIndicator,
-                          text: XSensDotConnectionService()
-                              .currentXSensDevice!
-                              .assignedName,
-                          graphic: _stateIconConnected,
-                          onPressed: () async {
-                            await _onDevicePressed(
-                                XSensDotConnectionService().currentXSensDevice);
-                          }),
-                    )),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  children: const [
-                    Text(
-                      knownDevicesNear,
-                      style: TextStyle(color: primaryColorLight, fontSize: 20),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: discreetText,
-                          value: null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _nearDevices.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: XSensDotListElement(
-                          hasLine: true,
-                          text: _nearDevices[index].assignedName,
-                          graphic: _stateIconDisconnected,
-                          onPressed: () async {
-                            await _onDevicePressed(_nearDevices[index]);
-                          },
-                        ));
-                  }),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: const Text(
-                  myDevices,
-                  style: TextStyle(color: primaryColorLight, fontSize: 20),
-                ),
-              ),
-              ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _farDevices.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: XSensDotListElement(
-                          hasLine: true,
-                          text: _farDevices[index].assignedName,
-                          graphic: _stateIconDisconnected,
-                          onPressed: () async {
-                            await _onDevicePressed(_farDevices[index]);
-                          },
-                        ));
-                  }),
-            ],
+                ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _farDevices.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: XSensDotListElement(
+                            hasLine: true,
+                            text: _farDevices[index].assignedName,
+                            graphic: _stateIconDisconnected,
+                            onPressed: () async {
+                              await _onDevicePressed(_farDevices[index]);
+                            },
+                          ));
+                    }),
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -190,28 +193,46 @@ class _KnownDevicesState extends State<KnownDevices>
             xSensDot: device,
             close: () {
               if (mounted) Navigator.of(context).pop();
+              setState(() {
+                _updateKnowDevices();
+              });
+              if (_knownDevices.isEmpty) {
+                widget.refreshParentCallback();
+              }
             },
           );
         });
     if (result == null) setState(() {});
   }
 
-  void _updateDeviceList() {
+  void _updateKnowDevices() {
+    if (_knownDevices.length != DeviceNamesManager().deviceNames.length) {
+      _knownDevices.clear();
+      _knownDevices.addAll(DeviceNamesManager()
+          .deviceNames
+          .map((name) => BluetoothDevice(name.deviceMacAddress, name.name)));
+      _updateDeviceLists();
+    }
+  }
+
+  void _updateDeviceLists() {
     _filterNearDevices();
     _filterFarDevices();
-
-    if (mounted) setState(() {});
   }
 
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
     _scannedMacAddresses.clear();
     _scannedMacAddresses.addAll(devices.map((e) => e.macAddress));
-    _updateDeviceList();
+    setState(() {
+      _updateDeviceLists();
+    });
   }
 
   @override
   void onStateChange(XSensDeviceState state) {
-    _updateDeviceList();
+    setState(() {
+      _updateDeviceLists();
+    });
   }
 }
