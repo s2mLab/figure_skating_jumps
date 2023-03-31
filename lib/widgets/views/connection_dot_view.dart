@@ -37,7 +37,11 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
         ),
         Expanded(
             child: DeviceNamesManager().deviceNames.isNotEmpty
-                ? const KnownDevices()
+                ? KnownDevices(
+                    refreshParentCallback: () {
+                      if (mounted) setState(() {});
+                    },
+                  )
                 : const NoKnownDevices()),
         Center(
             child: Padding(
@@ -51,7 +55,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                   builder: (BuildContext context) {
                     return const ConnectionNewXSensDotDialog();
                   },
-                ).then((value) => setState(()=>{}));
+                ).then((value) => setState(() => {}));
               },
               textColor: paleText,
               color: primaryColor,
