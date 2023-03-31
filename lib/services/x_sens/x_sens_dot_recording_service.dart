@@ -5,7 +5,6 @@ import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
-import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -79,8 +78,13 @@ class XSensDotRecordingService
   Future<void> startRecording() async {
     _exportedData.clear();
     _exportFileName = "";
+    _changeState(RecorderState.preparing);
     //TODO: when connexion logic-UI is merged: check if device is initialized
     await _setRate();
+  }
+
+  RecorderState get recorderState {
+    return _recorderState;
   }
 
   static Future<void> stopRecording(bool hasVideo) async {
@@ -96,7 +100,6 @@ class XSensDotRecordingService
     try {
       await _recordingMethodChannel.invokeMethod(
           'setRate', <String, dynamic>{'rate': _recordingOutputRate});
-      _changeState(RecorderState.preparing);
     } on PlatformException catch (e) {
       debugPrint(e.message);
     }
@@ -135,7 +138,7 @@ class XSensDotRecordingService
     if (_recorderState == RecorderState.preparing) {
       bool canRecord = data == "true";
       if (!canRecord) {
-        _recorderState == RecorderState.idle;
+        _changeState(RecorderState.idle);
         return;
       }
       try {

@@ -1,5 +1,8 @@
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -13,11 +16,12 @@ class StartRecordingDialog extends StatefulWidget {
   State<StartRecordingDialog> createState() => _StartRecordingState();
 }
 
-class _StartRecordingState extends State<StartRecordingDialog> implements IRecorderSubscriber {
+class _StartRecordingState extends State<StartRecordingDialog>
+    implements IRecorderSubscriber {
   bool _isMemoryFull = false;
   RecorderState _lastState = RecorderState.idle;
   final XSensDotRecordingService _xSensDotRecordingService =
-  XSensDotRecordingService();
+      XSensDotRecordingService();
 
   @override
   void initState() {
@@ -67,13 +71,23 @@ class _StartRecordingState extends State<StartRecordingDialog> implements IRecor
       title: const Text(
         errorCaptureStartingPrompt,
         textAlign: TextAlign.center,
+        style: TextStyle(color: errorColor),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Padding(
+          children: [
+            const Padding(
                 padding: EdgeInsets.all(16.0), child: Text(memoryErrorMessage)),
+            IceButton(
+                text: memoryDialogButton,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                textColor: errorColor,
+                color: errorColor,
+                iceButtonImportance: IceButtonImportance.secondaryAction,
+                iceButtonSize: IceButtonSize.medium)
           ],
         )
       ],
@@ -82,13 +96,13 @@ class _StartRecordingState extends State<StartRecordingDialog> implements IRecor
 
   @override
   void onStateChange(RecorderState state) {
-    if(_lastState == RecorderState.preparing && state == RecorderState.idle) {
+    if (_lastState == RecorderState.preparing && state == RecorderState.idle) {
       setState(() {
         _isMemoryFull = true;
       });
     }
     _lastState = state;
-    if(_lastState != RecorderState.recording) return;
+    if (_lastState != RecorderState.recording) return;
     Navigator.pop(context);
   }
 }

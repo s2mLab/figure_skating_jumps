@@ -137,7 +137,8 @@ const String captureViewCameraSwitchPrompt = "Caméra activée ?";
 const String captureStartingPrompt = "Démarrage...";
 const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
 const String memoryErrorMessage =
-    "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer";
+    "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
+const String memoryDialogButton = "ok";
 const String stopCapture = "Arrêter la capture";
 
 // widgets/screens/coach_account_creation_view

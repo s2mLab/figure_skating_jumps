@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
@@ -175,6 +176,10 @@ class _CaptureViewState extends State<CaptureView> {
     try {
       await _initializeControllerFuture;
       _displayStartDialog().then((_) => setState(() {
+            if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
+              return;
+            }
+
             //TODO display something else when there is no camera
             if (_isCameraActivated) _isFullscreen = true;
           }));
