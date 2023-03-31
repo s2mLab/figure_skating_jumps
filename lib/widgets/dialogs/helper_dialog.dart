@@ -57,17 +57,19 @@ class _HelperDialogState extends State<HelperDialog> {
                     Column(children: [
                       Text(HelperSubject.values[index].description),
                       if (HelperSubject.values[index].direction != null)
-                        IceButton(
-                            text: "Me diriger sur la page",
-                            onPressed: () {
-                              Navigator.pushNamed(context,
-                                  HelperSubject.values[index].direction!);
-                            },
-                            textColor: primaryColor,
-                            color: primaryColor,
-                            iceButtonImportance:
-                                IceButtonImportance.secondaryAction,
-                            iceButtonSize: IceButtonSize.medium)
+                        Container(
+                            margin: const EdgeInsets.all(8),
+                            child: IceButton(
+                                text: "Me diriger sur la page",
+                                onPressed: () {
+                                  Navigator.pushNamed(context,
+                                      HelperSubject.values[index].direction!);
+                                },
+                                textColor: primaryColor,
+                                color: primaryColor,
+                                iceButtonImportance:
+                                    IceButtonImportance.secondaryAction,
+                                iceButtonSize: IceButtonSize.medium))
                     ])
                 ]);
               }),
