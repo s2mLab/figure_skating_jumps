@@ -16,6 +16,7 @@ import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dar
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants/colors.dart';
@@ -33,7 +34,7 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber, IXSensDotMeasuringDataSubscriber {
   int _connectionStep = 0;
-  List<BluetoothDevice> _devices = [];
+  final List<BluetoothDevice> _devices = [];
   final List<XSensDotData> _streamedData = [];
   ChartSeriesController? _xChartSeriesController;
   ChartSeriesController? _yChartSeriesController;
@@ -47,7 +48,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void initState() {
-    _devices = _discoveryService.subscribe(this);
+    _addScannedDevices(_discoveryService.subscribe(this));
     _streamedData.addAll(_xSensDotStreamingDataService.subscribe(this));
     _discoveryService.scanDevices();
     super.initState();
@@ -276,7 +277,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
     if (mounted) {
       setState(() {
-        _devices = devices;
+        _addScannedDevices(devices);
       });
     }
   }
@@ -284,17 +285,26 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
-      await DeviceNamesManager()
-          .addDevice(UserClient().currentAuthUser!.uid, device);
       setState(() {
         _connectionStep = 1;
       });
       await _xSensDotStreamingDataService
           .startMeasuring(XSensDotConnectionService().isInitialized);
     } else {
-      //TODO show error message (when I will have the UI model to do so)
+      Fluttertoast.showToast(msg: connectionErrorMessage + device.macAddress);
       debugPrint("Connection to device ${device.macAddress} failed");
     }
+  }
+
+  void _addScannedDevices(List<BluetoothDevice> scannedDevices) {
+    _devices.clear();
+    List<String> knownMacAddresses = [];
+    knownMacAddresses.addAll(
+        DeviceNamesManager().deviceNames.map((e) => e.deviceMacAddress));
+    Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
+            (scannedDevice) =>
+        !knownMacAddresses.contains(scannedDevice.macAddress));
+    _devices.addAll(devicesToAdd);
   }
 
   @override
