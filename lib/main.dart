@@ -226,6 +226,11 @@ class _GodViewState extends State<GodView> {
                     coachId: "SDlOvaQOGKMKTKiTTeyvNr9SaVA3");
               },
               child: const Text('Remove Skater')),
+          TextButton(
+              onPressed: () async {
+                CaptureClient().addModificationToCapture(captureID: '8FsSz1a3JPGWA4saNZ7r', field: 'random', oldValue: '6', value: 'yes');
+              },
+              child: const Text('Update capture')),
         ],
       )),
     );
