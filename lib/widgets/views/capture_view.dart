@@ -131,7 +131,13 @@ class _CaptureViewState extends State<CaptureView> {
                                 })
                           ]),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Text(selectSeasonPrompt),
+                          ),
                           DropdownButton<Season>(
                               selectedItemBuilder: (context) {
                                 return Season.values.map<Widget>((Season item) {
@@ -145,7 +151,7 @@ class _CaptureViewState extends State<CaptureView> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          item.toString(),
+                                          item.displayedString,
                                           style: const TextStyle(
                                               color: darkText,
                                               fontWeight: FontWeight.w600),
@@ -166,6 +172,7 @@ class _CaptureViewState extends State<CaptureView> {
                               onChanged: (val) {
                                 setState(() {
                                   _selectedSeason = val!;
+                                  XSensDotRecordingService.season = _selectedSeason;
                                 });
                               }),
                         ]
