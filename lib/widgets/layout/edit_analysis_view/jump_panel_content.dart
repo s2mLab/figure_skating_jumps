@@ -222,7 +222,6 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             _j!.score = _selectedScore;
                             widget._onModified(_j!, _initialJumpType, _initialTime);
                             _initialJumpType = _selectedType;
-                            //TODO: toast
                           });
                         }),
                   ),

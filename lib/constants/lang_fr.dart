@@ -68,6 +68,7 @@ const String disconnectDevice = "Déconnecter";
 
 // widgets/layout/edit_analysis_view/jump_panel_header
 const String jumpType = "Type";
+const String savedModificationsSnack = "Modification enregistrée!";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
 const String deleteAJump = "Supprimer le saut";
