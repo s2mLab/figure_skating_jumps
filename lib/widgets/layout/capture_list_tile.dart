@@ -49,9 +49,9 @@ class CaptureListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "${_currentCapture.date.hour.toString().padLeft(2, "0")}h${_currentCapture.date.minute.toString().padLeft(2, "0")}",
+                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.hour)}h${TimeConverter.twoDigitsPadLeft(_currentCapture.date.minute)}",
                           style: const TextStyle(fontSize: 24, color: darkText)),Text(
-                          "${_currentCapture.date.second}s",
+                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.second)}s",
                           style: const TextStyle(fontSize: 14, color: darkText)),
                     ],
                   ),
