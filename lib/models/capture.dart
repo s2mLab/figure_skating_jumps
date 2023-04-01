@@ -87,7 +87,7 @@ class Capture {
         captureInfo.get('duration'),
         captureInfo.get('hasVideo'),
         (captureInfo.get('date') as Timestamp).toDate(),
-        Season.values.firstWhere((element) => element.displayedString == captureInfo.get('season')),
+        Season.values.firstWhere((element) => element.toString() == captureInfo.get('season')),
         List<String>.from(captureInfo.get('jumps') as List),
         List<Modification>.from((captureInfo.get('modifications') as List)
             .map((element) => Modification.buildFromMap(element))),
