@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../enums/season.dart';
 import '../models/xsens_dot_data.dart';
 import 'external_storage_service.dart';
 import '../models/skating_user.dart';
@@ -93,13 +94,14 @@ class CaptureClient {
   Future<void> saveCapture(
       {required String exportFileName,
       required List<XSensDotData> exportedData,
-      required bool hasVideo}) async {
+      required bool hasVideo,
+      required Season season}) async {
     String fullPath = await ExternalStorageService()
         .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
-        duration, hasVideo, DateTime.now(), [], []);
+        duration, hasVideo, DateTime.now(), season, [], []);
     await _createCapture(capture: capture);
   }
 
@@ -167,8 +169,11 @@ class CaptureClient {
         'date': capture.date,
         'duration': capture.duration,
         'file': capture.fileName,
+        'hasVideo': capture.hasVideo,
+        'season': capture.season,
         'jumps': capture.jumpsID,
-        'user': capture.userID
+        'user': capture.userID,
+        'modifications': capture.modifications
       });
       capture.uID = captureInfo.id;
     } catch (e) {
