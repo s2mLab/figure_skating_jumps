@@ -100,7 +100,7 @@ class _DemoConnectionState extends State<DemoConnection> {
                         )),
                     GestureDetector(
                         onTap: () async =>
-                            await XSensDotRecordingService.stopRecording(false),
+                            await XSensDotRecordingService().stopRecording(false),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(

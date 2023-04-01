@@ -16,20 +16,19 @@ import '../../models/xsens_dot_data.dart';
 class XSensDotRecordingService
     implements IObservable<IRecorderSubscriber, RecorderState> {
   static final _recordingMethodChannel =
-  MethodChannel(MethodChannelNames.recordingChannel.channelName);
+      MethodChannel(MethodChannelNames.recordingChannel.channelName);
   static final _recordingEventChannel =
-  EventChannel(EventChannelNames.recordingChannel.channelName);
+      EventChannel(EventChannelNames.recordingChannel.channelName);
   static var _recorderState = RecorderState.idle;
   final List<IRecorderSubscriber> _subscribers = [];
 
   static final XSensDotRecordingService _xSensDotRecordingServiceService =
-  XSensDotRecordingService._internal();
+      XSensDotRecordingService._internal();
 
   static final List<XSensDotData> _exportedData = [];
   static String _exportFileName = "";
 
   static bool _currentRecordingHasVideo = false;
-
 
   static Season season = Season.preparation;
   static const _recordingOutputRate = 120;
@@ -46,7 +45,7 @@ class XSensDotRecordingService
   static Future<void> _handleRecordingEvents(String event) async {
     var data = jsonDecode(event);
     var status =
-    RecordingStatus.values.firstWhere((el) => el.status == data['status']);
+        RecordingStatus.values.firstWhere((el) => el.status == data['status']);
     switch (status) {
       case RecordingStatus.setRate:
         await _handleSetRate();
@@ -72,6 +71,9 @@ class XSensDotRecordingService
       case RecordingStatus.extractFileDone:
         await _handleExtractFileDone();
         break;
+      case RecordingStatus.eraseMemoryDone:
+        _handleEraseMemoryDone();
+        break;
       default:
         debugPrint("default");
         break;
@@ -82,7 +84,7 @@ class XSensDotRecordingService
     _exportedData.clear();
     _exportFileName = "";
     _changeState(RecorderState.preparing);
-    //TODO: when connexion logic-UI is merged: check if device is initialized
+    //TODO when connexion logic-UI is merged: check if device is initialized
     await _setRate();
   }
 
@@ -90,12 +92,19 @@ class XSensDotRecordingService
     return _recorderState;
   }
 
-  static Future<void> stopRecording(bool hasVideo) async {
+  Future<void> stopRecording(bool hasVideo) async {
     _currentRecordingHasVideo = hasVideo;
     try {
       await _recordingMethodChannel.invokeMethod('stopRecording');
     } on PlatformException catch (e) {
       debugPrint(e.message!);
+    }
+  }
+
+  Future<void> eraseMemory() async {
+    if(_recorderState == RecorderState.idle) {
+      _changeState(RecorderState.erasing);
+      await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
   }
 
@@ -115,9 +124,10 @@ class XSensDotRecordingService
   static Future<void> _handleEnableRecordingNotificationDone(
       String data) async {
     if (data == "true") {
-      await _recordingMethodChannel.invokeMethod(
-          'getFlashInfo', <String, dynamic>{
-        'isExporting': _recorderState == RecorderState.exporting
+      await _recordingMethodChannel
+          .invokeMethod('getFlashInfo', <String, dynamic>{
+        'isManagingFiles': _recorderState == RecorderState.exporting ||
+            _recorderState == RecorderState.erasing
       });
     } else {
       debugPrint("Recording notifications were not enabled");
@@ -138,20 +148,30 @@ class XSensDotRecordingService
   }
 
   static Future<void> _handleGetFlashInfoDone(String? data) async {
-    if (_recorderState == RecorderState.preparing) {
-      bool canRecord = data == "true";
-      if (!canRecord) {
-        _changeState(RecorderState.idle);
-        return;
-      }
-      try {
-        await _recordingMethodChannel.invokeMethod('startRecording');
-      } on PlatformException catch (e) {
-        debugPrint(e.message!);
-      }
-    } else if (_recorderState == RecorderState.exporting) {
-      await _recordingMethodChannel.invokeMethod('getFileInfo');
+    switch(_recorderState) {
+      case RecorderState.preparing:
+        bool canRecord = data == "true";
+        if (!canRecord) {
+          _changeState(RecorderState.idle);
+          return;
+        }
+        try {
+          await _recordingMethodChannel.invokeMethod('startRecording');
+        } on PlatformException catch (e) {
+          debugPrint(e.message!);
+        }
+        break;
+      case RecorderState.exporting:
+        await _recordingMethodChannel.invokeMethod('getFileInfo');
+        break;
+      case RecorderState.erasing:
+        await _recordingMethodChannel.invokeMethod('eraseMemory');
+        break;
+      default:
+        break;
     }
+
+
   }
 
   static Future<void> _handleGetFileInfoDone(String data) async {
@@ -181,6 +201,10 @@ class XSensDotRecordingService
       _currentRecordingHasVideo = false;
       _changeState(RecorderState.idle);
     }
+  }
+
+  static void _handleEraseMemoryDone() async {
+    _changeState(RecorderState.idle);
   }
 
   static void _changeState(RecorderState state) {

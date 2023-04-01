@@ -8,14 +8,12 @@ import android.os.SystemClock
 import androidx.annotation.NonNull
 import com.example.figure_skating_jumps.channels.enums.EventChannelParameters
 import com.example.figure_skating_jumps.channels.enums.MethodChannelNames
-import com.xsens.dot.android.sdk.XsensDotSdk
 import com.xsens.dot.android.sdk.models.XsensDotDevice
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import com.example.figure_skating_jumps.permissions.PermissionUtils
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceScanner
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotRecorder
@@ -105,6 +103,7 @@ class MainActivity : FlutterActivity() {
             "extractFile" -> extractFile(call, result)
             "prepareExtract" -> prepareExtract(result)
             "prepareRecording" -> prepareRecording(result)
+            "eraseMemory" -> eraseMemory(result)
             else -> result.notImplemented()
         }
     }
@@ -211,13 +210,13 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getFlashInfo(call: MethodCall, result: MethodChannel.Result) {
-        val isExporting: Boolean? = call.argument<Boolean>("isExporting")
-        if (isExporting == null) {
-            result.error(ErrorCodes.ArgNotSet.code, "isExporting argument not set", null)
+        val isManagingFiles: Boolean? = call.argument<Boolean>("isManagingFiles")
+        if (isManagingFiles == null) {
+            result.error(ErrorCodes.ArgNotSet.code, "isManagingFiles argument not set", null)
             return
         }
 
-        if (isExporting) {
+        if (isManagingFiles) {
             xSensDotExporter?.getFlashInfo()
         } else {
             xSensDotRecorder?.getFlashInfo()
@@ -289,6 +288,11 @@ class MainActivity : FlutterActivity() {
         xSensDotRecorder = XSensDotRecorder(context, currentXSensDot!!)
         xSensDotRecorder?.enableDataRecordingNotification()
 
+        result.success(null)
+    }
+
+    private fun eraseMemory(result: MethodChannel.Result) {
+        xSensDotExporter?.eraseMemory()
         result.success(null)
     }
 }
