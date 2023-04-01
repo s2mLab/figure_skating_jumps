@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
@@ -55,7 +56,7 @@ class _LoggerViewState extends State<_LoggerView>
   @override
   void initState() {
     super.initState();
-    XSensDotStreamingDataService().startMeasuring(true);
+    XSensDotStreamingDataService().startMeasuring(XSensDotConnectionService().isInitialized);
     _displayedData = XSensDotStreamingDataService().subscribe(this);
   }
 
@@ -70,18 +71,18 @@ class _LoggerViewState extends State<_LoggerView>
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-            color: Colors.black,
-            width: double.infinity,
-            child: ListView.builder(
-                controller: _scrollController,
-                itemCount: _displayedData.length,
-                itemBuilder: (context, i) {
-                  return Text(_displayedData[i].toString(),
-                      style: const TextStyle(
-                          fontSize: 5, color: paleText, fontFamily: 'monospace'));
-                })),
-      );
+      child: Container(
+          color: Colors.black,
+          width: double.infinity,
+          child: ListView.builder(
+              controller: _scrollController,
+              itemCount: _displayedData.length,
+              itemBuilder: (context, i) {
+                return Text(_displayedData[i].toString(),
+                    style: const TextStyle(
+                        fontSize: 5, color: paleText, fontFamily: 'monospace'));
+              })),
+    );
   }
 
   @override
