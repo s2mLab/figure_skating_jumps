@@ -11,7 +11,6 @@ import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
-import 'package:figure_skating_jumps/widgets/views/demo_connection_view.dart';
 
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
@@ -88,9 +87,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
             title: 'Figure Skating Jump App',
             initialRoute: '/Login',
             routes: {
-              '/': (context) => const GodView(),
               '/ManageDevices': (context) => const ConnectionDotView(),
-              '/DemoConnection': (context) => const DemoConnection(),
               '/CoachAccountCreation': (context) =>
                   const CoachAccountCreationView(),
               '/CaptureData': (context) => const CaptureView(),
@@ -155,16 +152,6 @@ class _GodViewState extends State<GodView> {
                 );
               },
               child: const Text('CaptureView')),
-          TextButton(
-              onPressed: () {
-                CaptureClient().capturingSkatingUser =
-                    UserClient().currentSkatingUser!;
-                Navigator.pushNamed(
-                  context,
-                  '/DemoConnection',
-                );
-              },
-              child: const Text('Demo XSensDot')),
           TextButton(
               onPressed: () {
                 Navigator.pushNamed(
