@@ -3,11 +3,12 @@ import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../services/x_sens/x_sens_dot_recording_service.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/lang_fr.dart';
+import '../../../services/x_sens/x_sens_dot_recording_service.dart';
 
 class StartRecordingDialog extends StatefulWidget {
   const StartRecordingDialog({super.key});
@@ -58,7 +59,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Padding(
-                padding: EdgeInsets.all(16.0), child: Text(memoryErrorMessage)),
+                padding: EdgeInsets.all(16.0), child: InstructionPrompt(memoryErrorMessage, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {

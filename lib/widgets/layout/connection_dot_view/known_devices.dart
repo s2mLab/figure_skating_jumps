@@ -10,7 +10,7 @@ import '../../../enums/x_sens_device_state.dart';
 import '../../../interfaces/i_bluetooth_discovery_subscriber.dart';
 import '../../../services/manager/device_names_manager.dart';
 import '../../buttons/x_sens_dot_list_element.dart';
-import '../../dialogs/configure_x_sens_dot_dialog.dart';
+import '../../dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
 import '../../icons/x_sens_state_icon.dart';
 
 class KnownDevices extends StatefulWidget {

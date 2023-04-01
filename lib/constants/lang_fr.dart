@@ -34,9 +34,11 @@ const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 
 // widgets/layout/athlete_view/progression_tab/progression_tab
 const String succeededJumpsGraphicTitle = "Score moyen par saut dans le temps";
-const String percentageJumpsSucceededGraphicTitle = "Pourcentage de sauts réussis dans le temps";
+const String percentageJumpsSucceededGraphicTitle =
+    "Pourcentage de sauts réussis dans le temps";
 const String percentageJumpsSucceededLegend = "% Sauts réussis";
-const String averageJumpDurationGraphicTitle = "Durée moyenne de vol dans le temps";
+const String averageJumpDurationGraphicTitle =
+    "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
 // widgets/layout/dot_connected
@@ -56,7 +58,8 @@ const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
 
 // widgets/dialogs/modification_info_dialog
-const String modificationInfoDialogTitle  = "Journal de modification pour cette capture";
+const String modificationInfoDialogTitle =
+    "Journal de modification pour cette capture";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -64,7 +67,8 @@ const String bluetoothAuthorizationPrompt =
 const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
-const String connectionErrorMessage = "Erreur lors de la connexion à l'appareil: ";
+const String connectionErrorMessage =
+    "Erreur lors de la connexion à l'appareil: ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
@@ -153,13 +157,20 @@ const String captureViewInstructions =
 const String captureViewCameraInstruction =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
+const String stopCapture = "Arrêter la capture";
+
+// widgets/dialog/capture/start_recording_dialog
 const String captureStartingPrompt = "Démarrage...";
 const String erasingDataPrompt = "Suppression des données en cours...";
 const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
 const String memoryErrorMessage =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
 const String emptyMemoryButton = "Vider la mémoire";
-const String stopCapture = "Arrêter la capture";
+
+// widgets/dialog/capture/start_recording_dialog
+const String connectXSensDot = "Connecter un appareil XSens DOT";
+const String noDeviceErrorMessage =
+    "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";

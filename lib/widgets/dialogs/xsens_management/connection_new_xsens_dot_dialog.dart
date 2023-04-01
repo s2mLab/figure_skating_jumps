@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/lang_fr.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
