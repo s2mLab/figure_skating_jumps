@@ -54,6 +54,7 @@ const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
+const String myAthletes = "Mes athlètes";
 
 // widgets/dialogs/modification_info_dialog
 const String modificationInfoDialogTitle  = "Journal de modification pour cette capture";
