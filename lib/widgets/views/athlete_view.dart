@@ -32,7 +32,7 @@ class _AthleteViewState extends State<AthleteView> {
   @override
   Widget build(BuildContext context) {
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _futureCaptures ??= skater?.loadCapturesData(); //TODO load before
+    _futureCaptures ??= skater?.loadCapturesData();
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
@@ -67,15 +67,19 @@ class _AthleteViewState extends State<AthleteView> {
                   future: _futureCaptures,
                   builder: _buildCapturesTab,
                 ),
-                ProgressionTab(),
+                FutureBuilder(
+                  future: _futureCaptures,
+                  builder: _buildProgressionTab,
+                ),
                 const OptionsTab(),
               ],
             ),
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              padding: const EdgeInsets.only(bottom: 16.0, top: 4.0),
               child: IceButton(
+                  elevation: 4.0,
                   text: captureButton,
                   onPressed: () {
                     CaptureClient().capturingSkatingUser = skater!;
@@ -85,7 +89,7 @@ class _AthleteViewState extends State<AthleteView> {
                     );
                   },
                   textColor: paleText,
-                  color: secondaryColor,
+                  color: primaryColor,
                   iceButtonImportance: IceButtonImportance.mainAction,
                   iceButtonSize: IceButtonSize.large),
             ),
@@ -95,8 +99,7 @@ class _AthleteViewState extends State<AthleteView> {
     );
   }
 
-  Widget _buildCapturesTab(BuildContext context,
-      AsyncSnapshot<void> snapshot) {
+  Widget _buildCapturesTab(BuildContext context, AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
         ? CapturesTab(captures: skater!.groupedCaptures)
         : const Center(
@@ -104,5 +107,15 @@ class _AthleteViewState extends State<AthleteView> {
             padding: EdgeInsets.all(32.0),
             child: CircularProgressIndicator(),
           ));
+  }
+
+  Widget _buildProgressionTab(BuildContext context, AsyncSnapshot<void> snapshot) {
+    return snapshot.connectionState == ConnectionState.done
+        ? ProgressionTab(captures: skater!.groupedCaptures)
+        : const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: CircularProgressIndicator(),
+        ));
   }
 }

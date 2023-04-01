@@ -176,7 +176,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                               1;
                                       _capture!.jumpTypeCount[j.type] =
                                           _capture!.jumpTypeCount[j.type]! + 1;
-                                      CaptureClient().updateJump(jump: j);
+                                      CaptureClient().updateJump(jump: j).then((value) {
+                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(duration: Duration(seconds: 2), backgroundColor: confirm, content: Text(savedModificationsSnack)));
+                                      });
                                     });
                                   },
                                   onDeleted: (Jump j, JumpType initial) {
