@@ -6,7 +6,8 @@ enum RecordingStatus {
   getFlashInfoDone("GotFlashInfo"),
   getFileInfoDone("GotFileInfo"),
   extractingFile("ExtractingFile"),
-  extractFileDone("ExtractFileDone");
+  extractFileDone("ExtractFileDone"),
+  eraseMemoryDone("EraseMemoryDone");
 
   const RecordingStatus(this.status);
 

@@ -201,7 +201,7 @@ class _CaptureViewState extends State<CaptureView> {
   Future<void> _onCaptureStopPressed(BuildContext context) async {
     try {
       await _initializeControllerFuture;
-      await XSensDotRecordingService.stopRecording(_isCameraActivated);
+      await _xSensDotRecordingService.stopRecording(_isCameraActivated);
       XFile f = await _controller.stopVideoRecording();
       if (mounted) {
         _displayWaitingDialog(pleaseWait);
@@ -230,7 +230,7 @@ class _CaptureViewState extends State<CaptureView> {
               return;
             }
 
-            //TODO display something else when there is no camera
+            //TODO modal something else when there is no camera
             if (_isCameraActivated) _isFullscreen = true;
           }));
       await _xSensDotRecordingService.startRecording();

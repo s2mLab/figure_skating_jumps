@@ -154,10 +154,11 @@ const String captureViewCameraInstruction =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
 const String captureStartingPrompt = "Démarrage...";
+const String erasingDataPrompt = "Suppression des données en cours...";
 const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
 const String memoryErrorMessage =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
-const String memoryDialogButton = "ok";
+const String emptyMemoryButton = "Vider la mémoire";
 const String stopCapture = "Arrêter la capture";
 
 // widgets/screens/coach_account_creation_view

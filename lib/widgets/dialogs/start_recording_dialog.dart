@@ -18,7 +18,8 @@ class StartRecordingDialog extends StatefulWidget {
 
 class _StartRecordingState extends State<StartRecordingDialog>
     implements IRecorderSubscriber {
-  bool _isMemoryFull = false;
+  int _currentId = 0;
+  late List<SimpleDialog> _startingState;
   RecorderState _lastState = RecorderState.idle;
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
@@ -26,6 +27,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
   @override
   void initState() {
     _lastState = _xSensDotRecordingService.subscribe(this);
+    _startingState = [_startingRecording(), _fullMemory(), _erasingMemory()];
     super.initState();
   }
 
@@ -37,13 +39,58 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   SimpleDialog build(BuildContext context) {
-    return (!_isMemoryFull) ? _startingRecording() : _fullMemory();
+    return _startingState[_currentId];
   }
 
   SimpleDialog _startingRecording() {
+    return _loadingDialog(captureStartingPrompt);
+  }
+
+  SimpleDialog _fullMemory() {
     return SimpleDialog(
       title: const Text(
-        captureStartingPrompt,
+        errorCaptureStartingPrompt,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: errorColor),
+      ),
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+                padding: EdgeInsets.all(16.0), child: Text(memoryErrorMessage)),
+            IceButton(
+                text: emptyMemoryButton,
+                onPressed: () {
+                  _xSensDotRecordingService.eraseMemory();
+                },
+                textColor: paleText,
+                color: primaryColor,
+                iceButtonImportance: IceButtonImportance.mainAction,
+                iceButtonSize: IceButtonSize.medium),
+            IceButton(
+                text: goBack,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                textColor: primaryColor,
+                color: primaryColor,
+                iceButtonImportance: IceButtonImportance.secondaryAction,
+                iceButtonSize: IceButtonSize.medium),
+          ],
+        )
+      ],
+    );
+  }
+
+  SimpleDialog _erasingMemory() {
+    return _loadingDialog(erasingDataPrompt);
+  }
+
+  SimpleDialog _loadingDialog(String message) {
+    return SimpleDialog(
+      title: Text(
+        message,
         textAlign: TextAlign.center,
       ),
       children: [
@@ -66,42 +113,26 @@ class _StartRecordingState extends State<StartRecordingDialog>
     );
   }
 
-  SimpleDialog _fullMemory() {
-    return SimpleDialog(
-      title: const Text(
-        errorCaptureStartingPrompt,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: errorColor),
-      ),
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-                padding: EdgeInsets.all(16.0), child: Text(memoryErrorMessage)),
-            IceButton(
-                text: memoryDialogButton,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                textColor: errorColor,
-                color: errorColor,
-                iceButtonImportance: IceButtonImportance.secondaryAction,
-                iceButtonSize: IceButtonSize.medium)
-          ],
-        )
-      ],
-    );
-  }
-
   @override
   void onStateChange(RecorderState state) {
-    if (_lastState == RecorderState.preparing && state == RecorderState.idle) {
+    if(state == RecorderState.idle) {
+      if (_lastState == RecorderState.preparing ) {
+        setState(() {
+          _currentId = 1;
+        });
+      }
+      if (_lastState == RecorderState.erasing) {
+        Navigator.pop(context);
+        return;
+      }
+    }
+
+    _lastState = state;
+    if(_lastState == RecorderState.erasing) {
       setState(() {
-        _isMemoryFull = true;
+        _currentId = 2;
       });
     }
-    _lastState = state;
     if (_lastState != RecorderState.recording) return;
     Navigator.pop(context);
   }
