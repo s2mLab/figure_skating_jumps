@@ -1,7 +1,7 @@
 enum HelperSubject {
   connectDot(
       "Connecter un senseur",
-      "Pour connecter un XSens Dot, assurez-vous que la batterie est pleine, cliquez sur la barre de statu du senseur ou le bouton suivant.\n\nVous Pourrez ainsi connecter un XSens Dot déjà enregistrer ou un nouveau avec le bouton au bas de la page.",
+      "Pour connecter un XSens Dot, assurez-vous que la batterie soit pleine, cliquez sur la barre de statut du senseur ou le bouton suivant.\n\nVous pourrez ainsi connecter un XSens Dot déjà enregistré ou un nouvel appareil avec le bouton au bas de la page.",
       "/ManageDevices"),
   addSkater(
       "Ajouter un patineur",
@@ -9,7 +9,7 @@ enum HelperSubject {
       "/CreateSkater"),
   skaterInfo(
       "Qui a accès à mes informations",
-      "Vous pouvez voir la liste des entraineurs en consultant votre profil avec le bouton suivant.\n\nCes entraineurs peuvent consulter les captures et les rétroactions de chaque acquisition faite. Cependant, les vidéos ne sont accessible que sur l'appareil utilisé.",
+      "Vous pouvez voir la liste des entraineurs en consultant votre profil avec le bouton suivant.\n\nCes entraineurs peuvent consulter les captures et les rétroactions de chaque acquisition faite. Cependant, les vidéos ne sont accessibles que sur l'appareil utilisé.",
       "/ProfileView"),
   modificationInfo(
       "Modifier mes informations",

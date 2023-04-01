@@ -15,6 +15,7 @@ const String confirmLabel = "Modifier";
 
 // widgets/dialogs/modify_password
 const String helperTitle = "Page d'aide";
+const String redirect = "Me diriger sur la page";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
