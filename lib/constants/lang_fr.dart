@@ -55,6 +55,9 @@ const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
 
+// widgets/dialogs/modification_info_dialog
+const String modificationInfoDialogTitle  = "Journal de modification pour cette capture";
+
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
     'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';

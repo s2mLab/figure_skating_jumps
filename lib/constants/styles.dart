@@ -18,5 +18,5 @@ TextStyle tabStyle =
 const TextStyle connectingStyle = TextStyle(color: darkText);
 const TextStyle connectedStyle = TextStyle(color: connectedXSensDotButtonForeground);
 
-const dateFormatString = 'dd/MM/yyyy';
-final dateDisplayFormat = DateFormat(dateFormatString);
+const dateFormatString = 'dd/MM/yyyy - hh:mm:ss';
+final dateSecondsDisplayFormat = DateFormat(dateFormatString);
