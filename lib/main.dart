@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/services/http_client.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
@@ -156,7 +157,8 @@ class _GodViewState extends State<GodView> {
               child: const Text('CaptureView')),
           TextButton(
               onPressed: () {
-                CaptureClient().capturingSkatingUser = UserClient().currentSkatingUser!;
+                CaptureClient().capturingSkatingUser =
+                    UserClient().currentSkatingUser!;
                 Navigator.pushNamed(
                   context,
                   '/DemoConnection',
@@ -207,8 +209,17 @@ class _GodViewState extends State<GodView> {
           TextButton(
               onPressed: () async {
                 Random rnd = Random();
-                Jump jump = Jump(rnd.nextInt(6000), rnd.nextInt(1500), false,
-                    JumpType.values[rnd.nextInt(5)], "Good", 5,"TT9qrmqIdRfJGrlTzo7g", 3000.0, 1100.0, 780.0);
+                Jump jump = Jump(
+                    rnd.nextInt(6000),
+                    rnd.nextInt(1500),
+                    false,
+                    JumpType.values[rnd.nextInt(5)],
+                    "Good",
+                    5,
+                    "TT9qrmqIdRfJGrlTzo7g",
+                    3000.0,
+                    1100.0,
+                    780.0);
                 CaptureClient().createJump(jump: jump);
               },
               child: const Text('Make Him JUMP!')),
@@ -228,7 +239,8 @@ class _GodViewState extends State<GodView> {
               child: const Text('Remove Skater')),
           TextButton(
               onPressed: () async {
-                CaptureClient().addModificationToCapture(captureID: '8FsSz1a3JPGWA4saNZ7r', field: 'random', oldValue: '6', value: 'yes');
+                // CaptureClient().addModificationToCapture(captureID: '8FsSz1a3JPGWA4saNZ7r', field: 'random', oldValue: '6', value: 'yes');
+                debugPrint((await HttpClient().analyze(fileName: "anthony/any_11.csv", captureID: "hi")).toString());
               },
               child: const Text('Update capture')),
         ],

@@ -53,6 +53,7 @@ dependencies:
     collection: ^1.17.0
     csv: ^5.0.1
     firebase_storage: ^11.0.16
+    http:
 
 dev_dependencies:
     flutter_test:
