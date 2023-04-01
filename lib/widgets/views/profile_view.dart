@@ -131,47 +131,51 @@ class _ProfileViewState extends State<ProfileView> {
                           size: 70,
                           loaderstrokeWidth: 5,
                         ))
-                      : ListView.builder(
-                          itemCount: _currentUser.coaches.length,
-                          itemBuilder: (context, index) {
-                            SkatingUser item = _currentUser.coaches[index];
-                            return Container(
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 4,
-                                  horizontal: 8,
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          "${item.firstName} ${item.lastName}"),
-                                      IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: const BoxConstraints(),
-                                          onPressed: () async {
-                                            await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return ConfirmCancelCustomDialog(
-                                                      description:
-                                                          "Voulez-vous retirer ${item.firstName} de votre liste d'entraineurs ?",
-                                                      confirmAction: () =>
-                                                          removeCoachAction(
-                                                              item.uID!));
-                                                });
-                                          },
-                                          icon: const Icon(
-                                            Icons.cancel_outlined,
-                                            color: errorColor,
-                                          ))
-                                    ]));
-                          }),
+                      : _currentUser.coaches.isEmpty
+                          ? const Center(child: Text(noCoaches))
+                          : ListView.builder(
+                              itemCount: _currentUser.coaches.length,
+                              itemBuilder: (context, index) {
+                                SkatingUser item = _currentUser.coaches[index];
+                                return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 4,
+                                      horizontal: 8,
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              "${item.firstName} ${item.lastName}"),
+                                          IconButton(
+                                              padding: EdgeInsets.zero,
+                                              constraints:
+                                                  const BoxConstraints(),
+                                              onPressed: () async {
+                                                await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return ConfirmCancelCustomDialog(
+                                                          description:
+                                                              "Voulez-vous retirer ${item.firstName} de votre liste d'entraineurs ?",
+                                                          confirmAction: () =>
+                                                              removeCoachAction(
+                                                                  item.uID!));
+                                                    });
+                                              },
+                                              icon: const Icon(
+                                                Icons.cancel_outlined,
+                                                color: errorColor,
+                                              ))
+                                        ]));
+                              }),
                 ),
               )
             ])));
