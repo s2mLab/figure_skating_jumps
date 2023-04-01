@@ -11,6 +11,7 @@ import 'package:figure_skating_jumps/widgets/dialogs/start_recording_dialog.dart
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
+import '../../enums/season.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
@@ -33,6 +34,7 @@ class _CaptureViewState extends State<CaptureView> {
   late Future<void> _initializeControllerFuture;
   bool _isFullscreen = false;
   bool _isCameraActivated = true;
+  Season _selectedSeason = XSensDotRecordingService.season;
 
   @override
   void initState() {
@@ -128,6 +130,47 @@ class _CaptureViewState extends State<CaptureView> {
                                   });
                                 })
                           ]),
+                      Row(
+                        children: [
+                          DropdownButton<Season>(
+                              selectedItemBuilder: (context) {
+                                return Season.values.map<Widget>((Season item) {
+                                  // This is the widget that will be shown when you select an item.
+                                  // Here custom text style, alignment and layout size can be applied
+                                  // to selected item string.
+                                  return Container(
+                                    constraints: const BoxConstraints(minWidth: 80),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          item.toString(),
+                                          style: const TextStyle(
+                                              color: darkText,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                              value: _selectedSeason,
+                              menuMaxHeight: 300,
+                              items: List.generate(Season.values.length, (index) {
+                                return DropdownMenuItem<Season>(
+                                  value: Season.values[index],
+                                  child: Text(Season.values[index].displayedString),
+                                );
+                              }),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedSeason = val!;
+                                });
+                              }),
+                        ]
+
+                      ),
                       Center(
                         child: IceButton(
                           onPressed: () async {
