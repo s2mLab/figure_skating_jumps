@@ -5,9 +5,11 @@ import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/start_recording_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
@@ -181,7 +183,6 @@ class _CaptureViewState extends State<CaptureView> {
                       Center(
                         child: IceButton(
                           onPressed: () async {
-                            // TODO: ADD when eventchannels are merged displayWaitingDialog("Démarrage...");
                             await _onCaptureStartPressed(context);
                           },
                           text: captureViewStart,
@@ -223,9 +224,15 @@ class _CaptureViewState extends State<CaptureView> {
   }
 
   Future<void> _onCaptureStartPressed(BuildContext context) async {
+
+    if(!XSensDotConnectionService().isInitialized) {
+      await _displayStepDialog(const DeviceNotReadyDialog());
+      return;
+    }
+
     try {
       await _initializeControllerFuture;
-      _displayStartDialog().then((_) => setState(() {
+      _displayStepDialog(const StartRecordingDialog()).then((_) => setState(() {
             if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
               return;
             }
@@ -268,12 +275,12 @@ class _CaptureViewState extends State<CaptureView> {
     return const Center(child: CircularProgressIndicator());
   }
 
-  Future<void> _displayStartDialog() async {
+  Future<void> _displayStepDialog(Widget dialog) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return const StartRecordingDialog();
+          return dialog;
         });
   }
 
