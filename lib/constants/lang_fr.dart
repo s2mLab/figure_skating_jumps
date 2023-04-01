@@ -32,11 +32,16 @@ const String connectionStateMessageConnecting = "Tentative de connexion";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
 const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 
+// widgets/layout/athlete_view/capture_tab
+const String noCapture = "Aucune capture n'a été faite sur ce profil.";
+
 // widgets/layout/athlete_view/progression_tab/progression_tab
 const String succeededJumpsGraphicTitle = "Score moyen par saut dans le temps";
-const String percentageJumpsSucceededGraphicTitle = "Pourcentage de sauts réussis dans le temps";
+const String percentageJumpsSucceededGraphicTitle =
+    "Pourcentage de sauts réussis dans le temps";
 const String percentageJumpsSucceededLegend = "% Sauts réussis";
-const String averageJumpDurationGraphicTitle = "Durée moyenne de vol dans le temps";
+const String averageJumpDurationGraphicTitle =
+    "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
 // widgets/layout/dot_connected
@@ -61,7 +66,8 @@ const String bluetoothAuthorizationPrompt =
 const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
 const String completePairing = "Compléter le jumelage";
 const String verifyConnectivity = "Vérifier la réception du capteur";
-const String connectionErrorMessage = "Erreur lors de la connexion à l'appareil: ";
+const String connectionErrorMessage =
+    "Erreur lors de la connexion à l'appareil: ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDevice = "Oublier";
@@ -108,6 +114,7 @@ const String lastFastLineName = "Z";
 const String profileTitle = "Compte";
 const String modifyPassword = "Modifier le mot de passe";
 const String listCoaches = "Liste de mes entraineurs";
+const String noCoaches = "Aucun entraineur ne peut voir votre profil.";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";
@@ -128,6 +135,8 @@ const String optionsTab = "Options";
 
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
+const String noAthletes =
+    "Vous n'avez pas d'athlètes dans votre liste.\n\nAppuyer sur le bouton en bas pour ajouter un athlète.";
 
 // widgets/screens/athletes_view
 const String captureButton = "Capturer";
