@@ -5,8 +5,11 @@ class OptionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('option'),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: const [
+        // TODO: add option for coach to remove an athlete
+      ],
     );
   }
 }

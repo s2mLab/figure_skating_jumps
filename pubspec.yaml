@@ -54,6 +54,7 @@ dependencies:
     csv: ^5.0.1
     firebase_storage: ^11.0.16
     video_player: ^2.6.0
+    http:
 
 dev_dependencies:
     flutter_test:

@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/lang_fr.dart';
 
-class NoDotConnected extends StatelessWidget {
-  const NoDotConnected({Key? key}) : super(key: key);
+class NoKnownDevices extends StatelessWidget {
+  const NoKnownDevices({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

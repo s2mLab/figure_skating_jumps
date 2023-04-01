@@ -1,9 +1,13 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
@@ -11,9 +15,11 @@ import '../icons/x_sens_state_icon.dart';
 import '../prompts/ice_field_editable.dart';
 
 class ConfigureXSensDotDialog extends StatelessWidget {
-  final String name;
+  final BluetoothDevice xSensDot;
   final Function() close;
-  const ConfigureXSensDotDialog({required this.name, super.key, required this.close});
+
+  const ConfigureXSensDotDialog(
+      {required this.xSensDot, super.key, required this.close});
 
   @override
   Widget build(BuildContext context) {
@@ -30,40 +36,36 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             children: [
               IceFieldEditable(
                   onEditComplete: (String newText) {
-                    XSensDotConnectionService().currentXSensDevice!.assignedName = newText;
+                    xSensDot.assignedName = newText;
                   },
-                  text: name),
+                  text: xSensDot.assignedName),
               IceButton(
                   text: forgetDevice,
-                  onPressed: () {
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    await DeviceNamesManager().removeDevice(xSensDot);
+                    close();
                   },
                   textColor: errorColor,
                   color: errorColorDark,
                   iceButtonImportance: IceButtonImportance.discreetAction,
                   iceButtonSize: IceButtonSize.medium),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Center(
-                  child: XSensStateIcon(false, XSensDeviceState.connected),
+                  child: XSensStateIcon(
+                      false,
+                      _isDeviceConnected()
+                          ? XSensDeviceState.connected
+                          : XSensDeviceState.disconnected),
                 ),
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: IceButton(
-                      text: disconnectDevice,
-                      onPressed: () async {
-                        await XSensDotConnectionService().disconnect();
-                        close();
-                      },
-                      textColor: errorColor,
-                      color: errorColor,
-                      iceButtonImportance: IceButtonImportance.secondaryAction,
-                      iceButtonSize: IceButtonSize.large)),
+                  child: _connectionManagementButton()),
               IceButton(
                   text: goBack,
                   onPressed: () {
-                    Navigator.pop(context);
+                    close();
                   },
                   textColor: paleText,
                   color: primaryColor,
@@ -72,5 +74,49 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  Widget _connectionManagementButton() {
+    if (_isDeviceConnected()) {
+      return IceButton(
+          text: disconnectDevice,
+          onPressed: () async {
+            await XSensDotConnectionService().disconnect();
+            close();
+          },
+          textColor: errorColor,
+          color: errorColor,
+          iceButtonImportance: IceButtonImportance.secondaryAction,
+          iceButtonSize: IceButtonSize.large);
+    }
+
+    bool isNear = XSensDotBluetoothDiscoveryService()
+        .getDevices()
+        .any((element) => element.macAddress == xSensDot.macAddress);
+    return isNear
+        ? IceButton(
+            text: connectDevice,
+            onPressed: () async {
+              await XSensDotConnectionService().disconnect();
+              if (await XSensDotConnectionService().connect(xSensDot)) {
+                close();
+              } else {
+                Fluttertoast.showToast(
+                    msg: connectionErrorMessage + xSensDot.macAddress);
+                debugPrint(
+                    "Connection to device ${xSensDot.macAddress} failed");
+              }
+            },
+            textColor: primaryColor,
+            color: primaryColor,
+            iceButtonImportance: IceButtonImportance.secondaryAction,
+            iceButtonSize: IceButtonSize.large)
+        : const SizedBox(height: 56);
+  }
+
+  bool _isDeviceConnected() {
+    return XSensDotConnectionService().currentXSensDevice != null &&
+        xSensDot.macAddress ==
+            XSensDotConnectionService().currentXSensDevice?.macAddress;
   }
 }

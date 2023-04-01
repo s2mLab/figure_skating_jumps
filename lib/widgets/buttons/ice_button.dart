@@ -4,58 +4,68 @@ import '../../constants/colors.dart';
 import '../../enums/ice_button_importance.dart';
 
 class IceButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final IceButtonSize iceButtonSize;
-  final IceButtonImportance iceButtonImportance;
-  final Color textColor;
-  final Color color;
-  final String text;
+  final VoidCallback? _onPressed;
+  final IceButtonSize _iceButtonSize;
+  final IceButtonImportance _iceButtonImportance;
+  final Color _textColor;
+  final Color _color;
+  final String _text;
+  final double _elevation;
   static const List<double> _heights = [24, 40, 56];
   static const List<double> _widths = [140, 240, 340];
   static const List<double> _textSizes = [12, 16, 18];
+  static const double _defaultElevation = 0;
 
   const IceButton(
-      {required this.text,
-      required this.onPressed,
-      required this.textColor,
-      required this.color,
-      required this.iceButtonImportance,
-      required this.iceButtonSize,
-      super.key});
+      {required text,
+      required onPressed,
+      required textColor,
+      required color,
+      required iceButtonImportance,
+      required iceButtonSize,
+      elevation = _defaultElevation,
+      super.key})
+      : _text = text,
+        _onPressed = onPressed,
+        _textColor = textColor,
+        _color = color,
+        _iceButtonImportance = iceButtonImportance,
+        _iceButtonSize = iceButtonSize,
+        _elevation = elevation;
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: iceButtonImportance == IceButtonImportance.mainAction
-          ? color
+      color: _iceButtonImportance == IceButtonImportance.mainAction
+          ? _color
           : primaryBackground,
-      textColor: textColor,
-      elevation: 0,
+      textColor: _textColor,
+      elevation: _elevation,
       focusElevation:
-          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
+          _iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
       hoverElevation:
-          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
+          _iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
       highlightElevation:
-          iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
-      height: _heights[iceButtonSize.index],
-      minWidth: iceButtonImportance == IceButtonImportance.discreetAction
+          _iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
+      height: _heights[_iceButtonSize.index],
+      minWidth: _iceButtonImportance == IceButtonImportance.discreetAction
           ? null
-          : _widths[iceButtonSize.index],
-      shape: iceButtonImportance == IceButtonImportance.secondaryAction
+          : _widths[_iceButtonSize.index],
+      shape: _iceButtonImportance == IceButtonImportance.secondaryAction
           ? RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: color),
+              side: BorderSide(width: 1, color: _color),
               borderRadius: BorderRadius.circular(32))
-          : (iceButtonImportance == IceButtonImportance.discreetAction
+          : (_iceButtonImportance == IceButtonImportance.discreetAction
               ? null
               : RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32))),
-      onPressed: onPressed,
+      onPressed: _onPressed,
       child: Text(
-        text,
+        _text,
         style: TextStyle(
             fontFamily: 'Nunito',
             fontWeight: FontWeight.bold,
-            fontSize: _textSizes[iceButtonSize.index]),
+            fontSize: _textSizes[_iceButtonSize.index]),
       ),
     );
   }
