@@ -18,8 +18,10 @@ class XSensDotBluetoothDiscoveryService
   static final List<BluetoothDevice> _devices = [];
   static final _xSensScanChannel =
       EventChannel(EventChannelNames.scanChannel.channelName);
-  static final _xSensScanMethodChannel = MethodChannel(MethodChannelNames.scanChannel.channelName);
-  static const _scanDuration = Duration(seconds: 30);
+  static final _xSensScanMethodChannel =
+      MethodChannel(MethodChannelNames.scanChannel.channelName);
+  static const _scanRefreshRate = Duration(seconds: 30);
+  Timer? _scanTimer;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -39,14 +41,19 @@ class XSensDotBluetoothDiscoveryService
   }
 
   Future<void> scanDevices() async {
-    _devices.clear();
-    await _startScan();
-    Timer(_scanDuration, () async {
-      await _stopScan();
+    if (_scanTimer != null) {
+      _scanTimer?.cancel();
+    } else {
+      await _startScan();
+    }
+    _scanTimer = Timer.periodic(_scanRefreshRate, (_) {
+      _devices.clear();
+      notifySubscribers(_devices);
     });
   }
 
   Future<void> _startScan() async {
+    _devices.clear();
     try {
       await _xSensScanMethodChannel.invokeMethod('startScan');
     } on PlatformException catch (e) {
@@ -64,7 +71,7 @@ class XSensDotBluetoothDiscoveryService
 
   static void _addDevice(String eventDevice) {
     var device = BluetoothDevice.fromEvent(eventDevice);
-    if (_devices.indexWhere((el) => el.macAddress == device.macAddress) != -1) {
+    if (_devices.any((el) => el.macAddress == device.macAddress)) {
       return;
     }
     _devices.add(device);
@@ -88,5 +95,11 @@ class XSensDotBluetoothDiscoveryService
   @override
   void unsubscribe(IBluetoothDiscoverySubscriber subscriber) {
     _subscribers.remove(subscriber);
+    if (_subscribers.isEmpty) {
+      _scanTimer?.cancel();
+      _scanTimer = null;
+      //We do not need to await there, the scan will stop after a few ms
+      _stopScan();
+    }
   }
 }

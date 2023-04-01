@@ -4,6 +4,8 @@ import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 
+import '../enums/season.dart';
+
 class Capture {
   late String? uID;
   late String _file;
@@ -14,6 +16,7 @@ class Capture {
   late bool _hasVideo;
   late List<Modification> _modifications;
   final List<Jump> _jumps = [];
+  final Season _season;
   final Map<JumpType, int> _jumpTypeCount = {
     JumpType.axel: 0,
     JumpType.flip: 0,
@@ -26,6 +29,10 @@ class Capture {
 
   String get fileName {
     return _file;
+  }
+
+  Season get season {
+    return _season;
   }
 
   String get userID {
@@ -68,8 +75,8 @@ class Capture {
     return _jumpTypeCount;
   }
 
-  Capture(this._file, this._userID, this._duration, this._hasVideo, this._date,
-      this._jumpsID, this._modifications,
+  Capture(
+      this._file, this._userID, this._duration, this._hasVideo, this._date, this._season, this._jumpsID, this._modifications,
       [this.uID]);
 
   factory Capture._fromFirestore(
@@ -80,6 +87,7 @@ class Capture {
         captureInfo.get('duration'),
         captureInfo.get('hasVideo'),
         (captureInfo.get('date') as Timestamp).toDate(),
+        Season.values.firstWhere((element) => element.toString() == captureInfo.get('season')),
         List<String>.from(captureInfo.get('jumps') as List),
         List<Modification>.from((captureInfo.get('modifications') as List)
             .map((element) => Modification.buildFromMap(element))),
