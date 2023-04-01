@@ -71,15 +71,19 @@ const String jumpType = "Type";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
 const String deleteAJump = "Supprimer le saut";
-const String confirmDelete = "Cette action est irréversible, voulez-vous continuer?";
+const String confirmDelete =
+    "Cette action est irréversible, voulez-vous continuer?";
 const String deleteJumpDialogTitle = "Suppression d'un saut";
 const String commentDialogTitle = "Voir ou modifier un commentaire";
-const String howToComment = "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
+const String howToComment =
+    "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
 const String editTemporalValues = "Métriques avancées";
 const String rotationDegrees = "Degrés ";
 const String metricsDialogTitle = "Voir ou modifier les métriques avancées";
-const String advancedMetricsPrompt = "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
-const String irreversibleDataModification = "Les données précédentes seront perdues lors de l'enregistrement.";
+const String advancedMetricsPrompt =
+    "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
+const String irreversibleDataModification =
+    "Les données précédentes seront perdues lors de l'enregistrement.";
 const String turns = "Nombre de tours: ";
 const String score = "Score";
 const String durationLabel = "Durée";
@@ -143,6 +147,10 @@ const String captureViewCameraInstruction =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
 const String captureStartingPrompt = "Démarrage...";
+const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
+const String memoryErrorMessage =
+    "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
+const String memoryDialogButton = "ok";
 const String stopCapture = "Arrêter la capture";
 
 // widgets/screens/coach_account_creation_view

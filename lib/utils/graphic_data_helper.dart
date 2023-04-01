@@ -71,10 +71,11 @@ class GraphicDataHelper {
     }
     List<Capture> capturesOnDate = captures[day]!;
     List<Jump> jumpsOfDate = _getRequiredJumpsFromCaptures(capturesOnDate);
+    List<int> durationsOfJumps = [];
     for(Jump j in jumpsOfDate) {
-      scoresOfJumps.add(j.score);
+      durationsOfJumps.add(j.duration);
     }
-    return 0;
+    return durationsOfJumps.isEmpty ? null : durationsOfJumps.average;
   }
 
   static List<Jump> _getRequiredJumpsFromCaptures(List<Capture> captures, [bool Function(Jump)? test]) {
