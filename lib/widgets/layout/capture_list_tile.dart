@@ -4,6 +4,7 @@ import '../../constants/colors.dart';
 import '../../enums/jump_type.dart';
 import '../../models/capture.dart';
 import '../../utils/time_converter.dart';
+import '../dialogs/modification_info_dialog.dart';
 import 'color_circle.dart';
 
 class CaptureListTile extends StatelessWidget {
@@ -24,7 +25,9 @@ class CaptureListTile extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         onLongPress: () {
-          // TODO: Access log for capture
+          showDialog(context: context, builder: (_) {
+            return ModificationInfoDialog(orderedModifications: _currentCapture.modifications.reversed.toList());
+          });
         },
         onPressed: _isInteractive
             ? () {

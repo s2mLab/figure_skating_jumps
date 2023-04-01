@@ -4,11 +4,11 @@ class Modification {
   final DateTime _date;
   final String _action;
 
-  get date {
+  DateTime get date {
     return _date;
   }
 
-  get action {
+  String get action {
     return _action;
   }
 
