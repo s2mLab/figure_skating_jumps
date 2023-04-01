@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../enums/method_channel_names.dart';
+import '../../enums/season.dart';
 import '../../interfaces/i_recorder_state_subscriber.dart';
 import '../../models/xsens_dot_data.dart';
 
@@ -29,6 +30,8 @@ class XSensDotRecordingService
 
   static bool _currentRecordingHasVideo = false;
 
+
+  static Season season = Season.preparation;
   static const _recordingOutputRate = 120;
 
   factory XSensDotRecordingService() {
@@ -172,7 +175,8 @@ class XSensDotRecordingService
       await CaptureClient().saveCapture(
           exportFileName: _exportFileName,
           exportedData: _exportedData,
-          hasVideo: _currentRecordingHasVideo);
+          hasVideo: _currentRecordingHasVideo,
+          season: season);
       debugPrint("Done");
       _currentRecordingHasVideo = false;
       _changeState(RecorderState.idle);

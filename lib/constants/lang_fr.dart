@@ -6,6 +6,13 @@ const String continueTo = "Poursuivre";
 const String goBack = "Retour";
 const String pleaseWait = "Veuillez patienter";
 const String save = "Enregistrer";
+const String none = "Aucun";
+
+// enums/season
+const String preparationSeason = "Préparation";
+const String competitionSeason = "Compétition";
+const String transitionSeason = "Transition";
+const String sharpeningSeason = "Affûtage";
 
 // widgets/alertDialog/modify_full_name
 const String modificationTitle = "Modification";
@@ -24,6 +31,13 @@ const String connectionStateMessageInitialized = "XSens DOT prêt";
 const String connectionStateMessageConnecting = "Tentative de connexion";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
 const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
+
+// widgets/layout/athlete_view/progression_tab/progression_tab
+const String succeededJumpsGraphicTitle = "Score moyen par saut dans le temps";
+const String percentageJumpsSucceededGraphicTitle = "Pourcentage de sauts réussis dans le temps";
+const String percentageJumpsSucceededLegend = "% Sauts réussis";
+const String averageJumpDurationGraphicTitle = "Durée moyenne de vol dans le temps";
+const String averageFlyTimeLegend = "Temps de vol moyen";
 
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
@@ -56,6 +70,7 @@ const String disconnectDevice = "Déconnecter";
 
 // widgets/layout/edit_analysis_view/jump_panel_header
 const String jumpType = "Type";
+const String savedModificationsSnack = "Modification enregistrée!";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
 const String deleteAJump = "Supprimer le saut";
@@ -129,6 +144,7 @@ const String addAJump = "Ajouter un saut";
 const String savingToMemory = "Sauvegarde en mémoire";
 const String captureViewTitle = "Commencer une capture";
 const String captureViewStart = "Commencer une capture";
+const String selectSeasonPrompt = "Choisir la saison";
 const String captureViewInstructions =
     "Cette page permet de commencer une capture pour l’athlète sélectionné.";
 const String captureViewCameraInstruction =
