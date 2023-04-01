@@ -54,6 +54,7 @@ const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
+const String myAthletes = "Mes athlètes";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
