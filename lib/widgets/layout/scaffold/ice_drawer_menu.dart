@@ -79,6 +79,7 @@ class IceDrawerMenu extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
+                            Navigator.pop(context);
                             showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -102,13 +103,15 @@ class IceDrawerMenu extends StatelessWidget {
                                         builder: (BuildContext context) {
                                           return ConfirmCancelCustomDialog(
                                               description: disconnect,
-                                              confirmAction: () {
-                                                UserClient().signOut();
-                                                Navigator
-                                                    .pushNamedAndRemoveUntil(
-                                                        context,
-                                                        '/Login',
-                                                        (route) => false);
+                                              confirmAction: () async {
+                                                await UserClient().signOut();
+                                                if (context.mounted) {
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          '/Login',
+                                                          (route) => false);
+                                                }
                                               });
                                         });
                                   },
