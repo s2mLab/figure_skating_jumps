@@ -34,6 +34,10 @@ class XSensDotConnectionService
 
   XSensDotConnectionService._internal();
 
+  bool get isInitialized {
+    return _connectionState == XSensDeviceState.initialized;
+  }
+
   XSensDeviceState get connectionState {
     return _connectionState;
   }

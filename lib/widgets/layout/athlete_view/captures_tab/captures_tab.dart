@@ -1,15 +1,13 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import '../../capture_list_tile.dart';
 import '../../legend_move.dart';
 
 class CapturesTab extends StatelessWidget {
-  CapturesTab({Key? key, required this.captures}) : super(key: key);
+  const CapturesTab({Key? key, required this.captures}) : super(key: key);
   final Map<String, List<Capture>> captures;
-  final dateDisplayFormat = DateFormat('dd/MM/yyyy');
   final double heightContainer = 110;
 
   @override

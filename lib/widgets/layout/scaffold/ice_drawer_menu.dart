@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -60,13 +61,13 @@ class IceDrawerMenu extends StatelessWidget {
                         Navigator.pushNamed(context, '/Acquisitions',
                             arguments: UserClient().currentSkatingUser!);
                       }),
-                  NavMenuElement(
-                      text: "GodView",
-                      iconData: Icons.gavel_outlined,
+                  if(UserClient().currentSkatingUser!.role == UserRole.coach) NavMenuElement(
+                      text: myAthletes,
+                      iconData: Icons.groups_rounded,
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          '/',
+                          '/ListAthletes',
                         );
                       }),
                 ],

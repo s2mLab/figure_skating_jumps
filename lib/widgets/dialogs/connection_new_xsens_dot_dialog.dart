@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
@@ -15,6 +16,7 @@ import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dar
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants/colors.dart';
@@ -31,12 +33,13 @@ class ConnectionNewXSensDotDialog extends StatefulWidget {
 class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     implements IBluetoothDiscoverySubscriber, IXSensDotMeasuringDataSubscriber {
   int _connectionStep = 0;
-  List<BluetoothDevice> _devices = [];
+  final List<BluetoothDevice> _devices = [];
   final List<XSensDotData> _streamedData = [];
   ChartSeriesController? _xChartSeriesController;
   ChartSeriesController? _yChartSeriesController;
   ChartSeriesController? _zChartSeriesController;
-  final XSensDotBluetoothDiscoveryService _discoveryService = XSensDotBluetoothDiscoveryService();
+  final XSensDotBluetoothDiscoveryService _discoveryService =
+      XSensDotBluetoothDiscoveryService();
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
   final XSensDotStreamingDataService _xSensDotStreamingDataService =
@@ -44,7 +47,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
 
   @override
   void initState() {
-    _devices = _discoveryService.subscribe(this);
+    _addScannedDevices(_discoveryService.subscribe(this));
     _streamedData.addAll(_xSensDotStreamingDataService.subscribe(this));
     _discoveryService.scanDevices();
     super.initState();
@@ -273,25 +276,34 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
     if (mounted) {
       setState(() {
-        _devices = devices;
+        _addScannedDevices(devices);
       });
     }
   }
 
-  //TODO: Important to understand that this is always a new device, e.g. it isn't already in the users known device list
-  //TODO: That check will have to be implemented
-
-  //TODO: Maybe change for connection event when they will be done
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
-      //TODO: await UserPreferenceManager().addDeviceToKnown(device.macAddress);
       setState(() {
         _connectionStep = 1;
       });
-      await _xSensDotStreamingDataService.startMeasuring(false);
+      await _xSensDotStreamingDataService
+          .startMeasuring(XSensDotConnectionService().isInitialized);
+    } else {
+      Fluttertoast.showToast(msg: connectionErrorMessage + device.macAddress);
+      debugPrint("Connection to device ${device.macAddress} failed");
     }
-    //TODO show error message (when I will have the UI model to do so)
+  }
+
+  void _addScannedDevices(List<BluetoothDevice> scannedDevices) {
+    _devices.clear();
+    List<String> knownMacAddresses = [];
+    knownMacAddresses.addAll(
+        DeviceNamesManager().deviceNames.map((e) => e.deviceMacAddress));
+    Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
+            (scannedDevice) =>
+        !knownMacAddresses.contains(scannedDevice.macAddress));
+    _devices.addAll(devicesToAdd);
   }
 
   @override
@@ -306,12 +318,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       if (_xChartSeriesController == null ||
           _yChartSeriesController == null ||
           _zChartSeriesController == null) return;
-      
+
       int startIndex = _streamedData.length;
       int nbAddedData = measuredData.length - _streamedData.length;
-      List<int> addedIndexes = List<int>.generate(nbAddedData, (i) => i + startIndex);
+      List<int> addedIndexes =
+          List<int>.generate(nbAddedData, (i) => i + startIndex);
 
-      _streamedData.addAll(measuredData.where((element) => !_streamedData.contains(element)));
+      _streamedData.addAll(
+          measuredData.where((element) => !_streamedData.contains(element)));
 
       _xChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);
       _yChartSeriesController?.updateDataSource(addedDataIndexes: addedIndexes);

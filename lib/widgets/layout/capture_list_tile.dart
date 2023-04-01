@@ -4,6 +4,7 @@ import '../../constants/colors.dart';
 import '../../enums/jump_type.dart';
 import '../../models/capture.dart';
 import '../../utils/time_converter.dart';
+import '../dialogs/modification_info_dialog.dart';
 import 'color_circle.dart';
 
 class CaptureListTile extends StatelessWidget {
@@ -23,6 +24,11 @@ class CaptureListTile extends StatelessWidget {
         padding: EdgeInsets.zero,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        onLongPress: () {
+          showDialog(context: context, builder: (_) {
+            return ModificationInfoDialog(orderedModifications: _currentCapture.modifications.reversed.toList());
+          });
+        },
         onPressed: _isInteractive
             ? () {
                 Navigator.pushNamed(context, '/EditAnalysis',
@@ -42,20 +48,35 @@ class CaptureListTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                      "${_currentCapture.date.hour}h${_currentCapture.date.minute}",
-                      style: const TextStyle(fontSize: 24, color: darkText)),
-                  Icon(_currentCapture.hasVideo ? Icons.videocam : Icons.videocam_off, color: darkText),
-                  Row(children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 4.0),
-                      child: Icon(Icons.schedule, color: darkText),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.hour)}h${TimeConverter.twoDigitsPadLeft(_currentCapture.date.minute)}",
+                          style: const TextStyle(fontSize: 24, color: darkText)),Text(
+                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.second)}s",
+                          style: const TextStyle(fontSize: 14, color: darkText)),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(_currentCapture.hasVideo ? Icons.videocam : Icons.videocam_off, color: darkText),
+                        Row(children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 4.0),
+                            child: Icon(Icons.schedule, color: darkText),
+                          ),
+                          Text(
+                            TimeConverter.intToTime(_currentCapture.duration),
+                            style: const TextStyle(fontSize: 16, color: darkText),
+                          )
+                        ]),
+                      ],
                     ),
-                    Text(
-                      TimeConverter.intToTime(_currentCapture.duration),
-                      style: const TextStyle(fontSize: 16, color: darkText),
-                    )
-                  ])
+                  )
                 ],
               ),
               Padding(
