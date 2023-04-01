@@ -45,20 +45,35 @@ class CaptureListTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                      "${_currentCapture.date.hour}h${_currentCapture.date.minute}",
-                      style: const TextStyle(fontSize: 24, color: darkText)),
-                  Icon(_currentCapture.hasVideo ? Icons.videocam : Icons.videocam_off, color: darkText),
-                  Row(children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 4.0),
-                      child: Icon(Icons.schedule, color: darkText),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "${_currentCapture.date.hour.toString().padLeft(2, "0")}h${_currentCapture.date.minute.toString().padLeft(2, "0")}",
+                          style: const TextStyle(fontSize: 24, color: darkText)),Text(
+                          "${_currentCapture.date.second}s",
+                          style: const TextStyle(fontSize: 14, color: darkText)),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(_currentCapture.hasVideo ? Icons.videocam : Icons.videocam_off, color: darkText),
+                        Row(children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 4.0),
+                            child: Icon(Icons.schedule, color: darkText),
+                          ),
+                          Text(
+                            TimeConverter.intToTime(_currentCapture.duration),
+                            style: const TextStyle(fontSize: 16, color: darkText),
+                          )
+                        ]),
+                      ],
                     ),
-                    Text(
-                      TimeConverter.intToTime(_currentCapture.duration),
-                      style: const TextStyle(fontSize: 16, color: darkText),
-                    )
-                  ])
+                  )
                 ],
               ),
               Padding(
