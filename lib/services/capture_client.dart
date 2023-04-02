@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
+import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -95,14 +97,23 @@ class CaptureClient {
       {required String exportFileName,
       required List<XSensDotData> exportedData,
       required bool hasVideo,
+      required String videoPath,
       required Season season}) async {
     String fullPath = await ExternalStorageService()
         .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
+
     int duration = exportedData.last.time - exportedData.first.time;
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
         duration, hasVideo, DateTime.now(), season, [], []);
+
     await _createCapture(capture: capture);
+    await _linkCaptureToCurrentUser(capture: capture);
+
+    if (hasVideo) {
+      await LocalCapturesManager().saveCapture(
+          LocalCapture(captureID: capture.uID!, videoPath: videoPath));
+    }
   }
 
   Future<Capture> getCaptureByID({required String uID}) async {
@@ -180,6 +191,13 @@ class CaptureClient {
       debugPrint(e.toString());
       rethrow;
     }
+  }
+
+  Future<void> _linkCaptureToCurrentUser({required Capture capture}) async {
+    if (_capturingSkatingUser == null) return;
+    await UserClient().linkCapture(
+        userId: _capturingSkatingUser!.uID!, captureId: capture.uID!);
+    _capturingSkatingUser?.capturesID.add(capture.uID!);
   }
 
   Future<void> _modifyCaptureJumpList(
