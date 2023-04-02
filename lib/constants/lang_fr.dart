@@ -14,13 +14,17 @@ const String competitionSeason = "Compétition";
 const String transitionSeason = "Transition";
 const String sharpeningSeason = "Affûtage";
 
-// widgets/alertDialog/modify_full_name
+// widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
 const String firstName = "Prénom: ";
 const String lastName = "Nom: ";
 const String confirmLabel = "Modifier";
 
-// widgets/alertDialog/modify_password
+// widgets/dialogs/modify_password
+const String helperTitle = "Page d'aide";
+const String redirect = "Me diriger sur la page";
+
+// widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordInput = "Mot de passe: ";
 const String passwordConfirmationInput = "Confirmation mot de passe: ";
@@ -44,6 +48,11 @@ const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
+// widgets/layout/options_tab/options_tab
+const String confirmAthleteRemoval = "Confirmer le retrait";
+const String removeThisAthlete = "Enlever cet athlète";
+const String noOptionsAvailable = "Aucune option disponible pour le moment.";
+
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
 const String knownDevicesNear = "Appareils connus à proximité";
@@ -59,6 +68,10 @@ const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
+const String myAthletes = "Mes athlètes";
+
+// widgets/dialogs/modification_info_dialog
+const String modificationInfoDialogTitle  = "Journal de modification pour cette capture";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -100,6 +113,11 @@ const String startTimeLabel = "Début";
 const String maxSpeedLabel = "Vitesse atteinte";
 const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
 const String reorderJumpList = "Réordonner la liste";
+const String fallComment = "Chute";
+const String notEnoughRotationComment = "Manque de rotation";
+const String goodJobComment = "Bien fait";
+const String stepOut = "Step out";
+const String chooseBelowComments = "Ou choisir parmi les commentaires suivants:";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";

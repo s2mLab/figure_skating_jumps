@@ -85,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
                     width: double.infinity,
                     margin: const EdgeInsets.all(32.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: primaryBackground,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [connectionShadow],
                     ),
@@ -175,23 +175,6 @@ class _LoginViewState extends State<LoginView> {
                                       IceButtonImportance.secondaryAction,
                                   iceButtonSize: IceButtonSize.medium),
                             ),
-                            Padding(
-                              //TODO: remove in final release
-                              padding: const EdgeInsets.only(top: 8),
-                              child: IceButton(
-                                  text: "Bypass",
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      '/',
-                                    );
-                                  },
-                                  textColor: Colors.purpleAccent,
-                                  color: Colors.purpleAccent,
-                                  iceButtonImportance:
-                                      IceButtonImportance.discreetAction,
-                                  iceButtonSize: IceButtonSize.medium),
-                            )
                           ],
                         ))),
               ],
