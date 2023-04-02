@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:flutter/material.dart';
 
@@ -18,34 +19,40 @@ class CapturesTab extends StatelessWidget {
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.builder(
-            itemCount: captures.length,
-            itemBuilder: (context, dateIndex) {
-              String key = captures.keys.elementAt(dateIndex);
-              List<Capture> capturesToDisplay = captures[key]!;
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      key.replaceAll('-', '/'),
-                      style: const TextStyle(
-                          fontSize: 26,
-                          color: primaryColorLight,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                        height: capturesToDisplay.length * heightContainer,
-                        child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: capturesToDisplay.length,
-                            itemBuilder: (context, index) {
-                              Capture currentCapture = capturesToDisplay[index];
-                              return CaptureListTile(
-                                  currentCapture: currentCapture);
-                            }))
-                  ]);
-            },
-          ),
+          child: captures.isEmpty
+              ? const Center(
+                  child: Text(noCapture),
+                )
+              : ListView.builder(
+                  itemCount: captures.length,
+                  itemBuilder: (context, dateIndex) {
+                    String key = captures.keys.elementAt(dateIndex);
+                    List<Capture> capturesToDisplay = captures[key]!;
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            key.replaceAll('-', '/'),
+                            style: const TextStyle(
+                                fontSize: 26,
+                                color: primaryColorLight,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                              height:
+                                  capturesToDisplay.length * heightContainer,
+                              child: ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: capturesToDisplay.length,
+                                  itemBuilder: (context, index) {
+                                    Capture currentCapture =
+                                        capturesToDisplay[index];
+                                    return CaptureListTile(
+                                        currentCapture: currentCapture);
+                                  }))
+                        ]);
+                  },
+                ),
         )),
       ],
     );
