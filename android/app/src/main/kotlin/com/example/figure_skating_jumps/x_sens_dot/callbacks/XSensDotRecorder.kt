@@ -66,7 +66,7 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
         )
     }
 
-    override fun onXsensDotEraseDone(address: String?, p1: Boolean) {}
+    override fun onXsensDotEraseDone(address: String?, isSuccess: Boolean) {}
 
     override fun onXsensDotRequestFlashInfoDone(
         address: String?,
