@@ -255,4 +255,25 @@ class UserClient {
       rethrow;
     }
   }
+
+  Future<void> linkCapture({required String userId, required String captureId}) async {
+    try {
+      SkatingUser user = SkatingUser.fromFirestore(
+          userId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(userId)
+              .get());
+
+      user.capturesID.add(captureId);
+
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(userId)
+          .set({"captures": user.capturesID}, SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
 }
