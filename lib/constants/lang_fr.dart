@@ -42,6 +42,7 @@ const String averageFlyTimeLegend = "Temps de vol moyen";
 // widgets/layout/options_tab/options_tab
 const String confirmAthleteRemoval = "Confirmer le retrait";
 const String removeThisAthlete = "Enlever cet athlète";
+const String noOptionsAvailable = "Aucune option disponible pour le moment.";
 
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";

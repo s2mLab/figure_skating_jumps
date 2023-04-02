@@ -354,6 +354,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     null, //There is no form of comment that should be filtered out
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Ou choisir parmi les commentaires suivants:"),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

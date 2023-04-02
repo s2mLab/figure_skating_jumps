@@ -228,7 +228,7 @@ class UserClient {
               .get());
 
       skater.coachesID.removeWhere((element) => element == coachId);
-      coach.trainees.removeWhere((element) => element.uID! == skaterId); // TODO : bug it should be removed from the global usr
+      coach.trainees.removeWhere((element) => element.uID! == skaterId);
       _currentSkatingUser!.coachesID
           .removeWhere((element) => element == coachId);
 

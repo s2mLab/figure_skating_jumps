@@ -24,7 +24,7 @@ class OptionsTab extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: IceButton(
+            child: _athlete.uID == UserClient().currentSkatingUser!.uID! ? const Text(noOptionsAvailable) : IceButton(
                 text: removeThisAthlete,
                 onPressed: () {
                   showDialog(context: context, builder: (_) {
@@ -44,6 +44,8 @@ class OptionsTab extends StatelessWidget {
                     text: confirmText,
                     onPressed: () async {
                       await UserClient().removeSkater(skaterId: _athlete.uID!, coachId: UserClient().currentSkatingUser!.uID!);
+                      UserClient().currentSkatingUser!.trainees.removeWhere((element) => element.uID == _athlete.uID!);
+                      UserClient().currentSkatingUser!.traineesID.removeWhere((element) => element == _athlete.uID!);
                       if (context.mounted) Navigator.pushReplacementNamed(context, '/ListAthletes');
                     },
                     textColor: paleText,
