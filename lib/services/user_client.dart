@@ -40,39 +40,9 @@ class UserClient {
       {required String email,
       required String password,
       required SkatingUser userInfo}) async {
-    UserCredential userCreds;
-    try {
-      userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      ExceptionUtils.handleFirebaseAuthException(e);
-      // Should not reach this line but kept in to make sure the exception is handled
-      developer.log(e.toString());
-      rethrow;
-    } catch (e) {
-      developer.log(e.toString());
-      rethrow;
-    }
-
-    if (userCreds.user == null) {
-      throw NullUserException();
-    }
-    userInfo.uID = userCreds.user?.uid;
-    try {
-      await _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
-        'firstName': userInfo.firstName,
-        'lastName': userInfo.lastName,
-        'email': email,
-        'role': userInfo.role.toString(),
-        'captures': userInfo.capturesID,
-        'trainees': userInfo.trainees,
-        'coaches': userInfo.coachesID,
-      });
-    } catch (e) {
-      developer.log(e.toString());
-      rethrow;
-    }
-    return userCreds.user!.uid;
+    String uID = await _createUserInDb(email: email, password: password, userInfo: userInfo);
+    _currentSkatingUser = userInfo;
+    return uID;
   }
 
   /// Signs in the user with the give [email] and [password].
@@ -87,7 +57,7 @@ class UserClient {
 
       DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await _firestore
           .collection(_userCollectionString)
-          .doc(_firebaseAuth.currentUser?.uid)
+          .doc(_firebaseAuth.currentUser!.uid)
           .get();
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
@@ -187,9 +157,9 @@ class UserClient {
 
   Future<String> createAndLinkSkater(
       {required String skaterEmail,
-        required String coachId,
-        required String firstName,
-        required String lastName}) async {
+      required String coachId,
+      required String firstName,
+      required String lastName}) async {
     QuerySnapshot<Map<String, dynamic>> result = await _firestore
         .collection(_userCollectionString)
         .where("email", isEqualTo: skaterEmail)
@@ -197,7 +167,7 @@ class UserClient {
     if (result.docs.isNotEmpty) throw ConflictException();
 
     SkatingUser skatingUser =
-    SkatingUser(firstName, lastName, UserRole.iceSkater);
+        SkatingUser(firstName, lastName, UserRole.iceSkater);
     String password = _genPassword();
     // Signs up the user with a temporary random password
     String uID = await signUp(
@@ -210,8 +180,7 @@ class UserClient {
   }
 
   Future<String> linkExistingSkater(
-      {required String skaterEmail,
-      required String coachId}) async {
+      {required String skaterEmail, required String coachId}) async {
     QuerySnapshot<Map<String, dynamic>> result = await _firestore
         .collection(_userCollectionString)
         .where("email", isEqualTo: skaterEmail)
@@ -223,44 +192,6 @@ class UserClient {
 
     await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
     return skatingUser.uID!;
-  }
-
-  String _genPassword() {
-    Random rnd = Random.secure();
-    return List.generate(64, (index) => chars[rnd.nextInt(chars.length)]).join();
-  }
-
-  Future<void> _linkSkaterAndCoach(
-      {required String skaterId, required String coachId}) async {
-    try {
-      SkatingUser skater = SkatingUser.fromFirestore(
-          skaterId,
-          await _firestore
-              .collection(_userCollectionString)
-              .doc(skaterId)
-              .get());
-      SkatingUser coach = SkatingUser.fromFirestore(
-          coachId,
-          await _firestore
-              .collection(_userCollectionString)
-              .doc(coachId)
-              .get());
-
-      skater.coachesID.add(coachId);
-      coach.traineesID.add(skaterId);
-
-      await _firestore
-          .collection(_userCollectionString)
-          .doc(skaterId)
-          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
-      await _firestore
-          .collection(_userCollectionString)
-          .doc(coachId)
-          .set({"trainees": coach.trainees}, SetOptions(merge: true));
-    } catch (e) {
-      developer.log(e.toString());
-      rethrow;
-    }
   }
 
   Future<void> unlinkSkaterAndCoach(
@@ -296,5 +227,101 @@ class UserClient {
       developer.log(e.toString());
       rethrow;
     }
+  }
+
+  Future<void> linkCapture(
+      {required String userId, required String captureId}) async {
+    try {
+      SkatingUser user = SkatingUser.fromFirestore(userId,
+          await _firestore.collection(_userCollectionString).doc(userId).get());
+
+      user.capturesID.add(captureId);
+
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(userId)
+          .set({"captures": user.capturesID}, SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  String _genPassword() {
+    Random rnd = Random.secure();
+    return List.generate(64, (index) => chars[rnd.nextInt(chars.length)])
+        .join();
+  }
+
+  Future<void> _linkSkaterAndCoach(
+      {required String skaterId, required String coachId}) async {
+    try {
+      SkatingUser skater = SkatingUser.fromFirestore(
+          skaterId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(skaterId)
+              .get());
+      SkatingUser coach = SkatingUser.fromFirestore(
+          coachId,
+          await _firestore
+              .collection(_userCollectionString)
+              .doc(coachId)
+              .get());
+
+      skater.coachesID.add(coachId);
+      coach.traineesID.add(skaterId);
+
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(skaterId)
+          .set({"coaches": skater.coachesID}, SetOptions(merge: true));
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(coachId)
+          .set({"trainees": coach.trainees}, SetOptions(merge: true));
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<String> _createUserInDb(
+      {required String email,
+      required String password,
+      required SkatingUser userInfo}) async {
+    UserCredential userCreds;
+    try {
+      userCreds = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      ExceptionUtils.handleFirebaseAuthException(e);
+      // Should not reach this line but kept in to make sure the exception is handled
+      developer.log(e.toString());
+      rethrow;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+
+    if (userCreds.user == null) {
+      throw NullUserException();
+    }
+    userInfo.uID = userCreds.user!.uid;
+    try {
+      await _firestore.collection(_userCollectionString).doc(userInfo.uID).set({
+        'firstName': userInfo.firstName,
+        'lastName': userInfo.lastName,
+        'email': email,
+        'role': userInfo.role.toString(),
+        'captures': userInfo.capturesID,
+        'trainees': userInfo.trainees,
+        'coaches': userInfo.coachesID,
+      });
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+    return userCreds.user!.uid;
   }
 }

@@ -9,7 +9,7 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../buttons/ice_button.dart';
-import '../dialogs/connection_new_xsens_dot_dialog.dart';
+import '../dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
 import '../layout/connection_dot_view/no_known_devices.dart';
 import '../layout/scaffold/topbar.dart';
 

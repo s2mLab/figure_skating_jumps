@@ -85,7 +85,7 @@ class _AthleteViewState extends State<AthleteView> {
                     CaptureClient().capturingSkatingUser = skater!;
                     Navigator.pushNamed(
                       context,
-                      '/CaptureData',
+                      '/CaptureData'
                     );
                   },
                   textColor: paleText,
