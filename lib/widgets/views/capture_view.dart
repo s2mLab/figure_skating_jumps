@@ -31,11 +31,14 @@ class CaptureView extends StatefulWidget {
   State<CaptureView> createState() => _CaptureViewState();
 }
 
-class _CaptureViewState extends State<CaptureView> implements IRecorderSubscriber {
+class _CaptureViewState extends State<CaptureView>
+    implements IRecorderSubscriber {
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
-  final GlobalKey<NavigatorState> _exportingDialogKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _analyzingDialogKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _exportingDialogKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _analyzingDialogKey =
+      GlobalKey<NavigatorState>();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   RecorderState _lastState = RecorderState.idle;
@@ -217,11 +220,12 @@ class _CaptureViewState extends State<CaptureView> implements IRecorderSubscribe
       _displayWaitingDialog(exportingData, _exportingDialogKey);
       await _initializeControllerFuture;
       String videoPath = "";
-      if(_isCameraActivated) {
+      if (_isCameraActivated) {
         XFile f = await _controller.stopVideoRecording();
         videoPath = await ExternalStorageService().saveVideo(f);
       }
-      await _xSensDotRecordingService.stopRecording(_isCameraActivated, videoPath);
+      await _xSensDotRecordingService.stopRecording(
+          _isCameraActivated, videoPath);
     } catch (e) {
       developer.log(e.toString());
     }
@@ -244,8 +248,9 @@ class _CaptureViewState extends State<CaptureView> implements IRecorderSubscribe
           return;
         }
 
-        if(!_isCameraActivated) {
-          _displayStepDialog(const NoCameraRecordingDialog()).then((value) async {
+        if (!_isCameraActivated) {
+          _displayStepDialog(const NoCameraRecordingDialog())
+              .then((value) async {
             await _onCaptureStopPressed();
           });
           return;
@@ -299,7 +304,8 @@ class _CaptureViewState extends State<CaptureView> implements IRecorderSubscribe
         });
   }
 
-  void _displayWaitingDialog(String message, GlobalKey<NavigatorState> dialogKey) {
+  void _displayWaitingDialog(
+      String message, GlobalKey<NavigatorState> dialogKey) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -333,13 +339,21 @@ class _CaptureViewState extends State<CaptureView> implements IRecorderSubscribe
 
   @override
   void onStateChange(RecorderState state) {
-    if(_lastState == RecorderState.exporting && state == RecorderState.idle) {
-      if(_exportingDialogKey.currentContext != null) {
+    if (state == RecorderState.analyzing) {
+      if (_exportingDialogKey.currentContext != null) {
         Navigator.pop(_exportingDialogKey.currentContext!);
       }
       _displayWaitingDialog(analyzingData, _analyzingDialogKey);
-      //TODO perform analysis
     }
+
+    if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
+      if (_analyzingDialogKey.currentContext != null) {
+        Navigator.pop(_analyzingDialogKey.currentContext!);
+        Navigator.pushNamed(context, '/EditAnalysis',
+            arguments: _xSensDotRecordingService.currentCapture);
+      }
+    }
+
     _lastState = state;
   }
 }

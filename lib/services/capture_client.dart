@@ -35,7 +35,7 @@ class CaptureClient {
 
   CaptureClient._internal();
 
-  Future<void> createJump({required Jump jump}) async {
+  Future<Jump> createJump({required Jump jump}) async {
     try {
       DocumentReference<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).add({
@@ -53,6 +53,7 @@ class CaptureClient {
       jump.uID = jumpInfo.id;
       _modifyCaptureJumpList(
           captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
+      return jump;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -93,7 +94,7 @@ class CaptureClient {
     }
   }
 
-  Future<void> saveCapture(
+  Future<Capture> saveCapture(
       {required String exportFileName,
       required List<XSensDotData> exportedData,
       required bool hasVideo,
@@ -114,6 +115,8 @@ class CaptureClient {
       await LocalCapturesManager().saveCapture(
           LocalCapture(captureID: capture.uID!, videoPath: videoPath));
     }
+
+    return capture;
   }
 
   Future<Capture> getCaptureByID({required String uID}) async {
