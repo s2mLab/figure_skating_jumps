@@ -140,66 +140,85 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: ExpansionPanelList(
-                        expandedHeaderPadding: EdgeInsets.zero,
-                        expansionCallback: (i, isOpen) {
-                          setState(() {
-                            _isPanelsOpen[i] = !isOpen;
-                          });
-                        },
-                        elevation: 0,
-                        children:
-                            List.generate(_capture!.jumps.length, (index) {
-                          _isPanelsOpen.add(false);
-                          return ExpansionPanel(
-                              canTapOnHeader: true,
-                              backgroundColor: Colors.transparent,
-                              isExpanded: _isPanelsOpen[index],
-                              headerBuilder:
-                                  (BuildContext context, bool isExpanded) {
-                                return JumpPanelHeader(
-                                    jump: _capture!.jumps[index]);
+                    child: _capture!.jumps.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Center(child: Text(noJump)),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: ExpansionPanelList(
+                              expandedHeaderPadding: EdgeInsets.zero,
+                              expansionCallback: (i, isOpen) {
+                                setState(() {
+                                  _isPanelsOpen[i] = !isOpen;
+                                });
                               },
-                              body: JumpPanelContent(
-                                  jump: _capture!.jumps[index],
-                                  onModified: (Jump j, JumpType initialJumpType,
-                                      int initialTime) {
-                                    if (j.time != initialTime) {
-                                      _timeWasModified = true;
-                                    }
-                                    setState(() {
-                                      _capture!.jumpTypeCount[initialJumpType] =
-                                          _capture!.jumpTypeCount[
-                                                  initialJumpType]! -
-                                              1;
-                                      _capture!.jumpTypeCount[j.type] =
-                                          _capture!.jumpTypeCount[j.type]! + 1;
-                                      CaptureClient().updateJump(jump: j).then((value) {
-                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(duration: Duration(seconds: 2), backgroundColor: confirm, content: Text(savedModificationsSnack)));
-                                      });
-                                    });
-                                  },
-                                  onDeleted: (Jump j, JumpType initial) {
-                                    setState(() {
-                                      _capture!.jumpTypeCount[initial] =
-                                          _capture!.jumpTypeCount[initial]! - 1;
-                                      _capture!.jumps.remove(j);
-                                      _capture = _capture;
-                                      _isPanelsOpen = [];
-                                    });
-                                    CaptureClient()
-                                        .deleteJump(jump: j)
-                                        .then((value) {
-                                      Navigator.pushReplacementNamed(
-                                          context, '/EditAnalysis',
-                                          arguments: _capture);
-                                    }); //no need to await, done in the background
-                                  }));
-                        }),
-                      ),
-                    ),
+                              elevation: 0,
+                              children: List.generate(_capture!.jumps.length,
+                                  (index) {
+                                _isPanelsOpen.add(false);
+                                return ExpansionPanel(
+                                    canTapOnHeader: true,
+                                    backgroundColor: Colors.transparent,
+                                    isExpanded: _isPanelsOpen[index],
+                                    headerBuilder: (BuildContext context,
+                                        bool isExpanded) {
+                                      return JumpPanelHeader(
+                                          jump: _capture!.jumps[index]);
+                                    },
+                                    body: JumpPanelContent(
+                                        jump: _capture!.jumps[index],
+                                        onModified: (Jump j,
+                                            JumpType initialJumpType,
+                                            int initialTime) {
+                                          if (j.time != initialTime) {
+                                            _timeWasModified = true;
+                                          }
+                                          setState(() {
+                                            _capture!.jumpTypeCount[
+                                                    initialJumpType] =
+                                                _capture!.jumpTypeCount[
+                                                        initialJumpType]! -
+                                                    1;
+                                            _capture!.jumpTypeCount[j.type] =
+                                                _capture!.jumpTypeCount[
+                                                        j.type]! +
+                                                    1;
+                                            CaptureClient()
+                                                .updateJump(jump: j)
+                                                .then((value) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                      backgroundColor: confirm,
+                                                      content: Text(
+                                                          savedModificationsSnack)));
+                                            });
+                                          });
+                                        },
+                                        onDeleted: (Jump j, JumpType initial) {
+                                          setState(() {
+                                            _capture!.jumpTypeCount[initial] =
+                                                _capture!.jumpTypeCount[
+                                                        initial]! -
+                                                    1;
+                                            _capture!.jumps.remove(j);
+                                            _capture = _capture;
+                                            _isPanelsOpen = [];
+                                          });
+                                          CaptureClient()
+                                              .deleteJump(jump: j)
+                                              .then((value) {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/EditAnalysis',
+                                                arguments: _capture);
+                                          }); //no need to await, done in the background
+                                        }));
+                              }),
+                            ),
+                          ),
                   ),
                 ),
               ],
