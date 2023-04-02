@@ -39,6 +39,10 @@ const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle = "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
+// widgets/layout/options_tab/options_tab
+const String confirmAthleteRemoval = "Confirmer le retrait";
+const String removeThisAthlete = "Enlever cet athlète";
+
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
 const String knownDevicesNear = "Appareils connus à proximité";
