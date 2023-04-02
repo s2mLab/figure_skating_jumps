@@ -4,13 +4,17 @@ import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/services/http_client.dart';
+import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../enums/method_channel_names.dart';
 import '../../enums/season.dart';
 import '../../interfaces/i_recorder_state_subscriber.dart';
+import '../../models/capture.dart';
 import '../../models/xsens_dot_data.dart';
 
 class XSensDotRecordingService
@@ -32,6 +36,7 @@ class XSensDotRecordingService
   static String _currentRecordingVideoPath = "";
 
   static Season season = Season.preparation;
+  static Capture? _currentCapture;
   static const _recordingOutputRate = 120;
 
   factory XSensDotRecordingService() {
@@ -94,6 +99,10 @@ class XSensDotRecordingService
     return _recorderState;
   }
 
+  Capture get currentCapture {
+    return _currentCapture!;
+  }
+
   Future<void> stopRecording(bool hasVideo, String videoPath) async {
     _currentRecordingHasVideo = hasVideo;
     _currentRecordingVideoPath = videoPath;
@@ -105,7 +114,7 @@ class XSensDotRecordingService
   }
 
   Future<void> eraseMemory() async {
-    if(_recorderState == RecorderState.idle) {
+    if (_recorderState == RecorderState.idle) {
       _changeState(RecorderState.erasing);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
@@ -151,7 +160,7 @@ class XSensDotRecordingService
   }
 
   static Future<void> _handleGetFlashInfoDone(String? data) async {
-    switch(_recorderState) {
+    switch (_recorderState) {
       case RecorderState.preparing:
         bool canRecord = data == "true";
         if (!canRecord) {
@@ -173,8 +182,6 @@ class XSensDotRecordingService
       default:
         break;
     }
-
-
   }
 
   static Future<void> _handleGetFileInfoDone(String data) async {
@@ -195,15 +202,31 @@ class XSensDotRecordingService
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
-      await CaptureClient().saveCapture(
+      _currentCapture = await CaptureClient().saveCapture(
           exportFileName: _exportFileName,
           exportedData: _exportedData,
           hasVideo: _currentRecordingHasVideo,
           videoPath: _currentRecordingVideoPath,
           season: season);
       debugPrint("Done");
-      _changeState(RecorderState.idle);
+      _changeState(RecorderState.analyzing);
+      await _analyzeData();
     }
+  }
+
+  static Future<void> _analyzeData() async {
+    String content = CsvCreator.createXSensDotCsv(_exportedData);
+    bool success = await HttpClient()
+        .uploadFile(fileName: _exportFileName, fileContent: content);
+    if (success) {
+      List<Jump>? jumps = await HttpClient()
+          .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
+      jumps?.forEach((jump) async {
+        Jump newJump = await CaptureClient().createJump(jump: jump);
+        _currentCapture?.jumpsID.add(newJump.uID!);
+      });
+    }
+    _changeState(RecorderState.idle);
   }
 
   static void _handleEraseMemoryDone() async {
