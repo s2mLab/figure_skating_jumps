@@ -71,7 +71,8 @@ const String disconnect = "Voulez-vous vraiment vous déconnecter?";
 const String myAthletes = "Mes athlètes";
 
 // widgets/dialogs/modification_info_dialog
-const String modificationInfoDialogTitle  = "Journal de modification pour cette capture";
+const String modificationInfoDialogTitle =
+    "Journal de modification pour cette capture";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
 const String bluetoothAuthorizationPrompt =
@@ -184,12 +185,26 @@ const String captureViewInstructions =
 const String captureViewCameraInstruction =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
+const String stopCapture = "Arrêter la capture";
+const String exportingData = "Enregistrement des données...";
+const String analyzingData = "Analyse des données...";
+
+
+// widgets/dialog/capture/start_recording_dialog
 const String captureStartingPrompt = "Démarrage...";
+const String erasingDataPrompt = "Suppression des données en cours...";
 const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
 const String memoryErrorMessage =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
-const String memoryDialogButton = "ok";
-const String stopCapture = "Arrêter la capture";
+const String emptyMemoryButton = "Vider la mémoire";
+
+// widgets/dialog/capture/start_recording_dialog
+const String connectXSensDot = "Connecter un appareil XSens DOT";
+const String noDeviceErrorMessage =
+    "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
+
+// widgets/dialog/capture/no_camera_recording_dialog
+const String recordingPrompt = "Collecte de donnée en cours...";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";

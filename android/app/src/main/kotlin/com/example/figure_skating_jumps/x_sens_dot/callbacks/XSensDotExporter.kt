@@ -63,6 +63,14 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         exportingManager.clear()
     }
 
+    fun eraseMemory() {
+        if (isNotificationEnabled) {
+            SystemClock.sleep(sleepingTimeMs)
+            Log.i("XSensDot", "Started erasing")
+            exportingManager.eraseRecordingData()
+        }
+    }
+
     private fun selectDataIds(): Boolean {
         return exportingManager.selectExportedData(selectedDataIds)
     }
@@ -79,8 +87,13 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         )
     }
 
-    override fun onXsensDotEraseDone(address: String?, p1: Boolean) {
+    override fun onXsensDotEraseDone(address: String?, isSuccess: Boolean) {
         Log.i("XSensDot", "onXsensDotEraseDone")
+        XSensDotRecordingStreamHandler.sendEvent(
+            RecordingEvent(
+                RecordingStatus.EraseMemoryDone
+            )
+        )
     }
 
     override fun onXsensDotRequestFlashInfoDone(
@@ -92,20 +105,6 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
         XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.GetFlashInfoDone))
     }
-
-    override fun onXsensDotRecordingAck(
-        address: String?,
-        recordingId: Int,
-        isSuccess: Boolean,
-        recordingState: XsensDotRecordingState?
-    ) {}
-
-    override fun onXsensDotGetRecordingTime(
-        address: String?,
-        startUTCSeconds: Int,
-        totalRecordingSeconds: Int,
-        remainingRecordingSeconds: Int
-    ) {}
 
     override fun onXsensDotRequestFileInfoDone(
         address: String?,
@@ -161,4 +160,18 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
     override fun onXsensDotStopExportingData(address: String?) {
         Log.i("XSensDot", "onXsensDotStopExportingData")
     }
+
+    override fun onXsensDotRecordingAck(
+        address: String?,
+        recordingId: Int,
+        isSuccess: Boolean,
+        recordingState: XsensDotRecordingState?
+    ) {}
+
+    override fun onXsensDotGetRecordingTime(
+        address: String?,
+        startUTCSeconds: Int,
+        totalRecordingSeconds: Int,
+        remainingRecordingSeconds: Int
+    ) {}
 }
