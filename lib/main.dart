@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.d
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
+import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
@@ -89,6 +90,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
               '/EditAnalysis': (context) => const EditAnalysisView(),
               '/ListAthletes': (context) => const ListAthletesView(),
               '/ProfileView': (context) => const ProfileView(),
+              '/ForgotPasswordView': (context) => ForgotPasswordView(),
             },
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

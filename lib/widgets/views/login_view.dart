@@ -175,6 +175,22 @@ class _LoginViewState extends State<LoginView> {
                                       IceButtonImportance.secondaryAction,
                                   iceButtonSize: IceButtonSize.medium),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: IceButton(
+                                  text: forgotPasswordButton,
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/ForgotPasswordView',
+                                    );
+                                  },
+                                  textColor: primaryColor,
+                                  color: Colors.transparent,
+                                  iceButtonImportance:
+                                      IceButtonImportance.discreetAction,
+                                  iceButtonSize: IceButtonSize.medium),
+                            )
                           ],
                         ))),
               ],

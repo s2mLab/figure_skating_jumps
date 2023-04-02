@@ -138,6 +138,12 @@ const String connectionButton = "Connexion";
 const String connectingButton = "Connexion...";
 const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
+const String forgotPasswordButton = "Mot de passe oublié?";
+
+// widgets/screens/forgot_password_view
+const String forgotPasswordTitle = "Mot de passe oublié";
+const String forgotPasswordToast = "Si ce courriel existe, vous recevrez un email dans un court délai.";
+const String sendEmailButtonText = "Envoyer un courriel";
 
 // widgets/screens/acquisitions_view
 const String capturesTab = "Captures";
