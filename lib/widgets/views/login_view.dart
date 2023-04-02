@@ -85,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
                     width: double.infinity,
                     margin: const EdgeInsets.all(32.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: primaryBackground,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [connectionShadow],
                     ),

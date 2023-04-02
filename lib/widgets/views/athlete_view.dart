@@ -11,7 +11,7 @@ import '../../constants/colors.dart';
 import '../../constants/styles.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
-import '../layout/options_tab.dart';
+import '../layout/athlete_view/option_tab/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 
@@ -71,7 +71,7 @@ class _AthleteViewState extends State<AthleteView> {
                   future: _futureCaptures,
                   builder: _buildProgressionTab,
                 ),
-                const OptionsTab(),
+                OptionsTab(athlete: skater!),
               ],
             ),
           ),
