@@ -29,6 +29,7 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
+  LocalCapture? _captureInfo;
   List<bool> _isPanelsOpen = [];
   late ScrollController _jumpListScrollController;
   bool _timeWasModified = false;
@@ -41,10 +42,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
 
   loadVideoData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
-    LocalCapture? captureInfo =
-        await LocalCapturesManager().getCapture(_capture!.uID!);
-    debugPrint(captureInfo!.videoPath);
-    debugPrint("HEREEEEEEEEEEEEEEEEEEEE");
+    _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
+    setState(() {});
   }
 
   @override
@@ -66,14 +65,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const PageTitle(text: editAnalysisPageTitle),
-                    if (_capture!.hasVideo)
+                    if (_capture!.hasVideo &&
+                        _captureInfo != null &&
+                        _captureInfo!.videoPath.isNotEmpty)
                       IceButton(
                           text: seeVideoAgain,
                           onPressed: () {
                             showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return VideoPlayerDialog();
+                                  return VideoPlayerDialog(
+                                      videoPath: _captureInfo!.videoPath);
                                 });
                           },
                           textColor: primaryColor,
