@@ -148,6 +148,7 @@ const String editAnalysisPageTitle = "Analyse";
 const String analysisDonePrompt =
     "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
 const String addAJump = "Ajouter un saut";
+const String noJump = "Aucun saut n'a été détecté dans cette capture.";
 
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";
