@@ -40,7 +40,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     super.initState();
   }
 
-  loadVideoData() async {
+  Future<void> _loadVideoData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
     setState(() {});
@@ -48,7 +48,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
 
   @override
   Widget build(BuildContext context) {
-    loadVideoData();
+    _loadVideoData();
     return Scaffold(
         appBar: const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
