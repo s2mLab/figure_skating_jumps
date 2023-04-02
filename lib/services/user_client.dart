@@ -10,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
 
+import '../constants/generator_constants.dart';
+
 class UserClient {
   static final UserClient _userClient = UserClient._internal();
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -195,11 +197,7 @@ class UserClient {
     SkatingUser skatingUser =
         SkatingUser(firstName, lastName, UserRole.iceSkater);
     if (result.docs.isEmpty) {
-      Random rnd = Random.secure();
-      const chars =
-          'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-      String password =
-          List.generate(64, (index) => chars[rnd.nextInt(chars.length)]).join();
+      String password = _genPassword();
       // Signs up the user with a temporary random password
       String uID = await signUp(
           email: skaterEmail, password: password, userInfo: skatingUser);
@@ -214,6 +212,11 @@ class UserClient {
     // The id was set in both branches
     await linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
     return skatingUser.uID!;
+  }
+
+  String _genPassword() {
+    Random rnd = Random.secure();
+    return List.generate(64, (index) => chars[rnd.nextInt(chars.length)]).join();
   }
 
   Future<void> linkSkaterAndCoach(
