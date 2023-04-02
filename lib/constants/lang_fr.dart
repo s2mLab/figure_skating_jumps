@@ -14,13 +14,17 @@ const String competitionSeason = "Compétition";
 const String transitionSeason = "Transition";
 const String sharpeningSeason = "Affûtage";
 
-// widgets/alertDialog/modify_full_name
+// widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
 const String firstName = "Prénom: ";
 const String lastName = "Nom: ";
 const String confirmLabel = "Modifier";
 
-// widgets/alertDialog/modify_password
+// widgets/dialogs/modify_password
+const String helperTitle = "Page d'aide";
+const String redirect = "Me diriger sur la page";
+
+// widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordInput = "Mot de passe: ";
 const String passwordConfirmationInput = "Confirmation mot de passe: ";
