@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
@@ -30,28 +31,34 @@ class CaptureView extends StatefulWidget {
   State<CaptureView> createState() => _CaptureViewState();
 }
 
-class _CaptureViewState extends State<CaptureView> {
+class _CaptureViewState extends State<CaptureView> implements IRecorderSubscriber {
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
+  final GlobalKey<NavigatorState> _exportingDialogKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _analyzingDialogKey = GlobalKey<NavigatorState>();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  RecorderState _lastState = RecorderState.idle;
   bool _isFullscreen = false;
   bool _isCameraActivated = true;
   Season _selectedSeason = XSensDotRecordingService.season;
 
   @override
   void initState() {
+    _lastState = _xSensDotRecordingService.subscribe(this);
     _controller = CameraController(
       enableAudio: false,
       CameraService().rearCamera,
       ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _xSensDotRecordingService.unsubscribe(this);
     _controller.dispose();
     super.dispose();
   }
@@ -207,7 +214,7 @@ class _CaptureViewState extends State<CaptureView> {
 
   Future<void> _onCaptureStopPressed() async {
     try {
-      _displayWaitingDialog(exportingData);
+      _displayWaitingDialog(exportingData, _exportingDialogKey);
       await _initializeControllerFuture;
       await _xSensDotRecordingService.stopRecording(_isCameraActivated);
       if(_isCameraActivated) {
@@ -294,12 +301,13 @@ class _CaptureViewState extends State<CaptureView> {
         });
   }
 
-  void _displayWaitingDialog(String message) {
+  void _displayWaitingDialog(String message, GlobalKey<NavigatorState> dialogKey) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return SimpleDialog(
+            key: dialogKey,
             title: Text(
               message,
               textAlign: TextAlign.center,
@@ -323,5 +331,17 @@ class _CaptureViewState extends State<CaptureView> {
             ],
           );
         });
+  }
+
+  @override
+  void onStateChange(RecorderState state) {
+    if(_lastState == RecorderState.exporting && state == RecorderState.idle) {
+      if(_exportingDialogKey.currentContext != null) {
+        Navigator.pop(_exportingDialogKey.currentContext!);
+      }
+      _displayWaitingDialog(analyzingData, _analyzingDialogKey);
+      //TODO perform analysis
+    }
+    _lastState = state;
   }
 }
