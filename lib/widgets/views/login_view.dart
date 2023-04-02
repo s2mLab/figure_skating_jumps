@@ -180,7 +180,7 @@ class _LoginViewState extends State<LoginView> {
                               child: IceButton(
                                   text: forgotPasswordButton,
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
+                                    Navigator.pushNamed(
                                       context,
                                       '/ForgotPasswordView',
                                     );
