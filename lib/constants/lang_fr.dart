@@ -14,13 +14,17 @@ const String competitionSeason = "Compétition";
 const String transitionSeason = "Transition";
 const String sharpeningSeason = "Affûtage";
 
-// widgets/alertDialog/modify_full_name
+// widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
 const String firstName = "Prénom: ";
 const String lastName = "Nom: ";
 const String confirmLabel = "Modifier";
 
-// widgets/alertDialog/modify_password
+// widgets/dialogs/modify_password
+const String helperTitle = "Page d'aide";
+const String redirect = "Me diriger sur la page";
+
+// widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordInput = "Mot de passe: ";
 const String passwordConfirmationInput = "Confirmation mot de passe: ";
@@ -32,6 +36,9 @@ const String connectionStateMessageConnecting = "Tentative de connexion";
 const String connectionStateMessageReconnecting = "Tentative de reconnexion";
 const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
 
+// widgets/layout/athlete_view/capture_tab
+const String noCapture = "Aucune capture n'a été faite sur ce profil.";
+
 // widgets/layout/athlete_view/progression_tab/progression_tab
 const String succeededJumpsGraphicTitle = "Score moyen par saut dans le temps";
 const String percentageJumpsSucceededGraphicTitle =
@@ -40,6 +47,11 @@ const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
+
+// widgets/layout/options_tab/options_tab
+const String confirmAthleteRemoval = "Confirmer le retrait";
+const String removeThisAthlete = "Enlever cet athlète";
+const String noOptionsAvailable = "Aucune option disponible pour le moment.";
 
 // widgets/layout/dot_connected
 const String myDevices = "Mes appareils";
@@ -56,6 +68,7 @@ const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitions = "Mes acquisitions";
 const String disconnect = "Voulez-vous vraiment vous déconnecter?";
+const String myAthletes = "Mes athlètes";
 
 // widgets/dialogs/modification_info_dialog
 const String modificationInfoDialogTitle =
@@ -101,6 +114,11 @@ const String startTimeLabel = "Début";
 const String maxSpeedLabel = "Vitesse atteinte";
 const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
 const String reorderJumpList = "Réordonner la liste";
+const String fallComment = "Chute";
+const String notEnoughRotationComment = "Manque de rotation";
+const String goodJobComment = "Bien fait";
+const String stepOut = "Step out";
+const String chooseBelowComments = "Ou choisir parmi les commentaires suivants:";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
@@ -115,6 +133,7 @@ const String lastFastLineName = "Z";
 const String profileTitle = "Compte";
 const String modifyPassword = "Modifier le mot de passe";
 const String listCoaches = "Liste de mes entraineurs";
+const String noCoaches = "Aucun entraineur ne peut voir votre profil.";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";
@@ -127,6 +146,12 @@ const String connectionButton = "Connexion";
 const String connectingButton = "Connexion...";
 const String connectionImpossible = "Connexion impossible";
 const String createAccount = "Créer un compte";
+const String forgotPasswordButton = "Mot de passe oublié?";
+
+// widgets/screens/forgot_password_view
+const String forgotPasswordTitle = "Mot de passe oublié";
+const String forgotPasswordToast = "Si ce courriel existe, vous recevrez un email dans un court délai.";
+const String sendEmailButtonText = "Envoyer un courriel";
 
 // widgets/screens/acquisitions_view
 const String capturesTab = "Captures";
@@ -135,6 +160,8 @@ const String optionsTab = "Options";
 
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
+const String noAthletes =
+    "Vous n'avez pas d'athlètes dans votre liste.\n\nAppuyer sur le bouton en bas pour ajouter un athlète.";
 
 // widgets/screens/athletes_view
 const String captureButton = "Capturer";
@@ -146,6 +173,7 @@ const String editAnalysisPageTitle = "Analyse";
 const String analysisDonePrompt =
     "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
 const String addAJump = "Ajouter un saut";
+const String noJump = "Aucun saut n'a été détecté dans cette capture.";
 
 // widgets/screens/capture_view
 const String savingToMemory = "Sauvegarde en mémoire";

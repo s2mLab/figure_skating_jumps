@@ -15,10 +15,15 @@ import '../../buttons/ice_button.dart';
 
 class JumpPanelContent extends StatefulWidget {
   final Jump _j;
-  final void Function(Jump j, JumpType initialJumpType, int initialTime) _onModified;
+  final void Function(Jump j, JumpType initialJumpType, int initialTime)
+      _onModified;
   final void Function(Jump j, JumpType initialJumpType) _onDeleted;
   const JumpPanelContent(
-      {super.key, required jump, required void Function(Jump j, JumpType initialJumpType, int initialTime) onModified, required void Function(Jump j, JumpType initial) onDeleted})
+      {super.key,
+      required jump,
+      required void Function(Jump j, JumpType initialJumpType, int initialTime)
+          onModified,
+      required void Function(Jump j, JumpType initial) onDeleted})
       : _j = jump,
         _onModified = onModified,
         _onDeleted = onDeleted;
@@ -117,7 +122,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             setState(() {
                               _selectedType = newValue;
                               _j!.type = _selectedType;
-                              widget._onModified(_j!, _initialJumpType, _initialTime);
+                              widget._onModified(
+                                  _j!, _initialJumpType, _initialTime);
                               _initialJumpType = _selectedType;
                             });
                           });
@@ -220,7 +226,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           setState(() {
                             _selectedScore = val!;
                             _j!.score = _selectedScore;
-                            widget._onModified(_j!, _initialJumpType, _initialTime);
+                            widget._onModified(
+                                _j!, _initialJumpType, _initialTime);
                             _initialJumpType = _selectedType;
                           });
                         }),
@@ -237,7 +244,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           setState(() {
                             _commentController.text = value;
                             _j!.comment = value;
-                            widget._onModified(_j!, _initialJumpType, _initialTime);
+                            widget._onModified(
+                                _j!, _initialJumpType, _initialTime);
                             _initialJumpType = _selectedType;
                           });
                         });
@@ -265,8 +273,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         return FieldValidators.doubleValidator(val);
                       },
                       onEditingComplete: () {
-                        _j!.turns =
-                            double.parse(_rotationController.text);
+                        _j!.turns = double.parse(_rotationController.text);
                         widget._onModified(_j!, _initialJumpType, _initialTime);
                         _initialJumpType = _selectedType;
                       },
@@ -330,201 +337,273 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   Widget _commentDialog() {
     return SimpleDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        title: const Text(commentDialogTitle), children: [
-      Form(
-        key: _commentFormKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(howToComment, secondaryColor),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: TextFormField(
-                controller: _commentController,
-                minLines: 2,
-                maxLines: 5,
-                onSaved: (val) {
-                  Navigator.pop(context, val);
-                },
-                validator: (val) =>
-                    null, //There is no form of comment that should be filtered out
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+        title: const Text(commentDialogTitle),
+        children: [
+          Form(
+            key: _commentFormKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IceButton(
-                    text: cancel,
-                    onPressed: () {
-                      _initializeCommentController();
-                      Navigator.pop(context);
-                    },
-                    textColor: primaryColor,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.secondaryAction,
-                    iceButtonSize: IceButtonSize.small),
+                const Padding(
+                  padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
+                  child: InstructionPrompt(howToComment, secondaryColor),
+                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IceButton(
-                      text: save,
-                      onPressed: () {
-                        _commentFormKey.currentState?.save();
-                      },
-                      textColor: paleText,
-                      color: primaryColor,
-                      iceButtonImportance: IceButtonImportance.mainAction,
-                      iceButtonSize: IceButtonSize.small),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextFormField(
+                    controller: _commentController,
+                    minLines: 2,
+                    maxLines: 5,
+                    onSaved: (val) {
+                      Navigator.pop(context, val);
+                    },
+                    validator: (val) =>
+                        null, //There is no form of comment that should be filtered out
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(chooseBelowComments),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IceButton(
+                              text: fallComment,
+                              onPressed: () {
+                                _commentController.text = fallComment;
+                              },
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonSize: IceButtonSize.medium),
+                          IceButton(
+                              text: notEnoughRotationComment,
+                              onPressed: () {
+                                _commentController.text = notEnoughRotationComment;
+                              },
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonSize: IceButtonSize.medium)
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IceButton(
+                              text: goodJobComment,
+                              onPressed: () {
+                                _commentController.text = goodJobComment;
+                              },
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonSize: IceButtonSize.medium),
+                          IceButton(
+                              text: stepOut,
+                              onPressed: () {
+                                _commentController.text = stepOut;
+                              },
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonSize: IceButtonSize.medium)
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IceButton(
+                        text: cancel,
+                        onPressed: () {
+                          _initializeCommentController();
+                          Navigator.pop(context);
+                        },
+                        textColor: primaryColor,
+                        color: primaryColor,
+                        iceButtonImportance:
+                            IceButtonImportance.secondaryAction,
+                        iceButtonSize: IceButtonSize.small),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: IceButton(
+                          text: save,
+                          onPressed: () {
+                            _commentFormKey.currentState?.save();
+                          },
+                          textColor: paleText,
+                          color: primaryColor,
+                          iceButtonImportance: IceButtonImportance.mainAction,
+                          iceButtonSize: IceButtonSize.small),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
   }
 
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _temporalValuesDialog() {
     return SimpleDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        title: const Text(metricsDialogTitle), children: [
-      Form(
-        key: _metricsFormKey,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 24.0),
-                    child: InstructionPrompt(
-                        advancedMetricsPrompt, secondaryColor),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 24.0),
-                    child: InstructionPrompt(
-                        irreversibleDataModification, errorColor),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("$durationLabel (sec)",
-                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _durationController,
-                          maxLines: 1,
-                          onSaved: (val) {
-                            _j!.duration = int.parse(val!);
-                          },
-                          validator: (val) =>
-                              FieldValidators.nonNegativeValidator(val),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("$startTimeLabel (sec)",
-                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _startTimeController,
-                          maxLines: 1,
-                          onSaved: (val) {
-                            _j!.time = int.parse(val!);
-                          },
-                          validator: (val) =>
-                              FieldValidators.nonNegativeValidator(val),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("$timeToMaxSpeedLabel (sec)",
-                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color: discreetText),
-                          enabled: false,
-                          controller: _timeToMaxSpeedController,
-                          maxLines: 1,
-                          validator: (val) =>
-                              FieldValidators.doubleValidator(val),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("$maxSpeedLabel (sec)",
-                          style: TextStyle(fontSize: _labelFontSizeInPanel)),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color: discreetText),
-                          enabled: false,
-                          controller: _maxSpeedController,
-                          maxLines: 1,
-                          validator: (val) =>
-                              FieldValidators.doubleValidator(val),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+        title: const Text(metricsDialogTitle),
+        children: [
+          Form(
+            key: _metricsFormKey,
+            child: Column(
               children: [
-                IceButton(
-                    text: cancel,
-                    onPressed: () {
-                      _initializeAdvancedMetricsControllers();
-                      Navigator.pop(context);
-                    },
-                    textColor: primaryColor,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.secondaryAction,
-                    iceButtonSize: IceButtonSize.small),
-                IceButton(
-                    text: save,
-                    onPressed: () {
-                      if (_metricsFormKey.currentState!.validate()) {
-                        _metricsFormKey.currentState?.save();
-                        widget._onModified(_j!, _initialJumpType, _initialTime);
-                        _initialJumpType = _selectedType;
-                        Navigator.pop(context);
-                      }
-                    },
-                    textColor: paleText,
-                    color: primaryColor,
-                    iceButtonImportance: IceButtonImportance.mainAction,
-                    iceButtonSize: IceButtonSize.small),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 24.0),
+                        child: InstructionPrompt(
+                            advancedMetricsPrompt, secondaryColor),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 24.0),
+                        child: InstructionPrompt(
+                            irreversibleDataModification, errorColor),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("$durationLabel (sec)",
+                              style:
+                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              controller: _durationController,
+                              maxLines: 1,
+                              onSaved: (val) {
+                                _j!.duration = int.parse(val!);
+                              },
+                              validator: (val) =>
+                                  FieldValidators.nonNegativeValidator(val),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("$startTimeLabel (sec)",
+                              style:
+                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              controller: _startTimeController,
+                              maxLines: 1,
+                              onSaved: (val) {
+                                _j!.time = int.parse(val!);
+                              },
+                              validator: (val) =>
+                                  FieldValidators.nonNegativeValidator(val),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("$timeToMaxSpeedLabel (sec)",
+                              style:
+                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              style: const TextStyle(color: discreetText),
+                              enabled: false,
+                              controller: _timeToMaxSpeedController,
+                              maxLines: 1,
+                              validator: (val) =>
+                                  FieldValidators.doubleValidator(val),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("$maxSpeedLabel (sec)",
+                              style:
+                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              style: const TextStyle(color: discreetText),
+                              enabled: false,
+                              controller: _maxSpeedController,
+                              maxLines: 1,
+                              validator: (val) =>
+                                  FieldValidators.doubleValidator(val),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IceButton(
+                        text: cancel,
+                        onPressed: () {
+                          _initializeAdvancedMetricsControllers();
+                          Navigator.pop(context);
+                        },
+                        textColor: primaryColor,
+                        color: primaryColor,
+                        iceButtonImportance:
+                            IceButtonImportance.secondaryAction,
+                        iceButtonSize: IceButtonSize.small),
+                    IceButton(
+                        text: save,
+                        onPressed: () {
+                          if (_metricsFormKey.currentState!.validate()) {
+                            _metricsFormKey.currentState?.save();
+                            widget._onModified(
+                                _j!, _initialJumpType, _initialTime);
+                            _initialJumpType = _selectedType;
+                            Navigator.pop(context);
+                          }
+                        },
+                        textColor: paleText,
+                        color: primaryColor,
+                        iceButtonImportance: IceButtonImportance.mainAction,
+                        iceButtonSize: IceButtonSize.small),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
   }
 }
