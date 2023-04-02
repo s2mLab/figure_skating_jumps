@@ -216,14 +216,12 @@ class _CaptureViewState extends State<CaptureView> implements IRecorderSubscribe
     try {
       _displayWaitingDialog(exportingData, _exportingDialogKey);
       await _initializeControllerFuture;
-      await _xSensDotRecordingService.stopRecording(_isCameraActivated);
+      String videoPath = "";
       if(_isCameraActivated) {
         XFile f = await _controller.stopVideoRecording();
-        String path = await ExternalStorageService().saveVideo(f);
-        // TODO: Save to localDataBase. and eventually Firebase?
-        // To ignore the warning of unused variable -> will be used for localDB storage
-        path = path;
+        videoPath = await ExternalStorageService().saveVideo(f);
       }
+      await _xSensDotRecordingService.stopRecording(_isCameraActivated, videoPath);
     } catch (e) {
       developer.log(e.toString());
     }

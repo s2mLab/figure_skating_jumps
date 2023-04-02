@@ -29,6 +29,7 @@ class XSensDotRecordingService
   static String _exportFileName = "";
 
   static bool _currentRecordingHasVideo = false;
+  static String _currentRecordingVideoPath = "";
 
   static Season season = Season.preparation;
   static const _recordingOutputRate = 120;
@@ -83,6 +84,8 @@ class XSensDotRecordingService
   Future<void> startRecording() async {
     _exportedData.clear();
     _exportFileName = "";
+    _currentRecordingHasVideo = false;
+    _currentRecordingVideoPath = "";
     _changeState(RecorderState.preparing);
     await _setRate();
   }
@@ -91,8 +94,9 @@ class XSensDotRecordingService
     return _recorderState;
   }
 
-  Future<void> stopRecording(bool hasVideo) async {
+  Future<void> stopRecording(bool hasVideo, String videoPath) async {
     _currentRecordingHasVideo = hasVideo;
+    _currentRecordingVideoPath = videoPath;
     try {
       await _recordingMethodChannel.invokeMethod('stopRecording');
     } on PlatformException catch (e) {
@@ -195,9 +199,9 @@ class XSensDotRecordingService
           exportFileName: _exportFileName,
           exportedData: _exportedData,
           hasVideo: _currentRecordingHasVideo,
+          videoPath: _currentRecordingVideoPath,
           season: season);
       debugPrint("Done");
-      _currentRecordingHasVideo = false;
       _changeState(RecorderState.idle);
     }
   }
