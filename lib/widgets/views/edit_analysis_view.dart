@@ -122,11 +122,14 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                               IceButtonImportance.discreetAction,
                           iceButtonSize: IceButtonSize.small)),
                 Expanded(
-                  child: _capture!.jumps.isEmpty
-                      ? const Center(child: Text(noJump))
-                      : SingleChildScrollView(
-                          controller: _jumpListScrollController,
-                          child: ClipRRect(
+                  child: SingleChildScrollView(
+                    controller: _jumpListScrollController,
+                    child: _capture!.jumps.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Center(child: Text(noJump)),
+                          )
+                        : ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: ExpansionPanelList(
                               expandedHeaderPadding: EdgeInsets.zero,
@@ -200,7 +203,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                               }),
                             ),
                           ),
-                        ),
+                  ),
                 ),
               ],
             ),
