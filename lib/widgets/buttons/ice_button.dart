@@ -17,13 +17,13 @@ class IceButton extends StatelessWidget {
   static const double _defaultElevation = 0;
 
   const IceButton(
-      {required text,
-      required onPressed,
-      required textColor,
-      required color,
-      required iceButtonImportance,
-      required iceButtonSize,
-      elevation = _defaultElevation,
+      {required String text,
+      required VoidCallback? onPressed,
+      required Color textColor,
+      required Color color,
+      required IceButtonImportance iceButtonImportance,
+      required IceButtonSize iceButtonSize,
+      double elevation = _defaultElevation,
       super.key})
       : _text = text,
         _onPressed = onPressed,
