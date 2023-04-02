@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
@@ -24,7 +23,8 @@ class DeviceNotReadyDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Padding(
-                padding: EdgeInsets.all(16.0), child: InstructionPrompt(noDeviceErrorMessage, errorColor)),
+                padding: EdgeInsets.all(16.0),
+                child: InstructionPrompt(noDeviceErrorMessage, errorColor)),
             IceButton(
                 text: connectXSensDot,
                 onPressed: () {

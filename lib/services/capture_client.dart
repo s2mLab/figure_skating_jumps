@@ -170,7 +170,7 @@ class CaptureClient {
         'duration': capture.duration,
         'file': capture.fileName,
         'hasVideo': capture.hasVideo,
-        'season': capture.season,
+        'season': capture.season.toString(),
         'jumps': capture.jumpsID,
         'user': capture.userID,
         'modifications': capture.modifications

@@ -84,7 +84,6 @@ class XSensDotRecordingService
     _exportedData.clear();
     _exportFileName = "";
     _changeState(RecorderState.preparing);
-    //TODO when connexion logic-UI is merged: check if device is initialized
     await _setRate();
   }
 

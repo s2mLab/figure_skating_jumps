@@ -14,6 +14,7 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/season.dart';
+import '../dialogs/capture/no_camera_recording_dialog.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
@@ -71,7 +72,7 @@ class _CaptureViewState extends State<CaptureView> {
                     Center(
                       child: IceButton(
                         onPressed: () async {
-                          await _onCaptureStopPressed(context);
+                          await _onCaptureStopPressed();
                         },
                         text: stopCapture,
                         textColor: primaryColor,
@@ -133,57 +134,62 @@ class _CaptureViewState extends State<CaptureView> {
                                 })
                           ]),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: Text(selectSeasonPrompt),
-                          ),
-                          DropdownButton<Season>(
-                              selectedItemBuilder: (context) {
-                                return Season.values.map<Widget>((Season item) {
-                                  // This is the widget that will be shown when you select an item.
-                                  // Here custom text style, alignment and layout size can be applied
-                                  // to selected item string.
-                                  return Container(
-                                    constraints: const BoxConstraints(minWidth: 80),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          item.displayedString,
-                                          style: const TextStyle(
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Text(selectSeasonPrompt),
+                            ),
+                            DropdownButton<Season>(
+                                selectedItemBuilder: (context) {
+                                  return Season.values
+                                      .map<Widget>((Season item) {
+                                    // This is the widget that will be shown when you select an item.
+                                    // Here custom text style, alignment and layout size can be applied
+                                    // to selected item string.
+                                    return Container(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 80),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item.displayedString,
+                                            style: const TextStyle(
+                                                color: darkText,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList();
+                                },
+                                value: _selectedSeason,
+                                menuMaxHeight: 300,
+                                items: List.generate(Season.values.length,
+                                    (index) {
+                                  return DropdownMenuItem<Season>(
+                                    value: Season.values[index],
+                                    child: Text(
+                                        Season.values[index].displayedString),
                                   );
-                                }).toList();
-                              },
-                              value: _selectedSeason,
-                              menuMaxHeight: 300,
-                              items: List.generate(Season.values.length, (index) {
-                                return DropdownMenuItem<Season>(
-                                  value: Season.values[index],
-                                  child: Text(Season.values[index].displayedString),
-                                );
-                              }),
-                              onChanged: (val) {
-                                setState(() {
-                                  _selectedSeason = val!;
-                                  XSensDotRecordingService.season = _selectedSeason;
-                                });
-                              }),
-                        ]
-
-                      ),
+                                }),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _selectedSeason = val!;
+                                    XSensDotRecordingService.season =
+                                        _selectedSeason;
+                                  });
+                                }),
+                          ]),
                       Center(
                         child: IceButton(
                           onPressed: () async {
-                            await _onCaptureStartPressed(context);
+                            await _onCaptureStartPressed();
                           },
                           text: captureViewStart,
                           textColor: primaryColor,
@@ -199,7 +205,7 @@ class _CaptureViewState extends State<CaptureView> {
           );
   }
 
-  Future<void> _onCaptureStopPressed(BuildContext context) async {
+  Future<void> _onCaptureStopPressed() async {
     try {
       await _initializeControllerFuture;
       await _xSensDotRecordingService.stopRecording(_isCameraActivated);
@@ -215,33 +221,35 @@ class _CaptureViewState extends State<CaptureView> {
     } catch (e) {
       developer.log(e.toString());
     }
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pop();
-    }
     setState(() {
       _isFullscreen = false;
     });
   }
 
-  Future<void> _onCaptureStartPressed(BuildContext context) async {
-
-    if(!XSensDotConnectionService().isInitialized) {
+  Future<void> _onCaptureStartPressed() async {
+    if (!XSensDotConnectionService().isInitialized) {
       await _displayStepDialog(const DeviceNotReadyDialog());
       return;
     }
 
     try {
       await _initializeControllerFuture;
-      _displayStepDialog(const StartRecordingDialog()).then((_) => setState(() {
-            if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
-              return;
-            }
-
-            //TODO modal something else when there is no camera
-            if (_isCameraActivated) _isFullscreen = true;
-          }));
       await _xSensDotRecordingService.startRecording();
-      if (_isCameraActivated) await _controller.startVideoRecording();
+      _displayStepDialog(const StartRecordingDialog()).then((_) async {
+        if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
+          return;
+        }
+
+        if(!_isCameraActivated) {
+          _displayStepDialog(NoCameraRecordingDialog(stopRecording: _onCaptureStopPressed));
+          return;
+        }
+
+        setState(() {
+          _isFullscreen = true;
+        });
+        await _controller.startVideoRecording();
+      });
     } catch (e) {
       developer.log(e.toString());
     }
@@ -260,8 +268,9 @@ class _CaptureViewState extends State<CaptureView> {
       }
       if (!_isFullscreen) {
         //Reduce size to let place for other UI elements
-        cameraWidth /= 2;
-        cameraHeight /= 2;
+        //TODO put back to 2 before merge
+        cameraWidth /= 3;
+        cameraHeight /= 3;
       }
 
       return Center(

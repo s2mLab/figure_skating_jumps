@@ -172,6 +172,9 @@ const String connectXSensDot = "Connecter un appareil XSens DOT";
 const String noDeviceErrorMessage =
     "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
 
+// widgets/dialog/capture/no_camera_recording_dialog
+const String recordingPrompt = "Collecte de donnée en cours...";
+
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
 const String ifNotAnAthletePrompt =
