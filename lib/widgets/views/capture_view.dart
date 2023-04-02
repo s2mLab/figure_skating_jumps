@@ -278,10 +278,9 @@ class _CaptureViewState extends State<CaptureView>
         cameraHeight = screenSize.width * _controller.value.aspectRatio;
       }
       if (!_isFullscreen) {
-        //Reduce size to let place for other UI elements
-        //TODO put back to 2 before merge
-        cameraWidth /= 3;
-        cameraHeight /= 3;
+        //Reduce size to let place for other UI elements=
+        cameraWidth /= 2;
+        cameraHeight /= 2;
       }
 
       return Center(
