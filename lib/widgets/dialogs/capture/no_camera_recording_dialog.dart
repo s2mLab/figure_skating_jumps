@@ -7,9 +7,8 @@ import '../../../enums/ice_button_size.dart';
 import '../../buttons/ice_button.dart';
 
 class NoCameraRecordingDialog extends StatelessWidget {
-  final Function() stopRecording;
 
-  const NoCameraRecordingDialog({super.key, required this.stopRecording});
+  const NoCameraRecordingDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +32,8 @@ class NoCameraRecordingDialog extends StatelessWidget {
             ),
             IceButton(
                 text: stopCapture,
-                onPressed: () async {
+                onPressed: () {
                   Navigator.pop(context);
-                  await stopRecording();
                 },
                 textColor: primaryColor,
                 color: primaryColor,
