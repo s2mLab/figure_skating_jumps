@@ -187,30 +187,41 @@ class UserClient {
 
   Future<String> createAndLinkSkater(
       {required String skaterEmail,
-      required String coachId,
-      required String firstName,
-      required String lastName}) async {
+        required String coachId,
+        required String firstName,
+        required String lastName}) async {
     QuerySnapshot<Map<String, dynamic>> result = await _firestore
         .collection(_userCollectionString)
         .where("email", isEqualTo: skaterEmail)
         .get();
+    if (result.docs.isNotEmpty) throw ConflictException();
+
     SkatingUser skatingUser =
-        SkatingUser(firstName, lastName, UserRole.iceSkater);
-    if (result.docs.isEmpty) {
-      String password = _genPassword();
-      // Signs up the user with a temporary random password
-      String uID = await signUp(
-          email: skaterEmail, password: password, userInfo: skatingUser);
-      skatingUser.uID = uID;
-      await resetPassword(email: skaterEmail);
-    } else if (result.docs.length == 1) {
-      skatingUser =
-          SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
-    } else {
-      throw ConflictException();
-    }
-    // The id was set in both branches
-    await linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
+    SkatingUser(firstName, lastName, UserRole.iceSkater);
+    String password = _genPassword();
+    // Signs up the user with a temporary random password
+    String uID = await signUp(
+        email: skaterEmail, password: password, userInfo: skatingUser);
+    skatingUser.uID = uID;
+    await resetPassword(email: skaterEmail);
+
+    await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
+    return skatingUser.uID!;
+  }
+
+  Future<String> linkExistingSkater(
+      {required String skaterEmail,
+      required String coachId}) async {
+    QuerySnapshot<Map<String, dynamic>> result = await _firestore
+        .collection(_userCollectionString)
+        .where("email", isEqualTo: skaterEmail)
+        .get();
+    if (result.docs.length != 1) throw NullUserException();
+
+    SkatingUser skatingUser =
+        SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
+
+    await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
     return skatingUser.uID!;
   }
 
@@ -219,7 +230,7 @@ class UserClient {
     return List.generate(64, (index) => chars[rnd.nextInt(chars.length)]).join();
   }
 
-  Future<void> linkSkaterAndCoach(
+  Future<void> _linkSkaterAndCoach(
       {required String skaterId, required String coachId}) async {
     try {
       SkatingUser skater = SkatingUser.fromFirestore(
