@@ -15,7 +15,8 @@ import '../titles/page_title.dart';
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
 
-  late final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final _forgotPasswordInfoKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,13 @@ class ForgotPasswordView extends StatelessWidget {
                             ),
                             Form(
                                 child: TextFormField(
+                                  key: _forgotPasswordInfoKey,
                               keyboardType: TextInputType.emailAddress,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _emailController,
                               validator: (value) {
-                                return FieldValidators.loginEmailValidator(
+                                return FieldValidators.newEmailValidator(
                                     value);
                               },
                               decoration: const InputDecoration(
@@ -72,6 +74,10 @@ class ForgotPasswordView extends StatelessWidget {
                               child: IceButton(
                                   text: sendEmailButtonText,
                                   onPressed: () async {
+                                    if (_forgotPasswordInfoKey.currentState == null ||
+                                        !_forgotPasswordInfoKey.currentState!.validate()) {
+                                      return;
+                                    }
                                     try {
                                       await UserClient().resetPassword(
                                           email: _emailController.text);
