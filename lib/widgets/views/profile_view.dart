@@ -34,7 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   removeCoachAction(String coachID) {
     UserClient()
-        .removeCoach(coachId: coachID, skaterId: _currentUser.uID!)
+        .unlinkSkaterAndCoach(coachId: coachID, skaterId: _currentUser.uID!)
         .then((value) {
       Navigator.pop(context);
       setState(() {
