@@ -103,6 +103,11 @@ const String startTimeLabel = "Début";
 const String maxSpeedLabel = "Vitesse atteinte";
 const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
 const String reorderJumpList = "Réordonner la liste";
+const String fallComment = "Chute";
+const String notEnoughRotationComment = "Manque de rotation";
+const String goodJobComment = "Bien fait";
+const String stepOut = "Step out";
+const String chooseBelowComments = "Ou choisir parmi les commentaires suivants:";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
