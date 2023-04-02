@@ -207,12 +207,11 @@ class _CaptureViewState extends State<CaptureView> {
 
   Future<void> _onCaptureStopPressed() async {
     try {
+      _displayWaitingDialog(exportingData);
       await _initializeControllerFuture;
       await _xSensDotRecordingService.stopRecording(_isCameraActivated);
-      XFile f = await _controller.stopVideoRecording();
-      if (mounted) {
-        _displayWaitingDialog(pleaseWait);
-
+      if(_isCameraActivated) {
+        XFile f = await _controller.stopVideoRecording();
         String path = await ExternalStorageService().saveVideo(f);
         // TODO: Save to localDataBase. and eventually Firebase?
         // To ignore the warning of unused variable -> will be used for localDB storage
@@ -241,7 +240,9 @@ class _CaptureViewState extends State<CaptureView> {
         }
 
         if(!_isCameraActivated) {
-          _displayStepDialog(NoCameraRecordingDialog(stopRecording: _onCaptureStopPressed));
+          _displayStepDialog(const NoCameraRecordingDialog()).then((value) async {
+            await _onCaptureStopPressed();
+          });
           return;
         }
 

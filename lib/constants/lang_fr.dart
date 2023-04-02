@@ -158,6 +158,9 @@ const String captureViewCameraInstruction =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
 const String captureViewCameraSwitchPrompt = "Caméra activée ?";
 const String stopCapture = "Arrêter la capture";
+const String exportingData = "Enregistrement des données...";
+const String analyzingData = "Analyse des données...";
+
 
 // widgets/dialog/capture/start_recording_dialog
 const String captureStartingPrompt = "Démarrage...";
