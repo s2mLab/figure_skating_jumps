@@ -62,6 +62,7 @@ class UserClient {
         'trainees': userInfo.trainees,
         'coaches': userInfo.coachesID,
       });
+      _currentSkatingUser = userInfo;
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -80,7 +81,7 @@ class UserClient {
 
       DocumentSnapshot<Map<String, dynamic>> userInfoSnapshot = await _firestore
           .collection(_userCollectionString)
-          .doc(_firebaseAuth.currentUser?.uid)
+          .doc(_firebaseAuth.currentUser!.uid)
           .get();
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
