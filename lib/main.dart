@@ -225,14 +225,14 @@ class _GodViewState extends State<GodView> {
               child: const Text('Make Him JUMP!')),
           TextButton(
               onPressed: () async {
-                UserClient().addSkater(
+                UserClient().linkSkaterAndCoach(
                     skaterId: "BNegDj2K1ubkEQ4bb4okGQyrL0O2",
                     coachId: "SDlOvaQOGKMKTKiTTeyvNr9SaVA3");
               },
               child: const Text('Add Skater')),
           TextButton(
               onPressed: () async {
-                UserClient().removeSkater(
+                UserClient().unlinkSkaterAndCoach(
                     skaterId: "BNegDj2K1ubkEQ4bb4okGQyrL0O2",
                     coachId: "SDlOvaQOGKMKTKiTTeyvNr9SaVA3");
               },

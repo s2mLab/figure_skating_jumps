@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
@@ -30,7 +34,7 @@ class UserClient {
     return _currentSkatingUser;
   }
 
-  Future<void> signUp(
+  Future<String> signUp(
       {required String email,
       required String password,
       required SkatingUser userInfo}) async {
@@ -66,6 +70,7 @@ class UserClient {
       developer.log(e.toString());
       rethrow;
     }
+    return userCreds.user!.uid;
   }
 
   /// Signs in the user with the give [email] and [password].
@@ -178,7 +183,40 @@ class UserClient {
     }
   }
 
-  Future<void> addSkater(
+  Future<String> createAndLinkSkater(
+      {required String skaterEmail,
+      required String coachId,
+      required String firstName,
+      required String lastName}) async {
+    QuerySnapshot<Map<String, dynamic>> result = await _firestore
+        .collection(_userCollectionString)
+        .where("email", isEqualTo: skaterEmail)
+        .get();
+    SkatingUser skatingUser =
+        SkatingUser(firstName, lastName, UserRole.iceSkater);
+    if (result.docs.isEmpty) {
+      Random rnd = Random.secure();
+      const chars =
+          'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+      String password =
+          List.generate(64, (index) => chars[rnd.nextInt(chars.length)]).join();
+      // Signs up the user with a temporary random password
+      String uID = await signUp(
+          email: skaterEmail, password: password, userInfo: skatingUser);
+      skatingUser.uID = uID;
+      await resetPassword(email: skaterEmail);
+    } else if (result.docs.length == 1) {
+      skatingUser =
+          SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
+    } else {
+      throw ConflictException();
+    }
+    // The id was set in both branches
+    await linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
+    return skatingUser.uID!;
+  }
+
+  Future<void> linkSkaterAndCoach(
       {required String skaterId, required String coachId}) async {
     try {
       SkatingUser skater = SkatingUser.fromFirestore(
@@ -211,7 +249,7 @@ class UserClient {
     }
   }
 
-  Future<void> removeSkater(
+  Future<void> unlinkSkaterAndCoach(
       {required String skaterId, required String coachId}) async {
     try {
       SkatingUser skater = SkatingUser.fromFirestore(
@@ -240,16 +278,6 @@ class UserClient {
           .collection(_userCollectionString)
           .doc(coachId)
           .set({"trainees": coach.trainees}, SetOptions(merge: true));
-    } catch (e) {
-      developer.log(e.toString());
-      rethrow;
-    }
-  }
-
-  Future<void> removeCoach(
-      {required String coachId, required String skaterId}) async {
-    try {
-      removeSkater(skaterId: skaterId, coachId: coachId);
     } catch (e) {
       developer.log(e.toString());
       rethrow;
