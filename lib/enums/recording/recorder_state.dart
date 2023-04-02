@@ -1,1 +1,1 @@
-enum RecorderState { idle, preparing, recording, exporting, clearing }
+enum RecorderState { idle, preparing, recording, exporting, erasing, analyzing }

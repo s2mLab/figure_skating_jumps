@@ -3,15 +3,19 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/start_recording_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/season.dart';
+import '../dialogs/capture/no_camera_recording_dialog.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
@@ -27,28 +31,37 @@ class CaptureView extends StatefulWidget {
   State<CaptureView> createState() => _CaptureViewState();
 }
 
-class _CaptureViewState extends State<CaptureView> {
+class _CaptureViewState extends State<CaptureView>
+    implements IRecorderSubscriber {
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
+  final GlobalKey<NavigatorState> _exportingDialogKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _analyzingDialogKey =
+      GlobalKey<NavigatorState>();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  RecorderState _lastState = RecorderState.idle;
   bool _isFullscreen = false;
   bool _isCameraActivated = true;
   Season _selectedSeason = XSensDotRecordingService.season;
 
   @override
   void initState() {
+    _lastState = _xSensDotRecordingService.subscribe(this);
     _controller = CameraController(
       enableAudio: false,
       CameraService().rearCamera,
       ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _xSensDotRecordingService.unsubscribe(this);
     _controller.dispose();
     super.dispose();
   }
@@ -69,7 +82,7 @@ class _CaptureViewState extends State<CaptureView> {
                     Center(
                       child: IceButton(
                         onPressed: () async {
-                          await _onCaptureStopPressed(context);
+                          await _onCaptureStopPressed();
                         },
                         text: stopCapture,
                         textColor: primaryColor,
@@ -131,58 +144,62 @@ class _CaptureViewState extends State<CaptureView> {
                                 })
                           ]),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: Text(selectSeasonPrompt),
-                          ),
-                          DropdownButton<Season>(
-                              selectedItemBuilder: (context) {
-                                return Season.values.map<Widget>((Season item) {
-                                  // This is the widget that will be shown when you select an item.
-                                  // Here custom text style, alignment and layout size can be applied
-                                  // to selected item string.
-                                  return Container(
-                                    constraints: const BoxConstraints(minWidth: 80),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          item.displayedString,
-                                          style: const TextStyle(
-                                              color: darkText,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Text(selectSeasonPrompt),
+                            ),
+                            DropdownButton<Season>(
+                                selectedItemBuilder: (context) {
+                                  return Season.values
+                                      .map<Widget>((Season item) {
+                                    // This is the widget that will be shown when you select an item.
+                                    // Here custom text style, alignment and layout size can be applied
+                                    // to selected item string.
+                                    return Container(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 80),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item.displayedString,
+                                            style: const TextStyle(
+                                                color: darkText,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList();
+                                },
+                                value: _selectedSeason,
+                                menuMaxHeight: 300,
+                                items: List.generate(Season.values.length,
+                                    (index) {
+                                  return DropdownMenuItem<Season>(
+                                    value: Season.values[index],
+                                    child: Text(
+                                        Season.values[index].displayedString),
                                   );
-                                }).toList();
-                              },
-                              value: _selectedSeason,
-                              menuMaxHeight: 300,
-                              items: List.generate(Season.values.length, (index) {
-                                return DropdownMenuItem<Season>(
-                                  value: Season.values[index],
-                                  child: Text(Season.values[index].displayedString),
-                                );
-                              }),
-                              onChanged: (val) {
-                                setState(() {
-                                  _selectedSeason = val!;
-                                  XSensDotRecordingService.season = _selectedSeason;
-                                });
-                              }),
-                        ]
-
-                      ),
+                                }),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _selectedSeason = val!;
+                                    XSensDotRecordingService.season =
+                                        _selectedSeason;
+                                  });
+                                }),
+                          ]),
                       Center(
                         child: IceButton(
                           onPressed: () async {
-                            // TODO: ADD when eventchannels are merged displayWaitingDialog("Démarrage...");
-                            await _onCaptureStartPressed(context);
+                            await _onCaptureStartPressed();
                           },
                           text: captureViewStart,
                           textColor: primaryColor,
@@ -198,43 +215,52 @@ class _CaptureViewState extends State<CaptureView> {
           );
   }
 
-  Future<void> _onCaptureStopPressed(BuildContext context) async {
+  Future<void> _onCaptureStopPressed() async {
     try {
+      _displayWaitingDialog(exportingData, _exportingDialogKey);
       await _initializeControllerFuture;
-      await XSensDotRecordingService.stopRecording(_isCameraActivated);
-      XFile f = await _controller.stopVideoRecording();
-      if (mounted) {
-        _displayWaitingDialog(pleaseWait);
-
-        String path = await ExternalStorageService().saveVideo(f);
-        // TODO: Save to localDataBase. and eventually Firebase?
-        // To ignore the warning of unused variable -> will be used for localDB storage
-        path = path;
+      String videoPath = "";
+      if (_isCameraActivated) {
+        XFile f = await _controller.stopVideoRecording();
+        videoPath = await ExternalStorageService().saveVideo(f);
       }
+      await _xSensDotRecordingService.stopRecording(
+          _isCameraActivated, videoPath);
     } catch (e) {
       developer.log(e.toString());
-    }
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pop();
     }
     setState(() {
       _isFullscreen = false;
     });
   }
 
-  Future<void> _onCaptureStartPressed(BuildContext context) async {
+  Future<void> _onCaptureStartPressed() async {
+    if (!XSensDotConnectionService().isInitialized) {
+      await _displayStepDialog(const DeviceNotReadyDialog());
+      return;
+    }
+
     try {
       await _initializeControllerFuture;
-      _displayStartDialog().then((_) => setState(() {
-            if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
-              return;
-            }
-
-            //TODO display something else when there is no camera
-            if (_isCameraActivated) _isFullscreen = true;
-          }));
       await _xSensDotRecordingService.startRecording();
-      if (_isCameraActivated) await _controller.startVideoRecording();
+      _displayStepDialog(const StartRecordingDialog()).then((_) async {
+        if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
+          return;
+        }
+
+        if (!_isCameraActivated) {
+          _displayStepDialog(const NoCameraRecordingDialog())
+              .then((value) async {
+            await _onCaptureStopPressed();
+          });
+          return;
+        }
+
+        setState(() {
+          _isFullscreen = true;
+        });
+        await _controller.startVideoRecording();
+      });
     } catch (e) {
       developer.log(e.toString());
     }
@@ -252,7 +278,7 @@ class _CaptureViewState extends State<CaptureView> {
         cameraHeight = screenSize.width * _controller.value.aspectRatio;
       }
       if (!_isFullscreen) {
-        //Reduce size to let place for other UI elements
+        //Reduce size to let place for other UI elements=
         cameraWidth /= 2;
         cameraHeight /= 2;
       }
@@ -268,21 +294,23 @@ class _CaptureViewState extends State<CaptureView> {
     return const Center(child: CircularProgressIndicator());
   }
 
-  Future<void> _displayStartDialog() async {
+  Future<void> _displayStepDialog(Widget dialog) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return const StartRecordingDialog();
+          return dialog;
         });
   }
 
-  void _displayWaitingDialog(String message) {
+  void _displayWaitingDialog(
+      String message, GlobalKey<NavigatorState> dialogKey) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return SimpleDialog(
+            key: dialogKey,
             title: Text(
               message,
               textAlign: TextAlign.center,
@@ -306,5 +334,25 @@ class _CaptureViewState extends State<CaptureView> {
             ],
           );
         });
+  }
+
+  @override
+  void onStateChange(RecorderState state) {
+    if (state == RecorderState.analyzing) {
+      if (_exportingDialogKey.currentContext != null) {
+        Navigator.pop(_exportingDialogKey.currentContext!);
+      }
+      _displayWaitingDialog(analyzingData, _analyzingDialogKey);
+    }
+
+    if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
+      if (_analyzingDialogKey.currentContext != null) {
+        Navigator.pop(_analyzingDialogKey.currentContext!);
+        Navigator.pushNamed(context, '/EditAnalysis',
+            arguments: _xSensDotRecordingService.currentCapture);
+      }
+    }
+
+    _lastState = state;
   }
 }

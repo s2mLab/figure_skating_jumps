@@ -8,5 +8,6 @@ enum class RecordingStatus(val status: String) {
     GetFlashInfoDone("GotFlashInfo"),
     GetFileInfoDone("GotFileInfo"),
     ExtractingFile("ExtractingFile"),
-    ExtractFileDone("ExtractFileDone")
+    ExtractFileDone("ExtractFileDone"),
+    EraseMemoryDone("EraseMemoryDone")
 }

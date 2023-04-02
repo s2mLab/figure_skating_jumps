@@ -9,10 +9,10 @@ import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../icons/x_sens_state_icon.dart';
-import '../prompts/ice_field_editable.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/lang_fr.dart';
+import '../../icons/x_sens_state_icon.dart';
+import '../../prompts/ice_field_editable.dart';
 
 class ConfigureXSensDotDialog extends StatelessWidget {
   final BluetoothDevice xSensDot;
