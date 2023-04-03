@@ -60,6 +60,41 @@ class CaptureClient {
     }
   }
 
+  Future<List<Jump>> createListJump({required List<Jump> jumps}) async {
+    try {
+      List<String> listJumpID = [];
+      List<Jump> listJump = [];
+      for (Jump jump in jumps) {
+        DocumentReference<Map<String, dynamic>> jumpInfo =
+            await _firestore.collection(_jumpsCollectionString).add({
+          'capture': jump.captureID,
+          'comment': jump.comment,
+          'duration': jump.duration,
+          'isCustom': jump.isCustom,
+          'score': jump.score,
+          'time': jump.time,
+          'type': jump.type.toString(),
+          'durationToMaxSpeed': jump.durationToMaxSpeed,
+          'maxSpeed': jump.maxRotationSpeed,
+          'rotation': jump.rotationDegrees,
+        });
+        listJumpID.add(jumpInfo.id);
+        jump.uID = jumpInfo.id;
+        listJump.add(jump);
+      }
+
+      debugPrint("HERE" + listJumpID.length.toString());
+      if (listJumpID.isNotEmpty) {
+        _modifyCaptureMultipleJumpList(
+            captureID: jumps.first.captureID, jumpID: listJumpID);
+      }
+      return listJump;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> deleteJump({required Jump jump}) async {
     try {
       await _firestore
@@ -220,6 +255,29 @@ class CaptureClient {
       } else {
         jumpsID.remove(jumpID);
       }
+
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .update({"jumps": jumpsID});
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> _modifyCaptureMultipleJumpList(
+      {required String captureID, required List<String> jumpID}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .get();
+      List<String> jumpsID =
+          List<String>.from(captureInfo.get('jumps') as List);
+
+      jumpsID.addAll(jumpID);
+      debugPrint(jumpsID.length.toString());
 
       await _firestore
           .collection(_captureCollectionString)
