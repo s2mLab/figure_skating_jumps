@@ -371,7 +371,7 @@ def analyze_session_cmd(source: str) -> 'list[Jump_Analysis]':
     Returns:
         list[Jump_Analysis]: A list of all jump analysis.
     """
-    return analyze_session(source)
+    print(analyze_session(source))
 
 if __name__ == "__main__":
     analyze_session_cmd()
