@@ -221,10 +221,10 @@ class XSensDotRecordingService
     if (success) {
       List<Jump>? jumps = await HttpClient()
           .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
-      jumps?.forEach((jump) async {
-        Jump newJump = await CaptureClient().createJump(jump: jump);
-        _currentCapture?.jumpsID.add(newJump.uID!);
-      });
+
+      List<Jump> analyzedJumps = await CaptureClient().createJumps(jumps: jumps!);
+      _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
+      _currentCapture?.jumps.addAll(analyzedJumps);
     }
     _changeState(RecorderState.idle);
   }
