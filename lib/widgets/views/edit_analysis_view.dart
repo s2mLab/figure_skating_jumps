@@ -1,12 +1,14 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
+import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
@@ -27,6 +29,7 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
+  LocalCapture? _captureInfo;
   List<bool> _isPanelsOpen = [];
   late ScrollController _jumpListScrollController;
   bool _timeWasModified = false;
@@ -37,9 +40,16 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     super.initState();
   }
 
+  Future<void> _loadVideoData() async {
+    setState(() async {
+      _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
+      _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
+    _loadVideoData();
     return Scaffold(
         appBar: const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
@@ -56,10 +66,19 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const PageTitle(text: editAnalysisPageTitle),
-                    if (_capture!.hasVideo)
+                    if (_capture!.hasVideo &&
+                        _captureInfo != null &&
+                        _captureInfo!.videoPath.isNotEmpty)
                       IceButton(
                           text: seeVideoAgain,
-                          onPressed: () {}, // TODO: video preview
+                          onPressed: () {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return VideoPlayerDialog(
+                                      videoPath: _captureInfo!.videoPath);
+                                });
+                          },
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
