@@ -1,4 +1,6 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
+import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 
@@ -155,10 +157,28 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                 IceButton(
                                     text: createAccount,
                                     onPressed: () async {
+                                      String coachId =
+                                          UserClient().currentSkatingUser!.uID!;
                                       if (_newSkaterKey.currentState != null &&
                                           _newSkaterKey.currentState!
                                               .validate()) {
-                                        // TODO : await _onSkaterAccountCreate();
+                                        try {
+                                          await UserClient()
+                                              .createAndLinkSkater(
+                                                  skaterEmail: _skaterEmail,
+                                                  coachId: coachId,
+                                                  firstName: _skaterSurname,
+                                                  lastName: _skaterName);
+                                        } on ConflictException catch (e) {
+                                          // TODO add modal message
+                                          await UserClient().linkExistingSkater(
+                                              skaterEmail: _skaterEmail,
+                                              coachId: coachId);
+                                        } catch (e) {
+                                          // TODO cannot throw a NullUserException so don't handle specially
+                                          // TODO add error handling
+                                        }
+                                        // TODO add success message
                                       }
                                     },
                                     textColor: paleText,
