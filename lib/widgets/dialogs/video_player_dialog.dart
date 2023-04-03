@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerDialog extends StatefulWidget {
-  const VideoPlayerDialog({Key? key, required this.videoPath})
-      : super(key: key);
+  const VideoPlayerDialog({Key? key, required String videoPath})
+      : _videoPath = videoPath,
+        super(key: key);
 
-  final String videoPath;
+  final String _videoPath;
 
   @override
   State<VideoPlayerDialog> createState() {
@@ -23,7 +24,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
   @override
   void initState() {
     super.initState();
-    File videoFile = File(widget.videoPath);
+    File videoFile = File(widget._videoPath);
     _controller = VideoPlayerController.file(videoFile);
 
     _initializeVideoPlayerFuture = _controller.initialize();
