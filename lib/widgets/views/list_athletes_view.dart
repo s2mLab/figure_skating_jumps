@@ -29,6 +29,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   late FocusNode _focusNode;
   bool _searching = false;
   bool _loading = true;
+  bool _state = false;
 
   @override
   void initState() {
@@ -86,6 +87,10 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   @override
   Widget build(BuildContext context) {
     _loadData();
+    _state = ModalRoute.of(context)!.settings.arguments as bool;
+    if(_state) {
+      setState(() {});
+    }
     return Scaffold(
       appBar: const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,

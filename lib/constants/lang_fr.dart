@@ -232,6 +232,9 @@ const String tryLater = 'Veuillez réessayer plus tard.';
 const String createAthleteExplainPrompt =
     "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
 const String addASkaterTitle = "Ajouter un patineur";
+const String warnAccountTypeChange = "Ajouter un patineur convertira votre compte en compte entraîneur.";
+const String athleteAlreadyExists = "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
+const String athleteAlreadyInList = "Cet athète est déjà dans votre liste.";
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";

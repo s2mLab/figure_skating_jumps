@@ -9,7 +9,7 @@ class SkatingUser {
   late String? uID;
   late String _firstName;
   late String _lastName;
-  late UserRole _role;
+  late UserRole role;
   late String _email;
   late List<String> _capturesID = [];
   late final List<Capture> _captures = [];
@@ -40,10 +40,6 @@ class SkatingUser {
     if (newName.isNotEmpty) {
       _lastName = newName;
     }
-  }
-
-  UserRole get role {
-    return _role;
   }
 
   String get email {
@@ -100,7 +96,7 @@ class SkatingUser {
     }
   }
 
-  SkatingUser(this._firstName, this._lastName, this._role, [this.uID]);
+  SkatingUser(this._firstName, this._lastName, this.role, [this.uID]);
 
   Future<void> loadCapturesData() async {
     _captures.clear();
