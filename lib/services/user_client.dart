@@ -204,7 +204,7 @@ class UserClient {
     SkatingUser skatingUser =
         SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
 
-    if(_currentSkatingUser!.traineesID.contains(skatingUser.uID)) {
+    if(_currentSkatingUser!.traineesID.contains(skatingUser.uID) || _currentSkatingUser!.uID == skatingUser.uID) {
       return null;
     }
     await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
