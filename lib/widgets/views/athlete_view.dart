@@ -101,7 +101,7 @@ class _AthleteViewState extends State<AthleteView> {
 
   Widget _buildCapturesTab(BuildContext context, AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
-        ? CapturesTab(groupedCaptures: skater!.groupedCaptures)
+        ? CapturesTab(groupedCaptures: skater!.reversedGroupedCaptures)
         : const Center(
             child: Padding(
             padding: EdgeInsets.all(32.0),
@@ -111,7 +111,7 @@ class _AthleteViewState extends State<AthleteView> {
 
   Widget _buildProgressionTab(BuildContext context, AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
-        ? ProgressionTab(captures: skater!.groupedCaptures)
+        ? ProgressionTab(groupedCaptures: skater!.sortedGroupedCaptures)
         : const Center(
         child: Padding(
           padding: EdgeInsets.all(32.0),
