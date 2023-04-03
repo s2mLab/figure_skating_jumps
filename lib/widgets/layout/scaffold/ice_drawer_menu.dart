@@ -46,16 +46,6 @@ class IceDrawerMenu extends StatelessWidget {
                         );
                       }),
                   NavMenuElement(
-                      text: rawDataDrawerTile,
-                      iconData: Icons.terminal,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RawDataView()),
-                        );
-                      }),
-                  NavMenuElement(
                       text: myAcquisitions,
                       iconData: Icons.history,
                       onPressed: () {
@@ -78,6 +68,16 @@ class IceDrawerMenu extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        NavMenuElement(
+                            text: rawDataDrawerTile,
+                            iconData: Icons.terminal,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const RawDataView()),
+                              );
+                            }),
                         IconButton(
                           onPressed: () {
                             Navigator.pop(context);

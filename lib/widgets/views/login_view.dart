@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
       if (mounted) {
         UserClient().currentSkatingUser!.role == UserRole.coach
             ? Navigator.pushReplacementNamed(context, '/ListAthletes')
-            : Navigator.pushReplacementNamed(context, '/Acquisitions');
+            : Navigator.pushReplacementNamed(context, '/Acquisitions', arguments: UserClient().currentSkatingUser);
       }
     } on IceException catch (e) {
       setState(() {

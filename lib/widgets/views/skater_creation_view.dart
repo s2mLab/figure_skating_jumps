@@ -10,11 +10,13 @@ import '../../constants/colors.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
+import '../../enums/user_role.dart';
 import '../buttons/ice_button.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
 import '../layout/scaffold/topbar.dart';
 import '../prompts/instruction_prompt.dart';
 import '../titles/page_title.dart';
+import 'dart:developer' as developer;
 
 class SkaterCreationView extends StatefulWidget {
   const SkaterCreationView({super.key});
@@ -154,6 +156,14 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                if (UserClient().currentSkatingUser!.role ==
+                                    UserRole.iceSkater)
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 16.0),
+                                    child: InstructionPrompt(
+                                        warnAccountTypeChange,
+                                        primaryColorLight),
+                                  ),
                                 IceButton(
                                     text: createAccount,
                                     onPressed: () async {
@@ -162,6 +172,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                       if (_newSkaterKey.currentState != null &&
                                           _newSkaterKey.currentState!
                                               .validate()) {
+                                        // Ideally this would not use a try-catch as a condition-like structure
                                         try {
                                           await UserClient()
                                               .createAndLinkSkater(
@@ -170,15 +181,84 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                                   firstName: _skaterSurname,
                                                   lastName: _skaterName);
                                         } on ConflictException catch (e) {
-                                          // TODO add modal message
-                                          await UserClient().linkExistingSkater(
-                                              skaterEmail: _skaterEmail,
-                                              coachId: coachId);
+                                          developer.log(e.devMessage);
+                                          String? skatingUserUID =
+                                              await UserClient()
+                                                  .linkExistingSkater(
+                                                      skaterEmail: _skaterEmail,
+                                                      coachId: coachId);
+                                          if (skatingUserUID != null) {
+                                            UserClient()
+                                                .currentSkatingUser!
+                                                .traineesID
+                                                .add(skatingUserUID);
+                                          }
+                                          if (mounted) {
+                                            showDialog(
+                                                barrierDismissible: false,
+                                                context: context,
+                                                builder: (context) {
+                                                  return Dialog(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            skatingUserUID ==
+                                                                    null
+                                                                ? athleteAlreadyInList
+                                                                : athleteAlreadyExists,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        20),
+                                                          ),
+                                                        ),
+                                                        IceButton(
+                                                            text: confirmText,
+                                                            onPressed: () {
+                                                              Navigator
+                                                                  .pushReplacementNamed(
+                                                                      context,
+                                                                      '/ListAthletes');
+                                                            },
+                                                            textColor: paleText,
+                                                            color: confirm,
+                                                            iceButtonImportance:
+                                                                IceButtonImportance
+                                                                    .mainAction,
+                                                            iceButtonSize:
+                                                                IceButtonSize
+                                                                    .medium)
+                                                      ],
+                                                    ),
+                                                  );
+                                                });
+                                          }
                                         } catch (e) {
-                                          // TODO cannot throw a NullUserException so don't handle specially
-                                          // TODO add error handling
+                                          debugPrint(e.toString());
                                         }
-                                        // TODO add success message
+                                        if (UserClient()
+                                                .currentSkatingUser!
+                                                .role ==
+                                            UserRole.iceSkater) {
+                                          await UserClient().changeRole(
+                                              userID: UserClient()
+                                                  .currentSkatingUser!
+                                                  .uID!,
+                                              role: UserRole.coach);
+                                        }
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      savedModificationsSnack),
+                                                  backgroundColor: confirm));
+                                        }
                                       }
                                     },
                                     textColor: paleText,

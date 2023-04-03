@@ -126,6 +126,20 @@ class UserClient {
     }
   }
 
+  Future<void> changeRole(
+      {required String userID,
+        required UserRole role}) async {
+    try {
+      await _firestore.collection(_userCollectionString).doc(userID).set(
+          {"role": role.toString()},
+          SetOptions(merge: true));
+      _currentSkatingUser!.role = role;
+    } catch (e) {
+      developer.log(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> changePassword(
       {required String userID, required String password}) async {
     try {
@@ -179,7 +193,7 @@ class UserClient {
     return skatingUser.uID!;
   }
 
-  Future<String> linkExistingSkater(
+  Future<String?> linkExistingSkater(
       {required String skaterEmail, required String coachId}) async {
     QuerySnapshot<Map<String, dynamic>> result = await _firestore
         .collection(_userCollectionString)
@@ -190,6 +204,9 @@ class UserClient {
     SkatingUser skatingUser =
         SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
 
+    if(_currentSkatingUser!.traineesID.contains(skatingUser.uID)) {
+      return null;
+    }
     await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
     return skatingUser.uID!;
   }
