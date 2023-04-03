@@ -13,8 +13,8 @@ import '../../../../models/graphic_data_classes/value_date_pair.dart';
 class ProgressionTab extends StatefulWidget {
   final Map<String, List<Capture>> _captures;
   const ProgressionTab(
-      {required Map<String, List<Capture>> captures, super.key})
-      : _captures = captures;
+      {required Map<String, List<Capture>> groupedCaptures, super.key})
+      : _captures = groupedCaptures;
 
   @override
   State<ProgressionTab> createState() => _ProgressionTabState();
