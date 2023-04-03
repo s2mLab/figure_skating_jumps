@@ -37,8 +37,6 @@ class CaptureClient {
 
   Future<Jump> createJump({required Jump jump}) async {
     try {
-      await _addNewJumpModificationToCapture(
-          captureID: jump.captureID, jumpID: jump.uID!);
       DocumentReference<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).add({
         'capture': jump.captureID,
@@ -55,6 +53,8 @@ class CaptureClient {
       jump.uID = jumpInfo.id;
       _modifyCaptureJumpList(
           captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
+      await _addNewJumpModificationToCapture(
+          captureID: jump.captureID, jumpID: jump.uID!);
       return jump;
     } catch (e) {
       debugPrint(e.toString());
@@ -80,6 +80,8 @@ class CaptureClient {
 
   Future<void> updateJump({required Jump jump}) async {
     try {
+      await _addUpdateJumpModificationToCapture(
+          captureID: jump.captureID, updatedJump: jump);
       await _firestore.collection(_jumpsCollectionString).doc(jump.uID!).set({
         'capture': jump.captureID,
         'comment': jump.comment,
@@ -92,8 +94,6 @@ class CaptureClient {
         'maxSpeed': jump.maxRotationSpeed,
         'rotation': jump.rotationDegrees,
       }, SetOptions(merge: true));
-      await _addUpdateJumpModificationToCapture(
-          captureID: jump.captureID, updatedJump: jump);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
