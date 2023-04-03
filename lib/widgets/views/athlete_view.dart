@@ -101,7 +101,7 @@ class _AthleteViewState extends State<AthleteView> {
 
   Widget _buildCapturesTab(BuildContext context, AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
-        ? CapturesTab(captures: skater!.groupedCaptures)
+        ? CapturesTab(groupedCaptures: skater!.groupedCaptures)
         : const Center(
             child: Padding(
             padding: EdgeInsets.all(32.0),

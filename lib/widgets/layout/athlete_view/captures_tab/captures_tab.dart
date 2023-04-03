@@ -7,9 +7,14 @@ import '../../capture_list_tile.dart';
 import '../../legend_move.dart';
 
 class CapturesTab extends StatelessWidget {
-  const CapturesTab({Key? key, required this.captures}) : super(key: key);
-  final Map<String, List<Capture>> captures;
+  final Map<String, List<Capture>> groupedCaptures;
   final double heightContainer = 110;
+
+  CapturesTab({Key? key, required this.groupedCaptures}) : super(key: key) {
+    groupedCaptures.forEach((key, value) {
+      value.sort((Capture left, Capture right) => right.date.compareTo(left.date));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +24,15 @@ class CapturesTab extends StatelessWidget {
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: captures.isEmpty
+          child: groupedCaptures.isEmpty
               ? const Center(
                   child: Text(noCapture),
                 )
               : ListView.builder(
-                  itemCount: captures.length,
+                  itemCount: groupedCaptures.length,
                   itemBuilder: (context, dateIndex) {
-                    String key = captures.keys.elementAt(dateIndex);
-                    List<Capture> capturesToDisplay = captures[key]!;
+                    String key = groupedCaptures.keys.elementAt(dateIndex);
+                    List<Capture> capturesToDisplay = groupedCaptures[key]!;
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
