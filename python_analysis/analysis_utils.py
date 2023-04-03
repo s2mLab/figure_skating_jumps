@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import csv
+import sys
 
 from ice_exceptions import InvalidFormatError
 
@@ -51,11 +52,11 @@ def read_raw_csv_to_dataframe(source: str) -> pd.DataFrame:
     headers = []
     for iter, row in enumerate(raw_data):
         if "PacketCounter" in row:
-            valid_columns = len([iter for iter in row if len(iter) > 0])
+            valid_columns = len([iter for iter in row if len(str(iter).strip()) > 0])
             headers = raw_data[iter][:valid_columns]
             raw_data = raw_data[iter + 1:]
             break
-    headers = [header_converter.get(iter) for iter in headers]
+    headers = [header_converter.get(str(iter).strip()) for iter in headers]
     
     if len(headers) != len(header_converter.keys()) or all([iter in headers for iter in header_converter.keys()]):
         raise InvalidFormatError
