@@ -24,10 +24,11 @@ class LocalDbService {
   Future<void> ensureInitialized() async {
     WidgetsFlutterBinding.ensureInitialized();
     _database = await openDatabase(
-        version: 1,
-        join(await getDatabasesPath(), _databaseName), onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);'
+        version: 1, join(await getDatabasesPath(), _databaseName),
+        onCreate: (db, version) async {
+      await db.execute(
+          'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
+      await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
     });
   }
@@ -62,8 +63,7 @@ class LocalDbService {
       ) ==
       1;
 
-  Future<int> deleteWhere(
-          String table, String column, String whereArg) async =>
+  Future<int> deleteWhere(String table, String column, String whereArg) async =>
       await _database.delete(
         table,
         where: '$column = ?',
