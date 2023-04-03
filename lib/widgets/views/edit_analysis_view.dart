@@ -41,10 +41,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   }
 
   Future<void> _loadVideoData() async {
-    setState(() async {
-      _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
-      _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
-    });
+    _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
+    _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
+    setState(() {});
   }
 
   @override
