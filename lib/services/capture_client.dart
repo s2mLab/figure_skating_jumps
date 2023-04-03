@@ -62,6 +62,40 @@ class CaptureClient {
     }
   }
 
+  Future<List<Jump>> createJumps({required List<Jump> jumps}) async {
+    try {
+      List<String> jumpIds = [];
+      List<Jump> firebaseJumps = [];
+      for (Jump jump in jumps) {
+        DocumentReference<Map<String, dynamic>> jumpInfo =
+            await _firestore.collection(_jumpsCollectionString).add({
+          'capture': jump.captureID,
+          'comment': jump.comment,
+          'duration': jump.duration,
+          'isCustom': jump.isCustom,
+          'score': jump.score,
+          'time': jump.time,
+          'type': jump.type.toString(),
+          'durationToMaxSpeed': jump.durationToMaxSpeed,
+          'maxSpeed': jump.maxRotationSpeed,
+          'rotation': jump.rotationDegrees,
+        });
+        jumpIds.add(jumpInfo.id);
+        jump.uID = jumpInfo.id;
+        firebaseJumps.add(jump);
+      }
+
+      if (jumpIds.isNotEmpty) {
+        _addMultipleJumpsToCapture(
+            captureID: jumps.first.captureID, jumpIds: jumpIds);
+      }
+      return firebaseJumps;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> deleteJump({required Jump jump}) async {
     try {
       await _addDeleteJumpModificationToCapture(
@@ -322,6 +356,28 @@ class CaptureClient {
           .collection(_captureCollectionString)
           .doc(captureID)
           .update({"jumps": jumpsID});
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> _addMultipleJumpsToCapture(
+      {required String captureID, required List<String> jumpIds}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> captureInfo = await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .get();
+      List<String> captureJumpsId =
+          List<String>.from(captureInfo.get('jumps') as List);
+
+      captureJumpsId.addAll(jumpIds);
+
+      await _firestore
+          .collection(_captureCollectionString)
+          .doc(captureID)
+          .update({"jumps": captureJumpsId});
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
