@@ -58,7 +58,13 @@ class SkatingUser {
     return _captures;
   }
 
-  Map<String, List<Capture>> get groupedCaptures {
+  Map<String, List<Capture>> get sortedGroupedCaptures {
+    _captures.sort((Capture left, Capture right) => left.date.compareTo(right.date));
+    return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
+  }
+
+  Map<String, List<Capture>> get reversedGroupedCaptures {
+    _captures.sort((Capture left, Capture right) => right.date.compareTo(left.date));
     return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
   }
 
