@@ -358,7 +358,7 @@ def analyze_session(source: str) -> 'list[Jump_Analysis]':
 
 @click.command()
 @click.argument("source", type=str)
-def analyze_session_cmd(source: str) -> 'list[Jump_Analysis]':
+def analyze_session_cmd(source: str) -> None:
     """Reads a raw XSensDot output file and analyzes it.\n
     This is the command version and should not be called from code, only from a terminal.
 
