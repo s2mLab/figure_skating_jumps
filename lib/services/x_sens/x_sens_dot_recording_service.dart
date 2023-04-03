@@ -222,9 +222,9 @@ class XSensDotRecordingService
       List<Jump>? jumps = await HttpClient()
           .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
 
-      List<Jump> newJumps = await CaptureClient().createListJump(jumps: jumps!);
-      _currentCapture?.jumpsID.addAll(newJumps.map((e) => e.uID!));
-      _currentCapture?.jumps.addAll(newJumps);
+      List<Jump> analyzedJumps = await CaptureClient().createJumps(jumps: jumps!);
+      _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
+      _currentCapture?.jumps.addAll(analyzedJumps);
     }
     _changeState(RecorderState.idle);
   }
