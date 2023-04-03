@@ -276,7 +276,6 @@ class CaptureClient {
           List<String>.from(captureInfo.get('jumps') as List);
 
       captureJumpsId.addAll(jumpIds);
-      debugPrint(captureJumpsId.length.toString());
 
       await _firestore
           .collection(_captureCollectionString)
