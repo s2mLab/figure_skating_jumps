@@ -178,8 +178,6 @@ class CaptureClient {
       List<String> actions = _getJumpModificationActions(
           oldJump: oldJump, updatedJump: updatedJump);
 
-      debugPrint(actions.toString());
-
       Capture capture = await getCaptureByID(uID: captureID);
       DateTime modificationTime = DateTime.now();
       for (String action in actions) {
