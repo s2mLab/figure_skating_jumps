@@ -170,7 +170,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                               loaderstrokeWidth: 5,
                             ))
                           : _traineesToShow.isEmpty
-                              ? const Center(child: Text(noCoaches))
+                              ? const Center(child: Text(noAthletes, textAlign: TextAlign.center))
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {
