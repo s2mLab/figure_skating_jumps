@@ -59,6 +59,7 @@ class IceDrawerMenu extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           '/ListAthletes',
+                          arguments: true,
                         );
                       }),
                 ],

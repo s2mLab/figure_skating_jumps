@@ -172,93 +172,8 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                       if (_newSkaterKey.currentState != null &&
                                           _newSkaterKey.currentState!
                                               .validate()) {
-                                        // Ideally this would not use a try-catch as a condition-like structure
-                                        try {
-                                          await UserClient()
-                                              .createAndLinkSkater(
-                                                  skaterEmail: _skaterEmail,
-                                                  coachId: coachId,
-                                                  firstName: _skaterSurname,
-                                                  lastName: _skaterName);
-                                        } on ConflictException catch (e) {
-                                          developer.log(e.devMessage);
-                                          String? skatingUserUID =
-                                              await UserClient()
-                                                  .linkExistingSkater(
-                                                      skaterEmail: _skaterEmail,
-                                                      coachId: coachId);
-                                          if (skatingUserUID != null) {
-                                            UserClient()
-                                                .currentSkatingUser!
-                                                .traineesID
-                                                .add(skatingUserUID);
-                                          }
-                                          if (mounted) {
-                                            showDialog(
-                                                barrierDismissible: false,
-                                                context: context,
-                                                builder: (context) {
-                                                  return Dialog(
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            skatingUserUID ==
-                                                                    null
-                                                                ? athleteAlreadyInList
-                                                                : athleteAlreadyExists,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        20),
-                                                          ),
-                                                        ),
-                                                        IceButton(
-                                                            text: confirmText,
-                                                            onPressed: () {
-                                                              Navigator
-                                                                  .pushReplacementNamed(
-                                                                      context,
-                                                                      '/ListAthletes');
-                                                            },
-                                                            textColor: paleText,
-                                                            color: confirm,
-                                                            iceButtonImportance:
-                                                                IceButtonImportance
-                                                                    .mainAction,
-                                                            iceButtonSize:
-                                                                IceButtonSize
-                                                                    .medium)
-                                                      ],
-                                                    ),
-                                                  );
-                                                });
-                                          }
-                                        } catch (e) {
-                                          debugPrint(e.toString());
-                                        }
-                                        if (UserClient()
-                                                .currentSkatingUser!
-                                                .role ==
-                                            UserRole.iceSkater) {
-                                          await UserClient().changeRole(
-                                              userID: UserClient()
-                                                  .currentSkatingUser!
-                                                  .uID!,
-                                              role: UserRole.coach);
-                                        }
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      savedModificationsSnack),
-                                                  backgroundColor: confirm));
-                                        }
+                                        await _onCreateNewSkater(
+                                            coachId, context);
                                       }
                                     },
                                     textColor: paleText,
@@ -279,16 +194,71 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
           ),
         ));
   }
-/* TODO: Waiting on firebase account creation for skaters (no passwords yet when coach creates the account)
-  Future<bool> _onSkaterAccountCreate() async {
-    await UserClient().signUp(email: _skaterEmail, password: password, userInfo: UserInfo());
-    _resetForm();
-  }
 
-  void _resetForm() {
-    _skaterName = '';
-    _skaterSurname = '';
-    _skaterEmail = '';
+  Future<void> _onCreateNewSkater(String coachId, BuildContext context) async {
+    // Ideally this would not use a try-catch as a condition-like structure
+    try {
+      UserClient().currentSkatingUser!.traineesID.add(await UserClient()
+          .createAndLinkSkater(
+              skaterEmail: _skaterEmail,
+              coachId: coachId,
+              firstName: _skaterSurname,
+              lastName: _skaterName));
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/ListAthletes',
+            arguments: true);
+      }
+    } on ConflictException catch (e) {
+      developer.log(e.devMessage);
+      String? skatingUserUID = await UserClient()
+          .linkExistingSkater(skaterEmail: _skaterEmail, coachId: coachId);
+      if (skatingUserUID != null) {
+        UserClient().currentSkatingUser!.traineesID.add(skatingUserUID);
+      }
+      if (mounted) {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        skatingUserUID == null
+                            ? athleteAlreadyInList
+                            : athleteAlreadyExists,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    IceButton(
+                        text: confirmText,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, '/ListAthletes',
+                              arguments: true);
+                        },
+                        textColor: paleText,
+                        color: confirm,
+                        iceButtonImportance: IceButtonImportance.mainAction,
+                        iceButtonSize: IceButtonSize.medium)
+                  ],
+                ),
+              );
+            });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    if (UserClient().currentSkatingUser!.role == UserRole.iceSkater) {
+      await UserClient().changeRole(
+          userID: UserClient().currentSkatingUser!.uID!, role: UserRole.coach);
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(savedModificationsSnack), backgroundColor: confirm));
+    }
   }
-  */
 }
