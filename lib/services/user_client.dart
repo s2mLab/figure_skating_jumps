@@ -170,7 +170,7 @@ class UserClient {
         SkatingUser(firstName, lastName, UserRole.iceSkater);
     String password = _genPassword();
     // Signs up the user with a temporary random password
-    String uID = await signUp(
+    String uID = await _createUserInDb(
         email: skaterEmail, password: password, userInfo: skatingUser);
     skatingUser.uID = uID;
     await resetPassword(email: skaterEmail);
@@ -279,7 +279,7 @@ class UserClient {
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
-          .set({"trainees": coach.trainees}, SetOptions(merge: true));
+          .set({"trainees": coach.traineesID}, SetOptions(merge: true));
     } catch (e) {
       developer.log(e.toString());
       rethrow;
