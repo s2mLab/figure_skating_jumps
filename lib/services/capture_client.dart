@@ -104,7 +104,8 @@ class CaptureClient {
         .saveCaptureCsv(exportFileName, exportedData);
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
 
-    int duration = exportedData.last.time - exportedData.first.time;
+    // ExportedData is in us while we want it in ms
+    int duration = ((exportedData.last.time - exportedData.first.time) / 1000).floor();
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
         duration, hasVideo, DateTime.now(), season, [], []);
 
