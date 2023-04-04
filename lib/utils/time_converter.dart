@@ -1,26 +1,28 @@
 class TimeConverter {
-  static String intToTime(int duration) {
-    String time = "";
-    int nbHours = (duration / 3600).floor();
-    duration -= nbHours * 3600;
-    int nbMinutes = (duration / 60).floor();
-    duration -= nbMinutes * 60;
-    int nbSeconds = duration;
 
-    if (nbHours > 0) time += "${nbHours.toString()}h ";
-    if (nbMinutes > 0) time += "${nbMinutes.toString()}m ";
+  static String dateTimeToHoursAndMinutes(DateTime date) =>
+      "${date.hour.toString().padLeft(2, "0")}h${date.minute.toString().padLeft(2, "0")}";
 
-    return "$time${nbSeconds.toString()}s";
-  }
+  static String dateTimeToSeconds(DateTime date) =>
+      "${date.second.toString().padLeft(2, "0")}s";
 
-  // https://stackoverflow.com/a/54775297/13775984
-  static String printSecondsAndMilli(Duration duration) {
-    String twoDigitMinutes = TimeConverter.twoDigitsPadLeft(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = TimeConverter.twoDigitsPadLeft(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:${twoDigitSeconds}s";
+  static String msToFormatSMs(int ms) {
+    int nbSeconds = (ms / 1000).floor();
+    ms -= nbSeconds * 1000;
+
+    return "${nbSeconds.toString()}.${ms.toString().padLeft(3, "0")}s";
   }
 
   static String twoDigitsPadLeft(int n) {
     return n.toString().padLeft(2, "0");
+  }
+
+  static String _hourMinuteSecondString(int hours, int minutes, int seconds) {
+    if (hours > 0) {
+      return "${hours.toString()}h ${minutes.toString().padLeft(2, "0")}m ${seconds.toString().padLeft(2, "0")}s";
+    } else if (minutes > 0) {
+      return "${minutes.toString()}m ${seconds.toString().padLeft(2, "0")}s";
+    }
+    return "${seconds.toString()}s";
   }
 }
