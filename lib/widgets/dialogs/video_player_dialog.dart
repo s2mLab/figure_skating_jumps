@@ -18,6 +18,7 @@ class VideoPlayerDialog extends StatefulWidget {
 }
 
 class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
+  final int jumpDuration = 3;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
@@ -28,7 +29,6 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
     _controller = VideoPlayerController.file(videoFile);
 
     _initializeVideoPlayerFuture = _controller.initialize();
-    //_controller.setLooping(true);
     _controller.play();
   }
 
@@ -45,6 +45,14 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
         return;
       }
       _controller.play();
+    });
+  }
+
+  void _jumpTime(Duration time) {
+    setState(() {
+      _controller.position.then((value) {
+        _controller.seekTo(value! + time);
+      });
     });
   }
 
@@ -74,28 +82,16 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                       Flexible(
                           child: GestureDetector(
                         onTap: _playPause,
-                        onDoubleTap: () {
-                          setState(() {
-                            _controller.position.then((value) {
-                              _controller
-                                  .seekTo(value! - const Duration(seconds: 3));
-                            });
-                          });
-                        },
+                        onDoubleTap: () =>
+                            _jumpTime(const Duration(seconds: -3)),
                         child:
                             Container(height: 620, color: Colors.transparent),
                       )),
                       Flexible(
                           child: GestureDetector(
                         onTap: _playPause,
-                        onDoubleTap: () {
-                          setState(() {
-                            _controller.position.then((value) {
-                              _controller
-                                  .seekTo(value! + const Duration(seconds: 3));
-                            });
-                          });
-                        },
+                        onDoubleTap: () =>
+                            _jumpTime(const Duration(seconds: 3)),
                         child:
                             Container(height: 620, color: Colors.transparent),
                       ))
