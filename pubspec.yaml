@@ -55,6 +55,7 @@ dependencies:
     firebase_storage: ^11.0.16
     video_player: ^2.6.0
     http:
+    smooth_video_progress: ^0.0.4
 
 dev_dependencies:
     flutter_test:
