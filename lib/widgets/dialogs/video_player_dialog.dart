@@ -18,7 +18,7 @@ class VideoPlayerDialog extends StatefulWidget {
 }
 
 class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
-  final int jumpDuration = 3;
+  final int skipTimeDuration = 3;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
