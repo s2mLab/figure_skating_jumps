@@ -7,10 +7,10 @@ import '../../capture_list_tile.dart';
 import '../../legend_move.dart';
 
 class CapturesTab extends StatelessWidget {
-  const CapturesTab({Key? key, required this.groupedCaptures}) : super(key: key);
+  const CapturesTab({Key? key, required this.groupedCaptures})
+      : super(key: key);
   final Map<String, List<Capture>> groupedCaptures;
-  final double heightContainer = 110;
-
+  final double heightContainer = 116;
 
   @override
   Widget build(BuildContext context) {
