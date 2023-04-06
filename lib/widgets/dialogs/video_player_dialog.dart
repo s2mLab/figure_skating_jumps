@@ -1,8 +1,8 @@
 import 'dart:io';
-
+import 'package:smooth_video_progress/smooth_video_progress.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter/material.dart';
 
 class VideoPlayerDialog extends StatefulWidget {
   const VideoPlayerDialog({Key? key, required String videoPath})
@@ -18,6 +18,7 @@ class VideoPlayerDialog extends StatefulWidget {
 }
 
 class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
+  final int skipTimeDuration = 3;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
@@ -28,7 +29,6 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
     _controller = VideoPlayerController.file(videoFile);
 
     _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
     _controller.play();
   }
 
@@ -36,6 +36,24 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+
+  void _playPause() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+        return;
+      }
+      _controller.play();
+    });
+  }
+
+  void _jumpTime(Duration time) {
+    setState(() {
+      _controller.position.then((value) {
+        _controller.seekTo(value! + time);
+      });
+    });
   }
 
   @override
@@ -48,31 +66,70 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
           borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-            onTap: () {
-              setState(() {
-                if (_controller.value.isPlaying) {
-                  _controller.pause();
-                  return;
-                }
-                _controller.play();
-              });
-            },
-            child: FutureBuilder(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return AspectRatio(
+        child: FutureBuilder(
+          future: _initializeVideoPlayerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(mainAxisSize: MainAxisSize.min, children: [
+                Stack(children: [
+                  AspectRatio(
                     aspectRatio: _controller.value.aspectRatio,
                     child: VideoPlayer(_controller),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            )),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Flexible(
+                          child: GestureDetector(
+                        onTap: _playPause,
+                        onDoubleTap: () =>
+                            _jumpTime(const Duration(seconds: -3)),
+                        child:
+                            Container(height: 620, color: Colors.transparent),
+                      )),
+                      Flexible(
+                          child: GestureDetector(
+                        onTap: _playPause,
+                        onDoubleTap: () =>
+                            _jumpTime(const Duration(seconds: 3)),
+                        child:
+                            Container(height: 620, color: Colors.transparent),
+                      ))
+                    ],
+                  ),
+                ]),
+                SmoothVideoProgress(
+                    controller: _controller,
+                    builder: (context, position, duration, _) {
+                      final double max = duration.inMilliseconds.toDouble();
+                      return Theme(
+                          data: ThemeData.from(
+                            colorScheme:
+                                ColorScheme.fromSeed(seedColor: primaryColor),
+                            useMaterial3: true,
+                          ),
+                          child: Row(children: [
+                            Expanded(
+                                child: Slider(
+                              min: 0,
+                              max: max,
+                              value: position.inMilliseconds
+                                  .clamp(0, max)
+                                  .toDouble(),
+                              onChanged: (value) => _controller.seekTo(
+                                  Duration(milliseconds: value.toInt())),
+                            )),
+                            Text(position.toString().substring(2, 11))
+                          ]));
+                    }),
+              ]);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
     );
   }
