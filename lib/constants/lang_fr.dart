@@ -118,7 +118,8 @@ const String fallComment = "Chute";
 const String notEnoughRotationComment = "Manque de rotation";
 const String goodJobComment = "Bien fait";
 const String stepOut = "Step out";
-const String chooseBelowComments = "Ou choisir parmi les commentaires suivants:";
+const String chooseBelowComments =
+    "Ou choisir parmi les commentaires suivants:";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
@@ -150,7 +151,8 @@ const String forgotPasswordButton = "Mot de passe oublié?";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";
-const String forgotPasswordToast = "Si ce courriel existe, vous recevrez un email dans un court délai.";
+const String forgotPasswordToast =
+    "Si ce courriel existe, vous recevrez un email dans un court délai.";
 const String sendEmailButtonText = "Envoyer un courriel";
 
 // widgets/screens/acquisitions_view
@@ -188,7 +190,6 @@ const String captureViewCameraSwitchPrompt = "Caméra activée ?";
 const String stopCapture = "Arrêter la capture";
 const String exportingData = "Enregistrement des données...";
 const String analyzingData = "Analyse des données...";
-
 
 // widgets/dialog/capture/start_recording_dialog
 const String captureStartingPrompt = "Démarrage...";
@@ -228,12 +229,18 @@ const String confirmCreateCoachAccount = "Créer le compte";
 const String accountCreationError = "Erreur de création de compte";
 const String tryLater = 'Veuillez réessayer plus tard.';
 
+// widgets/screens/missing_permissions_view
+const String pleaseActivatePermissions =
+    "Veuillez activer les permissions dans vos paramètres, puis redémarrer l'application. Si cela ne fonctionne pas, veuillez réinstaller l'application.";
+
 // widgets/screens/skater_creation_view
 const String createAthleteExplainPrompt =
     "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
 const String addASkaterTitle = "Ajouter un patineur";
-const String warnAccountTypeChange = "Ajouter un patineur convertira votre compte en compte entraîneur.";
-const String athleteAlreadyExists = "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
+const String warnAccountTypeChange =
+    "Ajouter un patineur convertira votre compte en compte entraîneur.";
+const String athleteAlreadyExists =
+    "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
 const String athleteAlreadyInList = "Cet athète est déjà dans votre liste.";
 
 // exceptions
