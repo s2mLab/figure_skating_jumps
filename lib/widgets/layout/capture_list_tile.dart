@@ -52,9 +52,9 @@ class CaptureListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.hour)}h${TimeConverter.twoDigitsPadLeft(_currentCapture.date.minute)}",
+                          TimeConverter.dateTimeToHoursAndMinutes(_currentCapture.date),
                           style: const TextStyle(fontSize: 24, color: darkText)),Text(
-                          "${TimeConverter.twoDigitsPadLeft(_currentCapture.date.second)}s",
+                          TimeConverter.dateTimeToSeconds(_currentCapture.date),
                           style: const TextStyle(fontSize: 14, color: darkText)),
                     ],
                   ),
@@ -70,7 +70,7 @@ class CaptureListTile extends StatelessWidget {
                             child: Icon(Icons.schedule, color: darkText),
                           ),
                           Text(
-                            TimeConverter.intToTime(_currentCapture.duration),
+                            TimeConverter.msToFormatSMs(_currentCapture.duration),
                             style: const TextStyle(fontSize: 16, color: darkText),
                           )
                         ]),
