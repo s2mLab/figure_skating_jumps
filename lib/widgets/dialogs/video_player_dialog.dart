@@ -119,7 +119,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                               onChanged: (value) => _controller.seekTo(
                                   Duration(milliseconds: value.toInt())),
                             )),
-                            Text(position.toString().substring(2, 10))
+                            Text(position.toString().substring(2, 11))
                           ]));
                     }),
               ]);
