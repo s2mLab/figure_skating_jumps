@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -9,12 +10,12 @@ class PageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        style: const TextStyle(
+        style: TextStyle(
             overflow: TextOverflow.ellipsis,
             color: primaryColor,
-            fontSize: 25,
+            fontSize: ReactiveLayoutHelper.getHeightFromFactor(24),
             fontWeight: FontWeight.bold,
             fontFamily:
-                'Jost')); // Haved to specify it here for some reason even if the theme is properly configured
+                'Jost')); // Had to specify it here for some reason even if the theme is properly configured
   }
 }

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,8 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   static const int _maxLengthSearch = 11;
 
   late final SkatingUser _currentUser;
-  final double _heightContainer = 57; //57?
+  final double _heightContainer =
+      ReactiveLayoutHelper.getHeightFromFactor(57); //57?
   late Map<String, List<SkatingUser>> _traineesToShow;
   late TextEditingController _searchController;
   late String _searchString = "";
@@ -88,7 +90,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   Widget build(BuildContext context) {
     _loadData();
     _state = ModalRoute.of(context)!.settings.arguments as bool;
-    if(_state) {
+    if (_state) {
       setState(() {});
     }
     return Scaffold(
@@ -101,12 +103,15 @@ class _ListAthletesViewState extends State<ListAthletesView> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Container(
-              margin: const EdgeInsets.all(16),
+              margin: EdgeInsets.symmetric(
+                  vertical: ReactiveLayoutHelper.getHeightFromFactor(16),
+                  horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      margin: const EdgeInsets.only(bottom: 8.0),
+                      margin: EdgeInsets.only(
+                          bottom: ReactiveLayoutHelper.getHeightFromFactor(8)),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -114,16 +119,23 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                             if (_loading || _traineesToShow.isNotEmpty)
                               _searching
                                   ? Container(
-                                      height: 50,
-                                      padding: const EdgeInsets.only(
-                                          top: 8, left: 16, bottom: 8),
+                                      height: ReactiveLayoutHelper
+                                          .getHeightFromFactor(50),
+                                      padding: EdgeInsets.only(
+                                          top: ReactiveLayoutHelper
+                                              .getHeightFromFactor(8),
+                                          left: ReactiveLayoutHelper
+                                              .getHeightFromFactor(16),
+                                          bottom: ReactiveLayoutHelper
+                                              .getHeightFromFactor(8)),
                                       decoration: BoxDecoration(
                                           color: cardBackground,
                                           borderRadius:
                                               BorderRadius.circular(30)),
                                       child: Row(children: [
                                         SizedBox(
-                                            width: 150,
+                                            width: ReactiveLayoutHelper
+                                                .getHeightFromFactor(150),
                                             child: Focus(
                                                 onFocusChange: (hasFocus) =>
                                                     _searchFocusChanged(
@@ -144,8 +156,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                           icon:
                                               const Icon(Icons.cancel_outlined),
                                           color: discreetText,
-                                          padding: const EdgeInsets.all(0),
-                                          iconSize: 30,
+                                          padding: EdgeInsets.zero,
+                                          iconSize: ReactiveLayoutHelper
+                                              .getHeightFromFactor(30),
                                           onPressed: () {
                                             _searchController.clear();
                                             _updateList();
@@ -165,6 +178,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                             });
                                             _focusNode.requestFocus();
                                           },
+                                          iconSize: ReactiveLayoutHelper.getHeightFromFactor(30),
                                           icon: const Icon(Icons.search)))
                           ])),
                   Expanded(
@@ -175,7 +189,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                               loaderstrokeWidth: 5,
                             ))
                           : _traineesToShow.isEmpty
-                              ? const Center(child: Text(noAthletes, textAlign: TextAlign.center))
+                              ? const Center(
+                                  child: Text(noAthletes,
+                                      textAlign: TextAlign.center))
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {
@@ -190,8 +206,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                           if (traineesByName.isNotEmpty)
                                             Text(
                                               key,
-                                              style: const TextStyle(
-                                                  fontSize: 20,
+                                              style: TextStyle(
+                                                  fontSize: ReactiveLayoutHelper
+                                                      .getHeightFromFactor(20),
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           SizedBox(
@@ -214,15 +231,29 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                       },
                                                       child: Container(
                                                           margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 4,
-                                                                  right: 4,
-                                                                  bottom: 4,
-                                                                  left: 24),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(12),
+                                                              EdgeInsets.only(
+                                                            top: ReactiveLayoutHelper
+                                                                .getHeightFromFactor(
+                                                                    4),
+                                                            right: ReactiveLayoutHelper
+                                                                .getWidthFromFactor(
+                                                                    4),
+                                                            bottom: ReactiveLayoutHelper
+                                                                .getHeightFromFactor(
+                                                                    4),
+                                                            left: ReactiveLayoutHelper
+                                                                .getWidthFromFactor(
+                                                                    24),
+                                                          ),
+                                                          padding: EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  ReactiveLayoutHelper
+                                                                      .getWidthFromFactor(
+                                                                          12),
+                                                              vertical:
+                                                                  ReactiveLayoutHelper
+                                                                      .getHeightFromFactor(
+                                                                          12)),
                                                           decoration: BoxDecoration(
                                                               color:
                                                                   cardBackground,
