@@ -10,6 +10,7 @@ import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
 import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
+import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:flutter/material.dart';
@@ -75,34 +76,27 @@ class FigureSkatingJumpApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return canFunction
-        ? MaterialApp(
-            title: 'Figure Skating Jump App',
-            initialRoute: '/Login',
-            routes: {
-              '/ManageDevices': (context) => const ConnectionDotView(),
-              '/CoachAccountCreation': (context) =>
-                  const CoachAccountCreationView(),
-              '/CaptureData': (context) => const CaptureView(),
-              '/Login': (context) => const LoginView(),
-              '/CreateSkater': (context) => const SkaterCreationView(),
-              '/Acquisitions': (context) => const AthleteView(),
-              '/EditAnalysis': (context) => const EditAnalysisView(),
-              '/ListAthletes': (context) => const ListAthletesView(),
-              '/ProfileView': (context) => const ProfileView(),
-              '/ForgotPasswordView': (context) => ForgotPasswordView(),
-            },
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: primaryBackground,
-              fontFamily: 'Jost',
-            ),
-          )
-        : MaterialApp(
-            title: 'Figure Skating Jump App',
-            builder: (context, _) {
-              return const Text("Veuillez autoriser les permissions.");
-            },
-          ); //TODO: Placeholder until we have UI to handle the case when no permissions are granted.
+    return MaterialApp(
+      title: 'Figure Skating Jump App',
+      initialRoute: canFunction ? '/Login' : '/MissingPermissions' ,
+      routes: {
+        '/ManageDevices': (context) => const ConnectionDotView(),
+        '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
+        '/CaptureData': (context) => const CaptureView(),
+        '/Login': (context) => const LoginView(),
+        '/CreateSkater': (context) => const SkaterCreationView(),
+        '/Acquisitions': (context) => const AthleteView(),
+        '/EditAnalysis': (context) => const EditAnalysisView(),
+        '/ListAthletes': (context) => const ListAthletesView(),
+        '/ProfileView': (context) => const ProfileView(),
+        '/ForgotPasswordView': (context) => ForgotPasswordView(),
+        '/MissingPermissions': (context) => const MissingPermissionsView(),
+      },
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: primaryBackground,
+        fontFamily: 'Jost',
+      ),
+    );
   }
 }
