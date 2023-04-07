@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
 import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,6 +43,9 @@ class UserClient {
       required SkatingUser userInfo}) async {
     String uID = await _createUserInDb(email: email, password: password, userInfo: userInfo);
     _currentSkatingUser = userInfo;
+    if (ActiveSessionManager().activeSession == null || ActiveSessionManager().activeSession!.email != email) {
+      await ActiveSessionManager().saveActiveSession(email, password);
+    }
     return uID;
   }
 
@@ -61,6 +65,10 @@ class UserClient {
           .get();
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
+
+      if (ActiveSessionManager().activeSession == null || ActiveSessionManager().activeSession?.email != email) {
+        await ActiveSessionManager().saveActiveSession(email, password);
+      }
 
       await DeviceNamesManager()
           .loadDeviceNames(_firebaseAuth.currentUser!.uid);
