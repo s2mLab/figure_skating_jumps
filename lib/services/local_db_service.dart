@@ -11,6 +11,7 @@ class LocalDbService {
 
   static const deviceNamesTableName = "deviceNames";
   static const localCapturesTableName = "localCaptures";
+  static const activeSessionTableName = "activeSession";
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -30,6 +31,8 @@ class LocalDbService {
           'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
+      await db.execute(
+          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT);');
     });
   }
 
