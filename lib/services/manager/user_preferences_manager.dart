@@ -2,6 +2,8 @@ import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/db_models/user_preferences.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 
+import '../../enums/season.dart';
+
 class UserPreferencesManager implements ILocalDbManager<UserPreferences> {
   static UserPreferences? _preferences;
   static final UserPreferencesManager _userPreferencesManager =
@@ -19,7 +21,7 @@ class UserPreferencesManager implements ILocalDbManager<UserPreferences> {
   List<UserPreferences> constructObject(List<Map<String, dynamic>> objMaps) {
     return List.generate(objMaps.length, (i) {
       return UserPreferences(
-          id: objMaps[i]['id'], season: objMaps[i]['season']);
+          id: objMaps[i]['id'], season: Season.values.byName(objMaps[i]['season']));
     });
   }
 
@@ -29,6 +31,7 @@ class UserPreferencesManager implements ILocalDbManager<UserPreferences> {
 
   Future<void> savePreferences(UserPreferences preferences) async {
     _preferences = preferences;
+    _preferences?.id = 1;
     bool alreadyExists = await LocalDbService()
         .updateOne(_preferences!, LocalDbService.userPreferencesTableName);
     if (!alreadyExists) {
