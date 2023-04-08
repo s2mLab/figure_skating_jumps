@@ -1,7 +1,6 @@
 import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/db_models/active_session.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
-import 'package:flutter/cupertino.dart';
 
 class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
   static ActiveSession? _activeSession;
@@ -34,10 +33,9 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     _activeSession = ActiveSession(id: 1, email: email, password: password);
     bool temp = await LocalDbService()
         .updateOne(_activeSession!, LocalDbService.activeSessionTableName);
-    debugPrint(temp.toString());
     if (!temp) {
-      debugPrint((await LocalDbService()
-          .insertOne(_activeSession!, LocalDbService.activeSessionTableName)).toString());
+      await LocalDbService()
+          .insertOne(_activeSession!, LocalDbService.activeSessionTableName);
     }
   }
 
@@ -45,7 +43,6 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     List<ActiveSession> sessions = constructObject(
       await LocalDbService().readWhere(LocalDbService.activeSessionTableName, 'id', '1')
     );
-    debugPrint(sessions.toString());
     if (sessions.isNotEmpty) _activeSession = sessions[0];
   }
 }
