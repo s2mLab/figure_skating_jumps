@@ -38,6 +38,7 @@ class XSensDotRecordingService
   static Season season = Season.preparation;
   static Capture? _currentCapture;
   static const _recordingOutputRate = 120;
+  static const _estimatedExportRate = 30;
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
