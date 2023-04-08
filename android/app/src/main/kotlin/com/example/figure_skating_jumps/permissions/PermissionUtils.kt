@@ -65,13 +65,15 @@ object PermissionUtils {
             )
         }
         val isAccepted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-        val shouldShowDialog = shouldShowPermissionDialog(activity, permissions)
         BluetoothPermissionStreamHandler.sendEvent(
-            BluetoothPermissionRequest(
-                isAccepted,
-                shouldShowDialog
-            )
+            isAccepted
         )
+        if(isAccepted) return
+
+        Log.i("Android", "Permission request denied")
+        if(shouldShowPermissionDialog(activity, permissions)) {
+            showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
+        }
     }
 
     private fun manageBluetoothPermissions(activity: MainActivity) {
