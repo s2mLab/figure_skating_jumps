@@ -88,6 +88,7 @@ class UserClient {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      await ActiveSessionManager().clearActiveSession();
       _currentSkatingUser = null;
     } catch (e) {
       developer.log(e.toString());
@@ -155,6 +156,7 @@ class UserClient {
       {required String userID, required String password}) async {
     try {
       await _firebaseAuth.currentUser?.updatePassword(password);
+      await ActiveSessionManager().changeSessionPassword(password);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       // Should not reach this line but kept in to make sure the exception is handled

@@ -44,4 +44,16 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
         .readWhere(LocalDbService.activeSessionTableName, 'id', '1'));
     if (sessions.isNotEmpty) _activeSession = sessions[0];
   }
+
+  Future<void> clearActiveSession() async {
+    if (_activeSession == null) return;
+    _activeSession?.id = 1;
+    await LocalDbService().deleteOne(_activeSession!, LocalDbService.activeSessionTableName);
+  }
+
+  Future<void> changeSessionPassword(String password) async {
+    if (_activeSession == null) return;
+    _activeSession = ActiveSession(id: 1, email: _activeSession!.email, password: password);
+    await LocalDbService().updateOne(_activeSession!, LocalDbService.activeSessionTableName);
+  }
 }
