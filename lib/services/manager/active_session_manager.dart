@@ -31,7 +31,7 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
   }
 
   Future<void> saveActiveSession(String email, String password) async {
-    if (ActiveSessionManager().activeSession != null && ActiveSessionManager().activeSession?.email == email) return;
+    if (ActiveSessionManager().activeSession != null && ActiveSessionManager().activeSession!.email == email) return;
     _activeSession = ActiveSession(id: 1, email: email, password: password);
     bool alreadyExists = await LocalDbService()
         .updateOne(_activeSession!, LocalDbService.activeSessionTableName);
