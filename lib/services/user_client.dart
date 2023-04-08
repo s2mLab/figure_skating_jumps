@@ -65,7 +65,7 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
-        await ActiveSessionManager().saveActiveSession(email, password);
+      await ActiveSessionManager().saveActiveSession(email, password);
 
       await DeviceNamesManager()
           .loadDeviceNames(_firebaseAuth.currentUser!.uid);
