@@ -32,7 +32,7 @@ class LocalDbService {
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
       await db.execute(
-          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT);');
+          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY, email TEXT, password TEXT);');
     });
   }
 
@@ -62,15 +62,21 @@ class LocalDbService {
       await _database.delete(
         table,
         where: 'id = ?',
-        whereArgs: [object.id],
+        whereArgs: [object.id!]
       ) ==
       1;
 
-  Future<int> deleteWhere(String table, String column, String whereArg) async =>
+  Future<int> deleteWhere(String table, String column, Object whereArg) async =>
       await _database.delete(
         table,
         where: '$column = ?',
         whereArgs: [whereArg],
+      );
+
+  Future<int> deleteAll(String table) async =>
+      await _database.delete(
+        table,
+        where: null
       );
 
   Future<List<Map<String, dynamic>>> readAll(String table) async =>
