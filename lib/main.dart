@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
@@ -10,6 +11,7 @@ import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
 import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
+import 'package:figure_skating_jumps/widgets/views/initial_redirect_route.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart';
@@ -40,11 +42,9 @@ Future<void> main() async {
   await LocalDbService().ensureInitialized();
   await ActiveSessionManager().loadActiveSession();
   if (ActiveSessionManager().activeSession != null) {
-    debugPrint(ActiveSessionManager().activeSession!.email);
     await UserClient().signIn(
         email: ActiveSessionManager().activeSession!.email,
         password: ActiveSessionManager().activeSession!.password);
-    debugPrint(UserClient().currentSkatingUser!.email);
   }
 
   // prevent phone rotation
@@ -80,6 +80,12 @@ Future<bool> initializeStoragePermissions() async {
   return Future<bool>.value(permissionState);
 }
 
+String chooseInitialRoute(bool canFunction) {
+  if (!canFunction) return '/MissingPermissions';
+  if (UserClient().currentSkatingUser == null) return '/Login';
+  return UserClient().currentSkatingUser!.role == UserRole.coach ? '/ListAthletes' : '/Acquisitions';
+}
+
 class FigureSkatingJumpApp extends StatelessWidget {
   final bool canFunction;
 
@@ -89,8 +95,9 @@ class FigureSkatingJumpApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Figure Skating Jump App',
-      initialRoute: canFunction ? '/Login' : '/MissingPermissions',
+      initialRoute: '/InitialRedirectRoute',
       routes: {
+        '/InitialRedirectRoute': (context) => InitialRedirectRoute(canFunction),
         '/ManageDevices': (context) => const ConnectionDotView(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         '/CaptureData': (context) => const CaptureView(),

@@ -189,7 +189,7 @@ class UserClient {
     if (result.docs.isNotEmpty) throw ConflictException();
 
     SkatingUser skatingUser =
-        SkatingUser(firstName, lastName, UserRole.iceSkater);
+        SkatingUser(firstName, lastName, UserRole.iceSkater, skaterEmail);
     String password = _genPassword();
     // Signs up the user with a temporary random password
     String uID = await _createUserInDb(
