@@ -41,9 +41,11 @@ class UserClient {
       {required String email,
       required String password,
       required SkatingUser userInfo}) async {
-    String uID = await _createUserInDb(email: email, password: password, userInfo: userInfo);
+    String uID = await _createUserInDb(
+        email: email, password: password, userInfo: userInfo);
     _currentSkatingUser = userInfo;
-    if (ActiveSessionManager().activeSession == null || ActiveSessionManager().activeSession!.email != email) {
+    if (ActiveSessionManager().activeSession == null ||
+        ActiveSessionManager().activeSession!.email != email) {
       await ActiveSessionManager().saveActiveSession(email, password);
     }
     return uID;
@@ -66,7 +68,8 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
-      if (ActiveSessionManager().activeSession == null || ActiveSessionManager().activeSession?.email != email) {
+      if (ActiveSessionManager().activeSession == null ||
+          ActiveSessionManager().activeSession?.email != email) {
         await ActiveSessionManager().saveActiveSession(email, password);
       }
 
@@ -135,12 +138,12 @@ class UserClient {
   }
 
   Future<void> changeRole(
-      {required String userID,
-        required UserRole role}) async {
+      {required String userID, required UserRole role}) async {
     try {
-      await _firestore.collection(_userCollectionString).doc(userID).set(
-          {"role": role.toString()},
-          SetOptions(merge: true));
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(userID)
+          .set({"role": role.toString()}, SetOptions(merge: true));
       _currentSkatingUser!.role = role;
     } catch (e) {
       developer.log(e.toString());
@@ -212,7 +215,8 @@ class UserClient {
     SkatingUser skatingUser =
         SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
 
-    if(_currentSkatingUser!.traineesID.contains(skatingUser.uID) || _currentSkatingUser!.uID == skatingUser.uID) {
+    if (_currentSkatingUser!.traineesID.contains(skatingUser.uID) ||
+        _currentSkatingUser!.uID == skatingUser.uID) {
       return null;
     }
     await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
