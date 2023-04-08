@@ -9,13 +9,13 @@ class UserPreferences extends AbstractLocalDbObject {
     this.id = id;
   }
 
-  get season {
+  Season get season {
     return _season;
   }
 
   @override
   Map<String, dynamic> toMap() {
-    return {'season': _season};
+    return {'season': _season.name};
   }
 
   @override
