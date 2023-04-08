@@ -25,6 +25,6 @@ class ActiveSession extends AbstractLocalDbObject {
 
   @override
   String toString() {
-    return 'DeviceName{id: $id, email: $_email}';
+    return 'ActiveSession{id: $id, email: $_email}';
   }
 }
