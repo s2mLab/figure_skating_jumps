@@ -277,6 +277,7 @@ class _CaptureViewState extends State<CaptureView>
         cameraWidth = screenSize.width;
         cameraHeight = screenSize.width * _controller.value.aspectRatio;
       }
+
       if (!_isFullscreen) {
         //Reduce size to let place for other UI elements=
         cameraWidth /= 2;
@@ -285,8 +286,8 @@ class _CaptureViewState extends State<CaptureView>
 
       return Center(
         child: SizedBox(
-          width: _isFullscreen ? screenSize.width : cameraWidth,
-          height: _isFullscreen ? screenSize.height : cameraHeight,
+          width: cameraWidth,
+          height: cameraHeight,
           child: _controller.buildPreview(),
         ),
       );
