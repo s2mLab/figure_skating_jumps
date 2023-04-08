@@ -80,12 +80,6 @@ Future<bool> initializeStoragePermissions() async {
   return Future<bool>.value(permissionState);
 }
 
-String chooseInitialRoute(bool canFunction) {
-  if (!canFunction) return '/MissingPermissions';
-  if (UserClient().currentSkatingUser == null) return '/Login';
-  return UserClient().currentSkatingUser!.role == UserRole.coach ? '/ListAthletes' : '/Acquisitions';
-}
-
 class FigureSkatingJumpApp extends StatelessWidget {
   final bool canFunction;
 
