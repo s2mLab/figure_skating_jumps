@@ -40,9 +40,8 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
   }
 
   Future<void> loadActiveSession() async {
-    List<ActiveSession> sessions = constructObject(
-      await LocalDbService().readWhere(LocalDbService.activeSessionTableName, 'id', '1')
-    );
+    List<ActiveSession> sessions = constructObject(await LocalDbService()
+        .readWhere(LocalDbService.activeSessionTableName, 'id', '1'));
     if (sessions.isNotEmpty) _activeSession = sessions[0];
   }
 }

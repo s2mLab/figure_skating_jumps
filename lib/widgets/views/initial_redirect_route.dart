@@ -13,13 +13,17 @@ class InitialRedirectRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(!_canFunction) Navigator.pushReplacementNamed(context, '/MissingPermissions');
+      if (!_canFunction) {
+        Navigator.pushReplacementNamed(context, '/MissingPermissions');
+      }
       if (ActiveSessionManager().activeSession == null) {
         Navigator.pushReplacementNamed(context, '/Login');
       } else {
         UserClient().currentSkatingUser!.role == UserRole.coach
-            ? Navigator.pushReplacementNamed(context, '/ListAthletes', arguments: false)
-            : Navigator.pushReplacementNamed(context, '/Acquisitions', arguments: UserClient().currentSkatingUser);
+            ? Navigator.pushReplacementNamed(context, '/ListAthletes',
+                arguments: false)
+            : Navigator.pushReplacementNamed(context, '/Acquisitions',
+                arguments: UserClient().currentSkatingUser);
       }
     });
     return const CircularProgressIndicator();

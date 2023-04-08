@@ -55,12 +55,14 @@ class SkatingUser {
   }
 
   Map<String, List<Capture>> get sortedGroupedCaptures {
-    _captures.sort((Capture left, Capture right) => left.date.compareTo(right.date));
+    _captures
+        .sort((Capture left, Capture right) => left.date.compareTo(right.date));
     return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
   }
 
   Map<String, List<Capture>> get reversedGroupedCaptures {
-    _captures.sort((Capture left, Capture right) => right.date.compareTo(left.date));
+    _captures
+        .sort((Capture left, Capture right) => right.date.compareTo(left.date));
     return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
   }
 
@@ -96,7 +98,8 @@ class SkatingUser {
     }
   }
 
-  SkatingUser(this._firstName, this._lastName, this.role, this._email, [this.uID]);
+  SkatingUser(this._firstName, this._lastName, this.role, this._email,
+      [this.uID]);
 
   Future<void> loadCapturesData() async {
     _captures.clear();
