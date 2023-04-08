@@ -10,11 +10,11 @@ class ActiveSession extends AbstractLocalDbObject {
     this.id = id;
   }
 
-  get email {
+  String get email {
     return _email;
   }
 
-  get password {
+  String get password {
     return _password;
   }
 
