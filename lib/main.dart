@@ -2,12 +2,12 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
+import 'package:figure_skating_jumps/services/manager/global_settings_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
 import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
-
 import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
 import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
 import 'package:figure_skating_jumps/widgets/views/initial_redirect_route.dart';
@@ -45,6 +45,8 @@ Future<void> main() async {
         email: ActiveSessionManager().activeSession!.email,
         password: ActiveSessionManager().activeSession!.password);
   }
+
+  await GlobalSettingsManager().loadSettings();
 
   // prevent phone rotation
   SystemChrome.setPreferredOrientations([
