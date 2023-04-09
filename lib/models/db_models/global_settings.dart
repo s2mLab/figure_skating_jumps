@@ -1,10 +1,10 @@
 import '../../enums/season.dart';
 import 'abstract_local_db_object.dart';
 
-class UserPreferences extends AbstractLocalDbObject {
+class GlobalSettings extends AbstractLocalDbObject {
   final Season _season;
 
-  UserPreferences({id, required Season season})
+  GlobalSettings({id, required Season season})
       : _season = season {
     this.id = id;
   }
@@ -20,6 +20,6 @@ class UserPreferences extends AbstractLocalDbObject {
 
   @override
   String toString() {
-    return 'UserPreference{id: $id, season: $_season}';
+    return 'GlobalSettings{id: $id, season: $_season}';
   }
 }
