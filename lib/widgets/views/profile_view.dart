@@ -1,7 +1,10 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modify_full_name_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modify_password_dialog.dart';
@@ -92,26 +95,22 @@ class _ProfileViewState extends State<ProfileView> {
                               icon: const Icon(Icons.edit)))
                     ]),
               ),
-              Align(
+              Container(
+                  margin: const EdgeInsets.only(right: 24),
                   alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                      onTap: () {
+                  child: IceButton(
+                      text: modifyPassword,
+                      onPressed: () {
                         showDialog<String>(
                             context: context,
                             builder: (BuildContext context) {
                               return ModifyPassword();
                             });
                       },
-                      child: Container(
-                          margin: const EdgeInsets.only(right: 16),
-                          decoration: BoxDecoration(
-                              color: primaryColorLight,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.all(8),
-                          child: const Text(
-                            modifyPassword,
-                            style: TextStyle(color: paleText),
-                          )))),
+                      textColor: primaryColor,
+                      color: primaryColor,
+                      iceButtonImportance: IceButtonImportance.secondaryAction,
+                      iceButtonSize: IceButtonSize.small)),
               Container(
                   margin: const EdgeInsets.only(right: 16, left: 16, top: 32),
                   child: const Text(

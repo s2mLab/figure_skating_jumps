@@ -56,25 +56,24 @@ class LocalDbService {
         table,
         object.toMap(),
         where: 'id = ?',
-        whereArgs: [object.id],
+        whereArgs: [object.id!],
         conflictAlgorithm: ConflictAlgorithm.rollback,
       ) ==
       1;
 
   Future<bool> deleteOne(AbstractLocalDbObject object, String table) async =>
-      await _database.delete(
-        table,
-        where: 'id = ?',
-        whereArgs: [object.id],
-      ) ==
+      await _database.delete(table, where: 'id = ?', whereArgs: [object.id!]) ==
       1;
 
-  Future<int> deleteWhere(String table, String column, String whereArg) async =>
+  Future<int> deleteWhere(String table, String column, Object whereArg) async =>
       await _database.delete(
         table,
         where: '$column = ?',
         whereArgs: [whereArg],
       );
+
+  Future<int> deleteAll(String table) async =>
+      await _database.delete(table, where: null);
 
   Future<List<Map<String, dynamic>>> readAll(String table) async =>
       await _database.query(table);

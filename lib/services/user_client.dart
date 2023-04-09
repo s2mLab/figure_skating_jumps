@@ -44,10 +44,7 @@ class UserClient {
     String uID = await _createUserInDb(
         email: email, password: password, userInfo: userInfo);
     _currentSkatingUser = userInfo;
-    if (ActiveSessionManager().activeSession == null ||
-        ActiveSessionManager().activeSession!.email != email) {
-      await ActiveSessionManager().saveActiveSession(email, password);
-    }
+    await ActiveSessionManager().saveActiveSession(email, password);
     return uID;
   }
 
@@ -68,10 +65,7 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
-      if (ActiveSessionManager().activeSession == null ||
-          ActiveSessionManager().activeSession?.email != email) {
-        await ActiveSessionManager().saveActiveSession(email, password);
-      }
+      await ActiveSessionManager().saveActiveSession(email, password);
 
       await DeviceNamesManager()
           .loadDeviceNames(_firebaseAuth.currentUser!.uid);
@@ -88,6 +82,7 @@ class UserClient {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      await ActiveSessionManager().clearActiveSession();
       _currentSkatingUser = null;
     } catch (e) {
       developer.log(e.toString());
@@ -155,6 +150,7 @@ class UserClient {
       {required String userID, required String password}) async {
     try {
       await _firebaseAuth.currentUser?.updatePassword(password);
+      await ActiveSessionManager().changeSessionPassword(password);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       // Should not reach this line but kept in to make sure the exception is handled
