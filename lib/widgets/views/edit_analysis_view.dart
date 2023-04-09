@@ -202,12 +202,12 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                 .updateJump(jump: j)
                                                 .then((value) {
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
+                                                  .showSnackBar(SnackBar(
                                                       duration:
-                                                          Duration(seconds: 2),
+                                                          const Duration(seconds: 2),
                                                       backgroundColor: confirm,
                                                       content: Text(
-                                                          savedModificationsSnack)));
+                                                          savedModificationsSnack, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)));
                                             });
                                           });
                                         },
