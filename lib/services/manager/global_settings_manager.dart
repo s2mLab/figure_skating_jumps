@@ -29,7 +29,7 @@ class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
     return _settings;
   }
 
-  Future<void> savePreferences(GlobalSettings settings) async {
+  Future<void> saveSettings(GlobalSettings settings) async {
     _settings = settings;
     _settings?.id = 1;
     bool alreadyExists = await LocalDbService()
@@ -40,7 +40,7 @@ class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
     }
   }
 
-  Future<void> loadPreferences() async {
+  Future<void> loadSettings() async {
     List<GlobalSettings> settingsList = constructObject(await LocalDbService()
         .readWhere(LocalDbService.globalSettingsTableName, 'id', '1'));
     if (settingsList.isNotEmpty) _settings = settingsList[0];
