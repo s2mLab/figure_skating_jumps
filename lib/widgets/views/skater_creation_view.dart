@@ -11,8 +11,10 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../../enums/user_role.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../buttons/ice_button.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet-topbar.dart';
 import '../layout/scaffold/topbar.dart';
 import '../prompts/instruction_prompt.dart';
 import '../titles/page_title.dart';
@@ -53,7 +55,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         drawerScrimColor: Colors.transparent,
         drawerEnableOpenDragGesture: false,

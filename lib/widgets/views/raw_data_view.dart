@@ -8,6 +8,8 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../utils/reactive_layout_helper.dart';
+import '../layout/scaffold/tablet-topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class RawDataView extends StatelessWidget {
@@ -16,7 +18,7 @@ class RawDataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isUserDebuggingFeature: true),
+      appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: true) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: true),
       drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
       drawerScrimColor: Colors.transparent,
       drawerEnableOpenDragGesture: false,

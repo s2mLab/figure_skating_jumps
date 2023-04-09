@@ -14,6 +14,9 @@ import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
+import '../../utils/reactive_layout_helper.dart';
+import '../layout/scaffold/tablet-topbar.dart';
+
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
@@ -54,7 +57,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     _loadData();
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),

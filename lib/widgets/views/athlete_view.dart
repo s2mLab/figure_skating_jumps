@@ -9,10 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/athlete_view/option_tab/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet-topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class AthleteView extends StatefulWidget {
@@ -34,7 +36,7 @@ class _AthleteViewState extends State<AthleteView> {
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
     _futureCaptures ??= skater?.loadCapturesData();
     return Scaffold(
-      appBar: const Topbar(isUserDebuggingFeature: false),
+      appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),

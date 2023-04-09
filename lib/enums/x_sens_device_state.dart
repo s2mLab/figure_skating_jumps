@@ -7,46 +7,39 @@ enum XSensDeviceState {
   disconnected(
       0,
       connectionStateMessageDisconnected,
-      connectedStyle,
       Colors.black,
       errorColor),
   connecting(
       1,
       connectionStateMessageConnecting,
-      connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
   connected(
       2,
       connectionStateMessageConnected,
-      connectedStyle,
       primaryColorLight,
       connectedXSensDotButtonIndicator),
   initialized(
       3,
       connectionStateMessageInitialized,
-      connectedStyle,
       primaryColorLight,
       connectedXSensDotButtonIndicator),
   reconnecting(
       4,
       connectionStateMessageReconnecting,
-      connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
   startReconnecting(
       5,
       connectionStateMessageReconnecting,
-      connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator);
 
-  const XSensDeviceState(this.state, this.message, this.style,
+  const XSensDeviceState(this.state, this.message,
       this.backgroundColor, this.foregroundColor);
 
   final int state;
   final String message;
-  final TextStyle style;
   final Color backgroundColor;
   final Color foregroundColor;
 }

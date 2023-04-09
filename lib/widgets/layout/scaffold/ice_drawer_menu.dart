@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/helper_dialog.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class IceDrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: topbarHeight),
+      padding: EdgeInsets.only(top: ReactiveLayoutHelper.isTablet() ? bigTopbarHeight : topbarHeight),
       child: Drawer(
         backgroundColor: isUserDebuggingFeature ? darkText : primaryColor,
         child: Column(
