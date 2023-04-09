@@ -90,9 +90,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                         color: primaryBackground,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(12)),
-                        boxShadow: [
-                          connectionShadow
-                        ],
+                        boxShadow: [connectionShadow],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -269,7 +267,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 });
               },
               validator: (value) {
-                return FieldValidators.newPassConfirmValidator(value, _coachPassword);
+                return FieldValidators.newPassConfirmValidator(
+                    value, _coachPassword);
               },
               decoration: const InputDecoration(
                 labelText: passConfirmSame,
@@ -314,8 +313,11 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
 
   Future<bool> _createAccount() async {
     try {
-      await UserClient().signUp(email: _coachEmail, password: _coachPassword,
-          userInfo: SkatingUser(_coachSurname, _coachName, UserRole.coach));
+      await UserClient().signUp(
+          email: _coachEmail,
+          password: _coachPassword,
+          userInfo: SkatingUser(
+              _coachSurname, _coachName, UserRole.coach, _coachEmail));
       return Future.value(true);
     } on Exception catch (e) {
       _errorStateMessage = e.toString();
