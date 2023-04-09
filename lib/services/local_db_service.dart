@@ -33,7 +33,7 @@ class LocalDbService {
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
       await db.execute(
-          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT);');
+          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY, email TEXT, password TEXT);');
       await db.execute(
           'CREATE TABLE $userPreferencesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, season TEXT);');
     });
