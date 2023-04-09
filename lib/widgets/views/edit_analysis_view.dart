@@ -52,14 +52,23 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Widget build(BuildContext context) {
     _loadVideoData();
     return Scaffold(
-        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet()
+            ? const TabletTopbar(isUserDebuggingFeature: false)
+                as PreferredSizeWidget
+            : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: SizedBox(
-          height: MediaQuery.of(context).size.height - topbarHeight,
+          height: MediaQuery.of(context).size.height -
+              (ReactiveLayoutHelper.isTablet()
+                  ? bigTopbarHeight
+                  : topbarHeight),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.isTablet()
+                    ? ReactiveLayoutHelper.getWidthFromFactor(24, true)
+                    : ReactiveLayoutHelper.getWidthFromFactor(24)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -87,12 +96,12 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           iceButtonSize: IceButtonSize.small)
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 24.0),
-                  child: InstructionPrompt(analysisDonePrompt, secondaryColor),
+                Padding(
+                  padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                  child: const InstructionPrompt(analysisDonePrompt, secondaryColor),
                 ),
                 Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                     child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
                 Row(
@@ -145,9 +154,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
                     child: _capture!.jumps.isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.only(top: 8.0),
-                            child: Center(child: Text(noJump)),
+                        ? Padding(
+                            padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                            child: Center(child: Text(noJump, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(8),

@@ -43,7 +43,7 @@ class CaptureListTile extends StatelessWidget {
               : BoxDecoration(
                   borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(8)),
                   color: cardBackground),
-          child: Column(
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(

@@ -65,7 +65,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height - topbarHeight,
+              height: MediaQuery.of(context).size.height - (ReactiveLayoutHelper.isTablet() ? bigTopbarHeight : topbarHeight),
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 color: primaryBackground,
