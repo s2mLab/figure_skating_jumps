@@ -138,7 +138,13 @@ object PermissionUtils {
         permissions: Array<String>,
         requestCode: Int = requiredBluetoothPermissionsRequestCode
     ) {
-        if (permissions.isEmpty()) return
+
+        if (permissions.isEmpty()) {
+            BluetoothPermissionStreamHandler.sendEvent(
+                true
+            )
+            return
+        }
 
         if (shouldShowPermissionDialog(activity, permissions)) {
             showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
