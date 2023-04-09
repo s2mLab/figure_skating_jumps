@@ -30,6 +30,8 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
   }
 
   Future<void> saveActiveSession(String email, String password) async {
+    if (ActiveSessionManager().activeSession != null &&
+        ActiveSessionManager().activeSession!.email == email) return;
     _activeSession = ActiveSession(id: 1, email: email, password: password);
     bool alreadyExists = await LocalDbService()
         .updateOne(_activeSession!, LocalDbService.activeSessionTableName);
@@ -43,5 +45,20 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     List<ActiveSession> sessions = constructObject(await LocalDbService()
         .readWhere(LocalDbService.activeSessionTableName, 'id', '1'));
     if (sessions.isNotEmpty) _activeSession = sessions[0];
+  }
+
+  Future<void> clearActiveSession() async {
+    if (_activeSession == null) return;
+    _activeSession?.id = 1;
+    await LocalDbService()
+        .deleteOne(_activeSession!, LocalDbService.activeSessionTableName);
+  }
+
+  Future<void> changeSessionPassword(String password) async {
+    if (_activeSession == null) return;
+    _activeSession =
+        ActiveSession(id: 1, email: _activeSession!.email, password: password);
+    await LocalDbService()
+        .updateOne(_activeSession!, LocalDbService.activeSessionTableName);
   }
 }

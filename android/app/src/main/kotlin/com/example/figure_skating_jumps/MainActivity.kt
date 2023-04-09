@@ -88,6 +88,7 @@ class MainActivity : FlutterActivity() {
 
     private fun handleBluetoothPermissionsCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            "managePermissions" -> PermissionUtils.manageBluetoothRequirements(this)
             else -> result.notImplemented()
         }
     }
@@ -134,8 +135,6 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun startScan(result: MethodChannel.Result) {
-        // TODO when modifying the bluetooth management permissions: There is a race condition right there
-        PermissionUtils.manageBluetoothRequirements(this)
         xSensDotDeviceScanner.startScan()
         result.success(null)
     }
@@ -146,7 +145,6 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
-        PermissionUtils.manageBluetoothRequirements(this)
         val address = call.argument<String>("address")
         if (address == null) {
             result.error(ErrorCodes.ArgNotSet.code, "address argument not set", null);
