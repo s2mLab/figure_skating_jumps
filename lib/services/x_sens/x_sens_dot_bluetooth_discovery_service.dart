@@ -18,16 +18,24 @@ class XSensDotBluetoothDiscoveryService
   static final List<BluetoothDevice> _devices = [];
   static final _xSensScanChannel =
       EventChannel(EventChannelNames.scanChannel.channelName);
+  static final _bluetoothEventChannel =
+      EventChannel(EventChannelNames.bluetoothChannel.channelName);
   static final _xSensScanMethodChannel =
       MethodChannel(MethodChannelNames.scanChannel.channelName);
+  static final _bluetoothMethodChannel =
+      MethodChannel(MethodChannelNames.bluetoothChannel.channelName);
   static const _scanRefreshRate = Duration(seconds: 30);
-  Timer? _scanTimer;
+  static Timer? _scanTimer;
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory XSensDotBluetoothDiscoveryService() {
     _xSensScanChannel.receiveBroadcastStream().listen((event) {
       _addDevice(event as String);
+    });
+
+    _bluetoothEventChannel.receiveBroadcastStream().listen((event) {
+      _handleBluetoothEvent(event as bool);
     });
     return _bluetoothDiscovery;
   }
@@ -41,6 +49,14 @@ class XSensDotBluetoothDiscoveryService
   }
 
   Future<void> scanDevices() async {
+    try {
+      await _bluetoothMethodChannel.invokeMethod('managePermissions');
+    } on PlatformException catch (e) {
+      debugPrint(e.message!);
+    }
+  }
+
+  static Future<void> _setUpScan() async {
     if (_scanTimer != null) {
       _scanTimer?.cancel();
     } else {
@@ -48,11 +64,11 @@ class XSensDotBluetoothDiscoveryService
     }
     _scanTimer = Timer.periodic(_scanRefreshRate, (_) {
       _devices.clear();
-      notifySubscribers(_devices);
+      XSensDotBluetoothDiscoveryService().notifySubscribers(_devices);
     });
   }
 
-  Future<void> _startScan() async {
+  static Future<void> _startScan() async {
     _devices.clear();
     try {
       await _xSensScanMethodChannel.invokeMethod('startScan');
@@ -61,11 +77,17 @@ class XSensDotBluetoothDiscoveryService
     }
   }
 
-  Future<void> _stopScan() async {
+  static Future<void> _stopScan() async {
     try {
       await _xSensScanMethodChannel.invokeMethod('stopScan');
     } on PlatformException catch (e) {
       debugPrint(e.message!);
+    }
+  }
+
+  static Future<void> _handleBluetoothEvent(bool bluetoothEvent) async {
+    if (bluetoothEvent) {
+      await _setUpScan();
     }
   }
 
