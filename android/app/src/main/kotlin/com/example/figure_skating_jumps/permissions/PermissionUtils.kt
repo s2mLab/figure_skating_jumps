@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.example.figure_skating_jumps.MainActivity
 import com.example.figure_skating_jumps.R
+import com.example.figure_skating_jumps.channels.event_channels.BluetoothPermissionStreamHandler
 
 
 object PermissionUtils {
@@ -41,7 +42,7 @@ object PermissionUtils {
     }
 
     fun handleBluetoothRequestResults(requestCode: Int, resultCode: Int, activity: MainActivity) {
-        if(requestCode != bluetoothEnableRequestCode) return
+        if (requestCode != bluetoothEnableRequestCode) return
         if (resultCode == RESULT_OK) {
             manageBluetoothPermissions(activity)
         } else {
@@ -56,19 +57,22 @@ object PermissionUtils {
         grantResults: IntArray,
         activity: Activity
     ) {
-        if (requestCode == requiredBluetoothPermissionsRequestCode) {
-            for ((i, perm) in permissions.withIndex()) {
-                Log.i(
-                    "Android",
-                    "Result for $perm - Granted: ${grantResults[i] == PackageManager.PERMISSION_GRANTED}"
-                )
-            }
-            if(grantResults.contains(PackageManager.PERMISSION_DENIED)){
-                if(shouldShowPermissionDialog(activity, permissions)){
-                    showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
-                    return
-                }
-            }
+        if (requestCode != requiredBluetoothPermissionsRequestCode) return
+        for ((i, perm) in permissions.withIndex()) {
+            Log.i(
+                "Android",
+                "Result for $perm - Granted: ${grantResults[i] == PackageManager.PERMISSION_GRANTED}"
+            )
+        }
+        val isAccepted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+        BluetoothPermissionStreamHandler.sendEvent(
+            isAccepted
+        )
+        if(isAccepted) return
+
+        Log.i("Android", "Permission request denied")
+        if(shouldShowPermissionDialog(activity, permissions)) {
+            showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
         }
     }
 
@@ -134,9 +138,9 @@ object PermissionUtils {
         permissions: Array<String>,
         requestCode: Int = requiredBluetoothPermissionsRequestCode
     ) {
-        if(permissions.isEmpty()) return
+        if (permissions.isEmpty()) return
 
-        if(shouldShowPermissionDialog(activity, permissions)){
+        if (shouldShowPermissionDialog(activity, permissions)) {
             showRequiredDialog(activity, buildPermissionMessage(activity, permissions))
             return
         }
@@ -148,18 +152,27 @@ object PermissionUtils {
         )
     }
 
-    private fun shouldShowPermissionDialog(activity: Activity, permissions: Array<out String>): Boolean {
+    private fun shouldShowPermissionDialog(
+        activity: Activity,
+        permissions: Array<out String>
+    ): Boolean {
         val shouldShowLocationDialog = shouldShowLocationDialog(activity, permissions)
         val shouldShowDeviceDialog = shouldShowDeviceDialog(activity, permissions)
         return shouldShowLocationDialog || shouldShowDeviceDialog
     }
 
-    private fun shouldShowLocationDialog(activity: Activity, permissions: Array<out String>): Boolean {
+    private fun shouldShowLocationDialog(
+        activity: Activity,
+        permissions: Array<out String>
+    ): Boolean {
         return permissions.contains(permission.ACCESS_FINE_LOCATION)
                 && activity.shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun shouldShowDeviceDialog(activity: Activity, permissions: Array<out String>): Boolean {
+    private fun shouldShowDeviceDialog(
+        activity: Activity,
+        permissions: Array<out String>
+    ): Boolean {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
             return (permissions.contains(permission.BLUETOOTH_SCAN)
                     && activity.shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN))
