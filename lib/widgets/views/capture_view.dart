@@ -194,7 +194,7 @@ class _CaptureViewState extends State<CaptureView>
                                 onChanged: (val) {
                                   setState(() {
                                     _selectedSeason = val!;
-                                    GlobalSettingsManager().savePreferences(
+                                    GlobalSettingsManager().saveSettings(
                                         GlobalSettings(
                                             season: _selectedSeason));
                                     XSensDotRecordingService.season =

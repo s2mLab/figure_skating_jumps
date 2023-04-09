@@ -46,7 +46,7 @@ Future<void> main() async {
         password: ActiveSessionManager().activeSession!.password);
   }
 
-  await GlobalSettingsManager().loadPreferences();
+  await GlobalSettingsManager().loadSettings();
 
   // prevent phone rotation
   SystemChrome.setPreferredOrientations([
