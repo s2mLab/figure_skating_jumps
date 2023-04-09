@@ -11,6 +11,7 @@ class LocalDbService {
 
   static const deviceNamesTableName = "deviceNames";
   static const localCapturesTableName = "localCaptures";
+  static const activeSessionTableName = "activeSession";
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -30,6 +31,8 @@ class LocalDbService {
           'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
+      await db.execute(
+          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY, email TEXT, password TEXT);');
     });
   }
 
@@ -50,25 +53,24 @@ class LocalDbService {
         table,
         object.toMap(),
         where: 'id = ?',
-        whereArgs: [object.id],
+        whereArgs: [object.id!],
         conflictAlgorithm: ConflictAlgorithm.rollback,
       ) ==
       1;
 
   Future<bool> deleteOne(AbstractLocalDbObject object, String table) async =>
-      await _database.delete(
-        table,
-        where: 'id = ?',
-        whereArgs: [object.id],
-      ) ==
+      await _database.delete(table, where: 'id = ?', whereArgs: [object.id!]) ==
       1;
 
-  Future<int> deleteWhere(String table, String column, String whereArg) async =>
+  Future<int> deleteWhere(String table, String column, Object whereArg) async =>
       await _database.delete(
         table,
         where: '$column = ?',
         whereArgs: [whereArg],
       );
+
+  Future<int> deleteAll(String table) async =>
+      await _database.delete(table, where: null);
 
   Future<List<Map<String, dynamic>>> readAll(String table) async =>
       await _database.query(table);
