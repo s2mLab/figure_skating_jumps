@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
@@ -94,10 +95,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0, top: 2.0),
+      padding: EdgeInsets.only(
+          left: ReactiveLayoutHelper.getWidthFromFactor(8),
+          right: ReactiveLayoutHelper.getWidthFromFactor(8),
+          bottom: ReactiveLayoutHelper.getHeightFromFactor(12),
+          top: ReactiveLayoutHelper.getHeightFromFactor(2)),
       child: Container(
-          height: 248,
+          height: ReactiveLayoutHelper.getHeightFromFactor(248),
           width: double.infinity,
           decoration: BoxDecoration(
             boxShadow: [connectionShadow],
@@ -157,7 +161,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                 return _temporalValuesDialog();
                               },
                             );
-                          }, // TODO: video preview
+                          },
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
@@ -174,7 +178,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   Widget _jumpModificationForm() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
       child: Column(
         children: [
           Row(
@@ -182,15 +186,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("$rotationDegrees${_j!.rotationDegrees.toStringAsFixed(3)}",
-                  style: TextStyle(fontSize: _labelFontSizeInPanel)),
+                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
               Row(
                 children: [
                   Text(
                     score,
-                    style: TextStyle(fontSize: _labelFontSizeInPanel),
+                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                     child: DropdownButton<int>(
                         selectedItemBuilder: (context) {
                           return jumpScores.map<Widget>((int item) {
@@ -198,14 +202,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             // Here custom text style, alignment and layout size can be applied
                             // to selected item string.
                             return Container(
-                              constraints: const BoxConstraints(minWidth: 50),
+                              constraints: BoxConstraints(minWidth: ReactiveLayoutHelper.getWidthFromFactor(50)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     item.toString(),
-                                    style: const TextStyle(
+                                    style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16),
                                         color: darkText,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -215,11 +220,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           }).toList();
                         },
                         value: _selectedScore,
-                        menuMaxHeight: 300,
+                        menuMaxHeight: ReactiveLayoutHelper.getWidthFromFactor(300),
                         items: List.generate(jumpScores.length, (index) {
                           return DropdownMenuItem<int>(
                             value: jumpScores[index],
-                            child: Text(jumpScores[index].toString()),
+                            child: Text(jumpScores[index].toString(), style: TextStyle(fontSize:ReactiveLayoutHelper.getHeightFromFactor(16))),
                           );
                         }),
                         onChanged: (val) {
@@ -260,13 +265,14 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             children: [
               Text(
                 turns,
-                style: TextStyle(fontSize: _labelFontSizeInPanel),
+                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: SizedBox(
-                    width: 120,
+                    width:ReactiveLayoutHelper.getWidthFromFactor(120),
                     child: TextFormField(
+                      style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                       autovalidateMode: AutovalidateMode.always,
                       keyboardType: TextInputType.number,
                       validator: (val) {
@@ -382,16 +388,19 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
                               text: notEnoughRotationComment,
                               onPressed: () {
-                                _commentController.text = notEnoughRotationComment;
+                                _commentController.text =
+                                    notEnoughRotationComment;
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
@@ -405,7 +414,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
                               text: stepOut,
@@ -414,7 +424,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
