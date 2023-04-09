@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class ReactiveLayoutHelper {
   static const double _expectedHeight = 890;
   static const double _expectedWidth = 411;
+  static const double extraEnglobingHorizontalPadding = 48;
+  static const double extraEnglobingVerticalPadding = 32;
   static double _screenHeight = 0;
   static double _screenWidth = 0;
 
@@ -21,18 +23,17 @@ class ReactiveLayoutHelper {
   static double getHeightFromFactor(double value,
       [bool isEnglobingPadding = false]) {
     return value * _screenHeight / _expectedHeight +
-        (isEnglobingPadding && isTablet() ? 32 : 0);
+        (isEnglobingPadding && isTablet() ? extraEnglobingVerticalPadding : 0);
   }
 
   static double getWidthFromFactor(double value,
       [bool isEnglobingPadding = false]) {
     return value * _screenWidth / _expectedWidth +
-        (isEnglobingPadding && isTablet() ? 48 : 0);
+        (isEnglobingPadding && isTablet() ? extraEnglobingHorizontalPadding : 0);
   }
 
   static void updateDimensions(BuildContext context) {
     _screenHeight = MediaQuery.of(context).size.height;
     _screenWidth = MediaQuery.of(context).size.width;
-    print('height:${_screenHeight}width:$_screenWidth');
   }
 }

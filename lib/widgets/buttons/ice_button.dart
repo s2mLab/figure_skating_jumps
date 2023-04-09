@@ -55,11 +55,11 @@ class IceButton extends StatelessWidget {
       shape: _iceButtonImportance == IceButtonImportance.secondaryAction
           ? RoundedRectangleBorder(
               side: BorderSide(width: 1, color: _color),
-              borderRadius: BorderRadius.circular(32))
+              borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(32)))
           : (_iceButtonImportance == IceButtonImportance.discreetAction
               ? null
               : RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32))),
+                  borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(32)))),
       onPressed: _onPressed,
       child: Text(
         _text,

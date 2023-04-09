@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../utils/reactive_layout_helper.dart';
 import '../../capture_list_tile.dart';
 import '../../legend_move.dart';
 
@@ -16,10 +17,10 @@ class CapturesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(margin: const EdgeInsets.all(8), child: const LegendMove()),
+        Container(margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)), child: const LegendMove()),
         Expanded(
             child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
           child: groupedCaptures.isEmpty
               ? const Center(
                   child: Text(noCapture),
@@ -34,14 +35,14 @@ class CapturesTab extends StatelessWidget {
                         children: [
                           Text(
                             key.replaceAll('-', '/'),
-                            style: const TextStyle(
-                                fontSize: 26,
+                            style: TextStyle(
+                                fontSize: ReactiveLayoutHelper.getHeightFromFactor(26),
                                 color: primaryColorLight,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                               height:
-                                  capturesToDisplay.length * heightContainer,
+                                  capturesToDisplay.length * ReactiveLayoutHelper.getHeightFromFactor(heightContainer),
                               child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: capturesToDisplay.length,

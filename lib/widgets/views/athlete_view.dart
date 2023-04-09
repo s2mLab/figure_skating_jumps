@@ -14,7 +14,7 @@ import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/athlete_view/option_tab/options_tab.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class AthleteView extends StatefulWidget {
@@ -40,63 +40,69 @@ class _AthleteViewState extends State<AthleteView> {
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child:
-                  PageTitle(text: '${skater!.firstName} ${skater!.lastName}')),
-          Center(
-              child: SlideSwitcher(
-            onSelect: (int index) => setState(() => _switcherIndex = index),
-            slidersColors: const [primaryBackground],
-            containerHeight: 40,
-            containerWight: 390,
-            indents: 2,
-            containerColor: primaryColorLight,
-            children: [
-              Text(capturesTab, style: tabStyle),
-              Text(progressionTab, style: tabStyle),
-              Text(optionsTab, style: tabStyle),
-            ],
-          )),
-          Expanded(
-            child: IndexedStack(
-              index: _switcherIndex,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8), vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16), bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+              child: PageTitle(text: '${skater!.firstName} ${skater!.lastName}'),
+            ),
+            Center(
+                child: SlideSwitcher(
+              onSelect: (int index) => setState(() => _switcherIndex = index),
+              slidersColors: const [primaryBackground],
+              containerHeight: ReactiveLayoutHelper.getHeightFromFactor(40),
+              containerWight: ReactiveLayoutHelper.getWidthFromFactor(390),
+              indents: 2,
+              containerColor: primaryColorLight,
               children: [
-                FutureBuilder(
-                  future: _futureCaptures,
-                  builder: _buildCapturesTab,
-                ),
-                FutureBuilder(
-                  future: _futureCaptures,
-                  builder: _buildProgressionTab,
-                ),
-                OptionsTab(athlete: skater!),
+                Text(capturesTab, style: tabStyle),
+                Text(progressionTab, style: tabStyle),
+                Text(optionsTab, style: tabStyle),
               ],
+            )),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getWidthFromFactor(8, true) : ReactiveLayoutHelper.getWidthFromFactor(8)),
+                child: IndexedStack(
+                  index: _switcherIndex,
+                  children: [
+                    FutureBuilder(
+                      future: _futureCaptures,
+                      builder: _buildCapturesTab,
+                    ),
+                    FutureBuilder(
+                      future: _futureCaptures,
+                      builder: _buildProgressionTab,
+                    ),
+                    OptionsTab(athlete: skater!),
+                  ],
+                ),
+              ),
             ),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, top: 4.0),
-              child: IceButton(
-                  elevation: 4.0,
-                  text: captureButton,
-                  onPressed: () {
-                    CaptureClient().capturingSkatingUser = skater!;
-                    Navigator.pushNamed(
-                      context,
-                      '/CaptureData'
-                    );
-                  },
-                  textColor: paleText,
-                  color: primaryColor,
-                  iceButtonImportance: IceButtonImportance.mainAction,
-                  iceButtonSize: IceButtonSize.large),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16), top: ReactiveLayoutHelper.getHeightFromFactor(4)),
+                child: IceButton(
+                    elevation: 4.0,
+                    text: captureButton,
+                    onPressed: () {
+                      CaptureClient().capturingSkatingUser = skater!;
+                      Navigator.pushNamed(
+                        context,
+                        '/CaptureData'
+                      );
+                    },
+                    textColor: paleText,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.mainAction,
+                    iceButtonSize: IceButtonSize.large),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

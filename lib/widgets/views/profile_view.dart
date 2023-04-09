@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 import '../../utils/reactive_layout_helper.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);

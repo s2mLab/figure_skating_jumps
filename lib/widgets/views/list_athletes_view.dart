@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
-import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet-topbar.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +95,10 @@ class _ListAthletesViewState extends State<ListAthletesView> {
       setState(() {});
     }
     return Scaffold(
-      appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
+      appBar: ReactiveLayoutHelper.isTablet()
+          ? const TabletTopbar(isUserDebuggingFeature: false)
+              as PreferredSizeWidget
+          : const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
@@ -106,7 +109,8 @@ class _ListAthletesViewState extends State<ListAthletesView> {
           child: Container(
               margin: EdgeInsets.symmetric(
                   vertical: ReactiveLayoutHelper.getHeightFromFactor(16),
-                  horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true)),
+                  horizontal:
+                      ReactiveLayoutHelper.getWidthFromFactor(16, true)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,7 +146,11 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                     _searchFocusChanged(
                                                         hasFocus),
                                                 child: TextField(
-                                                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          ReactiveLayoutHelper
+                                                              .getHeightFromFactor(
+                                                                  16)),
                                                   maxLength: _maxLengthSearch,
                                                   focusNode: _focusNode,
                                                   controller: _searchController,
@@ -192,8 +200,13 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                             ))
                           : _traineesToShow.isEmpty
                               ? Center(
-                                  child: Text(noAthletes,
-                                      textAlign: TextAlign.center, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
+                                  child: Text(
+                                  noAthletes,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)),
+                                ))
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {
@@ -265,9 +278,11 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                                           10)),
                                                           child: Text(
                                                             "${item.firstName} ${item.lastName}",
-                                                            style:
-                                                                TextStyle(
-                                                                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    ReactiveLayoutHelper
+                                                                        .getHeightFromFactor(
+                                                                            16)),
                                                           )));
                                                 },
                                               ))

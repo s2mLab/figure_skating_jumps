@@ -20,6 +20,7 @@ class IceDrawerMenu extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: ReactiveLayoutHelper.isTablet() ? bigTopbarHeight : topbarHeight),
       child: Drawer(
+        elevation: 0,
         backgroundColor: isUserDebuggingFeature ? darkText : primaryColor,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,77 +66,86 @@ class IceDrawerMenu extends StatelessWidget {
                       }),
                 ],
               )),
-              Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        NavMenuElement(
-                            text: rawDataDrawerTile,
-                            iconData: Icons.terminal,
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    NavMenuElement(
+                        text: rawDataDrawerTile,
+                        iconData: Icons.terminal,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RawDataView()),
+                          );
+                        }),
+                    Padding(
+                      padding: ReactiveLayoutHelper.isTablet() ? EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16), horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)) : const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const RawDataView()),
-                              );
-                            }),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const HelperDialog();
-                                });
-                          },
-                          icon: const Icon(Icons.help_outline),
-                          iconSize: 40,
-                          color: discreetText,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(math.pi),
-                                child: IconButton(
-                                  onPressed: () async {
-                                    await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return ConfirmCancelCustomDialog(
-                                              description: disconnect,
-                                              confirmAction: () async {
-                                                await UserClient().signOut();
-                                                if (context.mounted) {
-                                                  Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                          context,
-                                                          '/Login',
-                                                          (route) => false);
-                                                }
-                                              });
-                                        });
+                              Navigator.pop(context);
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const HelperDialog();
+                                  });
+                            },
+                            icon: const Icon(Icons.help_outline),
+                            iconSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(40) : 40,
+                            color: discreetText,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(16) : 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.rotationY(math.pi),
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return ConfirmCancelCustomDialog(
+                                                  description: disconnect,
+                                                  confirmAction: () async {
+                                                    await UserClient().signOut();
+                                                    if (context.mounted) {
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              '/Login',
+                                                              (route) => false);
+                                                    }
+                                                  });
+                                            });
+                                      },
+                                      icon: const Icon(Icons.logout),
+                                      iconSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(40) : 40,
+                                      color: errorColor,
+                                    )),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/ProfileView',
+                                    );
                                   },
-                                  icon: const Icon(Icons.logout),
-                                  iconSize: 40,
-                                  color: errorColor,
-                                )),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/ProfileView',
-                                );
-                              },
-                              icon: const Icon(Icons.account_circle),
-                              iconSize: 40,
-                              color: secondaryColor,
-                            )
-                          ],
-                        )
-                      ]))
+                                  icon: const Icon(Icons.account_circle),
+                                  iconSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(40) : 40,
+                                  color: secondaryColor,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ])
             ]),
       ),
     );

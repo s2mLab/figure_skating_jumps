@@ -88,7 +88,6 @@ class _ProgressionTabState extends State<ProgressionTab> {
             child: Column(
               children: [
                 _succeededJumpsGraphic(),
-                _percentageJumpsSucceededGraphic(),
                 _averageJumpDurationGraphic(),
               ],
             ),
@@ -137,35 +136,6 @@ class _ProgressionTabState extends State<ProgressionTab> {
     filteredCaptures.addAll(widget._captures);
     filteredCaptures.removeWhere((key, value) => value[0].season != s);
     return filteredCaptures;
-  }
-
-  Widget _percentageJumpsSucceededGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(maximum: 100, interval: 20),
-        // Chart title
-        title: ChartTitle(
-            text: percentageJumpsSucceededGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: [
-          LineSeries<ValueDatePair, String>(
-              color: secondaryColorDark,
-              dataSource: GraphicDataHelper.getPercentageSucceededGraphData(
-                  _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
-              name: percentageJumpsSucceededLegend)
-        ]);
   }
 
   Widget _averageJumpDurationGraphic() {
