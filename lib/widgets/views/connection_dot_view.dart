@@ -12,7 +12,7 @@ import '../../utils/reactive_layout_helper.dart';
 import '../buttons/ice_button.dart';
 import '../dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
 import '../layout/connection_dot_view/no_known_devices.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class ConnectionDotView extends StatefulWidget {

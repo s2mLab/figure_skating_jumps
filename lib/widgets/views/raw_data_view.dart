@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../utils/reactive_layout_helper.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class RawDataView extends StatelessWidget {

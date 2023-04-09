@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../enums/jump_type.dart';
+import '../../utils/reactive_layout_helper.dart';
 import 'color_circle.dart';
 
 class LegendMove extends StatelessWidget {
@@ -15,8 +16,8 @@ class LegendMove extends StatelessWidget {
             children: [
               ColorCircle(colorCircle: JumpType.values[index].color),
               Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(JumpType.values[index].abbreviation)),
+                  margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(5)),
+                  child: Text(JumpType.values[index].abbreviation, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
             ],
           );
         }));

@@ -13,8 +13,8 @@ BoxShadow connectionShadow = BoxShadow(
 
 
 const double promptTextHeight = 1.1;
-TextStyle tabStyle =
-    const TextStyle(color: primaryColorDark, fontWeight: FontWeight.bold);
+final TextStyle tabStyle =
+    TextStyle(color: primaryColorDark, fontWeight: FontWeight.bold, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16));
 
 final TextStyle connectingStyle = TextStyle(color: darkText, fontSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(16): 16);
 final TextStyle connectedStyle = TextStyle(color: connectedXSensDotButtonForeground, fontSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(16) : 16);

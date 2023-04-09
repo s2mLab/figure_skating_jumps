@@ -20,7 +20,7 @@ import '../layout/edit_analysis_view/jump_panel_content.dart';
 import '../layout/edit_analysis_view/jump_panel_header.dart';
 import '../layout/legend_move.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class EditAnalysisView extends StatefulWidget {

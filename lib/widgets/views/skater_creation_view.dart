@@ -14,7 +14,7 @@ import '../../enums/user_role.dart';
 import '../../utils/reactive_layout_helper.dart';
 import '../buttons/ice_button.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/tablet-topbar.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 import '../prompts/instruction_prompt.dart';
 import '../titles/page_title.dart';
