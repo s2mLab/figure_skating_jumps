@@ -101,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     child: Container(
                         margin: EdgeInsets.symmetric(
-                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16),
+                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true),
                             vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
                         child: Column(
                           children: [

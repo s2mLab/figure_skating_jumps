@@ -7,18 +7,27 @@ class ReactiveLayoutHelper {
   static double _screenWidth = 0;
 
   static double getScreenHeight() {
-   return _screenHeight;
- }
+    return _screenHeight;
+  }
+
   static double getScreenWidth() {
     return _screenWidth;
   }
 
-  static double getHeightFromFactor(double value) {
-    return value * _screenHeight / _expectedHeight;
+  static bool isTablet() {
+    return _screenHeight > _expectedHeight + 200 && _screenWidth > _expectedWidth + 200;
   }
 
-  static double getWidthFromFactor(double value) {
-    return value * _screenWidth / _expectedWidth;
+  static double getHeightFromFactor(double value,
+      [bool isEnglobingPadding = false]) {
+    return value * _screenHeight / _expectedHeight +
+        (isEnglobingPadding && isTablet() ? 32 : 0);
+  }
+
+  static double getWidthFromFactor(double value,
+      [bool isEnglobingPadding = false]) {
+    return value * _screenWidth / _expectedWidth +
+        (isEnglobingPadding && isTablet() ? 48 : 0);
   }
 
   static void updateDimensions(BuildContext context) {

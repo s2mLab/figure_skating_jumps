@@ -14,11 +14,13 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_size.dart';
 import '../../models/capture.dart';
 import '../../models/jump.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../layout/capture_list_tile.dart';
 import '../layout/edit_analysis_view/jump_panel_content.dart';
 import '../layout/edit_analysis_view/jump_panel_header.dart';
 import '../layout/legend_move.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet-topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class EditAnalysisView extends StatefulWidget {
@@ -50,7 +52,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Widget build(BuildContext context) {
     _loadVideoData();
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
