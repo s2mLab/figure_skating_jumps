@@ -1,33 +1,34 @@
 import 'package:collection/collection.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 
-import 'db_models/device_name.dart';
+import 'db_models/abstract_local_db_object.dart';
 
-class BluetoothDevice {
-  late final String _name;
+class BluetoothDevice extends AbstractLocalDbObject {
+  late final String _userId;
   late final String _macAddress;
-  late String _assignedName;
+  late String _name;
 
-  String get name {
-    return _name;
+  String get userId {
+    return _userId;
   }
 
   String get macAddress {
     return _macAddress;
   }
 
-  String get assignedName {
-    return _assignedName;
+  String get name {
+    return _name;
   }
 
-  set assignedName(String val) {
+  set name(String val) {
     if (val.isNotEmpty) {
-      _assignedName = val;
-      DeviceNamesManager().changeName(val, this);
+      _name = val;
+      BluetoothDeviceManager().updateDevice(this);
     }
   }
 
-  BluetoothDevice(String macAddress, String name) {
+  BluetoothDevice({required String macAddress, required String userId, String name = "XSens Dot", int? id}) {
     name.trim().isEmpty
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_name'])
@@ -36,8 +37,9 @@ class BluetoothDevice {
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_macAddress'])
         : _macAddress = macAddress;
-    DeviceName? savedDevice = DeviceNamesManager().deviceNames.firstWhereOrNull((el) => el.deviceMacAddress == _macAddress);
-    _assignedName = savedDevice == null ? _name : savedDevice.name;
+    BluetoothDevice? savedDevice = BluetoothDeviceManager().devices.firstWhereOrNull((el) => el.macAddress == _macAddress);
+    _name = savedDevice?._name ?? "XSens Dot";
+    this.id = id;
   }
 
   factory BluetoothDevice.fromEvent(String event) {
@@ -46,12 +48,26 @@ class BluetoothDevice {
       throw ArgumentError(
           ['Can\'t create class with wrong format', 'event']);
     }
-    return BluetoothDevice(splitEvent.first, splitEvent.last);
+    return BluetoothDevice(macAddress: splitEvent.first, userId: UserClient().currentSkatingUser!.uID!, name: splitEvent.last);
   }
 
   BluetoothDevice.deepClone(BluetoothDevice toBeDeepClonedDevice) {
-    _name = toBeDeepClonedDevice.name;
+    _userId = toBeDeepClonedDevice.userId;
     _macAddress = toBeDeepClonedDevice.macAddress;
-    _assignedName = toBeDeepClonedDevice.assignedName;
+    _name = toBeDeepClonedDevice.name;
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'userID': _userId,
+      'macAddress': _macAddress,
+      'name': name,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'BluetoothDevice{id: $id, userID: $_userId, name: $_name, deviceMacAddress: $_macAddress}';
   }
 }
