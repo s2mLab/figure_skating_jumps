@@ -14,6 +14,23 @@ const String competitionSeasonLabel = "Compétition";
 const String transitionSeasonLabel = "Transition";
 const String sharpeningSeasonLabel = "Affûtage";
 
+// enums/helper_subject.dart
+const String connectDotTitle = "Connecter un senseur";
+const String connectDotDescription =
+    "Pour connecter un XSens Dot, assurez-vous que la batterie soit pleine, cliquez sur la barre de statut du senseur ou le bouton suivant.\n\nVous pourrez ainsi connecter un XSens Dot déjà enregistré ou un nouvel appareil avec le bouton au bas de la page.";
+const String addSkaterTitle = "Ajouter un patineur";
+const String addSkaterDescription =
+    "Vous pouvez ajouter un athlète à votre liste avec le courriel du compte athlète.\n\nDans le cas où un athlète n'a pas de compte, l'entraineur doit créer un compte pour celui-ci. Lors de la première connexion de l'athlète, celui-ci pourra réinitialiser son mot de passe.";
+const String skaterInfoTitle = "Qui a accès à mes informations";
+const String skaterDescription =
+    "Vous pouvez voir la liste des entraineurs en consultant votre profil avec le bouton suivant.\n\nCes entraineurs peuvent consulter les captures et les rétroactions de chaque acquisition faite. Cependant, les vidéos ne sont accessibles que sur l'appareil utilisé.";
+const String modificationInfoTitle = "Modifier mes informations";
+const String modificationDescription =
+    "En cliquant sur le bouton suivant, vous accèderez à votre profil. Vous pourrez ainsi modifier votre nom, prénom et mot de passe.";
+const String newAcquisitionTitle = "Prendre une nouvelle capture";
+const String newAcquisitionDescription =
+    "Afin de prendre une nouvelle capture, il suffit de cliquer sur le bouton \"Capturer\" de la liste des captures. Si le support vidéo n'est pas activé, il est possible de l'activer dans les paramètres du téléphone dans les permissions d'application.";
+
 // widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
 const String firstNameField = "Prénom: ";
