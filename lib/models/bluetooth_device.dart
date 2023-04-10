@@ -13,6 +13,12 @@ class BluetoothDevice extends AbstractLocalDbObject {
     return _userId;
   }
 
+  set userId(String val) {
+    if (val.isNotEmpty) {
+      _userId = val;
+    }
+  }
+
   String get macAddress {
     return _macAddress;
   }
@@ -37,8 +43,7 @@ class BluetoothDevice extends AbstractLocalDbObject {
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_macAddress'])
         : _macAddress = macAddress;
-    BluetoothDevice? savedDevice = BluetoothDeviceManager().devices.firstWhereOrNull((el) => el.macAddress == _macAddress);
-    _name = savedDevice?._name ?? "XSens Dot";
+    _userId = userId;
     this.id = id;
   }
 
@@ -60,7 +65,7 @@ class BluetoothDevice extends AbstractLocalDbObject {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'userID': _userId,
+      'userId': _userId,
       'macAddress': _macAddress,
       'name': name,
     };
@@ -68,6 +73,6 @@ class BluetoothDevice extends AbstractLocalDbObject {
 
   @override
   String toString() {
-    return 'BluetoothDevice{id: $id, userID: $_userId, name: $_name, deviceMacAddress: $_macAddress}';
+    return 'BluetoothDevice{id: $id, userId: $_userId, name: $_name, deviceMacAddress: $_macAddress}';
   }
 }

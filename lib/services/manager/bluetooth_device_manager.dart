@@ -26,9 +26,9 @@ class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
     return List.generate(objMaps.length, (i) {
       return BluetoothDevice(
         id: objMaps[i]['id'],
-        userId: objMaps[i]['userID'],
-        macAddress: objMaps[i]['deviceMacAddress'],
-        name: objMaps[i]['customName'] ?? "",
+        userId: objMaps[i]['userId'],
+        macAddress: objMaps[i]['macAddress'],
+        name: objMaps[i]['name'],
       );
     });
   }

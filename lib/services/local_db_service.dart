@@ -29,7 +29,7 @@ class LocalDbService {
         version: 1, join(await getDatabasesPath(), _databaseName),
         onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE $bluetoothDeviceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
+          'CREATE TABLE $bluetoothDeviceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userId TEXT, macAddress TEXT, name TEXT);');
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
       await db.execute(

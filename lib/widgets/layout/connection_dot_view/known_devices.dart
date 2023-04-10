@@ -210,8 +210,7 @@ class _KnownDevicesState extends State<KnownDevices>
     if (_knownDevices.length != BluetoothDeviceManager().devices.length) {
       _knownDevices.clear();
       _knownDevices.addAll(BluetoothDeviceManager()
-          .devices
-          .map((name) => BluetoothDevice(macAddress: name.macAddress, userId: UserClient().currentSkatingUser!.uID!, name: name.name)));
+          .devices);
       _updateDeviceLists();
     }
   }
