@@ -4,8 +4,10 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
+import 'package:figure_skating_jumps/models/db_models/global_settings.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/manager/global_settings_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -46,7 +48,8 @@ class _CaptureViewState extends State<CaptureView>
   RecorderState _lastState = RecorderState.idle;
   bool _isFullscreen = false;
   bool _isCameraActivated = true;
-  Season _selectedSeason = XSensDotRecordingService.season;
+  Season _selectedSeason = GlobalSettingsManager().settings?.season ??
+      XSensDotRecordingService.season;
 
   @override
   void initState() {
@@ -196,6 +199,9 @@ class _CaptureViewState extends State<CaptureView>
                                 onChanged: (val) {
                                   setState(() {
                                     _selectedSeason = val!;
+                                    GlobalSettingsManager().saveSettings(
+                                        GlobalSettings(
+                                            season: _selectedSeason));
                                     XSensDotRecordingService.season =
                                         _selectedSeason;
                                   });
