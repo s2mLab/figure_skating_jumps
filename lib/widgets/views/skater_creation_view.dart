@@ -80,7 +80,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                       child: PageTitle(text: addASkaterTitle),
                     ),
                     const InstructionPrompt(
-                        createAthleteExplainPrompt, secondaryColor),
+                        createAthleteExplainInfo, secondaryColor),
                     Expanded(
                       child: Column(children: [
                         Form(
@@ -102,7 +102,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                       value);
                                 },
                                 decoration: const InputDecoration(
-                                  labelText: surname,
+                                  labelText: surnameField,
                                   labelStyle: TextStyle(
                                       fontSize: 16, color: discreetText),
                                 ),
@@ -122,7 +122,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                       value);
                                 },
                                 decoration: const InputDecoration(
-                                  labelText: name,
+                                  labelText: nameField,
                                   labelStyle: TextStyle(
                                       fontSize: 16, color: discreetText),
                                 ),
@@ -142,7 +142,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                       value);
                                 },
                                 decoration: const InputDecoration(
-                                  labelText: email,
+                                  labelText: emailField,
                                   labelStyle: TextStyle(
                                       fontSize: 16, color: discreetText),
                                 ),
@@ -161,11 +161,11 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                   const Padding(
                                     padding: EdgeInsets.only(bottom: 16.0),
                                     child: InstructionPrompt(
-                                        warnAccountTypeChange,
+                                        warnAccountTypeChangeInfo,
                                         primaryColorLight),
                                   ),
                                 IceButton(
-                                    text: createAccount,
+                                    text: createAccountButton,
                                     onPressed: () async {
                                       String coachId =
                                           UserClient().currentSkatingUser!.uID!;
@@ -228,8 +228,8 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         skatingUserUID == null
-                            ? athleteAlreadyInList
-                            : athleteAlreadyExists,
+                            ? athleteAlreadyInListInfo
+                            : athleteAlreadyExistsInfo,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),

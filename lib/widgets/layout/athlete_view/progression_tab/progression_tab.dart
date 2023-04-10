@@ -36,7 +36,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
             children: [
               const Padding(
                   padding: EdgeInsets.only(right: 8.0),
-                  child: Text(selectSeasonPrompt)),
+                  child: Text(selectSeasonLabel)),
               DropdownButton<Season>(
                   selectedItemBuilder: (context) {
                     List<Season?> filters = <Season?>[null] + Season.values;

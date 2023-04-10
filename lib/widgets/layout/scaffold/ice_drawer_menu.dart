@@ -46,7 +46,7 @@ class IceDrawerMenu extends StatelessWidget {
                         );
                       }),
                   NavMenuElement(
-                      text: Title,
+                      text: captureViewStartLabel,
                       iconData: Icons.history,
                       onPressed: () {
                         Navigator.pushNamed(context, '/Acquisitions',

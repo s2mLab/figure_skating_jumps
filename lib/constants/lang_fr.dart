@@ -140,22 +140,22 @@ const String noCoachesInfo = "Aucun entraineur ne peut voir votre profil.";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";
-const String warnRawDataPrompt =
+const String warnRawDataPromptInfo =
     "Cette page n'a pas pour but de fournir des données compréhensibles. Avant tout, elle vise à permettre de constater les données en temps réel de l'appareil connecté à des fins de recherche ou de débogage.";
 
 // widgets/screens/login_view
 const String loginTitle = "Connexion";
 const String connectionButton = "Connexion";
 const String connectingButton = "Connexion...";
-const String connectionImpossible = "Connexion impossible";
-const String createAccount = "Créer un compte";
+const String connectionImpossibleLabel = "Connexion impossible";
+const String createAccountButton = "Créer un compte";
 const String forgotPasswordButton = "Mot de passe oublié?";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";
-const String forgotPasswordToast =
+const String forgotPasswordInfo =
     "Si ce courriel existe, vous recevrez un email dans un court délai.";
-const String sendEmailButtonText = "Envoyer un courriel";
+const String sendEmailButton = "Envoyer un courriel";
 
 // widgets/screens/acquisitions_view
 const String capturesTab = "Captures";
@@ -164,86 +164,86 @@ const String optionsTab = "Options";
 
 // widgets/screens/list_athletes_view
 const String listAthletesTitle = "Mes athlètes";
-const String noAthletes =
+const String noAthletesInfo =
     "Vous n'avez pas d'athlètes dans votre liste.\n\nAppuyer sur le bouton en bas pour ajouter un athlète.";
 
 // widgets/screens/athletes_view
 const String captureButton = "Capturer";
 
 // widgets/screens/edit_analysis_view
-const String seeVideoAgain = "Revoir la vidéo";
-const String detectedJumps = "Sauts enregistrés";
+const String seeVideoAgainButton = "Revoir la vidéo";
+const String detectedJumpsTitle = "Sauts enregistrés";
 const String editAnalysisPageTitle = "Analyse";
-const String analysisDonePrompt =
+const String analysisDoneInfo =
     "L'analyse est terminée. Vous pouvez catégoriser les sauts et donner des rétroactions au besoin.";
-const String addAJump = "Ajouter un saut";
-const String noJump = "Aucun saut n'a été détecté dans cette capture.";
+const String addAJumpButton = "Ajouter un saut";
+const String noJumpInfo = "Aucun saut n'a été détecté dans cette capture.";
 
 // widgets/screens/capture_view
-const String savingToMemory = "Sauvegarde en mémoire";
-const String captureViewTitle = "Commencer une capture";
-const String captureViewStart = "Commencer une capture";
-const String selectSeasonPrompt = "Choisir la saison";
-const String captureViewInstructions =
+const String savingToMemoryLabel = "Sauvegarde en mémoire";
+const String captureViewStartLabel = "Commencer une capture";
+const String selectSeasonLabel = "Choisir la saison";
+const String captureViewInfo =
     "Cette page permet de commencer une capture pour l’athlète sélectionné.";
-const String captureViewCameraInstruction =
+const String captureViewCameraInfo =
     "Une capture sans caméra se contente de communiquer avec le XSens Dot sans prise vidéo.";
-const String captureViewCameraSwitchPrompt = "Caméra activée ?";
-const String stopCapture = "Arrêter la capture";
-const String exportingData = "Enregistrement des données...";
-const String analyzingData = "Analyse des données...";
+const String captureViewCameraSwitchLabel = "Caméra activée ?";
+const String stopCaptureButton = "Arrêter la capture";
+const String exportingDataLabel = "Enregistrement des données...";
+const String analyzingDataLabel = "Analyse des données...";
 
 // widgets/dialog/capture/start_recording_dialog
-const String captureStartingPrompt = "Démarrage...";
-const String erasingDataPrompt = "Suppression des données en cours...";
-const String errorCaptureStartingPrompt = "Erreur lors du démarrage";
-const String memoryErrorMessage =
+const String captureStartingLabel = "Démarrage...";
+const String erasingDataLabel = "Suppression des données en cours...";
+const String errorCaptureStartingLabel = "Erreur lors du démarrage";
+const String memoryErrorInfo =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
 const String emptyMemoryButton = "Vider la mémoire";
 
 // widgets/dialog/capture/start_recording_dialog
-const String connectXSensDot = "Connecter un appareil XSens DOT";
-const String noDeviceErrorMessage =
+const String connectXSensDotButton = "Connecter un appareil XSens DOT";
+const String noDeviceErrorInfo =
     "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
 
 // widgets/dialog/capture/no_camera_recording_dialog
-const String recordingPrompt = "Collecte de donnée en cours...";
+const String recordingLabel = "Collecte de donnée en cours...";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
-const String ifNotAnAthletePrompt =
+const String ifNotAnAthleteInfo =
     "Si vous êtes un athlète, vous devez demander à votre entraîneur de vous créer un compte.";
 const String pleaseFillField = "Veuillez remplir ce champ.";
-const String reduceCharacter = "Réduire le nombre de caractères (max 255).";
-const String surname = "Prénom";
-const String name = "Nom";
-const String password = "Mot de passe";
-const String passConfirmSame = "Confirmation mot de passe";
-const String email = "Adresse courriel";
-const String invalidDigitFormat = "Format de nombre incorrect.";
-const String invalidEmailFormat =
+const String reduceCharacterLabel =
+    "Réduire le nombre de caractères (max 255).";
+const String surnameField = "Prénom";
+const String nameField = "Nom";
+const String passwordLabel = "Mot de passe";
+const String passConfirmSameLabel = "Confirmation mot de passe";
+const String emailField = "Adresse courriel";
+const String invalidDigitFormatLabel = "Format de nombre incorrect.";
+const String invalidEmailFormatLabel =
     'L\'adresse courriel n\'est pas de format valide.';
-const String alreadyHaveAccount = "J'ai déjà un compte";
-const String addCharacters =
+const String alreadyHaveAccountButton = "J'ai déjà un compte";
+const String addCharactersLabel =
     "Le mot de passe doit comporter au moins 10 caractères.";
-const String passwordMismatch = "Les mots de passe sont différents.";
-const String confirmCreateCoachAccount = "Créer le compte";
-const String accountCreationError = "Erreur de création de compte";
-const String tryLater = 'Veuillez réessayer plus tard.';
+const String passwordMismatchLabel = "Les mots de passe sont différents.";
+const String confirmCreateCoachAccountButton = "Créer le compte";
+const String accountCreationErrorLabel = "Erreur de création de compte";
+const String tryLaterLabel = 'Veuillez réessayer plus tard.';
 
 // widgets/screens/missing_permissions_view
-const String pleaseActivatePermissions =
+const String pleaseActivatePermissionsInfo =
     "Veuillez activer les permissions dans vos paramètres, puis redémarrer l'application. Si cela ne fonctionne pas, veuillez réinstaller l'application.";
 
 // widgets/screens/skater_creation_view
-const String createAthleteExplainPrompt =
+const String createAthleteExplainInfo =
     "L'athlète devra lui-même confirmer son courriel puis pourra choisir son mot de passe à la première connexion. Il sera ensuite disponible dans votre liste d'athlètes.";
 const String addASkaterTitle = "Ajouter un patineur";
-const String warnAccountTypeChange =
+const String warnAccountTypeChangeInfo =
     "Ajouter un patineur convertira votre compte en compte entraîneur.";
-const String athleteAlreadyExists =
+const String athleteAlreadyExistsInfo =
     "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
-const String athleteAlreadyInList = "Cet athète est déjà dans votre liste.";
+const String athleteAlreadyInListInfo = "Cet athète est déjà dans votre liste.";
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";

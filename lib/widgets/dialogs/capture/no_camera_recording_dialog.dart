@@ -7,14 +7,13 @@ import '../../../enums/ice_button_size.dart';
 import '../../buttons/ice_button.dart';
 
 class NoCameraRecordingDialog extends StatelessWidget {
-
   const NoCameraRecordingDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: const Text(
-        recordingPrompt,
+        recordingLabel,
         textAlign: TextAlign.center,
       ),
       children: [
@@ -31,7 +30,7 @@ class NoCameraRecordingDialog extends StatelessWidget {
                   )),
             ),
             IceButton(
-                text: stopCapture,
+                text: stopCaptureButton,
                 onPressed: () {
                   Navigator.pop(context);
                 },
