@@ -10,34 +10,35 @@ const String noneLabel = "Aucun";
 
 // enums/season
 const String preparationSeasonLabel = "Préparation";
-const String competitionSeason = "Compétition";
-const String transitionSeason = "Transition";
-const String sharpeningSeason = "Affûtage";
+const String competitionSeasonLabel = "Compétition";
+const String transitionSeasonLabel = "Transition";
+const String sharpeningSeasonLabel = "Affûtage";
 
 // widgets/dialogs/modify_full_name
 const String modificationTitle = "Modification";
-const String firstName = "Prénom: ";
-const String lastName = "Nom: ";
-const String modifyLabel = "Modifier";
+const String firstNameField = "Prénom: ";
+const String lastNameField = "Nom: ";
+const String modifyButton = "Modifier";
 
 // widgets/dialogs/modify_password
 const String helperTitle = "Page d'aide";
-const String redirect = "Me diriger sur la page";
+const String redirectButton = "Me diriger sur la page";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
-const String passwordInput = "Mot de passe: ";
-const String passwordConfirmationInput = "Confirmation mot de passe: ";
+const String passwordField = "Mot de passe: ";
+const String passwordConfirmationField = "Confirmation mot de passe: ";
 
 // widgets/button/x_sens_dot_connection_button
-const String connectionStateMessageConnected = "XSens DOT connecté";
-const String connectionStateMessageInitialized = "XSens DOT prêt";
-const String connectionStateMessageConnecting = "Tentative de connexion";
-const String connectionStateMessageReconnecting = "Tentative de reconnexion";
-const String connectionStateMessageDisconnected = "XSens DOT déconnecté";
+const String connectionStateMessageConnectedLabel = "XSens DOT connecté";
+const String connectionStateMessageInitializedLabel = "XSens DOT prêt";
+const String connectionStateMessageConnectingLabel = "Tentative de connexion";
+const String connectionStateMessageReconnectingLabel =
+    "Tentative de reconnexion";
+const String connectionStateMessageDisconnectedLabel = "XSens DOT déconnecté";
 
 // widgets/layout/athlete_view/capture_tab
-const String noCapture = "Aucune capture n'a été faite sur ce profil.";
+const String noCaptureInfo = "Aucune capture n'a été faite sur ce profil.";
 
 // widgets/layout/athlete_view/progression_tab/progression_tab
 const String succeededJumpsGraphicTitle = "Score moyen par saut dans le temps";
@@ -49,82 +50,83 @@ const String averageJumpDurationGraphicTitle =
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
 // widgets/layout/options_tab/options_tab
-const String confirmAthleteRemoval = "Confirmer le retrait";
-const String removeThisAthlete = "Enlever cet athlète";
-const String noOptionsAvailable = "Aucune option disponible pour le moment.";
+const String confirmAthleteRemovalButton = "Confirmer le retrait";
+const String removeThisAthleteButton = "Enlever cet athlète";
+const String noOptionsAvailableInfo =
+    "Aucune option disponible pour le moment.";
 
 // widgets/layout/dot_connected
-const String myDevices = "Mes appareils";
-const String knownDevicesNear = "Appareils connus à proximité";
-const String connectedDevice = "Appareil connecté";
+const String myDevicesTitle = "Mes appareils";
+const String knownDevicesNearTitle = "Appareils connus à proximité";
+const String connectedDeviceTitle = "Appareil connecté";
 
 // widgets/layout/no_dot_connected
-const String noConnectionMessage =
+const String noConnectionInfo =
     "Zut! il semblerait que vous n'ayez pas encore associé un appareil XSens DOT. Tapoter le bouton ci-dessous pour commencer.";
 
 // widgets/layout/ice_drawer_menu
 const String rawDataDrawerTile = "Données brutes";
 const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
-const String myAcquisitions = "Mes acquisitions";
-const String disconnect = "Voulez-vous vraiment vous déconnecter?";
-const String myAthletes = "Mes athlètes";
+const String myAcquisitionsTitle = "Mes acquisitions";
+const String disconnectLabel = "Voulez-vous vraiment vous déconnecter?";
+const String myAthletesTitle = "Mes athlètes";
 
 // widgets/dialogs/modification_info_dialog
 const String modificationInfoDialogTitle =
     "Journal de modification pour cette capture";
 
 // widgets/dialogs/connection_new_xsens_dot_dialog
-const String bluetoothAuthorizationPrompt =
+const String bluetoothAuthorizationPromptInfo =
     'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';
 const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
-const String completePairing = "Compléter le jumelage";
-const String verifyConnectivity = "Vérifier la réception du capteur";
-const String connectionErrorMessage =
+const String completePairingButton = "Compléter le jumelage";
+const String verifyConnectivityLabel = "Vérifier la réception du capteur";
+const String connectionErrorLabel =
     "Erreur lors de la connexion à l'appareil: ";
 
 // widgets/layout/configure_x_sens_dot_dialog
-const String forgetDevice = "Oublier";
-const String disconnectDevice = "Déconnecter";
-const String connectDevice = "Connecter";
+const String forgetDeviceButton = "Oublier";
+const String disconnectDeviceButton = "Déconnecter";
+const String connectDeviceButton = "Connecter";
 
 // widgets/layout/edit_analysis_view/jump_panel_header
-const String jumpType = "Type";
-const String savedModificationsSnack = "Modification enregistrée!";
+const String jumpTypeLabel = "Type";
+const String savedModificationsSnackInfo = "Modification enregistrée!";
 
 // widgets/layout/edit_analysis_view/jump_panel_content
-const String deleteAJump = "Supprimer le saut";
-const String confirmDelete =
+const String deleteAJumpButton = "Supprimer le saut";
+const String confirmDeleteInfo =
     "Cette action est irréversible, voulez-vous continuer?";
 const String deleteJumpDialogTitle = "Suppression d'un saut";
 const String commentDialogTitle = "Voir ou modifier un commentaire";
-const String howToComment =
+const String howToCommentInfo =
     "Vous pouvez ici inscrire un commentaire personnalisé sur le saut.";
-const String editTemporalValues = "Métriques avancées";
-const String rotationDegrees = "Degrés ";
+const String editTemporalValuesButton = "Métriques avancées";
+const String rotationDegreesField = "Degrés ";
 const String metricsDialogTitle = "Voir ou modifier les métriques avancées";
-const String advancedMetricsPrompt =
+const String advancedMetricsPromptInfo =
     "La modification de ces données ne devrait être faite que si vous êtes certains de ce que vous faites.";
-const String irreversibleDataModification =
+const String irreversibleDataModificationInfo =
     "Les données précédentes seront perdues lors de l'enregistrement.";
-const String turns = "Nombre de tours: ";
-const String score = "Score";
-const String durationLabel = "Durée";
-const String startTimeLabel = "Début";
+const String turnsField = "Nombre de tours: ";
+const String scoreField = "Score";
+const String durationField = "Durée";
+const String startTimeField = "Début";
 const String maxSpeedLabel = "Vitesse atteinte";
 const String timeToMaxSpeedLabel = "Temps avant vitesse max.";
-const String reorderJumpList = "Réordonner la liste";
+const String reorderJumpListButton = "Réordonner la liste";
 const String fallComment = "Chute";
 const String notEnoughRotationComment = "Manque de rotation";
 const String goodJobComment = "Bien fait";
-const String stepOut = "Step out";
-const String chooseBelowComments =
+const String stepOutComment = "Step out";
+const String chooseBelowCommentsLabel =
     "Ou choisir parmi les commentaires suivants:";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
-const String connectNewXSensDot = "Connecter un appareil XSens DOT";
-const String noData = "Aucune donnée n'a été collectée";
+const String connectNewXSensDotButton = "Connecter un appareil XSens DOT";
+const String noDataLabel = "Aucune donnée n'a été collectée";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
 const String secondFastLineName = "Y";
@@ -132,9 +134,9 @@ const String lastFastLineName = "Z";
 
 // widgets/screens/profile_view
 const String profileTitle = "Compte";
-const String modifyPassword = "Modifier le mot de passe";
-const String listCoaches = "Liste de mes entraineurs";
-const String noCoaches = "Aucun entraineur ne peut voir votre profil.";
+const String modifyPasswordButton = "Modifier le mot de passe";
+const String listCoachesTitle = "Liste de mes entraineurs";
+const String noCoachesInfo = "Aucun entraineur ne peut voir votre profil.";
 
 // widgets/screens/raw_data_view
 const String rawDataTitle = "Données brutes XSens DOT";

@@ -106,8 +106,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       children: [
         const Padding(
           padding: EdgeInsets.all(16.0),
-          child:
-              InstructionPrompt(bluetoothAuthorizationPrompt, secondaryColor),
+          child: InstructionPrompt(
+              bluetoothAuthorizationPromptInfo, secondaryColor),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -177,7 +177,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt(verifyConnectivity, secondaryColor),
+          child: InstructionPrompt(verifyConnectivityLabel, secondaryColor),
         ),
         Expanded(
           child: _streamedData.isNotEmpty
@@ -233,14 +233,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     ])
               : const Center(
                   child: Text(
-                  noData,
+                  noDataLabel,
                   style: TextStyle(fontFamily: 'Jost'),
                 )),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
-              text: completePairing,
+              text: completePairingButton,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 if (mounted) {
@@ -290,7 +290,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       await _xSensDotStreamingDataService
           .startMeasuring(XSensDotConnectionService().isInitialized);
     } else {
-      Fluttertoast.showToast(msg: connectionErrorMessage + device.macAddress);
+      Fluttertoast.showToast(msg: connectionErrorLabel + device.macAddress);
       debugPrint("Connection to device ${device.macAddress} failed");
     }
   }

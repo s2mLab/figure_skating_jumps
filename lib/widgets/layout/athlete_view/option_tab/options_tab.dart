@@ -27,15 +27,15 @@ class OptionsTab extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: _athlete.uID == UserClient().currentSkatingUser!.uID!
-                ? const Text(noOptionsAvailable)
+                ? const Text(noOptionsAvailableInfo)
                 : IceButton(
-                    text: removeThisAthlete,
+                    text: removeThisAthleteButton,
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                                title: const Text(confirmAthleteRemoval),
+                                title: const Text(confirmAthleteRemovalButton),
                                 actions: [
                                   IceButton(
                                       text: cancelLabel,
@@ -77,7 +77,7 @@ class OptionsTab extends StatelessWidget {
                                       iceButtonSize: IceButtonSize.small)
                                 ],
                                 content: const InstructionPrompt(
-                                    confirmDelete, errorColor));
+                                    confirmDeleteInfo, errorColor));
                           });
                     },
                     textColor: primaryColor,

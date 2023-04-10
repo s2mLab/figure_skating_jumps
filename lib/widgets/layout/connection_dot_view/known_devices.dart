@@ -71,7 +71,7 @@ class _KnownDevicesState extends State<KnownDevices>
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
-                      connectedDevice,
+                      connectedDeviceTitle,
                       style: TextStyle(color: primaryColorLight, fontSize: 20),
                     ),
                   ),
@@ -97,7 +97,7 @@ class _KnownDevicesState extends State<KnownDevices>
                   child: Row(
                     children: const [
                       Text(
-                        knownDevicesNear,
+                        knownDevicesNearTitle,
                         style:
                             TextStyle(color: primaryColorLight, fontSize: 20),
                       ),
@@ -134,7 +134,7 @@ class _KnownDevicesState extends State<KnownDevices>
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   child: const Text(
-                    myDevices,
+                    myDevicesTitle,
                     style: TextStyle(color: primaryColorLight, fontSize: 20),
                   ),
                 ),

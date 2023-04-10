@@ -127,7 +127,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 if (_timeWasModified)
                   Center(
                       child: IceButton(
-                          text: reorderJumpList,
+                          text: reorderJumpListButton,
                           onPressed: () {
                             Capture.sortJumps(_capture!);
                             Navigator.pushReplacementNamed(
@@ -196,7 +196,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                           Duration(seconds: 2),
                                                       backgroundColor: confirm,
                                                       content: Text(
-                                                          savedModificationsSnack)));
+                                                          savedModificationsSnackInfo)));
                                             });
                                           });
                                         },
