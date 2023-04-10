@@ -6,9 +6,11 @@ class ExportStatusEvent {
   late double _exportPct;
   late Duration _timeRemaining;
 
-  ExportStatusEvent({required exportPct, required timeRemaining}) {
+  ExportStatusEvent(
+      {required double exportPct, required Duration timeRemaining}) {
     _exportPct = clampDouble(exportPct, 0.0, 1.0);
-    _timeRemaining = timeRemaining;
+    _timeRemaining =
+        !timeRemaining.isNegative ? timeRemaining : const Duration(seconds: 0);
   }
 
   String get formattedTimeRemaining {
