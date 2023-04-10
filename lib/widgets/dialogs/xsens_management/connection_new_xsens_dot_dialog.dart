@@ -125,7 +125,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   ),
                 ),
               ),
-              Text(searching)
+              Text(searchingLabel)
             ],
           ),
         ),
@@ -152,7 +152,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -255,7 +255,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 await _xSensDotConnectionService.disconnect();
@@ -301,8 +301,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     knownMacAddresses.addAll(
         DeviceNamesManager().deviceNames.map((e) => e.deviceMacAddress));
     Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
-            (scannedDevice) =>
-        !knownMacAddresses.contains(scannedDevice.macAddress));
+        (scannedDevice) =>
+            !knownMacAddresses.contains(scannedDevice.macAddress));
     _devices.addAll(devicesToAdd);
   }
 

@@ -200,7 +200,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IceButton(
-                text: continueTo,
+                text: continueToLabel,
                 onPressed: () {
                   if (_personalInfoKey.currentState != null &&
                       _personalInfoKey.currentState!.validate()) {
@@ -294,7 +294,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     setState(() {
                       _toAccount();

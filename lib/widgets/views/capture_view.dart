@@ -335,7 +335,7 @@ class _CaptureViewState extends State<CaptureView>
                           backgroundColor: discreetText,
                         )),
                   ),
-                  Text(pleaseWait)
+                  Text(pleaseWaitLabel)
                 ],
               )
             ],

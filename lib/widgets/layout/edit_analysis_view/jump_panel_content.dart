@@ -304,7 +304,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IceButton(
-                    text: cancel,
+                    text: cancelLabel,
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -315,7 +315,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: IceButton(
-                      text: continueTo,
+                      text: continueToLabel,
                       onPressed: () {
                         widget._onDeleted(_j!, _initialJumpType);
                         Navigator.pop(context);
@@ -382,16 +382,19 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
                               text: notEnoughRotationComment,
                               onPressed: () {
-                                _commentController.text = notEnoughRotationComment;
+                                _commentController.text =
+                                    notEnoughRotationComment;
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
@@ -405,7 +408,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
                               text: stepOut,
@@ -414,7 +418,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
@@ -425,7 +430,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IceButton(
-                        text: cancel,
+                        text: cancelLabel,
                         onPressed: () {
                           _initializeCommentController();
                           Navigator.pop(context);
@@ -438,7 +443,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: IceButton(
-                          text: save,
+                          text: saveLabel,
                           onPressed: () {
                             _commentFormKey.currentState?.save();
                           },
@@ -574,7 +579,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IceButton(
-                        text: cancel,
+                        text: cancelLabel,
                         onPressed: () {
                           _initializeAdvancedMetricsControllers();
                           Navigator.pop(context);
@@ -585,7 +590,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small),
                     IceButton(
-                        text: save,
+                        text: saveLabel,
                         onPressed: () {
                           if (_metricsFormKey.currentState!.validate()) {
                             _metricsFormKey.currentState?.save();
