@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 
