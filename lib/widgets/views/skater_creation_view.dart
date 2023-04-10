@@ -258,7 +258,8 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
     }
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(savedModificationsSnack), backgroundColor: confirm));
+          content: Text(savedModificationsSnackInfo),
+          backgroundColor: confirm));
     }
   }
 }

@@ -2,9 +2,9 @@ import '../constants/lang_fr.dart';
 
 enum Season {
   preparation(preparationSeasonLabel),
-  competition(competitionSeason),
-  transition(transitionSeason),
-  sharpening(sharpeningSeason);
+  competition(competitionSeasonLabel),
+  transition(transitionSeasonLabel),
+  sharpening(sharpeningSeasonLabel);
 
   final String displayedString;
   const Season(this.displayedString);

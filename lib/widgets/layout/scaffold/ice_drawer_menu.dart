@@ -46,22 +46,23 @@ class IceDrawerMenu extends StatelessWidget {
                         );
                       }),
                   NavMenuElement(
-                      text: myAcquisitions,
+                      text: Title,
                       iconData: Icons.history,
                       onPressed: () {
                         Navigator.pushNamed(context, '/Acquisitions',
                             arguments: UserClient().currentSkatingUser!);
                       }),
-                  if(UserClient().currentSkatingUser!.role == UserRole.coach) NavMenuElement(
-                      text: myAthletes,
-                      iconData: Icons.groups_rounded,
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/ListAthletes',
-                          arguments: true,
-                        );
-                      }),
+                  if (UserClient().currentSkatingUser!.role == UserRole.coach)
+                    NavMenuElement(
+                        text: myAthletesTitle,
+                        iconData: Icons.groups_rounded,
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/ListAthletes',
+                            arguments: true,
+                          );
+                        }),
                 ],
               )),
               Container(
@@ -104,7 +105,7 @@ class IceDrawerMenu extends StatelessWidget {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return ConfirmCancelCustomDialog(
-                                              description: disconnect,
+                                              description: disconnectLabel,
                                               confirmAction: () async {
                                                 await UserClient().signOut();
                                                 if (context.mounted) {

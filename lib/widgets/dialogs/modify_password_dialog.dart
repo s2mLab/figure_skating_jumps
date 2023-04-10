@@ -34,7 +34,7 @@ class ModifyPassword extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(passwordInput),
+                    const Text(passwordField),
                     Expanded(
                         child: TextFormField(
                             controller: _passwordController,
@@ -44,7 +44,7 @@ class ModifyPassword extends StatelessWidget {
                               return FieldValidators.newPassValidator(value);
                             })),
                     const SizedBox(height: 24),
-                    const Text(passwordConfirmationInput),
+                    const Text(passwordConfirmationField),
                     Expanded(
                         child: TextFormField(
                             controller: _passwordConfirmationController,
@@ -64,7 +64,7 @@ class ModifyPassword extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: const Text(modifyLabel),
+          child: const Text(modifyButton),
         ),
       ],
     );

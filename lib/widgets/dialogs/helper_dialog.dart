@@ -58,7 +58,7 @@ class _HelperDialogState extends State<HelperDialog> {
                       Container(
                           margin: const EdgeInsets.all(8),
                           child: IceButton(
-                              text: redirect,
+                              text: redirectButton,
                               onPressed: () {
                                 Navigator.pushReplacementNamed(context,
                                     HelperSubject.values[index].direction!);

@@ -4,39 +4,27 @@ import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:flutter/material.dart';
 
 enum XSensDeviceState {
-  disconnected(
-      0,
-      connectionStateMessageDisconnected,
-      connectedStyle,
-      Colors.black,
-      errorColor),
+  disconnected(0, connectionStateMessageDisconnectedLabel, connectedStyle,
+      Colors.black, errorColor),
   connecting(
       1,
-      connectionStateMessageConnecting,
+      connectionStateMessageConnectingLabel,
       connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
-  connected(
-      2,
-      connectionStateMessageConnected,
-      connectedStyle,
-      primaryColorLight,
-      connectedXSensDotButtonIndicator),
-  initialized(
-      3,
-      connectionStateMessageInitialized,
-      connectedStyle,
-      primaryColorLight,
-      connectedXSensDotButtonIndicator),
+  connected(2, connectionStateMessageConnectedLabel, connectedStyle,
+      primaryColorLight, connectedXSensDotButtonIndicator),
+  initialized(3, connectionStateMessageInitializedLabel, connectedStyle,
+      primaryColorLight, connectedXSensDotButtonIndicator),
   reconnecting(
       4,
-      connectionStateMessageReconnecting,
+      connectionStateMessageReconnectingLabel,
       connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
   startReconnecting(
       5,
-      connectionStateMessageReconnecting,
+      connectionStateMessageReconnectingLabel,
       connectingStyle,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator);
