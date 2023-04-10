@@ -65,10 +65,11 @@ class OptionsTab extends StatelessWidget {
                                             .traineesID
                                             .removeWhere((element) =>
                                                 element == _athlete.uID!);
-                                        if (context.mounted)
+                                        if (context.mounted) {
                                           Navigator.pushReplacementNamed(
                                               context, '/ListAthletes',
                                               arguments: true);
+                                        }
                                       },
                                       textColor: paleText,
                                       color: errorColorDark,
