@@ -56,7 +56,7 @@ class XSensDotConnectionService
         debugPrint(e.message!);
       }
       if (response) {
-        _currentXSensDevice = BluetoothDevice(macAddress: bluetoothDevice.macAddress, userId: UserClient().currentSkatingUser!.uID!);
+        _currentXSensDevice = BluetoothDevice(macAddress: bluetoothDevice.macAddress, userId: UserClient().currentSkatingUser!.uID!, name: bluetoothDevice.name, id: bluetoothDevice.id);
 
         BluetoothDevice? deviceName = BluetoothDeviceManager().devices
             .firstWhereOrNull((iter) =>
