@@ -13,9 +13,6 @@ class ExportDialog extends StatefulWidget {
 }
 
 class _ExportDialogState extends State<ExportDialog> {
-  final double _initialPct = 0.0;
-  final Duration _initialTimeRemaning = Duration(seconds: -1);
-
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
@@ -26,25 +23,28 @@ class _ExportDialogState extends State<ExportDialog> {
       children: [
         StreamBuilder<ExportStatusEvent>(
           stream: XSensDotRecordingService().exportStatusStream,
-          initialData: ExportStatusEvent(exportPct: _initialPct, timeRemaining: _initialTimeRemaning),
           builder: (context, snapshot) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                      width: 150,
-                      child:
-                      LinearProgressIndicator(
-                        color: primaryColor,
-                        backgroundColor: discreetText,
-                        value: snapshot.data?.exportPct,
-                      )),
-                ),
-                Text(remainingTime + snapshot.data!.formattedTimeRemaining)
-              ],
-            );
+            if(snapshot.hasData) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SizedBox(
+                        width: 150,
+                        child:
+                        LinearProgressIndicator(
+                          color: primaryColor,
+                          backgroundColor: discreetText,
+                          value: snapshot.data?.exportPct,
+                        )),
+                  ),
+                  Text(remainingTime + snapshot.data!.formattedTimeRemaining)
+                ],
+              );
+            } else {
+              return const Center(child: Text(calculating));
+            }
           }
         )
       ],
