@@ -15,8 +15,10 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/season.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../dialogs/capture/no_camera_recording_dialog.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
 
@@ -98,27 +100,30 @@ class _CaptureViewState extends State<CaptureView>
             );
           })
         : Scaffold(
-            appBar: const Topbar(isUserDebuggingFeature: false),
+            appBar: ReactiveLayoutHelper.isTablet()
+                ? const TabletTopbar(isUserDebuggingFeature: false)
+                    as PreferredSizeWidget
+                : const Topbar(isUserDebuggingFeature: false),
             drawerEnableOpenDragGesture: false,
             drawerScrimColor: Colors.transparent,
             drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
             body: Builder(builder: (context) {
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 32.0, vertical: 16.0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: ReactiveLayoutHelper.getWidthFromFactor(24, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const PageTitle(text: captureViewTitle),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: InstructionPrompt(
+                      Padding(
+                        padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        child: const InstructionPrompt(
                             captureViewInstructions, secondaryColor),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: InstructionPrompt(
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        child: const InstructionPrompt(
                             captureViewCameraInstruction, secondaryColor),
                       ),
                       if (_isCameraActivated)
