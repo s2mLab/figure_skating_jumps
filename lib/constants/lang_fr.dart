@@ -14,7 +14,7 @@ const String competitionSeasonLabel = "Compétition";
 const String transitionSeasonLabel = "Transition";
 const String sharpeningSeasonLabel = "Affûtage";
 
-// enums/helper_subject.dart
+// enums/helper_subject
 const String connectDotTitle = "Connecter un senseur";
 const String connectDotDescription =
     "Pour connecter un XSens Dot, assurez-vous que la batterie soit pleine, cliquez sur la barre de statut du senseur ou le bouton suivant.\n\nVous pourrez ainsi connecter un XSens Dot déjà enregistré ou un nouvel appareil avec le bouton au bas de la page.";
@@ -40,6 +40,35 @@ const String modifyButton = "Modifier";
 // widgets/dialogs/modify_password
 const String helperTitle = "Page d'aide";
 const String redirectButton = "Me diriger sur la page";
+
+// widgets/dialog/capture/start_recording_dialog
+const String connectXSensDotButton = "Connecter un appareil XSens DOT";
+const String noDeviceErrorInfo =
+    "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
+
+// widgets/dialog/capture/no_camera_recording_dialog
+const String recordingLabel = "Collecte de donnée en cours...";
+
+// widgets/dialogs/connection_new_xsens_dot_dialog
+const String bluetoothAuthorizationPromptInfo =
+    'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';
+const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
+const String completePairingButton = "Compléter le jumelage";
+const String verifyConnectivityLabel = "Vérifier la réception du capteur";
+const String connectionErrorLabel =
+    "Erreur lors de la connexion à l'appareil: ";
+
+// widgets/dialogs/modification_info_dialog
+const String modificationInfoDialogTitle =
+    "Journal de modification pour cette capture";
+
+// widgets/dialog/capture/start_recording_dialog
+const String captureStartingLabel = "Démarrage...";
+const String erasingDataLabel = "Suppression des données en cours...";
+const String errorCaptureStartingLabel = "Erreur lors du démarrage";
+const String memoryErrorInfo =
+    "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
+const String emptyMemoryButton = "Vider la mémoire";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
@@ -88,19 +117,6 @@ const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitionsTitle = "Mes acquisitions";
 const String disconnectLabel = "Voulez-vous vraiment vous déconnecter?";
 const String myAthletesTitle = "Mes athlètes";
-
-// widgets/dialogs/modification_info_dialog
-const String modificationInfoDialogTitle =
-    "Journal de modification pour cette capture";
-
-// widgets/dialogs/connection_new_xsens_dot_dialog
-const String bluetoothAuthorizationPromptInfo =
-    'Veuillez donner l\'autorisation à l\'application d\'accéder au Bluetooth. L\'option se trouve généralement dans les paramètres de votre appareil.';
-const String newXSensConnectionDialogTitle = 'Connecter un nouvel XSens DOT';
-const String completePairingButton = "Compléter le jumelage";
-const String verifyConnectivityLabel = "Vérifier la réception du capteur";
-const String connectionErrorLabel =
-    "Erreur lors de la connexion à l'appareil: ";
 
 // widgets/layout/configure_x_sens_dot_dialog
 const String forgetDeviceButton = "Oublier";
@@ -208,22 +224,6 @@ const String captureViewCameraSwitchLabel = "Caméra activée ?";
 const String stopCaptureButton = "Arrêter la capture";
 const String exportingDataLabel = "Enregistrement des données...";
 const String analyzingDataLabel = "Analyse des données...";
-
-// widgets/dialog/capture/start_recording_dialog
-const String captureStartingLabel = "Démarrage...";
-const String erasingDataLabel = "Suppression des données en cours...";
-const String errorCaptureStartingLabel = "Erreur lors du démarrage";
-const String memoryErrorInfo =
-    "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
-const String emptyMemoryButton = "Vider la mémoire";
-
-// widgets/dialog/capture/start_recording_dialog
-const String connectXSensDotButton = "Connecter un appareil XSens DOT";
-const String noDeviceErrorInfo =
-    "Il semblerait qu'il n'y ait pas de XSens Dot connecté ou que celui-ci ne soit pas encore prêt à être utilisé. Si vous n'avez pas connecté d'appareil, veuillez vous diriger vers la page de connexion afin de connecter un capteur. Sinon, veuillez attendre que l'indicateur en haut de l'écran montre que le capteur est prêt et réessayez.";
-
-// widgets/dialog/capture/no_camera_recording_dialog
-const String recordingLabel = "Collecte de donnée en cours...";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
