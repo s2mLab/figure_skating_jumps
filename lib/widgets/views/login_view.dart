@@ -48,8 +48,10 @@ class _LoginViewState extends State<LoginView> {
       await UserClient().signIn(email: _email, password: _password);
       if (mounted) {
         UserClient().currentSkatingUser!.role == UserRole.coach
-            ? Navigator.pushReplacementNamed(context, '/ListAthletes', arguments: false)
-            : Navigator.pushReplacementNamed(context, '/Acquisitions', arguments: UserClient().currentSkatingUser);
+            ? Navigator.pushReplacementNamed(context, '/ListAthletes',
+                arguments: false)
+            : Navigator.pushReplacementNamed(context, '/Acquisitions',
+                arguments: UserClient().currentSkatingUser);
       }
     } on IceException catch (e) {
       setState(() {
@@ -57,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
       });
       debugPrint(e.devMessage);
     } catch (e) {
-      _errorMessage = connectionImpossible;
+      _errorMessage = connectionImpossibleLabel;
     }
     setState(() {
       _connectionLabelBtn = connectionButton;
@@ -116,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                                       });
                                     },
                                     decoration: const InputDecoration(
-                                      labelText: email,
+                                      labelText: emailField,
                                       labelStyle: TextStyle(
                                           fontSize: 16, color: discreetText),
                                     ),
@@ -136,7 +138,7 @@ class _LoginViewState extends State<LoginView> {
                                       });
                                     },
                                     decoration: const InputDecoration(
-                                      labelText: password,
+                                      labelText: passwordLabel,
                                       labelStyle: TextStyle(
                                           fontSize: 16, color: discreetText),
                                     ),
@@ -162,7 +164,7 @@ class _LoginViewState extends State<LoginView> {
                             Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: IceButton(
-                                  text: createAccount,
+                                  text: createAccountButton,
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                       context,

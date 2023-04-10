@@ -54,17 +54,16 @@ class ForgotPasswordView extends StatelessWidget {
                             ),
                             Form(
                                 child: TextFormField(
-                                  key: _forgotPasswordInfoKey,
+                              key: _forgotPasswordInfoKey,
                               keyboardType: TextInputType.emailAddress,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _emailController,
                               validator: (value) {
-                                return FieldValidators.newEmailValidator(
-                                    value);
+                                return FieldValidators.newEmailValidator(value);
                               },
                               decoration: const InputDecoration(
-                                labelText: email,
+                                labelText: emailField,
                                 labelStyle: TextStyle(
                                     fontSize: 16, color: discreetText),
                               ),
@@ -72,10 +71,12 @@ class ForgotPasswordView extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: IceButton(
-                                  text: sendEmailButtonText,
+                                  text: sendEmailButton,
                                   onPressed: () async {
-                                    if (_forgotPasswordInfoKey.currentState == null ||
-                                        !_forgotPasswordInfoKey.currentState!.validate()) {
+                                    if (_forgotPasswordInfoKey.currentState ==
+                                            null ||
+                                        !_forgotPasswordInfoKey.currentState!
+                                            .validate()) {
                                       return;
                                     }
                                     try {
@@ -85,7 +86,7 @@ class ForgotPasswordView extends StatelessWidget {
                                       debugPrint(e.toString());
                                     } finally {
                                       Fluttertoast.showToast(
-                                          msg: forgotPasswordToast);
+                                          msg: forgotPasswordInfo);
                                     }
                                   },
                                   textColor: paleText,

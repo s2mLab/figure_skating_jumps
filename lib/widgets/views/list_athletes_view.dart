@@ -88,7 +88,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   Widget build(BuildContext context) {
     _loadData();
     _state = ModalRoute.of(context)!.settings.arguments as bool;
-    if(_state) {
+    if (_state) {
       setState(() {});
     }
     return Scaffold(
@@ -175,7 +175,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                               loaderstrokeWidth: 5,
                             ))
                           : _traineesToShow.isEmpty
-                              ? const Center(child: Text(noAthletes, textAlign: TextAlign.center))
+                              ? const Center(
+                                  child: Text(noAthletesInfo,
+                                      textAlign: TextAlign.center))
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {

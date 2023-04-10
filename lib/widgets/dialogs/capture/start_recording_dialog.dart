@@ -44,13 +44,13 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _startingRecording() {
-    return _loadingDialog(captureStartingPrompt);
+    return _loadingDialog(captureStartingLabel);
   }
 
   SimpleDialog _fullMemory() {
     return SimpleDialog(
       title: const Text(
-        errorCaptureStartingPrompt,
+        errorCaptureStartingLabel,
         textAlign: TextAlign.center,
         style: TextStyle(color: errorColor),
       ),
@@ -60,7 +60,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
           children: [
             const Padding(
                 padding: EdgeInsets.all(16.0),
-                child: InstructionPrompt(memoryErrorMessage, errorColor)),
+                child: InstructionPrompt(memoryErrorInfo, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -86,7 +86,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _erasingMemory() {
-    return _loadingDialog(erasingDataPrompt);
+    return _loadingDialog(erasingDataLabel);
   }
 
   SimpleDialog _loadingDialog(String message) {
