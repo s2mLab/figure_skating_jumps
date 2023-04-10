@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
@@ -10,7 +9,6 @@ class AnalysisDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      key: key,
       title: const Text(
         analyzingData,
         textAlign: TextAlign.center,
