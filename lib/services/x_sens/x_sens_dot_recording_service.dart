@@ -45,7 +45,8 @@ class XSensDotRecordingService
   static late int _totalRecordingData;
   static final StreamController<ExportStatusEvent>
       _exportStatusStreamController = StreamController<ExportStatusEvent>();
-  static final Stream<ExportStatusEvent> _exportStream = _exportStatusStreamController.stream.asBroadcastStream();
+  static final Stream<ExportStatusEvent> _exportStream =
+      _exportStatusStreamController.stream.asBroadcastStream();
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
@@ -216,11 +217,11 @@ class XSensDotRecordingService
         _exportedData.add(XSensDotData.fromEventChannel(data));
         double exportPct =
             _exportedData.length.toDouble() / _totalRecordingData.toDouble();
-        Duration timeRemaining = Duration(
-            seconds: ((_totalRecordingData - _exportedData.length) /
-                    _estimatedExportRate)
-                .ceil()
-                .toInt());
+        int remainingSeconds = ((_totalRecordingData - _exportedData.length) /
+                _estimatedExportRate)
+            .ceil()
+            .toInt();
+        Duration timeRemaining = Duration(seconds: remainingSeconds);
         _exportStatusStreamController.add(ExportStatusEvent(
             exportPct: exportPct, timeRemaining: timeRemaining));
       }
