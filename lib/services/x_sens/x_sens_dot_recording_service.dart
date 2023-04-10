@@ -45,6 +45,7 @@ class XSensDotRecordingService
   static late int _totalRecordingData;
   static final StreamController<ExportStatusEvent>
       _exportStatusStreamController = StreamController<ExportStatusEvent>();
+  static final Stream<ExportStatusEvent> _exportStream = _exportStatusStreamController.stream.asBroadcastStream();
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
@@ -98,6 +99,7 @@ class XSensDotRecordingService
     _exportFileName = "";
     _currentRecordingHasVideo = false;
     _currentRecordingVideoPath = "";
+    _totalRecordingData = 0;
     _changeState(RecorderState.preparing);
     await _setRate();
   }
@@ -111,7 +113,7 @@ class XSensDotRecordingService
   }
 
   Stream<ExportStatusEvent> get exportStatusStream {
-    return _exportStatusStreamController.stream;
+    return _exportStream;
   }
 
   Future<void> stopRecording(bool hasVideo, String videoPath) async {
@@ -166,10 +168,10 @@ class XSensDotRecordingService
 
   static Future<void> _handleRecordingStopped() async {
     if (_recorderState == RecorderState.recording) {
-      int recordingDuration =
-          DateTime.now().millisecond - _startTime.millisecond;
+      int recordingDuration = DateTime.now().millisecondsSinceEpoch -
+          _startTime.millisecondsSinceEpoch;
       _totalRecordingData =
-          (_recordingOutputRate * (recordingDuration / 1000.0)).ceil().toInt();
+          (_recordingOutputRate * recordingDuration / 1000.0).ceil().toInt();
       _changeState(RecorderState.exporting);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
@@ -215,8 +217,10 @@ class XSensDotRecordingService
         double exportPct =
             _exportedData.length.toDouble() / _totalRecordingData.toDouble();
         Duration timeRemaining = Duration(
-            seconds: (_totalRecordingData - _exportedData.length) *
-                _estimatedExportRate);
+            seconds: ((_totalRecordingData - _exportedData.length) /
+                    _estimatedExportRate)
+                .ceil()
+                .toInt());
         _exportStatusStreamController.add(ExportStatusEvent(
             exportPct: exportPct, timeRemaining: timeRemaining));
       }
