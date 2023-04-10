@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
 import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,8 +41,10 @@ class UserClient {
       {required String email,
       required String password,
       required SkatingUser userInfo}) async {
-    String uID = await _createUserInDb(email: email, password: password, userInfo: userInfo);
+    String uID = await _createUserInDb(
+        email: email, password: password, userInfo: userInfo);
     _currentSkatingUser = userInfo;
+    await ActiveSessionManager().saveActiveSession(email, password);
     return uID;
   }
 
@@ -62,6 +65,8 @@ class UserClient {
       _currentSkatingUser = SkatingUser.fromFirestore(
           _firebaseAuth.currentUser?.uid, userInfoSnapshot);
 
+      await ActiveSessionManager().saveActiveSession(email, password);
+
       await DeviceNamesManager()
           .loadDeviceNames(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
@@ -77,6 +82,7 @@ class UserClient {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      await ActiveSessionManager().clearActiveSession();
       _currentSkatingUser = null;
     } catch (e) {
       developer.log(e.toString());
@@ -127,12 +133,12 @@ class UserClient {
   }
 
   Future<void> changeRole(
-      {required String userID,
-        required UserRole role}) async {
+      {required String userID, required UserRole role}) async {
     try {
-      await _firestore.collection(_userCollectionString).doc(userID).set(
-          {"role": role.toString()},
-          SetOptions(merge: true));
+      await _firestore
+          .collection(_userCollectionString)
+          .doc(userID)
+          .set({"role": role.toString()}, SetOptions(merge: true));
       _currentSkatingUser!.role = role;
     } catch (e) {
       developer.log(e.toString());
@@ -144,6 +150,7 @@ class UserClient {
       {required String userID, required String password}) async {
     try {
       await _firebaseAuth.currentUser?.updatePassword(password);
+      await ActiveSessionManager().changeSessionPassword(password);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       // Should not reach this line but kept in to make sure the exception is handled
@@ -181,7 +188,7 @@ class UserClient {
     if (result.docs.isNotEmpty) throw ConflictException();
 
     SkatingUser skatingUser =
-        SkatingUser(firstName, lastName, UserRole.iceSkater);
+        SkatingUser(firstName, lastName, UserRole.iceSkater, skaterEmail);
     String password = _genPassword();
     // Signs up the user with a temporary random password
     String uID = await _createUserInDb(
@@ -204,7 +211,8 @@ class UserClient {
     SkatingUser skatingUser =
         SkatingUser.fromFirestore(result.docs[0].id, result.docs[0]);
 
-    if(_currentSkatingUser!.traineesID.contains(skatingUser.uID) || _currentSkatingUser!.uID == skatingUser.uID) {
+    if (_currentSkatingUser!.traineesID.contains(skatingUser.uID) ||
+        _currentSkatingUser!.uID == skatingUser.uID) {
       return null;
     }
     await _linkSkaterAndCoach(skaterId: skatingUser.uID!, coachId: coachId);
