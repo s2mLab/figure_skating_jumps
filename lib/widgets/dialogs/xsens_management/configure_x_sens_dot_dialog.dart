@@ -63,7 +63,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: _connectionManagementButton()),
               IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     close();
                   },

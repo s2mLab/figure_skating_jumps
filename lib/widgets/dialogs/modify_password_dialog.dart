@@ -60,11 +60,11 @@ class ModifyPassword extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(cancel),
+          child: const Text(cancelLabel),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: const Text(confirmLabel),
+          child: const Text(modifyLabel),
         ),
       ],
     );

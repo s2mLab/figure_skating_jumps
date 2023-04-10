@@ -32,7 +32,7 @@ class ConfirmCancelCustomDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: IceButton(
-                    text: confirmText,
+                    text: confirmLabel,
                     onPressed: () => confirmAction(),
                     textColor: paleText,
                     color: primaryColor,
@@ -40,7 +40,7 @@ class ConfirmCancelCustomDialog extends StatelessWidget {
                     iceButtonSize: IceButtonSize.large),
               ),
               IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     Navigator.pop(context);
                   },

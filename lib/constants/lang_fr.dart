@@ -1,15 +1,15 @@
 // global
-const String searching = "Recherche en cours";
-const String cancel = "Annuler";
-const String confirmText = "Confirmer";
-const String continueTo = "Poursuivre";
-const String goBack = "Retour";
-const String pleaseWait = "Veuillez patienter";
-const String save = "Enregistrer";
-const String none = "Aucun";
+const String searchingLabel = "Recherche en cours";
+const String cancelLabel = "Annuler";
+const String confirmLabel = "Confirmer";
+const String continueToLabel = "Poursuivre";
+const String goBackLabel = "Retour";
+const String pleaseWaitLabel = "Veuillez patienter";
+const String saveLabel = "Enregistrer";
+const String noneLabel = "Aucun";
 
 // enums/season
-const String preparationSeason = "Préparation";
+const String preparationSeasonLabel = "Préparation";
 const String competitionSeason = "Compétition";
 const String transitionSeason = "Transition";
 const String sharpeningSeason = "Affûtage";
@@ -18,7 +18,7 @@ const String sharpeningSeason = "Affûtage";
 const String modificationTitle = "Modification";
 const String firstName = "Prénom: ";
 const String lastName = "Nom: ";
-const String confirmLabel = "Modifier";
+const String modifyLabel = "Modifier";
 
 // widgets/dialogs/modify_password
 const String helperTitle = "Page d'aide";

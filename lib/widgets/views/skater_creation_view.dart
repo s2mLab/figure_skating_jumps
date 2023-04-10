@@ -234,7 +234,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                       ),
                     ),
                     IceButton(
-                        text: confirmText,
+                        text: confirmLabel,
                         onPressed: () {
                           Navigator.pushReplacementNamed(
                               context, '/ListAthletes',

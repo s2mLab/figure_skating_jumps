@@ -59,7 +59,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Padding(
-                padding: EdgeInsets.all(16.0), child: InstructionPrompt(memoryErrorMessage, errorColor)),
+                padding: EdgeInsets.all(16.0),
+                child: InstructionPrompt(memoryErrorMessage, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -70,7 +71,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
                 iceButtonImportance: IceButtonImportance.mainAction,
                 iceButtonSize: IceButtonSize.medium),
             IceButton(
-                text: goBack,
+                text: goBackLabel,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -107,7 +108,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
                     backgroundColor: discreetText,
                   )),
             ),
-            Text(pleaseWait)
+            Text(pleaseWaitLabel)
           ],
         )
       ],
@@ -116,8 +117,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   void onStateChange(RecorderState state) {
-    if(state == RecorderState.idle) {
-      if (_lastState == RecorderState.preparing ) {
+    if (state == RecorderState.idle) {
+      if (_lastState == RecorderState.preparing) {
         setState(() {
           _currentId = 1;
         });
@@ -129,7 +130,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
     }
 
     _lastState = state;
-    if(_lastState == RecorderState.erasing) {
+    if (_lastState == RecorderState.erasing) {
       setState(() {
         _currentId = 2;
       });

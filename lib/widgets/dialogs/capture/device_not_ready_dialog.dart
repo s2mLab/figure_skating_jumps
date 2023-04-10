@@ -35,7 +35,7 @@ class DeviceNotReadyDialog extends StatelessWidget {
                 iceButtonImportance: IceButtonImportance.secondaryAction,
                 iceButtonSize: IceButtonSize.medium),
             IceButton(
-                text: goBack,
+                text: goBackLabel,
                 onPressed: () {
                   Navigator.pop(context);
                 },
