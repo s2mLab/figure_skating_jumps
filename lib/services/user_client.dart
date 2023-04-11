@@ -5,7 +5,7 @@ import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,8 +67,8 @@ class UserClient {
 
       await ActiveSessionManager().saveActiveSession(email, password);
 
-      await DeviceNamesManager()
-          .loadDeviceNames(_firebaseAuth.currentUser!.uid);
+      await BluetoothDeviceManager()
+          .loadDevices(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       developer.log(e.toString());
@@ -236,9 +236,7 @@ class UserClient {
               .get());
 
       skater.coachesID.removeWhere((element) => element == coachId);
-      coach.trainees.removeWhere((element) => element.uID! == skaterId);
-      _currentSkatingUser!.coachesID
-          .removeWhere((element) => element == coachId);
+      coach.traineesID.removeWhere((element) => element == skaterId);
 
       await _firestore
           .collection(_userCollectionString)
@@ -247,7 +245,7 @@ class UserClient {
       await _firestore
           .collection(_userCollectionString)
           .doc(coachId)
-          .set({"trainees": coach.trainees}, SetOptions(merge: true));
+          .set({"trainees": coach.traineesID}, SetOptions(merge: true));
     } catch (e) {
       developer.log(e.toString());
       rethrow;
@@ -340,7 +338,7 @@ class UserClient {
         'email': email,
         'role': userInfo.role.toString(),
         'captures': userInfo.capturesID,
-        'trainees': userInfo.trainees,
+        'trainees': userInfo.traineesID,
         'coaches': userInfo.coachesID,
       });
     } catch (e) {

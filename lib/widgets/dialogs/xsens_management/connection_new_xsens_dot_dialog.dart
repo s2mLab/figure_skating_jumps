@@ -7,7 +7,7 @@ import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
@@ -139,7 +139,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: XSensDotListElement(
                     hasLine: true,
-                    text: _devices[index].assignedName,
+                    text: _devices[index].name,
                     graphic: const XSensStateIcon(
                         true, XSensDeviceState.disconnected),
                     onPressed: () async {
@@ -299,7 +299,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices.clear();
     List<String> knownMacAddresses = [];
     knownMacAddresses.addAll(
-        DeviceNamesManager().deviceNames.map((e) => e.deviceMacAddress));
+        BluetoothDeviceManager().devices.map((e) => e.macAddress));
     Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
         (scannedDevice) =>
             !knownMacAddresses.contains(scannedDevice.macAddress));

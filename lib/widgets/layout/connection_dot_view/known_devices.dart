@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../enums/x_sens_device_state.dart';
 import '../../../interfaces/i_bluetooth_discovery_subscriber.dart';
-import '../../../services/manager/device_names_manager.dart';
+import '../../../services/manager/bluetooth_device_manager.dart';
 import '../../buttons/x_sens_dot_list_element.dart';
 import '../../dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
 import '../../icons/x_sens_state_icon.dart';
@@ -85,7 +85,7 @@ class _KnownDevicesState extends State<KnownDevices>
                             lineColor: connectedXSensDotButtonIndicator,
                             text: XSensDotConnectionService()
                                 .currentXSensDevice!
-                                .assignedName,
+                                .name,
                             graphic: _stateIconConnected,
                             onPressed: () async {
                               await _onDevicePressed(XSensDotConnectionService()
@@ -124,7 +124,7 @@ class _KnownDevicesState extends State<KnownDevices>
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           child: XSensDotListElement(
                             hasLine: true,
-                            text: _nearDevices[index].assignedName,
+                            text: _nearDevices[index].name,
                             graphic: _stateIconDisconnected,
                             onPressed: () async {
                               await _onDevicePressed(_nearDevices[index]);
@@ -147,7 +147,7 @@ class _KnownDevicesState extends State<KnownDevices>
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           child: XSensDotListElement(
                             hasLine: true,
-                            text: _farDevices[index].assignedName,
+                            text: _farDevices[index].name,
                             graphic: _stateIconDisconnected,
                             onPressed: () async {
                               await _onDevicePressed(_farDevices[index]);
@@ -206,11 +206,10 @@ class _KnownDevicesState extends State<KnownDevices>
   }
 
   void _updateKnowDevices() {
-    if (_knownDevices.length != DeviceNamesManager().deviceNames.length) {
+    if (_knownDevices.length != BluetoothDeviceManager().devices.length) {
       _knownDevices.clear();
-      _knownDevices.addAll(DeviceNamesManager()
-          .deviceNames
-          .map((name) => BluetoothDevice(name.deviceMacAddress, name.name)));
+      _knownDevices.addAll(BluetoothDeviceManager()
+          .devices);
       _updateDeviceLists();
     }
   }

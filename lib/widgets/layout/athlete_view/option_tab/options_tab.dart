@@ -57,11 +57,6 @@ class OptionsTab extends StatelessWidget {
                                                 .uID!);
                                         UserClient()
                                             .currentSkatingUser!
-                                            .trainees
-                                            .removeWhere((element) =>
-                                                element.uID == _athlete.uID!);
-                                        UserClient()
-                                            .currentSkatingUser!
                                             .traineesID
                                             .removeWhere((element) =>
                                                 element == _athlete.uID!);
