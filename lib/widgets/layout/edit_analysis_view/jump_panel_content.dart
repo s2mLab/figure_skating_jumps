@@ -101,7 +101,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
           bottom: ReactiveLayoutHelper.getHeightFromFactor(12),
           top: ReactiveLayoutHelper.getHeightFromFactor(2)),
       child: Container(
-          height: ReactiveLayoutHelper.getHeightFromFactor(248),
+          height: ReactiveLayoutHelper.getHeightFromFactor(300),
           width: double.infinity,
           decoration: BoxDecoration(
             boxShadow: [connectionShadow],

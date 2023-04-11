@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ReactiveLayoutHelper {
@@ -35,5 +37,11 @@ class ReactiveLayoutHelper {
   static void updateDimensions(BuildContext context) {
     _screenHeight = MediaQuery.of(context).size.height;
     _screenWidth = MediaQuery.of(context).size.width;
+  }
+
+  static double getCameraScalingFactor({required double width, required double height}) {
+    double widthFactor = width/_screenWidth;
+    double heightFactor = height/_screenHeight;
+    return min(widthFactor, heightFactor) * (isTablet() ? 3.2 : 2.5);
   }
 }

@@ -69,7 +69,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    ReactiveLayoutHelper.updateDimensions(context);
     return Scaffold(
         backgroundColor: primaryColorLight,
         body: GestureDetector(
