@@ -5,7 +5,7 @@ import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,8 +67,8 @@ class UserClient {
 
       await ActiveSessionManager().saveActiveSession(email, password);
 
-      await DeviceNamesManager()
-          .loadDeviceNames(_firebaseAuth.currentUser!.uid);
+      await BluetoothDeviceManager()
+          .loadDevices(_firebaseAuth.currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       ExceptionUtils.handleFirebaseAuthException(e);
       developer.log(e.toString());

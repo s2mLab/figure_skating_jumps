@@ -9,7 +9,7 @@ class LocalDbService {
   static late Database _database;
   static final LocalDbService _localDbService = LocalDbService._internal();
 
-  static const deviceNamesTableName = "deviceNames";
+  static const bluetoothDeviceTableName = "bluetoothDevices";
   static const localCapturesTableName = "localCaptures";
   static const activeSessionTableName = "activeSession";
   static const globalSettingsTableName = "globalSettings";
@@ -29,7 +29,7 @@ class LocalDbService {
         version: 1, join(await getDatabasesPath(), _databaseName),
         onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE $deviceNamesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userID TEXT, deviceMacAddress TEXT, customName TEXT);');
+          'CREATE TABLE $bluetoothDeviceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userId TEXT, macAddress TEXT, name TEXT);');
       await db.execute(
           'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
       await db.execute(
