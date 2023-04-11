@@ -113,36 +113,45 @@ class _CaptureViewState extends State<CaptureView>
             body: Builder(builder: (context) {
               return Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ReactiveLayoutHelper.getWidthFromFactor(24, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                    horizontal:
+                        ReactiveLayoutHelper.getWidthFromFactor(24, true),
+                    vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const PageTitle(text: captureViewTitle),
                       Padding(
-                        padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        padding: EdgeInsets.only(
+                            top: ReactiveLayoutHelper.getHeightFromFactor(20)),
                         child: const InstructionPrompt(
                             captureViewInstructions, secondaryColor),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        padding: EdgeInsets.symmetric(
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(20)),
                         child: const InstructionPrompt(
                             captureViewCameraInstruction, secondaryColor),
                       ),
-                      if (_isCameraActivated)
-                        FutureBuilder<void>(
-                            future: _initializeControllerFuture,
-                            builder: _buildCameraPreview),
                       Expanded(
-                          child: Center(
-                              child: _isCameraActivated
-                                  ? const SizedBox()
-                                  : const Icon(Icons.no_photography_outlined,
+                          child: _isCameraActivated
+                              ? FutureBuilder<void>(
+                                  future: _initializeControllerFuture,
+                                  builder: _buildCameraPreview)
+                              : const Center(
+                                  child: Icon(Icons.no_photography_outlined,
                                       size: 56))),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(captureViewCameraSwitchPrompt),
+                            Text(
+                              captureViewCameraSwitchPrompt,
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
+                            ),
                             Switch(
                                 value: _isCameraActivated,
                                 onChanged: (val) {
@@ -155,9 +164,15 @@ class _CaptureViewState extends State<CaptureView>
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Text(selectSeasonPrompt),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          8)),
+                              child: Text(selectSeasonPrompt,
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16))),
                             ),
                             DropdownButton<Season>(
                                 selectedItemBuilder: (context) {
@@ -167,8 +182,9 @@ class _CaptureViewState extends State<CaptureView>
                                     // Here custom text style, alignment and layout size can be applied
                                     // to selected item string.
                                     return Container(
-                                      constraints:
-                                          const BoxConstraints(minWidth: 80),
+                                      constraints: BoxConstraints(
+                                          minWidth: ReactiveLayoutHelper
+                                              .getWidthFromFactor(80)),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -177,7 +193,9 @@ class _CaptureViewState extends State<CaptureView>
                                         children: [
                                           Text(
                                             item.displayedString,
-                                            style: const TextStyle(
+                                            style: TextStyle(
+                                                fontSize: ReactiveLayoutHelper
+                                                    .getHeightFromFactor(16),
                                                 color: darkText,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -187,13 +205,19 @@ class _CaptureViewState extends State<CaptureView>
                                   }).toList();
                                 },
                                 value: _selectedSeason,
-                                menuMaxHeight: 300,
+                                menuMaxHeight:
+                                    ReactiveLayoutHelper.getWidthFromFactor(
+                                        300),
                                 items: List.generate(Season.values.length,
                                     (index) {
                                   return DropdownMenuItem<Season>(
                                     value: Season.values[index],
                                     child: Text(
-                                        Season.values[index].displayedString),
+                                      Season.values[index].displayedString,
+                                      style: TextStyle(
+                                          fontSize: ReactiveLayoutHelper
+                                              .getHeightFromFactor(16)),
+                                    ),
                                   );
                                 }),
                                 onChanged: (val) {
@@ -207,17 +231,21 @@ class _CaptureViewState extends State<CaptureView>
                                   });
                                 }),
                           ]),
-                      Center(
-                        child: IceButton(
-                          onPressed: () async {
-                            await _onCaptureStartPressed();
-                          },
-                          text: captureViewStart,
-                          textColor: primaryColor,
-                          color: primaryColor,
-                          iceButtonImportance:
-                              IceButtonImportance.secondaryAction,
-                          iceButtonSize: IceButtonSize.medium,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                        child: Center(
+                          child: IceButton(
+                            onPressed: () async {
+                              await _onCaptureStartPressed();
+                            },
+                            text: captureViewStart,
+                            textColor: primaryColor,
+                            color: primaryColor,
+                            iceButtonImportance:
+                                IceButtonImportance.secondaryAction,
+                            iceButtonSize: IceButtonSize.medium,
+                          ),
                         ),
                       ),
                     ]),
@@ -290,9 +318,12 @@ class _CaptureViewState extends State<CaptureView>
       }
 
       if (!_isFullscreen) {
+        double cameraScalingFactor =
+            ReactiveLayoutHelper.getCameraScalingFactor(
+                width: cameraWidth, height: cameraHeight);
         //Reduce size to let place for other UI elements=
-        cameraWidth /= 2;
-        cameraHeight /= 2;
+        cameraWidth = cameraWidth / (cameraScalingFactor);
+        cameraHeight = cameraHeight / (cameraScalingFactor);
       }
 
       return Center(
@@ -323,24 +354,28 @@ class _CaptureViewState extends State<CaptureView>
         builder: (_) {
           return SimpleDialog(
             key: dialogKey,
-            title: Text(
-              message,
-              textAlign: TextAlign.center,
-            ),
+            title: Text(message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(
+                        ReactiveLayoutHelper.getHeightFromFactor(16)),
                     child: SizedBox(
-                        width: 50,
-                        child: LinearProgressIndicator(
+                        width: ReactiveLayoutHelper.getWidthFromFactor(50),
+                        child: const LinearProgressIndicator(
                           color: primaryColor,
                           backgroundColor: discreetText,
                         )),
                   ),
-                  Text(pleaseWait)
+                  Text(pleaseWait,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16)))
                 ],
               )
             ],

@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
@@ -13,7 +14,8 @@ class NoCameraRecordingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text(
+      title: Text(
+        style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
         recordingPrompt,
         textAlign: TextAlign.center,
       ),
@@ -21,11 +23,11 @@ class NoCameraRecordingDialog extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
               child: SizedBox(
-                  width: 50,
-                  child: LinearProgressIndicator(
+                  width: ReactiveLayoutHelper.getWidthFromFactor(50),
+                  child: const LinearProgressIndicator(
                     color: primaryColor,
                     backgroundColor: discreetText,
                   )),
