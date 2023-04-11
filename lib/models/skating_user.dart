@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
@@ -12,7 +11,6 @@ class SkatingUser {
   late UserRole role;
   late String _email;
   late List<String> _capturesID = [];
-  late final List<Capture> _captures = [];
   late List<String> _traineesID = [];
   final List<SkatingUser> _trainees = [];
   late List<String> _coachesID = [];
@@ -50,22 +48,6 @@ class SkatingUser {
     return _capturesID;
   }
 
-  List<Capture> get captures {
-    return _captures;
-  }
-
-  Map<String, List<Capture>> get sortedGroupedCaptures {
-    _captures
-        .sort((Capture left, Capture right) => left.date.compareTo(right.date));
-    return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
-  }
-
-  Map<String, List<Capture>> get reversedGroupedCaptures {
-    _captures
-        .sort((Capture left, Capture right) => right.date.compareTo(left.date));
-    return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
-  }
-
   List<SkatingUser> get trainees {
     return _trainees;
   }
@@ -101,12 +83,12 @@ class SkatingUser {
   SkatingUser(this._firstName, this._lastName, this.role, this._email,
       [this.uID]);
 
-  Future<void> loadCapturesData() async {
-    _captures.clear();
+  Future<List<Capture>> getCapturesData() async {
+    List<Capture> captures = [];
     for (String captureID in _capturesID) {
-      Capture capture = await CaptureClient().getCaptureByID(uID: captureID);
-      _captures.add(capture);
+      captures.add(await CaptureClient().getCaptureByID(uID: captureID));
     }
+    return captures;
   }
 
   factory SkatingUser.fromFirestore(
