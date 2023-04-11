@@ -8,6 +8,8 @@ class BluetoothDevice extends AbstractLocalDbObject {
   late final String _macAddress;
   late String _name;
 
+  static const defaultName = "XSens Dot";
+
   String get userId {
     return _userId;
   }
@@ -33,7 +35,7 @@ class BluetoothDevice extends AbstractLocalDbObject {
     }
   }
 
-  BluetoothDevice({required String macAddress, required String userId, String name = "XSens Dot", int? id}) {
+  BluetoothDevice({required String macAddress, required String userId, String name = defaultName, int? id}) {
     name.trim().isEmpty
         ? throw ArgumentError(
             ['Can\'t create class with empty argument', '_name'])
