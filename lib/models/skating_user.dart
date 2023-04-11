@@ -12,9 +12,7 @@ class SkatingUser {
   late String _email;
   late List<String> _capturesID = [];
   late List<String> _traineesID = [];
-  final List<SkatingUser> _trainees = [];
   late List<String> _coachesID = [];
-  final List<SkatingUser> _coaches = [];
 
   String get firstName {
     return _firstName;
@@ -48,40 +46,33 @@ class SkatingUser {
     return _capturesID;
   }
 
-  List<SkatingUser> get trainees {
-    return _trainees;
-  }
-
   List<String> get traineesID {
     return _traineesID;
-  }
-
-  List<SkatingUser> get coaches {
-    return _coaches;
   }
 
   List<String> get coachesID {
     return _coachesID;
   }
 
-  Future<void> loadCoaches() async {
-    _coaches.clear();
-    for (String id in _coachesID) {
-      SkatingUser coach = await UserClient().getUserById(id: id);
-      _coaches.add(coach);
-    }
-  }
-
-  Future<void> loadTrainees() async {
-    _trainees.clear();
-    for (String id in _traineesID) {
-      SkatingUser trainee = await UserClient().getUserById(id: id);
-      _trainees.add(trainee);
-    }
-  }
-
   SkatingUser(this._firstName, this._lastName, this.role, this._email,
       [this.uID]);
+
+  Future<List<SkatingUser>> getCoachesData() async {
+    List<SkatingUser> coaches = [];
+    for (String id in _coachesID) {
+      SkatingUser coach = await UserClient().getUserById(id: id);
+      coaches.add(coach);
+    }
+    return coaches;
+  }
+
+  Future<List<SkatingUser>> getTraineesData() async {
+    List<SkatingUser> trainees = [];
+    for (String id in _traineesID) {
+      trainees.add(await UserClient().getUserById(id: id));
+    }
+    return trainees;
+  }
 
   Future<List<Capture>> getCapturesData() async {
     List<Capture> captures = [];

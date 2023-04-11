@@ -27,6 +27,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   late TextEditingController _searchController;
   late String _searchString = "";
   late FocusNode _focusNode;
+  List<SkatingUser> _trainees = [];
   bool _searching = false;
   bool _loading = true;
   bool _state = false;
@@ -41,7 +42,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
 
   _loadData() async {
     if (!_loading) return;
-    await _currentUser.loadTrainees();
+    _trainees = await _currentUser.getTraineesData();
     _updateList();
     setState(() {
       _loading = false;
@@ -55,7 +56,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   }
 
   _updateList() {
-    _traineesToShow = groupBy(_currentUser.trainees,
+    _traineesToShow = groupBy(_trainees,
         (obj) => obj.firstName.toString().toUpperCase().substring(0, 1));
     _traineesToShow = Map.fromEntries(_traineesToShow.entries.toList()
       ..sort((e1, e2) => e1.key.compareTo(e2.key)));
