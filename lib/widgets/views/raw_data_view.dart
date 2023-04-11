@@ -1,14 +1,13 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
-import '../layout/scaffold/topbar.dart';
 
 class RawDataView extends StatelessWidget {
   const RawDataView({super.key});
@@ -56,7 +55,8 @@ class _LoggerViewState extends State<_LoggerView>
   @override
   void initState() {
     super.initState();
-    XSensDotStreamingDataService().startMeasuring(XSensDotConnectionService().isInitialized);
+    XSensDotStreamingDataService()
+        .startMeasuring(XSensDotConnectionService().isInitialized);
     _displayedData = XSensDotStreamingDataService().subscribe(this);
   }
 

@@ -1,16 +1,15 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/styles.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../utils/field_validators.dart';
-import '../buttons/ice_button.dart';
-import '../titles/page_title.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
@@ -54,14 +53,13 @@ class ForgotPasswordView extends StatelessWidget {
                             ),
                             Form(
                                 child: TextFormField(
-                                  key: _forgotPasswordInfoKey,
+                              key: _forgotPasswordInfoKey,
                               keyboardType: TextInputType.emailAddress,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _emailController,
                               validator: (value) {
-                                return FieldValidators.newEmailValidator(
-                                    value);
+                                return FieldValidators.newEmailValidator(value);
                               },
                               decoration: const InputDecoration(
                                 labelText: email,
@@ -74,8 +72,10 @@ class ForgotPasswordView extends StatelessWidget {
                               child: IceButton(
                                   text: sendEmailButtonText,
                                   onPressed: () async {
-                                    if (_forgotPasswordInfoKey.currentState == null ||
-                                        !_forgotPasswordInfoKey.currentState!.validate()) {
+                                    if (_forgotPasswordInfoKey.currentState ==
+                                            null ||
+                                        !_forgotPasswordInfoKey.currentState!
+                                            .validate()) {
                                       return;
                                     }
                                     try {

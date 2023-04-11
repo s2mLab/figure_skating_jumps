@@ -1,19 +1,19 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/captures_tab/captures_tab.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/option_tab/options_tab.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/progression_tab.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
-import '../../constants/colors.dart';
-import '../../constants/styles.dart';
-import '../layout/athlete_view/captures_tab/captures_tab.dart';
-import '../layout/athlete_view/progression_tab/progression_tab.dart';
-import '../layout/athlete_view/option_tab/options_tab.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/topbar.dart';
 
 class AthleteView extends StatefulWidget {
   const AthleteView({Key? key}) : super(key: key);
@@ -83,10 +83,7 @@ class _AthleteViewState extends State<AthleteView> {
                   text: captureButton,
                   onPressed: () {
                     CaptureClient().capturingSkatingUser = skater!;
-                    Navigator.pushNamed(
-                      context,
-                      '/CaptureData'
-                    );
+                    Navigator.pushNamed(context, '/CaptureData');
                   },
                   textColor: paleText,
                   color: primaryColor,
@@ -109,13 +106,14 @@ class _AthleteViewState extends State<AthleteView> {
           ));
   }
 
-  Widget _buildProgressionTab(BuildContext context, AsyncSnapshot<void> snapshot) {
+  Widget _buildProgressionTab(
+      BuildContext context, AsyncSnapshot<void> snapshot) {
     return snapshot.connectionState == ConnectionState.done
         ? ProgressionTab(groupedCaptures: skater!.sortedGroupedCaptures)
         : const Center(
-        child: Padding(
-          padding: EdgeInsets.all(32.0),
-          child: CircularProgressIndicator(),
-        ));
+            child: Padding(
+            padding: EdgeInsets.all(32.0),
+            child: CircularProgressIndicator(),
+          ));
   }
 }

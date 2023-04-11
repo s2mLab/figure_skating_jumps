@@ -1,14 +1,14 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/lang_fr.dart';
-import '../../constants/styles.dart';
-
 class ModificationInfoDialog extends StatelessWidget {
   final List<Modification> _orderedModifications;
-  const ModificationInfoDialog({required List<Modification> orderedModifications, super.key})
+  const ModificationInfoDialog(
+      {required List<Modification> orderedModifications, super.key})
       : _orderedModifications = orderedModifications;
 
   @override
@@ -48,7 +48,8 @@ class ModificationInfoDialog extends StatelessWidget {
                                 child: Text(
                                   dateSecondsDisplayFormat.format(
                                       _orderedModifications[index].date),
-                                  style: const TextStyle(color: primaryColorDark,
+                                  style: const TextStyle(
+                                      color: primaryColorDark,
                                       decorationStyle:
                                           TextDecorationStyle.solid,
                                       decoration: TextDecoration.underline),

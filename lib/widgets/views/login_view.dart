@@ -1,17 +1,16 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../enums/user_role.dart';
-import '../buttons/ice_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -48,8 +47,10 @@ class _LoginViewState extends State<LoginView> {
       await UserClient().signIn(email: _email, password: _password);
       if (mounted) {
         UserClient().currentSkatingUser!.role == UserRole.coach
-            ? Navigator.pushReplacementNamed(context, '/ListAthletes', arguments: false)
-            : Navigator.pushReplacementNamed(context, '/Acquisitions', arguments: UserClient().currentSkatingUser);
+            ? Navigator.pushReplacementNamed(context, '/ListAthletes',
+                arguments: false)
+            : Navigator.pushReplacementNamed(context, '/Acquisitions',
+                arguments: UserClient().currentSkatingUser);
       }
     } on IceException catch (e) {
       setState(() {

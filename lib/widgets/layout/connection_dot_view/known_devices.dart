@@ -1,17 +1,16 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
+import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
+import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:flutter/material.dart';
-
-import '../../../enums/x_sens_device_state.dart';
-import '../../../interfaces/i_bluetooth_discovery_subscriber.dart';
-import '../../../services/manager/bluetooth_device_manager.dart';
-import '../../buttons/x_sens_dot_list_element.dart';
-import '../../dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
-import '../../icons/x_sens_state_icon.dart';
 
 class KnownDevices extends StatefulWidget {
   final Function refreshParentCallback;
@@ -208,8 +207,7 @@ class _KnownDevicesState extends State<KnownDevices>
   void _updateKnowDevices() {
     if (_knownDevices.length != BluetoothDeviceManager().devices.length) {
       _knownDevices.clear();
-      _knownDevices.addAll(BluetoothDeviceManager()
-          .devices);
+      _knownDevices.addAll(BluetoothDeviceManager().devices);
       _updateDeviceLists();
     }
   }

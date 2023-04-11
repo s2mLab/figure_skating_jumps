@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/models/db_models/global_settings.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
@@ -12,17 +14,14 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_servi
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/no_camera_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dialog.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/season.dart';
-import '../dialogs/capture/no_camera_recording_dialog.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
-
-import '../titles/page_title.dart';
 
 class CaptureView extends StatefulWidget {
   const CaptureView({

@@ -1,6 +1,5 @@
+import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:flutter/material.dart';
-
-import '../../enums/jump_type.dart';
 import 'color_circle.dart';
 
 class LegendMove extends StatelessWidget {

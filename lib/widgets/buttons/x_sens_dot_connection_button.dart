@@ -1,7 +1,7 @@
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:flutter/material.dart';
-import '../../enums/x_sens_device_state.dart';
-import '../../interfaces/i_x_sens_state_subscriber.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
   const XSensDotConnectionButton({Key? key}) : super(key: key);
@@ -40,14 +40,15 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           onPressed: () {
-            Navigator.pushReplacementNamed(context,'/ManageDevices',
-                );
+            Navigator.pushReplacementNamed(
+              context,
+              '/ManageDevices',
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(connectionState.message,
-                  style: connectionState.style),
+              Text(connectionState.message, style: connectionState.style),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Container(
@@ -66,7 +67,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
 
   @override
   void onStateChange(XSensDeviceState state) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         connectionState = state;
       });

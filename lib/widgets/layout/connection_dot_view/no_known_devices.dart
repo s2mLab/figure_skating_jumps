@@ -1,8 +1,8 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:flutter/cupertino.dart';
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
 
 class NoKnownDevices extends StatelessWidget {
   const NoKnownDevices({Key? key}) : super(key: key);

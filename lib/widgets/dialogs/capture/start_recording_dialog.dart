@@ -1,14 +1,13 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
-import '../../../services/x_sens/x_sens_dot_recording_service.dart';
 
 class StartRecordingDialog extends StatefulWidget {
   const StartRecordingDialog({super.key});
@@ -59,7 +58,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Padding(
-                padding: EdgeInsets.all(16.0), child: InstructionPrompt(memoryErrorMessage, errorColor)),
+                padding: EdgeInsets.all(16.0),
+                child: InstructionPrompt(memoryErrorMessage, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -116,8 +116,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   void onStateChange(RecorderState state) {
-    if(state == RecorderState.idle) {
-      if (_lastState == RecorderState.preparing ) {
+    if (state == RecorderState.idle) {
+      if (_lastState == RecorderState.preparing) {
         setState(() {
           _currentId = 1;
         });
@@ -129,7 +129,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
     }
 
     _lastState = state;
-    if(_lastState == RecorderState.erasing) {
+    if (_lastState == RecorderState.erasing) {
       setState(() {
         _currentId = 2;
       });

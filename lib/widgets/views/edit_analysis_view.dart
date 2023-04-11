@@ -1,25 +1,25 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
+import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
+import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_panel_content.dart';
+import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_panel_header.dart';
+import 'package:figure_skating_jumps/widgets/layout/legend_move.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_size.dart';
-import '../../models/capture.dart';
-import '../../models/jump.dart';
-import '../layout/capture_list_tile.dart';
-import '../layout/edit_analysis_view/jump_panel_content.dart';
-import '../layout/edit_analysis_view/jump_panel_header.dart';
-import '../layout/legend_move.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/topbar.dart';
 
 class EditAnalysisView extends StatefulWidget {
   const EditAnalysisView({super.key});

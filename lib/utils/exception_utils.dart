@@ -1,11 +1,10 @@
+import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
+import 'package:figure_skating_jumps/exceptions/invalid_email_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
+import 'package:figure_skating_jumps/exceptions/too_many_attempts_exception.dart';
+import 'package:figure_skating_jumps/exceptions/weak_password_exception.dart';
+import 'package:figure_skating_jumps/exceptions/wrong_password_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../exceptions/conflict_exception.dart';
-import '../exceptions/invalid_email_exception.dart';
-import '../exceptions/too_many_attempts_exception.dart';
-import '../exceptions/weak_password_exception.dart';
-import '../exceptions/wrong_password_exception.dart';
 
 class ExceptionUtils {
   static handleFirebaseAuthException(FirebaseAuthException e) {

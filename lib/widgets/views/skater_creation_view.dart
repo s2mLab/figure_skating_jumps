@@ -1,21 +1,18 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
-
 import 'package:figure_skating_jumps/utils/field_validators.dart';
-
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
+import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../enums/user_role.dart';
-import '../buttons/ice_button.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/topbar.dart';
-import '../prompts/instruction_prompt.dart';
-import '../titles/page_title.dart';
 import 'dart:developer' as developer;
 
 class SkaterCreationView extends StatefulWidget {

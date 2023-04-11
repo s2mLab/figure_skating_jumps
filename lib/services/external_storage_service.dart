@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../models/xsens_dot_data.dart';
 
 class ExternalStorageService {
   static final ExternalStorageService _externalStorageService =
@@ -26,7 +24,8 @@ class ExternalStorageService {
     Directory directory = Directory(DirType.video.fullPath(
         dirName: DirType.video.defaults, relativePath: null.orAppFolder));
 
-    await Directory('${directory.path}/$_videoDirPrefix').create(recursive: true);
+    await Directory('${directory.path}/$_videoDirPrefix')
+        .create(recursive: true);
 
     String fileName = Uri.parse(f.path).pathSegments.last.trim();
     File file =
@@ -35,7 +34,8 @@ class ExternalStorageService {
     return Future<String>.value(file.path);
   }
 
-  Future<String> saveCaptureCsv(String fileName, List<XSensDotData> extractedData) async {
+  Future<String> saveCaptureCsv(
+      String fileName, List<XSensDotData> extractedData) async {
     Directory directory = await getApplicationDocumentsDirectory();
     String dirPath = '${directory.path}/csv';
     await Directory(dirPath).create(recursive: true);
@@ -46,6 +46,4 @@ class ExternalStorageService {
 
     return Future<String>.value(file.path);
   }
-
-  
 }
