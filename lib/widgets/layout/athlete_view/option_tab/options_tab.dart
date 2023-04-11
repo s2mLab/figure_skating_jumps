@@ -44,7 +44,6 @@ class OptionsTab extends StatelessWidget {
                     text: confirmText,
                     onPressed: () async {
                       await UserClient().unlinkSkaterAndCoach(skaterId: _athlete.uID!, coachId: UserClient().currentSkatingUser!.uID!);
-                      UserClient().currentSkatingUser!.trainees.removeWhere((element) => element.uID == _athlete.uID!);
                       UserClient().currentSkatingUser!.traineesID.removeWhere((element) => element == _athlete.uID!);
                       if (context.mounted) Navigator.pushReplacementNamed(context, '/ListAthletes', arguments: true);
                     },

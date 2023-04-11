@@ -14,7 +14,6 @@ class SkatingUser {
   late List<String> _capturesID = [];
   late final List<Capture> _captures = [];
   late List<String> _traineesID = [];
-  final List<SkatingUser> _trainees = [];
   late List<String> _coachesID = [];
   final List<SkatingUser> _coaches = [];
 
@@ -66,10 +65,6 @@ class SkatingUser {
     return groupBy(_captures, (obj) => obj.date.toString().substring(0, 10));
   }
 
-  List<SkatingUser> get trainees {
-    return _trainees;
-  }
-
   List<String> get traineesID {
     return _traineesID;
   }
@@ -82,6 +77,9 @@ class SkatingUser {
     return _coachesID;
   }
 
+  SkatingUser(this._firstName, this._lastName, this.role, this._email,
+      [this.uID]);
+
   Future<void> loadCoaches() async {
     _coaches.clear();
     for (String id in _coachesID) {
@@ -90,16 +88,13 @@ class SkatingUser {
     }
   }
 
-  Future<void> loadTrainees() async {
-    _trainees.clear();
+  Future<List<SkatingUser>> getTraineesData() async {
+    List<SkatingUser> trainees = [];
     for (String id in _traineesID) {
-      SkatingUser trainee = await UserClient().getUserById(id: id);
-      _trainees.add(trainee);
+      trainees.add(await UserClient().getUserById(id: id));
     }
+    return trainees;
   }
-
-  SkatingUser(this._firstName, this._lastName, this.role, this._email,
-      [this.uID]);
 
   Future<void> loadCapturesData() async {
     _captures.clear();
