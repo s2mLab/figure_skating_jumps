@@ -8,6 +8,7 @@ class ReactiveLayoutHelper {
   static const double extraEnglobingHorizontalPadding = 48;
   static const double extraEnglobingVerticalPadding = 32;
   static double _screenHeight = 0;
+  static double _tabletWidthThreshold = 600;
   static double _screenWidth = 0;
 
   static double getScreenHeight() {
@@ -19,7 +20,7 @@ class ReactiveLayoutHelper {
   }
 
   static bool isTablet() {
-    return _screenHeight > _expectedHeight + 200 && _screenWidth > _expectedWidth + 200;
+    return _screenWidth > _tabletWidthThreshold;
   }
 
   static double getHeightFromFactor(double value,
@@ -30,6 +31,7 @@ class ReactiveLayoutHelper {
 
   static double getWidthFromFactor(double value,
       [bool isEnglobingPadding = false]) {
+    print(_screenWidth);
     return value * _screenWidth / _expectedWidth +
         (isEnglobingPadding && isTablet() ? extraEnglobingHorizontalPadding : 0);
   }
