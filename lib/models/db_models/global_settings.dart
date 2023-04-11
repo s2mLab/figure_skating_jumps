@@ -1,11 +1,10 @@
-import '../../enums/season.dart';
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'abstract_local_db_object.dart';
 
 class GlobalSettings extends AbstractLocalDbObject {
   final Season _season;
 
-  GlobalSettings({id, required Season season})
-      : _season = season {
+  GlobalSettings({id, required Season season}) : _season = season {
     this.id = id;
   }
 

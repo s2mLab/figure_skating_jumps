@@ -1,19 +1,18 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
+import 'package:figure_skating_jumps/widgets/utils/progression_dots_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../constants/styles.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../enums/user_role.dart';
-import '../../models/skating_user.dart';
-import '../../services/user_client.dart';
-import '../utils/progression_dots_row.dart';
 
 class CoachAccountCreationView extends StatefulWidget {
   const CoachAccountCreationView({super.key});

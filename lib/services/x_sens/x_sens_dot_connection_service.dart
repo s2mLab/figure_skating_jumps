@@ -1,14 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
+import 'package:figure_skating_jumps/enums/method_channel_names.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
+import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import '../../enums/method_channel_names.dart';
-import '../../enums/x_sens_device_state.dart';
-import '../../interfaces/i_x_sens_state_subscriber.dart';
-import '../../models/bluetooth_device.dart';
-import '../manager/bluetooth_device_manager.dart';
 
 class XSensDotConnectionService
     implements IObservable<IXSensStateSubscriber, XSensDeviceState> {
@@ -56,11 +56,16 @@ class XSensDotConnectionService
         debugPrint(e.message!);
       }
       if (response) {
-        _currentXSensDevice = BluetoothDevice(macAddress: bluetoothDevice.macAddress, userId: UserClient().currentSkatingUser!.uID!, name: bluetoothDevice.name, id: bluetoothDevice.id);
+        _currentXSensDevice = BluetoothDevice(
+            macAddress: bluetoothDevice.macAddress,
+            userId: UserClient().currentSkatingUser!.uID!,
+            name: bluetoothDevice.name,
+            id: bluetoothDevice.id);
 
-        BluetoothDevice? deviceName = BluetoothDeviceManager().devices
-            .firstWhereOrNull((iter) =>
-                _currentXSensDevice!.macAddress == iter.macAddress);
+        BluetoothDevice? deviceName = BluetoothDeviceManager()
+            .devices
+            .firstWhereOrNull(
+                (iter) => _currentXSensDevice!.macAddress == iter.macAddress);
 
         if (deviceName != null) {
           _currentXSensDevice!.name = deviceName.name;

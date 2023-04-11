@@ -1,17 +1,16 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
 import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/known_devices.dart';
+import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/no_known_devices.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../buttons/ice_button.dart';
-import '../dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
-import '../layout/connection_dot_view/no_known_devices.dart';
-import '../layout/scaffold/topbar.dart';
 
 class ConnectionDotView extends StatefulWidget {
   const ConnectionDotView({Key? key}) : super(key: key);

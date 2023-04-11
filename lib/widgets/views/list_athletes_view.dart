@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import '../../constants/lang_fr.dart';
-import '../../models/skating_user.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
 
 class ListAthletesView extends StatefulWidget {
   const ListAthletesView({Key? key}) : super(key: key);
@@ -88,7 +88,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
   Widget build(BuildContext context) {
     _loadData();
     _state = ModalRoute.of(context)!.settings.arguments as bool;
-    if(_state) {
+    if (_state) {
       setState(() {});
     }
     return Scaffold(
@@ -175,7 +175,9 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                               loaderstrokeWidth: 5,
                             ))
                           : _traineesToShow.isEmpty
-                              ? const Center(child: Text(noAthletes, textAlign: TextAlign.center))
+                              ? const Center(
+                                  child: Text(noAthletes,
+                                      textAlign: TextAlign.center))
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {

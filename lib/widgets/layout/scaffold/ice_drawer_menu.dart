@@ -1,14 +1,14 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/widgets/buttons/nav_menu_element.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/helper_dialog.dart';
+import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
-import '../../buttons/nav_menu_element.dart';
-import '../../views/raw_data_view.dart';
 
 class IceDrawerMenu extends StatelessWidget {
   final bool isUserDebuggingFeature;
@@ -52,16 +52,17 @@ class IceDrawerMenu extends StatelessWidget {
                         Navigator.pushNamed(context, '/Acquisitions',
                             arguments: UserClient().currentSkatingUser!);
                       }),
-                  if(UserClient().currentSkatingUser!.role == UserRole.coach) NavMenuElement(
-                      text: myAthletes,
-                      iconData: Icons.groups_rounded,
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/ListAthletes',
-                          arguments: true,
-                        );
-                      }),
+                  if (UserClient().currentSkatingUser!.role == UserRole.coach)
+                    NavMenuElement(
+                        text: myAthletes,
+                        iconData: Icons.groups_rounded,
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/ListAthletes',
+                            arguments: true,
+                          );
+                        }),
                 ],
               )),
               Container(

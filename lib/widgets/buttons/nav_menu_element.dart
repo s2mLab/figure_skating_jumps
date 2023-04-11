@@ -1,7 +1,6 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
 
 class NavMenuElement extends StatelessWidget {
   final String text;
