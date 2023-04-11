@@ -2,7 +2,7 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -36,13 +36,13 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             children: [
               IceFieldEditable(
                   onEditComplete: (String newText) {
-                    xSensDot.assignedName = newText;
+                    xSensDot.name = newText;
                   },
-                  text: xSensDot.assignedName),
+                  text: xSensDot.name),
               IceButton(
                   text: forgetDeviceButton,
                   onPressed: () async {
-                    await DeviceNamesManager().removeDevice(xSensDot);
+                    await BluetoothDeviceManager().removeDevice(xSensDot);
                     close();
                   },
                   textColor: errorColor,
