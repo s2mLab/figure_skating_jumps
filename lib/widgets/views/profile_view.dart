@@ -24,12 +24,13 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  bool _loading = true;
   final SkatingUser _currentUser = UserClient().currentSkatingUser!;
+  List<SkatingUser> _coaches = [];
+  bool _loading = true;
 
   _loadData() async {
     if (!_loading) return;
-    await _currentUser.loadCoaches();
+    _coaches = await _currentUser.getCoachesData();
     setState(() {
       _loading = false;
     });
@@ -41,7 +42,7 @@ class _ProfileViewState extends State<ProfileView> {
         .then((value) {
       Navigator.pop(context);
       setState(() {
-        _currentUser.coaches.removeWhere((element) => element.uID! == coachID);
+        _coaches.removeWhere((element) => element.uID! == coachID);
       });
     });
   }
@@ -130,12 +131,12 @@ class _ProfileViewState extends State<ProfileView> {
                           size: 70,
                           loaderstrokeWidth: 5,
                         ))
-                      : _currentUser.coaches.isEmpty
+                      : _coaches.isEmpty
                           ? const Center(child: Text(noCoaches))
                           : ListView.builder(
-                              itemCount: _currentUser.coaches.length,
+                              itemCount: _coaches.length,
                               itemBuilder: (context, index) {
-                                SkatingUser item = _currentUser.coaches[index];
+                                SkatingUser item = _coaches[index];
                                 return Container(
                                     margin: const EdgeInsets.symmetric(
                                       vertical: 4,
