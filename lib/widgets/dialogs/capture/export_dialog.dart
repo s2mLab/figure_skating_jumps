@@ -17,7 +17,7 @@ class _ExportDialogState extends State<ExportDialog> {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: const Text(
-        exportingData,
+        exportingDataLabel,
         textAlign: TextAlign.center,
       ),
       children: [
@@ -39,11 +39,11 @@ class _ExportDialogState extends State<ExportDialog> {
                           value: snapshot.data?.exportPct,
                         )),
                   ),
-                  Text(remainingTime + snapshot.data!.formattedTimeRemaining)
+                  Text(remainingTimeLabel + snapshot.data!.formattedTimeRemaining)
                 ],
               );
             } else {
-              return const Center(child: Text(calculating));
+              return const Center(child: Text(calculatingLabel));
             }
           }
         )

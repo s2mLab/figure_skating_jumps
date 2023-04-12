@@ -7,7 +7,6 @@ import '../../constants/lang_fr.dart';
 class MissingPermissionsView extends StatelessWidget {
   const MissingPermissionsView({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,8 @@ class MissingPermissionsView extends StatelessWidget {
               ),
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: InstructionPrompt(pleaseActivatePermissions, errorColor),
+                child: InstructionPrompt(
+                    pleaseActivatePermissionsInfo, errorColor),
               ),
             ),
           ),
@@ -34,5 +34,4 @@ class MissingPermissionsView extends StatelessWidget {
       ),
     );
   }
-
 }
