@@ -2,9 +2,10 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,24 +26,24 @@ class ConfigureXSensDotDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         backgroundColor: primaryBackground,
-        insetPadding: const EdgeInsets.only(left: 16, right: 16),
+        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
         clipBehavior: Clip.antiAlias,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24), vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               IceFieldEditable(
                   onEditComplete: (String newText) {
-                    xSensDot.assignedName = newText;
+                    xSensDot.name = newText;
                   },
-                  text: xSensDot.assignedName),
+                  text: xSensDot.name),
               IceButton(
                   text: forgetDevice,
                   onPressed: () async {
-                    await DeviceNamesManager().removeDevice(xSensDot);
+                    await BluetoothDeviceManager().removeDevice(xSensDot);
                     close();
                   },
                   textColor: errorColor,
@@ -50,7 +51,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   iceButtonImportance: IceButtonImportance.discreetAction,
                   iceButtonSize: IceButtonSize.medium),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
                 child: Center(
                   child: XSensStateIcon(
                       false,
@@ -60,7 +61,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: _connectionManagementButton()),
               IceButton(
                   text: goBack,
@@ -111,7 +112,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
             color: primaryColor,
             iceButtonImportance: IceButtonImportance.secondaryAction,
             iceButtonSize: IceButtonSize.large)
-        : const SizedBox(height: 56);
+        : SizedBox(height: ReactiveLayoutHelper.getHeightFromFactor(56));
   }
 
   bool _isDeviceConnected() {

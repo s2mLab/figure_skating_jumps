@@ -8,8 +8,7 @@ import '../../enums/method_channel_names.dart';
 import '../../enums/x_sens_device_state.dart';
 import '../../interfaces/i_x_sens_state_subscriber.dart';
 import '../../models/bluetooth_device.dart';
-import '../../models/db_models/device_name.dart';
-import '../manager/device_names_manager.dart';
+import '../manager/bluetooth_device_manager.dart';
 
 class XSensDotConnectionService
     implements IObservable<IXSensStateSubscriber, XSensDeviceState> {
@@ -57,18 +56,16 @@ class XSensDotConnectionService
         debugPrint(e.message!);
       }
       if (response) {
-        _currentXSensDevice = bluetoothDevice;
+        _currentXSensDevice = BluetoothDevice(macAddress: bluetoothDevice.macAddress, userId: UserClient().currentSkatingUser!.uID!, name: bluetoothDevice.name, id: bluetoothDevice.id);
 
-        DeviceName? deviceName = DeviceNamesManager()
-            .deviceNames
+        BluetoothDevice? deviceName = BluetoothDeviceManager().devices
             .firstWhereOrNull((iter) =>
-                _currentXSensDevice!.macAddress == iter.deviceMacAddress);
+                _currentXSensDevice!.macAddress == iter.macAddress);
 
         if (deviceName != null) {
-          _currentXSensDevice!.assignedName = deviceName.name;
+          _currentXSensDevice!.name = deviceName.name;
         } else {
-          DeviceNamesManager().addDevice(
-              UserClient().currentAuthUser!.uid, _currentXSensDevice!);
+          BluetoothDeviceManager().addDevice(_currentXSensDevice!);
         }
       }
       return response;
