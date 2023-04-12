@@ -11,7 +11,9 @@ import 'package:figure_skating_jumps/services/manager/global_settings_manager.da
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/analysis_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/export_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +39,6 @@ class _CaptureViewState extends State<CaptureView>
     implements IRecorderSubscriber {
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
-  final GlobalKey<NavigatorState> _exportingDialogKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _analyzingDialogKey =
-      GlobalKey<NavigatorState>();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   RecorderState _lastState = RecorderState.idle;
@@ -223,7 +221,7 @@ class _CaptureViewState extends State<CaptureView>
 
   Future<void> _onCaptureStopPressed() async {
     try {
-      _displayWaitingDialog(exportingData, _exportingDialogKey);
+      _displayStepDialog(const ExportDialog());
       await _initializeControllerFuture;
       String videoPath = "";
       if (_isCameraActivated) {
@@ -310,54 +308,17 @@ class _CaptureViewState extends State<CaptureView>
         });
   }
 
-  void _displayWaitingDialog(
-      String message, GlobalKey<NavigatorState> dialogKey) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return SimpleDialog(
-            key: dialogKey,
-            title: Text(
-              message,
-              textAlign: TextAlign.center,
-            ),
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: SizedBox(
-                        width: 50,
-                        child: LinearProgressIndicator(
-                          color: primaryColor,
-                          backgroundColor: discreetText,
-                        )),
-                  ),
-                  Text(pleaseWait)
-                ],
-              )
-            ],
-          );
-        });
-  }
-
   @override
   void onStateChange(RecorderState state) {
     if (state == RecorderState.analyzing) {
-      if (_exportingDialogKey.currentContext != null) {
-        Navigator.pop(_exportingDialogKey.currentContext!);
-      }
-      _displayWaitingDialog(analyzingData, _analyzingDialogKey);
+      Navigator.of(context, rootNavigator: true).pop();
+      _displayStepDialog(const AnalysisDialog());
     }
 
     if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
-      if (_analyzingDialogKey.currentContext != null) {
-        Navigator.pop(_analyzingDialogKey.currentContext!);
-        Navigator.pushNamed(context, '/EditAnalysis',
-            arguments: _xSensDotRecordingService.currentCapture);
-      }
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushNamed(context, '/EditAnalysis',
+          arguments: _xSensDotRecordingService.currentCapture);
     }
 
     _lastState = state;
