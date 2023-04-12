@@ -99,36 +99,43 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _succeededJumpsGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(
-            maximum: jumpScores.first.toDouble(),
-            minimum: jumpScores.last.toDouble()),
-        // Chart title
-        title: ChartTitle(
-            text: succeededJumpsGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: List<ChartSeries<ValueDatePair, String>>.generate(
-            JumpType.values.length - 1, (index) {
-          return LineSeries<ValueDatePair, String>(
-              color: JumpType.values[index].color,
-              dataSource: GraphicDataHelper.getJumpScorePerTypeGraphData(
-                  _getCapturesBySeason(_selectedSeason),
-                  JumpType.values[index]),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
-              name: JumpType.values[index].abbreviation);
-        }));
+    return FutureBuilder(
+        future: GraphicDataHelper.getJumpScorePerTypeGraphData(
+            _getCapturesBySeason(_selectedSeason)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const CircularProgressIndicator();
+          }
+          return SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              primaryYAxis: NumericAxis(
+                  maximum: jumpScores.first.toDouble(),
+                  minimum: jumpScores.last.toDouble()),
+              // Chart title
+              title: ChartTitle(
+                  text: succeededJumpsGraphicTitle,
+                  textStyle: const TextStyle(fontFamily: 'Jost')),
+              // Enable legend
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+              ),
+              // Enable tooltip
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: List<ChartSeries<ValueDatePair, String>>.generate(
+                  JumpType.values.length - 1, (index) {
+                return LineSeries<ValueDatePair, String>(
+                    color: JumpType.values[index].color,
+                    dataSource: snapshot.data![JumpType.values[index]]!,
+                    emptyPointSettings:
+                        EmptyPointSettings(mode: EmptyPointMode.drop),
+                    xValueMapper: (ValueDatePair data, _) => data.day,
+                    yValueMapper: (ValueDatePair data, _) => data.value,
+                    markerSettings: const MarkerSettings(
+                        isVisible: true, height: 4, width: 4),
+                    name: JumpType.values[index].abbreviation);
+              }));
+        });
   }
 
   Map<String, List<Capture>> _getCapturesBySeason(Season? s) {
@@ -140,59 +147,75 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _percentageJumpsSucceededGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(maximum: 100, interval: 20),
-        // Chart title
-        title: ChartTitle(
-            text: percentageJumpsSucceededGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: [
-          LineSeries<ValueDatePair, String>(
-              color: secondaryColorDark,
-              dataSource: GraphicDataHelper.getPercentageSucceededGraphData(
-                  _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
-              name: percentageJumpsSucceededLegend)
-        ]);
+    return FutureBuilder(
+        future: GraphicDataHelper.getPercentageSucceededGraphData(
+            _getCapturesBySeason(_selectedSeason)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const CircularProgressIndicator();
+          }
+          return SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              primaryYAxis: NumericAxis(maximum: 100, interval: 20),
+              // Chart title
+              title: ChartTitle(
+                  text: percentageJumpsSucceededGraphicTitle,
+                  textStyle: const TextStyle(fontFamily: 'Jost')),
+              // Enable legend
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+              ),
+              // Enable tooltip
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: [
+                LineSeries<ValueDatePair, String>(
+                    color: secondaryColorDark,
+                    dataSource: snapshot.data!,
+                    emptyPointSettings:
+                        EmptyPointSettings(mode: EmptyPointMode.drop),
+                    xValueMapper: (ValueDatePair data, _) => data.day,
+                    yValueMapper: (ValueDatePair data, _) => data.value,
+                    markerSettings: const MarkerSettings(
+                        isVisible: true, height: 4, width: 4),
+                    name: percentageJumpsSucceededLegend)
+              ]);
+        });
   }
 
   Widget _averageJumpDurationGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        // Chart title
-        title: ChartTitle(
-            text: averageJumpDurationGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: [
-          LineSeries<ValueDatePair, String>(
-              color: secondaryColor,
-              dataSource: GraphicDataHelper.getAverageFlyTimeGraphData(
-                  _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
-              name: averageFlyTimeLegend)
-        ]);
+    return FutureBuilder(
+        future: GraphicDataHelper.getAverageFlyTimeGraphData(
+            _getCapturesBySeason(_selectedSeason)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const CircularProgressIndicator();
+          }
+          return SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              // Chart title
+              title: ChartTitle(
+                  text: averageJumpDurationGraphicTitle,
+                  textStyle: const TextStyle(fontFamily: 'Jost')),
+              // Enable legend
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+              ),
+              // Enable tooltip
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: [
+                LineSeries<ValueDatePair, String>(
+                    color: secondaryColor,
+                    dataSource: snapshot.data!,
+                    emptyPointSettings:
+                        EmptyPointSettings(mode: EmptyPointMode.drop),
+                    xValueMapper: (ValueDatePair data, _) => data.day,
+                    yValueMapper: (ValueDatePair data, _) => data.value,
+                    markerSettings: const MarkerSettings(
+                        isVisible: true, height: 4, width: 4),
+                    name: averageFlyTimeLegend)
+              ]);
+        });
   }
 }
