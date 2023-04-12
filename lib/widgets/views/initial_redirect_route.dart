@@ -3,6 +3,8 @@ import 'package:figure_skating_jumps/services/manager/active_session_manager.dar
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/reactive_layout_helper.dart';
+
 class InitialRedirectRoute extends StatelessWidget {
   late final bool _canFunction;
 
@@ -12,6 +14,7 @@ class InitialRedirectRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ReactiveLayoutHelper.updateDimensions(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_canFunction) {
         Navigator.pushReplacementNamed(context, '/MissingPermissions');

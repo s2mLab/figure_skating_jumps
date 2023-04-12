@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,29 +32,30 @@ class ForgotPasswordView extends StatelessWidget {
                     child: Column(
               children: [
                 Container(
-                    margin: const EdgeInsets.all(32.0),
-                    height: 100,
+                    margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
+                    height: ReactiveLayoutHelper.getHeightFromFactor(100),
                     child: SvgPicture.asset(
                         'assets/vectors/blanc-logo-patinage-quebec.svg')),
                 Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.all(32.0),
+                    margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [connectionShadow],
                     ),
                     child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 32.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16), vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
                         child: Column(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: PageTitle(text: forgotPasswordTitle),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                              child: const PageTitle(text: forgotPasswordTitle),
                             ),
                             Form(
                                 child: TextFormField(
+                                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                               key: _forgotPasswordInfoKey,
                               keyboardType: TextInputType.emailAddress,
                               autovalidateMode:
@@ -62,14 +64,14 @@ class ForgotPasswordView extends StatelessWidget {
                               validator: (value) {
                                 return FieldValidators.newEmailValidator(value);
                               },
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 labelText: emailField,
                                 labelStyle: TextStyle(
-                                    fontSize: 16, color: discreetText),
+                                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
                               ),
                             )),
                             Padding(
-                              padding: const EdgeInsets.only(top: 8),
+                              padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
                               child: IceButton(
                                   text: sendEmailButton,
                                   onPressed: () async {

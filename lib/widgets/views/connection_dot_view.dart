@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../buttons/ice_button.dart';
 import '../dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
 import '../layout/connection_dot_view/no_known_devices.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class ConnectionDotView extends StatefulWidget {
@@ -24,13 +26,13 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isUserDebuggingFeature: false),
+      appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+          margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16), horizontal: ReactiveLayoutHelper.getHeightFromFactor(32)),
           child: const PageTitle(text: managingXSensDotTitle),
         ),
         Expanded(
@@ -43,7 +45,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                 : const NoKnownDevices()),
         Center(
             child: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
+          padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
               text: connectNewXSensDotButton,
               onPressed: () {

@@ -5,9 +5,12 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_servi
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../utils/reactive_layout_helper.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class RawDataView extends StatelessWidget {
@@ -16,25 +19,21 @@ class RawDataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(isUserDebuggingFeature: true),
+      appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: true) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: true),
       drawer: const IceDrawerMenu(isUserDebuggingFeature: true),
       drawerScrimColor: Colors.transparent,
       drawerEnableOpenDragGesture: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16), horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(rawDataTitle,
-                  style: TextStyle(
-                      color: primaryColor,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold)),
+            children: [
+              const PageTitle(text: rawDataTitle),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: InstructionPrompt(warnRawDataPromptInfo, secondaryColor),
+                padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                child: const InstructionPrompt(warnRawDataPromptInfo, secondaryColor),
               ),
-              _LoggerView()
+              const _LoggerView()
             ]),
       ),
     );
@@ -80,8 +79,8 @@ class _LoggerViewState extends State<_LoggerView>
               itemCount: _displayedData.length,
               itemBuilder: (context, i) {
                 return Text(_displayedData[i].toString(),
-                    style: const TextStyle(
-                        fontSize: 5, color: paleText, fontFamily: 'monospace'));
+                    style: TextStyle(
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(5), color: paleText, fontFamily: 'monospace'));
               })),
     );
   }
