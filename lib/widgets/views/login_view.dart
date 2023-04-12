@@ -60,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
       });
       debugPrint(e.devMessage);
     } catch (e) {
-      _errorMessage = connectionImpossible;
+      _errorMessage = connectionImpossibleLabel;
     }
     setState(() {
       _connectionLabelBtn = connectionButton;
@@ -129,7 +129,7 @@ class _LoginViewState extends State<LoginView> {
                                       });
                                     },
                                     decoration: InputDecoration(
-                                      labelText: email,
+                                      labelText: emailField,
                                       labelStyle: TextStyle(
                                           fontSize:
                                               ReactiveLayoutHelper
@@ -153,7 +153,7 @@ class _LoginViewState extends State<LoginView> {
                                       });
                                     },
                                     decoration: InputDecoration(
-                                      labelText: password,
+                                      labelText: passwordLabel,
                                       labelStyle: TextStyle(
                                           fontSize: ReactiveLayoutHelper
                                                   .getHeightFromFactor(16),
@@ -183,7 +183,7 @@ class _LoginViewState extends State<LoginView> {
                                   top: ReactiveLayoutHelper
                                           .getHeightFromFactor(8)),
                               child: IceButton(
-                                  text: createAccount,
+                                  text: createAccountButton,
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                       context,

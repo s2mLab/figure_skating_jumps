@@ -80,7 +80,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                         _captureInfo != null &&
                         _captureInfo!.videoPath.isNotEmpty)
                       IceButton(
-                          text: seeVideoAgain,
+                          text: seeVideoAgainButton,
                           onPressed: () {
                             showDialog<String>(
                                 context: context,
@@ -98,7 +98,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(24)),
-                  child: const InstructionPrompt(analysisDonePrompt, secondaryColor),
+                  child: const InstructionPrompt(analysisDoneInfo, secondaryColor),
                 ),
                 Container(
                     margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
@@ -108,9 +108,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const PageTitle(text: detectedJumps),
+                    const PageTitle(text: detectedJumpsTitle),
                     IceButton(
-                        text: addAJump,
+                        text: addAJumpButton,
                         onPressed: () async {
                           Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
                               0, _capture!.uID!, 0, 0, 0);
@@ -138,7 +138,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 if (_timeWasModified)
                   Center(
                       child: IceButton(
-                          text: reorderJumpList,
+                          text: reorderJumpListButton,
                           onPressed: () {
                             Capture.sortJumps(_capture!);
                             Navigator.pushReplacementNamed(
@@ -156,7 +156,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     child: _capture!.jumps.isEmpty
                         ? Padding(
                             padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                            child: Center(child: Text(noJump, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
+                            child: Center(child: Text(noJumpInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(8),
@@ -207,7 +207,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                           const Duration(seconds: 2),
                                                       backgroundColor: confirm,
                                                       content: Text(
-                                                          savedModificationsSnack, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)));
+                                                          savedModificationsSnackInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)));
+
                                             });
                                           });
                                         },

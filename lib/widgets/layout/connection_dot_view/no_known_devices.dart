@@ -14,7 +14,7 @@ class NoKnownDevices extends StatelessWidget {
       Padding(
         padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(64, true)),
         child: Text(
-          noConnectionMessage,
+          noConnectionInfo,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: discreetText,

@@ -45,13 +45,13 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _startingRecording() {
-    return _loadingDialog(captureStartingPrompt);
+    return _loadingDialog(captureStartingLabel);
   }
 
   SimpleDialog _fullMemory() {
     return SimpleDialog(
       title: Text(
-        errorCaptureStartingPrompt,
+        errorCaptureStartingLabel,
         textAlign: TextAlign.center,
         style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
@@ -60,7 +60,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)), child: const InstructionPrompt(memoryErrorMessage, errorColor)),
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)), child: const InstructionPrompt(memoryErrorInfo, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -71,7 +71,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
                 iceButtonImportance: IceButtonImportance.mainAction,
                 iceButtonSize: IceButtonSize.medium),
             IceButton(
-                text: goBack,
+                text: goBackLabel,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -86,7 +86,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _erasingMemory() {
-    return _loadingDialog(erasingDataPrompt);
+    return _loadingDialog(erasingDataLabel);
   }
 
   SimpleDialog _loadingDialog(String message) {
@@ -109,7 +109,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
                     backgroundColor: discreetText,
                   )),
             ),
-            Text(pleaseWait, style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
+            Text(pleaseWaitLabel, style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
           ],
         )
       ],
@@ -118,8 +118,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   void onStateChange(RecorderState state) {
-    if(state == RecorderState.idle) {
-      if (_lastState == RecorderState.preparing ) {
+    if (state == RecorderState.idle) {
+      if (_lastState == RecorderState.preparing) {
         setState(() {
           _currentId = 1;
         });
@@ -131,7 +131,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
     }
 
     _lastState = state;
-    if(_lastState == RecorderState.erasing) {
+    if (_lastState == RecorderState.erasing) {
       setState(() {
         _currentId = 2;
       });
