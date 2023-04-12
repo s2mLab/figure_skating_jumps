@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
-import 'package:figure_skating_jumps/services/capture_client.dart';
 
 import '../enums/season.dart';
 
@@ -51,10 +50,6 @@ class Capture {
     return _hasVideo;
   }
 
-  List<Jump> get jumps {
-    return _jumps;
-  }
-
   List<String> get jumpsID {
     return _jumpsID;
   }
@@ -79,7 +74,7 @@ class Capture {
       this._file, this._userID, this._duration, this._hasVideo, this._date, this._season, this._jumpsID, this._modifications,
       [this.uID]);
 
-  factory Capture._fromFirestore(
+  factory Capture.fromFirestore(
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) {
     return Capture(
         captureInfo.get('file'),
@@ -96,19 +91,5 @@ class Capture {
 
   static void sortJumps(Capture c) {
     c._jumps.sort((a, b) => a.time.compareTo(b.time));
-  }
-
-  static Future<Capture> createFromFirebase(
-      String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) async {
-    Capture capture = Capture._fromFirestore(uID, captureInfo);
-    for (String jumpID in capture._jumpsID) {
-      Jump jumpToAdd = await CaptureClient().getJumpByID(uID: jumpID);
-      capture.jumpTypeCount[jumpToAdd.type] =
-          capture.jumpTypeCount[jumpToAdd.type]! + 1;
-      capture._jumps.add(jumpToAdd);
-      Capture.sortJumps(capture);
-    }
-
-    return capture;
   }
 }
