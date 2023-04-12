@@ -11,7 +11,9 @@ import 'package:figure_skating_jumps/services/manager/global_settings_manager.da
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/analysis_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/export_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +41,6 @@ class _CaptureViewState extends State<CaptureView>
     implements IRecorderSubscriber {
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
-  final GlobalKey<NavigatorState> _exportingDialogKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _analyzingDialogKey =
-      GlobalKey<NavigatorState>();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   RecorderState _lastState = RecorderState.idle;
@@ -89,7 +87,7 @@ class _CaptureViewState extends State<CaptureView>
                         onPressed: () async {
                           await _onCaptureStopPressed();
                         },
-                        text: stopCapture,
+                        text: stopCaptureButton,
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
@@ -120,19 +118,19 @@ class _CaptureViewState extends State<CaptureView>
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const PageTitle(text: captureViewTitle),
+                      const PageTitle(text: captureViewStartLabel),
                       Padding(
                         padding: EdgeInsets.only(
                             top: ReactiveLayoutHelper.getHeightFromFactor(20)),
                         child: const InstructionPrompt(
-                            captureViewInstructions, secondaryColor),
+                            captureViewInfo, secondaryColor),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical:
                                 ReactiveLayoutHelper.getHeightFromFactor(20)),
                         child: const InstructionPrompt(
-                            captureViewCameraInstruction, secondaryColor),
+                            captureViewCameraInfo, secondaryColor),
                       ),
                       Expanded(
                           child: _isCameraActivated
@@ -146,7 +144,7 @@ class _CaptureViewState extends State<CaptureView>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              captureViewCameraSwitchPrompt,
+                              captureViewCameraSwitchLabel,
                               style: TextStyle(
                                   fontSize:
                                       ReactiveLayoutHelper.getHeightFromFactor(
@@ -169,7 +167,7 @@ class _CaptureViewState extends State<CaptureView>
                                   right:
                                       ReactiveLayoutHelper.getWidthFromFactor(
                                           8)),
-                              child: Text(selectSeasonPrompt,
+                              child: Text(selectSeasonLabel,
                                   style: TextStyle(
                                       fontSize: ReactiveLayoutHelper
                                           .getHeightFromFactor(16))),
@@ -239,7 +237,7 @@ class _CaptureViewState extends State<CaptureView>
                             onPressed: () async {
                               await _onCaptureStartPressed();
                             },
-                            text: captureViewStart,
+                            text: captureViewStartLabel,
                             textColor: primaryColor,
                             color: primaryColor,
                             iceButtonImportance:
@@ -256,7 +254,7 @@ class _CaptureViewState extends State<CaptureView>
 
   Future<void> _onCaptureStopPressed() async {
     try {
-      _displayWaitingDialog(exportingData, _exportingDialogKey);
+      _displayStepDialog(const ExportDialog());
       await _initializeControllerFuture;
       String videoPath = "";
       if (_isCameraActivated) {
@@ -346,58 +344,17 @@ class _CaptureViewState extends State<CaptureView>
         });
   }
 
-  void _displayWaitingDialog(
-      String message, GlobalKey<NavigatorState> dialogKey) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return SimpleDialog(
-            key: dialogKey,
-            title: Text(message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(
-                        ReactiveLayoutHelper.getHeightFromFactor(16)),
-                    child: SizedBox(
-                        width: ReactiveLayoutHelper.getWidthFromFactor(50),
-                        child: const LinearProgressIndicator(
-                          color: primaryColor,
-                          backgroundColor: discreetText,
-                        )),
-                  ),
-                  Text(pleaseWait,
-                      style: TextStyle(
-                          fontSize:
-                              ReactiveLayoutHelper.getHeightFromFactor(16)))
-                ],
-              )
-            ],
-          );
-        });
-  }
-
   @override
   void onStateChange(RecorderState state) {
     if (state == RecorderState.analyzing) {
-      if (_exportingDialogKey.currentContext != null) {
-        Navigator.pop(_exportingDialogKey.currentContext!);
-      }
-      _displayWaitingDialog(analyzingData, _analyzingDialogKey);
+      Navigator.of(context, rootNavigator: true).pop();
+      _displayStepDialog(const AnalysisDialog());
     }
 
     if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
-      if (_analyzingDialogKey.currentContext != null) {
-        Navigator.pop(_analyzingDialogKey.currentContext!);
-        Navigator.pushNamed(context, '/EditAnalysis',
-            arguments: _xSensDotRecordingService.currentCapture);
-      }
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushNamed(context, '/EditAnalysis',
+          arguments: _xSensDotRecordingService.currentCapture);
     }
 
     _lastState = state;

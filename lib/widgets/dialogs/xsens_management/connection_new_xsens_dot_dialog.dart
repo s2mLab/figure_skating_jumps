@@ -108,7 +108,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
           child:
-              const InstructionPrompt(bluetoothAuthorizationPrompt, secondaryColor),
+              const InstructionPrompt(bluetoothAuthorizationPromptInfo, secondaryColor),
+
         ),
         Padding(
           padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
@@ -126,7 +127,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   ),
                 ),
               ),
-              Text(searching, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
+              Text(searchingLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
             ],
           ),
         ),
@@ -153,7 +154,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -178,7 +179,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         Padding(
           padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
-          child: const InstructionPrompt(verifyConnectivity, secondaryColor),
+          child: const InstructionPrompt(verifyConnectivityLabel, secondaryColor),
+
         ),
         Expanded(
           child: _streamedData.isNotEmpty
@@ -234,14 +236,15 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     ])
               : Center(
                   child: Text(
-                  noData,
+                  noDataLabel,
                   style: TextStyle(fontFamily: 'Jost', fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+
                 )),
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
-              text: completePairing,
+              text: completePairingButton,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 if (mounted) {
@@ -256,7 +259,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 await _xSensDotConnectionService.disconnect();
@@ -291,7 +294,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       await _xSensDotStreamingDataService
           .startMeasuring(XSensDotConnectionService().isInitialized);
     } else {
-      Fluttertoast.showToast(msg: connectionErrorMessage + device.macAddress);
+      Fluttertoast.showToast(msg: connectionErrorLabel + device.macAddress);
       debugPrint("Connection to device ${device.macAddress} failed");
     }
   }
@@ -302,8 +305,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     knownMacAddresses.addAll(
         BluetoothDeviceManager().devices.map((e) => e.macAddress));
     Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
-            (scannedDevice) =>
-        !knownMacAddresses.contains(scannedDevice.macAddress));
+        (scannedDevice) =>
+            !knownMacAddresses.contains(scannedDevice.macAddress));
     _devices.addAll(devicesToAdd);
   }
 

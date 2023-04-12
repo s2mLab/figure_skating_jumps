@@ -45,10 +45,11 @@ class ModifyFullName extends StatelessWidget {
               child: Column(children: [
                 Row(
                   children: [
-                    Text(firstName,
+                    Text(firstNameField,
                         style: TextStyle(
                             fontSize:
                                 ReactiveLayoutHelper.getHeightFromFactor(16))),
+
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(
@@ -67,7 +68,7 @@ class ModifyFullName extends StatelessWidget {
                 SizedBox(height: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 Row(
                   children: [
-                    const Text(lastName),
+                    const Text(lastNameField),
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(
@@ -89,11 +90,11 @@ class ModifyFullName extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(cancel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+          child: Text(cancelLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: Text(confirmLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+          child: Text(modifyButton, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
       ],
     );

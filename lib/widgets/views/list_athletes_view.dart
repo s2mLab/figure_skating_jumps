@@ -202,12 +202,13 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                           : _traineesToShow.isEmpty
                               ? Center(
                                   child: Text(
-                                  noAthletes,
+                                  noAthletesInfo,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: ReactiveLayoutHelper
                                           .getHeightFromFactor(16)),
                                 ))
+
                               : ListView.builder(
                                   itemCount: _traineesToShow.length,
                                   itemBuilder: (context, letterIndex) {

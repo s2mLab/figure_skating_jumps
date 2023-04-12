@@ -54,7 +54,7 @@ class JumpPanelHeader extends StatelessWidget {
                 padding: EdgeInsets.only(
                     left: ReactiveLayoutHelper.getWidthFromFactor(5)),
                 child: Text(
-                  '$jumpType:',
+                  '$jumpTypeLabel:',
                   style: TextStyle(
                       fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 ),

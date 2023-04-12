@@ -72,7 +72,7 @@ class _KnownDevicesState extends State<KnownDevices>
                   Container(
                     margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                     child: Text(
-                      connectedDevice,
+                      connectedDeviceTitle,
                       style: TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                     ),
                   ),
@@ -98,7 +98,7 @@ class _KnownDevicesState extends State<KnownDevices>
                   child: Row(
                     children: [
                       Text(
-                        knownDevicesNear,
+                        knownDevicesNearTitle,
                         style:
                             TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                       ),
@@ -135,7 +135,7 @@ class _KnownDevicesState extends State<KnownDevices>
                 Container(
                   margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: Text(
-                    myDevices,
+                    myDevicesTitle,
                     style: TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                   ),
                 ),

@@ -5,32 +5,32 @@ import 'package:flutter/material.dart';
 enum XSensDeviceState {
   disconnected(
       0,
-      connectionStateMessageDisconnected,
+      connectionStateMessageDisconnectedLabel,
       Colors.black,
       errorColor),
   connecting(
       1,
-      connectionStateMessageConnecting,
+      connectionStateMessageConnectingLabel,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
   connected(
       2,
-      connectionStateMessageConnected,
+      connectionStateMessageConnectedLabel,
       primaryColorLight,
       connectedXSensDotButtonIndicator),
   initialized(
       3,
-      connectionStateMessageInitialized,
+      connectionStateMessageInitializedLabel,
       primaryColorLight,
       connectedXSensDotButtonIndicator),
   reconnecting(
       4,
-      connectionStateMessageReconnecting,
+      connectionStateMessageReconnectingLabel,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator),
   startReconnecting(
       5,
-      connectionStateMessageReconnecting,
+      connectionStateMessageReconnectingLabel,
       reconnectingXSensDotButtonBackground,
       reconnectingXSensDotButtonIndicator);
 

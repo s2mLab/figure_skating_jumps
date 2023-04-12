@@ -77,7 +77,7 @@ class _HelperDialogState extends State<HelperDialog> {
                               margin: EdgeInsets.all(
                                   ReactiveLayoutHelper.getHeightFromFactor(8)),
                               child: IceButton(
-                                  text: redirect,
+                                  text: redirectButton,
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(context,
                                         HelperSubject.values[index].direction!);

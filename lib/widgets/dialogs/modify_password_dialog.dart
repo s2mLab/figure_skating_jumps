@@ -35,7 +35,7 @@ class ModifyPassword extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(passwordInput, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                    Text(passwordField, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
@@ -46,7 +46,7 @@ class ModifyPassword extends StatelessWidget {
                               return FieldValidators.newPassValidator(value);
                             })),
                     const SizedBox(height: 24),
-                    Text(passwordConfirmationInput, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                    Text(passwordConfirmationField, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
@@ -63,11 +63,11 @@ class ModifyPassword extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(cancel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+          child: Text(cancelLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: Text(confirmLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+          child: Text(modifyButton, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
       ],
     );

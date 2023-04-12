@@ -30,24 +30,24 @@ class OptionsTab extends StatelessWidget {
                 top: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child: _athlete.uID == UserClient().currentSkatingUser!.uID!
                 ? Text(
-                    noOptionsAvailable,
+                    noOptionsAvailableInfo,
                     style: TextStyle(
                         fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   )
                 : IceButton(
-                    text: removeThisAthlete,
+                    text: removeThisAthleteButton,
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                                title: Text(confirmAthleteRemoval,
+                                title: Text(confirmAthleteRemovalButton,
                                     style: TextStyle(
                                         fontSize: ReactiveLayoutHelper
                                             .getHeightFromFactor(16))),
                                 actions: [
                                   IceButton(
-                                      text: cancel,
+                                      text: cancelLabel,
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -57,7 +57,7 @@ class OptionsTab extends StatelessWidget {
                                           IceButtonImportance.secondaryAction,
                                       iceButtonSize: IceButtonSize.small),
                                   IceButton(
-                                      text: confirmText,
+                                      text: confirmLabel,
                                       onPressed: () async {
                                         await UserClient().unlinkSkaterAndCoach(
                                             skaterId: _athlete.uID!,
@@ -82,7 +82,8 @@ class OptionsTab extends StatelessWidget {
                                       iceButtonSize: IceButtonSize.small)
                                 ],
                                 content: const InstructionPrompt(
-                                    confirmDelete, errorColor));
+                                    confirmDeleteInfo, errorColor));
+
                           });
                     },
                     textColor: primaryColor,
