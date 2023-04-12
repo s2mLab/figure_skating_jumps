@@ -32,7 +32,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+          margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16), horizontal: ReactiveLayoutHelper.getHeightFromFactor(32)),
           child: const PageTitle(text: managingXSensDotTitle),
         ),
         Expanded(
@@ -45,7 +45,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
                 : const NoKnownDevices()),
         Center(
             child: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
+          padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
               text: connectNewXSensDot,
               onPressed: () {
