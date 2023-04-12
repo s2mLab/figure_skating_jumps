@@ -41,8 +41,10 @@ class OptionsTab extends StatelessWidget {
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                                title: Text(confirmAthleteRemoval, style:TextStyle(
-                                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                                title: Text(confirmAthleteRemoval,
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16))),
                                 actions: [
                                   IceButton(
                                       text: cancel,
@@ -62,11 +64,6 @@ class OptionsTab extends StatelessWidget {
                                             coachId: UserClient()
                                                 .currentSkatingUser!
                                                 .uID!);
-                                        UserClient()
-                                            .currentSkatingUser!
-                                            .trainees
-                                            .removeWhere((element) =>
-                                                element.uID == _athlete.uID!);
                                         UserClient()
                                             .currentSkatingUser!
                                             .traineesID

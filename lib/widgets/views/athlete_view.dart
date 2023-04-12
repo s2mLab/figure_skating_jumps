@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
@@ -9,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
+
 import '../../utils/reactive_layout_helper.dart';
+import '../../models/capture.dart';
 import '../layout/athlete_view/captures_tab/captures_tab.dart';
 import '../layout/athlete_view/progression_tab/progression_tab.dart';
 import '../layout/athlete_view/option_tab/options_tab.dart';
@@ -29,12 +32,12 @@ class AthleteView extends StatefulWidget {
 class _AthleteViewState extends State<AthleteView> {
   int _switcherIndex = 0;
   SkatingUser? skater;
-  Future<void>? _futureCaptures;
+  Future<List<Capture>>? _futureCaptures;
 
   @override
   Widget build(BuildContext context) {
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
-    _futureCaptures ??= skater?.loadCapturesData();
+    _futureCaptures ??= skater?.getCapturesData();
     return Scaffold(
       appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
       drawerEnableOpenDragGesture: false,
@@ -107,23 +110,35 @@ class _AthleteViewState extends State<AthleteView> {
     );
   }
 
-  Widget _buildCapturesTab(BuildContext context, AsyncSnapshot<void> snapshot) {
-    return snapshot.connectionState == ConnectionState.done
-        ? CapturesTab(groupedCaptures: skater!.reversedGroupedCaptures)
-        : const Center(
-            child: Padding(
-            padding: EdgeInsets.all(32.0),
-            child: CircularProgressIndicator(),
-          ));
+  Widget _buildCapturesTab(
+      BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
+    if (snapshot.connectionState != ConnectionState.done) {
+      return const Center(
+          child: Padding(
+        padding: EdgeInsets.all(32.0),
+        child: CircularProgressIndicator(),
+      ));
+    }
+    snapshot.data!
+        .sort((Capture left, Capture right) => right.date.compareTo(left.date));
+    return CapturesTab(
+        groupedCaptures: groupBy(
+            snapshot.data!, (obj) => obj.date.toString().substring(0, 10)));
   }
 
-  Widget _buildProgressionTab(BuildContext context, AsyncSnapshot<void> snapshot) {
-    return snapshot.connectionState == ConnectionState.done
-        ? ProgressionTab(groupedCaptures: skater!.sortedGroupedCaptures)
-        : const Center(
-        child: Padding(
-          padding: EdgeInsets.all(32.0),
-          child: CircularProgressIndicator(),
-        ));
+  Widget _buildProgressionTab(
+      BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
+    if (snapshot.connectionState != ConnectionState.done) {
+      return const Center(
+          child: Padding(
+        padding: EdgeInsets.all(32.0),
+        child: CircularProgressIndicator(),
+      ));
+    }
+    snapshot.data!
+        .sort((Capture left, Capture right) => left.date.compareTo(right.date));
+    return ProgressionTab(
+        groupedCaptures: groupBy(
+            snapshot.data!, (obj) => obj.date.toString().substring(0, 10)));
   }
 }

@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/services/manager/device_names_manager.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/known_devices.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -36,7 +36,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
           child: const PageTitle(text: managingXSensDotTitle),
         ),
         Expanded(
-            child: DeviceNamesManager().deviceNames.isNotEmpty
+            child: BluetoothDeviceManager().devices.isNotEmpty
                 ? KnownDevices(
                     refreshParentCallback: () {
                       if (mounted) setState(() {});
