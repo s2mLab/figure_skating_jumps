@@ -24,9 +24,9 @@ class MissingPermissionsView extends StatelessWidget {
                 color: primaryBackground,
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InstructionPrompt(
+              child: Padding(
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
+                child: const InstructionPrompt(
                     pleaseActivatePermissionsInfo, errorColor),
               ),
             ),
