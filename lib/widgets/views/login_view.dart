@@ -185,7 +185,7 @@ class _LoginViewState extends State<LoginView> {
                               child: IceButton(
                                   text: createAccountButton,
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
+                                    Navigator.pushNamed(
                                       context,
                                       '/CoachAccountCreation',
                                     );

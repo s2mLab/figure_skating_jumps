@@ -63,7 +63,7 @@ class _ProfileViewState extends State<ProfileView> {
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: Container(
-            margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+            margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const PageTitle(text: profileTitle),
@@ -135,7 +135,7 @@ class _ProfileViewState extends State<ProfileView> {
                           loaderstrokeWidth: 5,
                         ))
                       : _coaches.isEmpty
-                          ? const Center(child: Text(noCoachesInfo))
+                          ? Center(child: Text(noCoachesInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
                           : ListView.builder(
                               itemCount: _coaches.length,
                               itemBuilder: (context, index) {

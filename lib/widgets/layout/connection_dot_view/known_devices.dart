@@ -106,7 +106,7 @@ class _KnownDevicesState extends State<KnownDevices>
                         padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16)),
                         child: SizedBox(
                           height: ReactiveLayoutHelper.getHeightFromFactor(20),
-                          width: ReactiveLayoutHelper.getWidthFromFactor(20),
+                          width: ReactiveLayoutHelper.getHeightFromFactor(20),
                           child: const CircularProgressIndicator(
                             color: discreetText,
                             value: null,
