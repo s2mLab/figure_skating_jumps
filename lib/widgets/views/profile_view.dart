@@ -100,7 +100,7 @@ class _ProfileViewState extends State<ProfileView> {
                   margin: const EdgeInsets.only(right: 24),
                   alignment: Alignment.centerRight,
                   child: IceButton(
-                      text: modifyPassword,
+                      text: modifyPasswordButton,
                       onPressed: () {
                         showDialog<String>(
                             context: context,
@@ -115,7 +115,7 @@ class _ProfileViewState extends State<ProfileView> {
               Container(
                   margin: const EdgeInsets.only(right: 16, left: 16, top: 32),
                   child: const Text(
-                    listCoaches,
+                    listCoachesTitle,
                     style: TextStyle(color: darkText, fontSize: 20),
                   )),
               Expanded(
@@ -132,7 +132,7 @@ class _ProfileViewState extends State<ProfileView> {
                           loaderstrokeWidth: 5,
                         ))
                       : _coaches.isEmpty
-                          ? const Center(child: Text(noCoaches))
+                          ? const Center(child: Text(noCoachesInfo))
                           : ListView.builder(
                               itemCount: _coaches.length,
                               itemBuilder: (context, index) {

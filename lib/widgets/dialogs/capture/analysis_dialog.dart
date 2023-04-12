@@ -10,7 +10,7 @@ class AnalysisDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: const Text(
-        analyzingData,
+        analyzingDataLabel,
         textAlign: TextAlign.center,
       ),
       children: [
@@ -26,7 +26,7 @@ class AnalysisDialog extends StatelessWidget {
                     backgroundColor: discreetText,
                   )),
             ),
-            Text(pleaseWait)
+            Text(pleaseWaitLabel)
           ],
         )
       ],

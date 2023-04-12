@@ -85,7 +85,7 @@ class _CaptureViewState extends State<CaptureView>
                         onPressed: () async {
                           await _onCaptureStopPressed();
                         },
-                        text: stopCapture,
+                        text: stopCaptureButton,
                         textColor: primaryColor,
                         color: primaryColor,
                         iceButtonImportance:
@@ -111,16 +111,16 @@ class _CaptureViewState extends State<CaptureView>
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const PageTitle(text: captureViewTitle),
+                      const PageTitle(text: captureViewStartLabel),
                       const Padding(
                         padding: EdgeInsets.only(top: 24.0),
-                        child: InstructionPrompt(
-                            captureViewInstructions, secondaryColor),
+                        child:
+                            InstructionPrompt(captureViewInfo, secondaryColor),
                       ),
                       const Padding(
                         padding: EdgeInsets.only(top: 24.0),
                         child: InstructionPrompt(
-                            captureViewCameraInstruction, secondaryColor),
+                            captureViewCameraInfo, secondaryColor),
                       ),
                       if (_isCameraActivated)
                         FutureBuilder<void>(
@@ -135,7 +135,7 @@ class _CaptureViewState extends State<CaptureView>
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(captureViewCameraSwitchPrompt),
+                            const Text(captureViewCameraSwitchLabel),
                             Switch(
                                 value: _isCameraActivated,
                                 onChanged: (val) {
@@ -150,7 +150,7 @@ class _CaptureViewState extends State<CaptureView>
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(right: 8.0),
-                              child: Text(selectSeasonPrompt),
+                              child: Text(selectSeasonLabel),
                             ),
                             DropdownButton<Season>(
                                 selectedItemBuilder: (context) {
@@ -205,7 +205,7 @@ class _CaptureViewState extends State<CaptureView>
                           onPressed: () async {
                             await _onCaptureStartPressed();
                           },
-                          text: captureViewStart,
+                          text: captureViewStartLabel,
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:

@@ -40,7 +40,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   },
                   text: xSensDot.name),
               IceButton(
-                  text: forgetDevice,
+                  text: forgetDeviceButton,
                   onPressed: () async {
                     await BluetoothDeviceManager().removeDevice(xSensDot);
                     close();
@@ -63,7 +63,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: _connectionManagementButton()),
               IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     close();
                   },
@@ -79,7 +79,7 @@ class ConfigureXSensDotDialog extends StatelessWidget {
   Widget _connectionManagementButton() {
     if (_isDeviceConnected()) {
       return IceButton(
-          text: disconnectDevice,
+          text: disconnectDeviceButton,
           onPressed: () async {
             await XSensDotConnectionService().disconnect();
             close();
@@ -95,14 +95,14 @@ class ConfigureXSensDotDialog extends StatelessWidget {
         .any((element) => element.macAddress == xSensDot.macAddress);
     return isNear
         ? IceButton(
-            text: connectDevice,
+            text: connectDeviceButton,
             onPressed: () async {
               await XSensDotConnectionService().disconnect();
               if (await XSensDotConnectionService().connect(xSensDot)) {
                 close();
               } else {
                 Fluttertoast.showToast(
-                    msg: connectionErrorMessage + xSensDot.macAddress);
+                    msg: connectionErrorLabel + xSensDot.macAddress);
                 debugPrint(
                     "Connection to device ${xSensDot.macAddress} failed");
               }

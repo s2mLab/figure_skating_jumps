@@ -14,7 +14,7 @@ class DeviceNotReadyDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: const Text(
-        errorCaptureStartingPrompt,
+        errorCaptureStartingLabel,
         textAlign: TextAlign.center,
         style: TextStyle(color: errorColor),
       ),
@@ -24,9 +24,9 @@ class DeviceNotReadyDialog extends StatelessWidget {
           children: [
             const Padding(
                 padding: EdgeInsets.all(16.0),
-                child: InstructionPrompt(noDeviceErrorMessage, errorColor)),
+                child: InstructionPrompt(noDeviceErrorInfo, errorColor)),
             IceButton(
-                text: connectXSensDot,
+                text: connectXSensDotButton,
                 onPressed: () {
                   Navigator.pushNamed(context, '/ManageDevices');
                 },
@@ -35,7 +35,7 @@ class DeviceNotReadyDialog extends StatelessWidget {
                 iceButtonImportance: IceButtonImportance.secondaryAction,
                 iceButtonSize: IceButtonSize.medium),
             IceButton(
-                text: goBack,
+                text: goBackLabel,
                 onPressed: () {
                   Navigator.pop(context);
                 },

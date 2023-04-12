@@ -106,8 +106,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       children: [
         const Padding(
           padding: EdgeInsets.all(16.0),
-          child:
-              InstructionPrompt(bluetoothAuthorizationPrompt, secondaryColor),
+          child: InstructionPrompt(
+              bluetoothAuthorizationPromptInfo, secondaryColor),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -125,7 +125,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   ),
                 ),
               ),
-              Text(searching)
+              Text(searchingLabel)
             ],
           ),
         ),
@@ -152,7 +152,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -177,7 +177,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child: InstructionPrompt(verifyConnectivity, secondaryColor),
+          child: InstructionPrompt(verifyConnectivityLabel, secondaryColor),
         ),
         Expanded(
           child: _streamedData.isNotEmpty
@@ -233,14 +233,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                     ])
               : const Center(
                   child: Text(
-                  noData,
+                  noDataLabel,
                   style: TextStyle(fontFamily: 'Jost'),
                 )),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: IceButton(
-              text: completePairing,
+              text: completePairingButton,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 if (mounted) {
@@ -255,7 +255,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: cancel,
+              text: cancelLabel,
               onPressed: () async {
                 await _xSensDotStreamingDataService.stopMeasuring();
                 await _xSensDotConnectionService.disconnect();
@@ -290,7 +290,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       await _xSensDotStreamingDataService
           .startMeasuring(XSensDotConnectionService().isInitialized);
     } else {
-      Fluttertoast.showToast(msg: connectionErrorMessage + device.macAddress);
+      Fluttertoast.showToast(msg: connectionErrorLabel + device.macAddress);
       debugPrint("Connection to device ${device.macAddress} failed");
     }
   }
@@ -301,8 +301,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     knownMacAddresses.addAll(
         BluetoothDeviceManager().devices.map((e) => e.macAddress));
     Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
-            (scannedDevice) =>
-        !knownMacAddresses.contains(scannedDevice.macAddress));
+        (scannedDevice) =>
+            !knownMacAddresses.contains(scannedDevice.macAddress));
     _devices.addAll(devicesToAdd);
   }
 

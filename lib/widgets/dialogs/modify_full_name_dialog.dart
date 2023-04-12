@@ -42,7 +42,7 @@ class ModifyFullName extends StatelessWidget {
               child: Column(children: [
                 Row(
                   children: [
-                    const Text(firstName),
+                    const Text(firstNameField),
                     Expanded(
                         child: TextFormField(
                             maxLength: _maxLength,
@@ -57,7 +57,7 @@ class ModifyFullName extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Text(lastName),
+                    const Text(lastNameField),
                     Expanded(
                         child: TextFormField(
                             maxLength: _maxLength,
@@ -75,11 +75,11 @@ class ModifyFullName extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(cancel),
+          child: const Text(cancelLabel),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: const Text(confirmLabel),
+          child: const Text(modifyButton),
         ),
       ],
     );

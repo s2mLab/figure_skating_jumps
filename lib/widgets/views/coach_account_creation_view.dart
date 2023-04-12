@@ -114,7 +114,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                               child: PageTitle(text: coachCreateAccountTitle),
                             ),
                             const InstructionPrompt(
-                                ifNotAnAthletePrompt, secondaryColor),
+                                ifNotAnAthleteInfo, secondaryColor),
                             Expanded(
                               child: IndexedStack(
                                 index: _pageIndex,
@@ -154,7 +154,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
-                labelText: surname,
+                labelText: surnameField,
                 labelStyle: TextStyle(fontSize: 16, color: discreetText),
               ),
             ),
@@ -171,7 +171,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return FieldValidators.newNameValidator(value);
               },
               decoration: const InputDecoration(
-                labelText: name,
+                labelText: nameField,
                 labelStyle: TextStyle(fontSize: 16, color: discreetText),
               ),
             ),
@@ -188,7 +188,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return FieldValidators.newEmailValidator(value);
               },
               decoration: const InputDecoration(
-                labelText: email,
+                labelText: emailField,
                 labelStyle: TextStyle(fontSize: 16, color: discreetText),
               ),
             ),
@@ -200,7 +200,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IceButton(
-                text: continueTo,
+                text: continueToLabel,
                 onPressed: () {
                   if (_personalInfoKey.currentState != null &&
                       _personalInfoKey.currentState!.validate()) {
@@ -216,7 +216,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
-                  text: alreadyHaveAccount,
+                  text: alreadyHaveAccountButton,
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                       context,
@@ -253,7 +253,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return FieldValidators.newPassValidator(value);
               },
               decoration: const InputDecoration(
-                labelText: password,
+                labelText: passwordLabel,
                 labelStyle: TextStyle(fontSize: 16, color: discreetText),
               ),
             ),
@@ -271,7 +271,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                     value, _coachPassword);
               },
               decoration: const InputDecoration(
-                labelText: passConfirmSame,
+                labelText: passConfirmSameLabel,
                 labelStyle: TextStyle(fontSize: 16, color: discreetText),
               ),
             ),
@@ -283,7 +283,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IceButton(
-                text: confirmCreateCoachAccount,
+                text: confirmCreateCoachAccountButton,
                 onPressed: () async {
                   await onAccountCreatePressed();
                 },
@@ -294,7 +294,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     setState(() {
                       _toAccount();
@@ -344,10 +344,10 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               context: context,
               builder: (_) {
                 return AlertDialog(
-                    title: const Text(accountCreationError),
+                    title: const Text(accountCreationErrorLabel),
                     titleTextStyle: const TextStyle(
                         fontSize: 20, color: errorColor, fontFamily: 'Jost'),
-                    content: Text('$_errorStateMessage\n$tryLater'));
+                    content: Text('$_errorStateMessage\n$tryLaterLabel'));
               });
         }
       }

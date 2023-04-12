@@ -13,7 +13,7 @@ class NoKnownDevices extends StatelessWidget {
       const Padding(
         padding: EdgeInsets.symmetric(horizontal: 64.0),
         child: Text(
-          noConnectionMessage,
+          noConnectionInfo,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: discreetText,

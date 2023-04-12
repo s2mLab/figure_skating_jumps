@@ -45,7 +45,7 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
             child: Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: IceButton(
-              text: connectNewXSensDot,
+              text: connectNewXSensDotButton,
               onPressed: () {
                 showDialog(
                   barrierDismissible: false,

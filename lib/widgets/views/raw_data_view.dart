@@ -32,7 +32,7 @@ class RawDataView extends StatelessWidget {
                       fontWeight: FontWeight.bold)),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: InstructionPrompt(warnRawDataPrompt, secondaryColor),
+                child: InstructionPrompt(warnRawDataPromptInfo, secondaryColor),
               ),
               _LoggerView()
             ]),
@@ -56,7 +56,8 @@ class _LoggerViewState extends State<_LoggerView>
   @override
   void initState() {
     super.initState();
-    XSensDotStreamingDataService().startMeasuring(XSensDotConnectionService().isInitialized);
+    XSensDotStreamingDataService()
+        .startMeasuring(XSensDotConnectionService().isInitialized);
     _displayedData = XSensDotStreamingDataService().subscribe(this);
   }
 

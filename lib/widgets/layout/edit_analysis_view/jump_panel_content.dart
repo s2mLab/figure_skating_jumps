@@ -134,7 +134,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IceButton(
-                          text: deleteAJump,
+                          text: deleteAJumpButton,
                           onPressed: () {
                             showDialog(
                                 context: context,
@@ -148,7 +148,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               IceButtonImportance.secondaryAction,
                           iceButtonSize: IceButtonSize.small),
                       IceButton(
-                          text: editTemporalValues,
+                          text: editTemporalValuesButton,
                           onPressed: () {
                             showDialog(
                               barrierDismissible: false,
@@ -181,12 +181,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("$rotationDegrees${_j!.rotationDegrees.toStringAsFixed(3)}",
+              Text(
+                  "$rotationDegreesField${_j!.rotationDegrees.toStringAsFixed(3)}",
                   style: TextStyle(fontSize: _labelFontSizeInPanel)),
               Row(
                 children: [
                   Text(
-                    score,
+                    scoreField,
                     style: TextStyle(fontSize: _labelFontSizeInPanel),
                   ),
                   Padding(
@@ -259,7 +260,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                turns,
+                turnsField,
                 style: TextStyle(fontSize: _labelFontSizeInPanel),
               ),
               Padding(
@@ -298,13 +299,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
           children: [
             const Padding(
               padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(confirmDelete, errorColor),
+              child: InstructionPrompt(confirmDeleteInfo, errorColor),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IceButton(
-                    text: cancel,
+                    text: cancelLabel,
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -315,7 +316,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: IceButton(
-                      text: continueTo,
+                      text: continueToLabel,
                       onPressed: () {
                         widget._onDeleted(_j!, _initialJumpType);
                         Navigator.pop(context);
@@ -347,7 +348,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-                  child: InstructionPrompt(howToComment, secondaryColor),
+                  child: InstructionPrompt(howToCommentInfo, secondaryColor),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -364,7 +365,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(chooseBelowComments),
+                  child: Text(chooseBelowCommentsLabel),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -382,16 +383,19 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
                               text: notEnoughRotationComment,
                               onPressed: () {
-                                _commentController.text = notEnoughRotationComment;
+                                _commentController.text =
+                                    notEnoughRotationComment;
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
@@ -405,16 +409,18 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium),
                           IceButton(
-                              text: stepOut,
+                              text: stepOutComment,
                               onPressed: () {
-                                _commentController.text = stepOut;
+                                _commentController.text = stepOutComment;
                               },
                               textColor: primaryColor,
                               color: primaryColor,
-                              iceButtonImportance: IceButtonImportance.discreetAction,
+                              iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
@@ -425,7 +431,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IceButton(
-                        text: cancel,
+                        text: cancelLabel,
                         onPressed: () {
                           _initializeCommentController();
                           Navigator.pop(context);
@@ -438,7 +444,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: IceButton(
-                          text: save,
+                          text: saveLabel,
                           onPressed: () {
                             _commentFormKey.currentState?.save();
                           },
@@ -474,17 +480,17 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                       const Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: InstructionPrompt(
-                            advancedMetricsPrompt, secondaryColor),
+                            advancedMetricsPromptInfo, secondaryColor),
                       ),
                       const Padding(
                         padding: EdgeInsets.only(bottom: 24.0),
                         child: InstructionPrompt(
-                            irreversibleDataModification, errorColor),
+                            irreversibleDataModificationInfo, errorColor),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("$durationLabel (sec)",
+                          Text("$durationField (sec)",
                               style:
                                   TextStyle(fontSize: _labelFontSizeInPanel)),
                           SizedBox(
@@ -506,7 +512,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("$startTimeLabel (sec)",
+                          Text("$startTimeField (sec)",
                               style:
                                   TextStyle(fontSize: _labelFontSizeInPanel)),
                           SizedBox(
@@ -574,7 +580,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IceButton(
-                        text: cancel,
+                        text: cancelLabel,
                         onPressed: () {
                           _initializeAdvancedMetricsControllers();
                           Navigator.pop(context);
@@ -585,7 +591,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small),
                     IceButton(
-                        text: save,
+                        text: saveLabel,
                         onPressed: () {
                           if (_metricsFormKey.currentState!.validate()) {
                             _metricsFormKey.currentState?.save();

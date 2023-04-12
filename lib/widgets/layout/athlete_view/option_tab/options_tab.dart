@@ -11,7 +11,9 @@ import '../../../../models/skating_user.dart';
 
 class OptionsTab extends StatelessWidget {
   final SkatingUser _athlete;
-  const OptionsTab({required SkatingUser athlete, Key? key}) : _athlete = athlete, super(key: key);
+  const OptionsTab({required SkatingUser athlete, Key? key})
+      : _athlete = athlete,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,40 +26,60 @@ class OptionsTab extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: _athlete.uID == UserClient().currentSkatingUser!.uID! ? const Text(noOptionsAvailable) : IceButton(
-                text: removeThisAthlete,
-                onPressed: () {
-                  showDialog(context: context, builder: (_) {
-                    return AlertDialog(
-                      title: const Text(confirmAthleteRemoval),
-                      actions: [
-                        IceButton(
-                        text: cancel,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        textColor: primaryColor,
-                        color: primaryColor,
-                        iceButtonImportance: IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.small),
-                    IceButton(
-                    text: confirmText,
-                    onPressed: () async {
-                      await UserClient().unlinkSkaterAndCoach(skaterId: _athlete.uID!, coachId: UserClient().currentSkatingUser!.uID!);
-                      UserClient().currentSkatingUser!.traineesID.removeWhere((element) => element == _athlete.uID!);
-                      if (context.mounted) Navigator.pushReplacementNamed(context, '/ListAthletes', arguments: true);
+            child: _athlete.uID == UserClient().currentSkatingUser!.uID!
+                ? const Text(noOptionsAvailableInfo)
+                : IceButton(
+                    text: removeThisAthleteButton,
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                                title: const Text(confirmAthleteRemovalButton),
+                                actions: [
+                                  IceButton(
+                                      text: cancelLabel,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      textColor: primaryColor,
+                                      color: primaryColor,
+                                      iceButtonImportance:
+                                          IceButtonImportance.secondaryAction,
+                                      iceButtonSize: IceButtonSize.small),
+                                  IceButton(
+                                      text: confirmLabel,
+                                      onPressed: () async {
+                                        await UserClient().unlinkSkaterAndCoach(
+                                            skaterId: _athlete.uID!,
+                                            coachId: UserClient()
+                                                .currentSkatingUser!
+                                                .uID!);
+                                        UserClient()
+                                            .currentSkatingUser!
+                                            .traineesID
+                                            .removeWhere((element) =>
+                                                element == _athlete.uID!);
+                                        if (context.mounted) {
+                                          Navigator.pushReplacementNamed(
+                                              context, '/ListAthletes',
+                                              arguments: true);
+                                        }
+                                      },
+                                      textColor: paleText,
+                                      color: errorColorDark,
+                                      iceButtonImportance:
+                                          IceButtonImportance.mainAction,
+                                      iceButtonSize: IceButtonSize.small)
+                                ],
+                                content: const InstructionPrompt(
+                                    confirmDeleteInfo, errorColor));
+                          });
                     },
-                    textColor: paleText,
-                    color: errorColorDark,
-                    iceButtonImportance: IceButtonImportance.mainAction,
-                    iceButtonSize: IceButtonSize.small)],
-                    content: const InstructionPrompt(confirmDelete, errorColor));
-                  });
-                },
-                textColor: primaryColor,
-                color: primaryColor,
-                iceButtonImportance: IceButtonImportance.discreetAction,
-                iceButtonSize: IceButtonSize.medium),
+                    textColor: primaryColor,
+                    color: primaryColor,
+                    iceButtonImportance: IceButtonImportance.discreetAction,
+                    iceButtonSize: IceButtonSize.medium),
           )
         ],
       ),

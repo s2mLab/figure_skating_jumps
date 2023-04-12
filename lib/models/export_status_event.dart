@@ -15,8 +15,8 @@ class ExportStatusEvent {
 
   String get formattedTimeRemaining {
     return (_timeRemaining.inSeconds > 60)
-        ? "${_timeRemaining.inMinutes} ${(_timeRemaining.inMinutes != 1) ? minutes : minutes.replaceFirst("s", "")}"
-        : "${_timeRemaining.inSeconds} ${(_timeRemaining.inSeconds != 1) ? seconds : seconds.replaceFirst("s", "", seconds.length - 1)}";
+        ? "${_timeRemaining.inMinutes} ${(_timeRemaining.inMinutes != 1) ? minuteLabel : minuteLabel.replaceFirst("s", "")}"
+        : "${_timeRemaining.inSeconds} ${(_timeRemaining.inSeconds != 1) ? secondsLabel : secondsLabel.replaceFirst("s", "", secondsLabel.length - 1)}";
   }
 
   double get exportPct {

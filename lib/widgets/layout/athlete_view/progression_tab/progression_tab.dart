@@ -36,7 +36,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
             children: [
               const Padding(
                   padding: EdgeInsets.only(right: 8.0),
-                  child: Text(selectSeasonPrompt)),
+                  child: Text(selectSeasonLabel)),
               DropdownButton<Season>(
                   selectedItemBuilder: (context) {
                     List<Season?> filters = <Season?>[null] + Season.values;
@@ -51,7 +51,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              item == null ? none : item.displayedString,
+                              item == null ? noneLabel : item.displayedString,
                               style: const TextStyle(
                                   color: darkText, fontWeight: FontWeight.w600),
                             ),
@@ -65,7 +65,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
                   items: [
                         const DropdownMenuItem<Season>(
                           value: null,
-                          child: Text(none),
+                          child: Text(noneLabel),
                         )
                       ] +
                       List<DropdownMenuItem<Season>>.generate(
