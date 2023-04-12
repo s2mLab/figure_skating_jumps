@@ -48,7 +48,6 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // TODO: The [0,2,3] list specifies the states that have to have a specific style -> move somewhere global
               Text(connectionState.message,
                   style: [0,2,3].contains(connectionState.state) ? connectedStyle : connectingStyle),
               Padding(
