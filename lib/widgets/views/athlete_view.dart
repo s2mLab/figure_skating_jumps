@@ -113,10 +113,10 @@ class _AthleteViewState extends State<AthleteView> {
   Widget _buildCapturesTab(
       BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
-      return const Center(
+      return Center(
           child: Padding(
-        padding: EdgeInsets.all(32.0),
-        child: CircularProgressIndicator(),
+        padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
+        child: const CircularProgressIndicator(),
       ));
     }
     snapshot.data!
@@ -129,10 +129,10 @@ class _AthleteViewState extends State<AthleteView> {
   Widget _buildProgressionTab(
       BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
-      return const Center(
+      return Center(
           child: Padding(
-        padding: EdgeInsets.all(32.0),
-        child: CircularProgressIndicator(),
+          padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
+        child: const CircularProgressIndicator(),
       ));
     }
     snapshot.data!
