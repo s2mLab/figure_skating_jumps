@@ -9,6 +9,7 @@ import '../../../../constants/lang_fr.dart';
 import '../../../../enums/season.dart';
 import '../../../../models/capture.dart';
 import '../../../../models/graphic_data_classes/value_date_pair.dart';
+import '../../../../utils/reactive_layout_helper.dart';
 
 class ProgressionTab extends StatefulWidget {
   final Map<String, List<Capture>> _captures;
@@ -26,7 +27,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+          vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -34,9 +36,13 @@ class _ProgressionTabState extends State<ProgressionTab> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: Text(selectSeasonLabel)),
+              Padding(
+                  padding: EdgeInsets.only(
+                      right: ReactiveLayoutHelper.getWidthFromFactor(8)),
+                  child: Text(selectSeasonLabel,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16)))),
               DropdownButton<Season>(
                   selectedItemBuilder: (context) {
                     List<Season?> filters = <Season?>[null] + Season.values;
@@ -45,15 +51,21 @@ class _ProgressionTabState extends State<ProgressionTab> {
                       // Here custom text style, alignment and layout size can be applied
                       // to selected item string.
                       return Container(
-                        constraints: const BoxConstraints(minWidth: 80),
+                        constraints: BoxConstraints(
+                            minWidth:
+                                ReactiveLayoutHelper.getWidthFromFactor(80)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               item == null ? noneLabel : item.displayedString,
-                              style: const TextStyle(
-                                  color: darkText, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  color: darkText,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                             ),
                           ],
                         ),
@@ -61,18 +73,26 @@ class _ProgressionTabState extends State<ProgressionTab> {
                     }).toList();
                   },
                   value: _selectedSeason,
-                  menuMaxHeight: 300,
+                  menuMaxHeight: ReactiveLayoutHelper.getHeightFromFactor(300),
                   items: [
-                        const DropdownMenuItem<Season>(
+                        DropdownMenuItem<Season>(
                           value: null,
-                          child: Text(noneLabel),
+                          child: Text(noneLabel,
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16))),
                         )
                       ] +
                       List<DropdownMenuItem<Season>>.generate(
                           Season.values.length, (index) {
                         return DropdownMenuItem<Season>(
                           value: Season.values[index],
-                          child: Text(Season.values[index].displayedString),
+                          child: Text(Season.values[index].displayedString,
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16))),
                         );
                       }),
                   onChanged: (val) {
@@ -84,11 +104,14 @@ class _ProgressionTabState extends State<ProgressionTab> {
           ),
           Expanded(
               child: SingleChildScrollView(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.isTablet()
+                    ? ReactiveLayoutHelper.getWidthFromFactor(8, true)
+                    : ReactiveLayoutHelper.getWidthFromFactor(8),
+                vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
             child: Column(
               children: [
                 _succeededJumpsGraphic(),
-                _percentageJumpsSucceededGraphic(),
                 _averageJumpDurationGraphic(),
               ],
             ),
@@ -107,11 +130,19 @@ class _ProgressionTabState extends State<ProgressionTab> {
         // Chart title
         title: ChartTitle(
             text: succeededJumpsGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
+            textStyle: TextStyle(
+                fontFamily: 'Jost',
+                fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         // Enable legend
         legend: Legend(
           isVisible: true,
           position: LegendPosition.bottom,
+          textStyle: TextStyle(
+              fontFamily: 'Jost',
+              fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
+          padding: ReactiveLayoutHelper.getWidthFromFactor(8),
+          iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
+          iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
         ),
         // Enable tooltip
         tooltipBehavior: TooltipBehavior(enable: true),
@@ -125,8 +156,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
               emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
               xValueMapper: (ValueDatePair data, _) => data.day,
               yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
+              markerSettings: MarkerSettings(
+                  isVisible: true,
+                  height: ReactiveLayoutHelper.getWidthFromFactor(4),
+                  width: ReactiveLayoutHelper.getWidthFromFactor(4)),
               name: JumpType.values[index].abbreviation);
         }));
   }
@@ -139,46 +172,25 @@ class _ProgressionTabState extends State<ProgressionTab> {
     return filteredCaptures;
   }
 
-  Widget _percentageJumpsSucceededGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(maximum: 100, interval: 20),
-        // Chart title
-        title: ChartTitle(
-            text: percentageJumpsSucceededGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: [
-          LineSeries<ValueDatePair, String>(
-              color: secondaryColorDark,
-              dataSource: GraphicDataHelper.getPercentageSucceededGraphData(
-                  _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
-              name: percentageJumpsSucceededLegend)
-        ]);
-  }
-
   Widget _averageJumpDurationGraphic() {
     return SfCartesianChart(
         primaryXAxis: CategoryAxis(),
         // Chart title
         title: ChartTitle(
             text: averageJumpDurationGraphicTitle,
-            textStyle: const TextStyle(fontFamily: 'Jost')),
+            textStyle: TextStyle(
+                fontFamily: 'Jost',
+                fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         // Enable legend
         legend: Legend(
           isVisible: true,
           position: LegendPosition.bottom,
+          textStyle: TextStyle(
+              fontFamily: 'Jost',
+              fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
+          padding: ReactiveLayoutHelper.getWidthFromFactor(8),
+          iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
+          iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
         ),
         // Enable tooltip
         tooltipBehavior: TooltipBehavior(enable: true),
@@ -190,8 +202,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
               emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
               xValueMapper: (ValueDatePair data, _) => data.day,
               yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings:
-                  const MarkerSettings(isVisible: true, height: 4, width: 4),
+              markerSettings: MarkerSettings(
+                  isVisible: true,
+                  height: ReactiveLayoutHelper.getWidthFromFactor(4),
+                  width: ReactiveLayoutHelper.getWidthFromFactor(4)),
               name: averageFlyTimeLegend)
         ]);
   }

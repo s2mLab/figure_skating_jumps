@@ -11,8 +11,10 @@ import '../../constants/lang_fr.dart';
 import '../../enums/ice_button_importance.dart';
 import '../../enums/ice_button_size.dart';
 import '../../enums/user_role.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../buttons/ice_button.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 import '../prompts/instruction_prompt.dart';
 import '../titles/page_title.dart';
@@ -53,7 +55,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         drawerScrimColor: Colors.transparent,
         drawerEnableOpenDragGesture: false,
@@ -63,21 +65,21 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height - topbarHeight,
+              height: MediaQuery.of(context).size.height - (ReactiveLayoutHelper.isTablet() ? bigTopbarHeight : topbarHeight),
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 color: primaryBackground,
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16), horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(
-                          left: 8.0, right: 8.0, bottom: 24.0, top: 8.0),
-                      child: PageTitle(text: addASkaterTitle),
+                          left: ReactiveLayoutHelper.getWidthFromFactor(8), bottom: ReactiveLayoutHelper.getHeightFromFactor(24), top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                      child: const PageTitle(text: addASkaterTitle),
                     ),
                     const InstructionPrompt(
                         createAthleteExplainInfo, secondaryColor),
@@ -88,6 +90,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                           child: Column(
                             children: [
                               TextFormField(
+                                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                                 keyboardType: TextInputType.name,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -101,13 +104,14 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                   return FieldValidators.newNameValidator(
                                       value);
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: surnameField,
                                   labelStyle: TextStyle(
-                                      fontSize: 16, color: discreetText),
+                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
                                 ),
                               ),
                               TextFormField(
+                                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                                 keyboardType: TextInputType.name,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -121,13 +125,14 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                   return FieldValidators.newNameValidator(
                                       value);
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: nameField,
                                   labelStyle: TextStyle(
-                                      fontSize: 16, color: discreetText),
+                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
                                 ),
                               ),
                               TextFormField(
+                                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                                 keyboardType: TextInputType.emailAddress,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -141,10 +146,10 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                                   return FieldValidators.newEmailValidator(
                                       value);
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: emailField,
                                   labelStyle: TextStyle(
-                                      fontSize: 16, color: discreetText),
+                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
                                 ),
                               ),
                             ],
@@ -152,15 +157,15 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 32.0),
+                            padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(32)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 if (UserClient().currentSkatingUser!.role ==
                                     UserRole.iceSkater)
-                                  const Padding(
-                                    padding: EdgeInsets.only(bottom: 16.0),
-                                    child: InstructionPrompt(
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                    child: const InstructionPrompt(
                                         warnAccountTypeChangeInfo,
                                         primaryColorLight),
                                   ),
@@ -225,12 +230,12 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
                       child: Text(
                         skatingUserUID == null
                             ? athleteAlreadyInListInfo
                             : athleteAlreadyExistsInfo,
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                       ),
                     ),
                     IceButton(
@@ -257,8 +262,8 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
           userID: UserClient().currentSkatingUser!.uID!, role: UserRole.coach);
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(savedModificationsSnackInfo),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(savedModificationsSnackInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
           backgroundColor: confirm));
     }
   }

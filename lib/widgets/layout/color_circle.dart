@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/reactive_layout_helper.dart';
+
 class ColorCircle extends StatelessWidget {
   const ColorCircle({Key? key, required this.colorCircle}) : super(key: key);
   final Color colorCircle;
@@ -7,9 +9,9 @@ class ColorCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 12,
-        height: 12,
+        width: ReactiveLayoutHelper.getHeightFromFactor(12),
+        height: ReactiveLayoutHelper.getHeightFromFactor(12),
         decoration: BoxDecoration(
-            color: colorCircle, borderRadius: BorderRadius.circular(10)));
+            color: colorCircle, borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(10))));
   }
 }

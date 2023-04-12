@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
@@ -94,10 +95,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0, top: 2.0),
+      padding: EdgeInsets.only(
+          left: ReactiveLayoutHelper.getWidthFromFactor(8),
+          right: ReactiveLayoutHelper.getWidthFromFactor(8),
+          bottom: ReactiveLayoutHelper.getHeightFromFactor(12),
+          top: ReactiveLayoutHelper.getHeightFromFactor(2)),
       child: Container(
-          height: 248,
+          height: ReactiveLayoutHelper.getHeightFromFactor(300),
           width: double.infinity,
           decoration: BoxDecoration(
             boxShadow: [connectionShadow],
@@ -157,7 +161,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                 return _temporalValuesDialog();
                               },
                             );
-                          }, // TODO: video preview
+                          },
                           textColor: primaryColor,
                           color: primaryColor,
                           iceButtonImportance:
@@ -174,24 +178,23 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   Widget _jumpModificationForm() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                  "$rotationDegreesField${_j!.rotationDegrees.toStringAsFixed(3)}",
-                  style: TextStyle(fontSize: _labelFontSizeInPanel)),
+              Text("$rotationDegreesField${_j!.rotationDegrees.toStringAsFixed(3)}",
+                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
               Row(
                 children: [
                   Text(
                     scoreField,
-                    style: TextStyle(fontSize: _labelFontSizeInPanel),
+                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                     child: DropdownButton<int>(
                         selectedItemBuilder: (context) {
                           return jumpScores.map<Widget>((int item) {
@@ -199,14 +202,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             // Here custom text style, alignment and layout size can be applied
                             // to selected item string.
                             return Container(
-                              constraints: const BoxConstraints(minWidth: 50),
+                              constraints: BoxConstraints(minWidth: ReactiveLayoutHelper.getWidthFromFactor(50)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     item.toString(),
-                                    style: const TextStyle(
+                                    style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16),
                                         color: darkText,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -216,11 +220,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           }).toList();
                         },
                         value: _selectedScore,
-                        menuMaxHeight: 300,
+                        menuMaxHeight: ReactiveLayoutHelper.getWidthFromFactor(300),
                         items: List.generate(jumpScores.length, (index) {
                           return DropdownMenuItem<int>(
                             value: jumpScores[index],
-                            child: Text(jumpScores[index].toString()),
+                            child: Text(jumpScores[index].toString(), style: TextStyle(fontSize:ReactiveLayoutHelper.getHeightFromFactor(16))),
                           );
                         }),
                         onChanged: (val) {
@@ -234,6 +238,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         }),
                   ),
                   IconButton(
+                    iconSize: ReactiveLayoutHelper.getHeightFromFactor(24),
                       onPressed: () {
                         showDialog(
                             barrierDismissible: false,
@@ -261,13 +266,14 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             children: [
               Text(
                 turnsField,
-                style: TextStyle(fontSize: _labelFontSizeInPanel),
+                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                 child: SizedBox(
-                    width: 120,
+                    width:ReactiveLayoutHelper.getWidthFromFactor(120),
                     child: TextFormField(
+                      style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                       autovalidateMode: AutovalidateMode.always,
                       keyboardType: TextInputType.number,
                       validator: (val) {
@@ -291,18 +297,18 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _confirmDeleteJumpDialog() {
     return SimpleDialog(
-      title: const Text(deleteJumpDialogTitle),
+      title: Text(deleteJumpDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24)),),
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-              child: InstructionPrompt(confirmDeleteInfo, errorColor),
+            Padding(
+              padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16), bottom: ReactiveLayoutHelper.getHeightFromFactor(24), top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+              child: const InstructionPrompt(confirmDeleteInfo, errorColor),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IceButton(
                     text: cancelLabel,
@@ -313,19 +319,16 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     color: primaryColor,
                     iceButtonImportance: IceButtonImportance.mainAction,
                     iceButtonSize: IceButtonSize.small),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IceButton(
-                      text: continueToLabel,
-                      onPressed: () {
-                        widget._onDeleted(_j!, _initialJumpType);
-                        Navigator.pop(context);
-                      },
-                      textColor: errorColor,
-                      color: errorColorDark,
-                      iceButtonImportance: IceButtonImportance.secondaryAction,
-                      iceButtonSize: IceButtonSize.small),
-                ),
+                IceButton(
+                    text: continueToLabel,
+                    onPressed: () {
+                      widget._onDeleted(_j!, _initialJumpType);
+                      Navigator.pop(context);
+                    },
+                    textColor: errorColor,
+                    color: errorColorDark,
+                    iceButtonImportance: IceButtonImportance.secondaryAction,
+                    iceButtonSize: IceButtonSize.small),
               ],
             ),
           ],
@@ -337,8 +340,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the context and returns a value through it
   Widget _commentDialog() {
     return SimpleDialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        title: const Text(commentDialogTitle),
+        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
+        title: Text(commentDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
         children: [
           Form(
             key: _commentFormKey,
@@ -346,13 +349,14 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 24.0, bottom: 24.0),
-                  child: InstructionPrompt(howToCommentInfo, secondaryColor),
+                Padding(
+                  padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16), right: ReactiveLayoutHelper.getWidthFromFactor(16),bottom: ReactiveLayoutHelper.getHeightFromFactor(24), top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child: const InstructionPrompt(howToCommentInfo, secondaryColor),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   child: TextFormField(
+                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                     controller: _commentController,
                     minLines: 2,
                     maxLines: 5,
@@ -363,12 +367,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         null, //There is no form of comment that should be filtered out
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(chooseBelowCommentsLabel),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child: Text(chooseBelowCommentsLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -399,36 +403,39 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               iceButtonSize: IceButtonSize.medium)
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IceButton(
-                              text: goodJobComment,
-                              onPressed: () {
-                                _commentController.text = goodJobComment;
-                              },
-                              textColor: primaryColor,
-                              color: primaryColor,
-                              iceButtonImportance:
-                                  IceButtonImportance.discreetAction,
-                              iceButtonSize: IceButtonSize.medium),
-                          IceButton(
-                              text: stepOutComment,
-                              onPressed: () {
-                                _commentController.text = stepOutComment;
-                              },
-                              textColor: primaryColor,
-                              color: primaryColor,
-                              iceButtonImportance:
-                                  IceButtonImportance.discreetAction,
-                              iceButtonSize: IceButtonSize.medium)
-                        ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IceButton(
+                                text: goodJobComment,
+                                onPressed: () {
+                                  _commentController.text = goodJobComment;
+                                },
+                                textColor: primaryColor,
+                                color: primaryColor,
+                                iceButtonImportance:
+                                    IceButtonImportance.discreetAction,
+                                iceButtonSize: IceButtonSize.medium),
+                            IceButton(
+                                text: stepOutComment,
+                                onPressed: () {
+                                  _commentController.text = stepOutComment;
+                                },
+                                textColor: primaryColor,
+                                color: primaryColor,
+                                iceButtonImportance:
+                                    IceButtonImportance.discreetAction,
+                                iceButtonSize: IceButtonSize.medium)
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IceButton(
                         text: cancelLabel,
@@ -442,7 +449,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
                       child: IceButton(
                           text: saveLabel,
                           onPressed: () {
@@ -464,27 +471,27 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _temporalValuesDialog() {
     return SimpleDialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        title: const Text(metricsDialogTitle),
+        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
+        title: Text(metricsDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
         children: [
           Form(
             key: _metricsFormKey,
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 24.0),
-                        child: InstructionPrompt(
+                      Padding(
+                        padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                        child: const InstructionPrompt(
                             advancedMetricsPromptInfo, secondaryColor),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 24.0),
-                        child: InstructionPrompt(
+                      Padding(
+                        padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                        child: const InstructionPrompt(
                             irreversibleDataModificationInfo, errorColor),
                       ),
                       Row(
@@ -492,10 +499,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         children: [
                           Text("$durationField (sec)",
                               style:
-                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
                           SizedBox(
-                            width: 100,
+                            width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
+                              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _durationController,
@@ -514,10 +522,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         children: [
                           Text("$startTimeField (sec)",
                               style:
-                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
                           SizedBox(
-                            width: 100,
+                            width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
+                              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _startTimeController,
@@ -536,13 +545,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         children: [
                           Text("$timeToMaxSpeedLabel (sec)",
                               style:
-                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
                           SizedBox(
-                            width: 100,
+                            width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
+                              style: TextStyle(color: discreetText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              style: const TextStyle(color: discreetText),
                               enabled: false,
                               controller: _timeToMaxSpeedController,
                               maxLines: 1,
@@ -555,15 +564,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("$maxSpeedLabel (sec)",
+                          Text("$maxSpeedLabel (deg/sec)",
                               style:
-                                  TextStyle(fontSize: _labelFontSizeInPanel)),
+                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
                           SizedBox(
-                            width: 100,
+                            width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              style: const TextStyle(color: discreetText),
+                              style: TextStyle(color: discreetText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                               enabled: false,
                               controller: _maxSpeedController,
                               maxLines: 1,
@@ -576,36 +585,39 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IceButton(
-                        text: cancelLabel,
-                        onPressed: () {
-                          _initializeAdvancedMetricsControllers();
-                          Navigator.pop(context);
-                        },
-                        textColor: primaryColor,
-                        color: primaryColor,
-                        iceButtonImportance:
-                            IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.small),
-                    IceButton(
-                        text: saveLabel,
-                        onPressed: () {
-                          if (_metricsFormKey.currentState!.validate()) {
-                            _metricsFormKey.currentState?.save();
-                            widget._onModified(
-                                _j!, _initialJumpType, _initialTime);
-                            _initialJumpType = _selectedType;
+                Padding(
+                  padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IceButton(
+                          text: cancelLabel,
+                          onPressed: () {
+                            _initializeAdvancedMetricsControllers();
                             Navigator.pop(context);
-                          }
-                        },
-                        textColor: paleText,
-                        color: primaryColor,
-                        iceButtonImportance: IceButtonImportance.mainAction,
-                        iceButtonSize: IceButtonSize.small),
-                  ],
+                          },
+                          textColor: primaryColor,
+                          color: primaryColor,
+                          iceButtonImportance:
+                              IceButtonImportance.secondaryAction,
+                          iceButtonSize: IceButtonSize.small),
+                      IceButton(
+                          text: saveLabel,
+                          onPressed: () {
+                            if (_metricsFormKey.currentState!.validate()) {
+                              _metricsFormKey.currentState?.save();
+                              widget._onModified(
+                                  _j!, _initialJumpType, _initialTime);
+                              _initialJumpType = _selectedType;
+                              Navigator.pop(context);
+                            }
+                          },
+                          textColor: paleText,
+                          color: primaryColor,
+                          iceButtonImportance: IceButtonImportance.mainAction,
+                          iceButtonSize: IceButtonSize.small),
+                    ],
+                  ),
                 ),
               ],
             ),

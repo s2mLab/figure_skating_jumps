@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
@@ -13,18 +14,18 @@ class DeviceNotReadyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text(
+      title: Text(
         errorCaptureStartingLabel,
         textAlign: TextAlign.center,
-        style: TextStyle(color: errorColor),
+        style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: InstructionPrompt(noDeviceErrorInfo, errorColor)),
+            Padding(
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+                child: const InstructionPrompt(noDeviceErrorInfo, errorColor)),
             IceButton(
                 text: connectXSensDotButton,
                 onPressed: () {
@@ -34,15 +35,18 @@ class DeviceNotReadyDialog extends StatelessWidget {
                 color: primaryColor,
                 iceButtonImportance: IceButtonImportance.secondaryAction,
                 iceButtonSize: IceButtonSize.medium),
-            IceButton(
-                text: goBackLabel,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                textColor: paleText,
-                color: primaryColor,
-                iceButtonImportance: IceButtonImportance.mainAction,
-                iceButtonSize: IceButtonSize.medium),
+            Padding(
+              padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+              child: IceButton(
+                  text: goBackLabel,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textColor: paleText,
+                  color: primaryColor,
+                  iceButtonImportance: IceButtonImportance.mainAction,
+                  iceButtonSize: IceButtonSize.medium),
+            ),
           ],
         )
       ],
