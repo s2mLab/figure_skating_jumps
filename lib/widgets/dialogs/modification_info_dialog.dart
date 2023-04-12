@@ -45,7 +45,7 @@ class ModificationInfoDialog extends StatelessWidget {
                             children: [
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                    EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(4)),
                                 child: Text(
                                   dateSecondsDisplayFormat.format(
                                       _orderedModifications[index].date),
