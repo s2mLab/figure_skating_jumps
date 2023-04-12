@@ -15,6 +15,7 @@ import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
+import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,7 +55,8 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(FigureSkatingJumpApp(canFunction: hasNecessaryPermissions));
+  runApp(
+      FigureSkatingJumpApp(canFunction: hasNecessaryPermissions, routeObserver: RouteObserver<ModalRoute<void>>(),));
 }
 
 Future<bool> initializeStoragePermissions() async {
@@ -83,8 +85,8 @@ Future<bool> initializeStoragePermissions() async {
 
 class FigureSkatingJumpApp extends StatelessWidget {
   final bool canFunction;
-
-  const FigureSkatingJumpApp({super.key, required this.canFunction});
+  final RouteObserver<ModalRoute<void>> routeObserver;
+  const FigureSkatingJumpApp({super.key, required this.canFunction, required this.routeObserver});
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +104,11 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/EditAnalysis': (context) => const EditAnalysisView(),
         '/ListAthletes': (context) => const ListAthletesView(),
         '/ProfileView': (context) => const ProfileView(),
+        '/RawDataView': (context) => RawDataView(routeObserver: routeObserver),
         '/ForgotPasswordView': (context) => ForgotPasswordView(),
         '/MissingPermissions': (context) => const MissingPermissionsView(),
       },
+      navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: primaryBackground,
