@@ -22,8 +22,8 @@ class CapturesTab extends StatelessWidget {
             child: Padding(
           padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
           child: groupedCaptures.isEmpty
-              ? const Center(
-                  child: Text(noCaptureInfo),
+              ? Center(
+                  child: Text(noCaptureInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                 )
               : ListView.builder(
                   itemCount: groupedCaptures.length,

@@ -66,7 +66,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     return Dialog(
       backgroundColor: primaryBackground,
       insetPadding:
-          EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16), vertical: ReactiveLayoutHelper.getHeightFromFactor(104)),
+          EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(104)),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -79,7 +79,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             ),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(104)),
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: Text(
                   newXSensConnectionDialogTitle,
                   textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                 padding: EdgeInsets.only(right: ReactiveLayoutHelper.getWidthFromFactor(16)),
                 child: SizedBox(
                   height: ReactiveLayoutHelper.getHeightFromFactor(20),
-                  width: ReactiveLayoutHelper.getWidthFromFactor(20),
+                  width: ReactiveLayoutHelper.getHeightFromFactor(20),
                   child: const CircularProgressIndicator(
                     color: primaryColorDark,
                     value: null,

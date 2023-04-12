@@ -344,7 +344,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         _passwordKey.currentState!.validate()) {
       if (await _createAccount()) {
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/ManageDevices');
+          Navigator.of(context).pushNamedAndRemoveUntil('/ManageDevices', (route) => false);
         }
       } else {
         if (mounted) {
