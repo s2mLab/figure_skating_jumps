@@ -64,7 +64,7 @@ class _KnownDevicesState extends State<KnownDevices>
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
+            padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
