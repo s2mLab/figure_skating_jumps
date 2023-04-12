@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
@@ -15,22 +16,22 @@ class ModificationInfoDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
             child: Text(
               modificationInfoDialogTitle,
-              style: TextStyle(color: primaryColor, fontSize: 20),
+              style: TextStyle(color: primaryColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
             ),
           ),
           SizedBox(
-            height: 200,
+            height: ReactiveLayoutHelper.getWidthFromFactor(200),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
                 child: Column(
                   children: [
                     ListView.builder(
@@ -48,7 +49,7 @@ class ModificationInfoDialog extends StatelessWidget {
                                 child: Text(
                                   dateSecondsDisplayFormat.format(
                                       _orderedModifications[index].date),
-                                  style: const TextStyle(color: primaryColorDark,
+                                  style: TextStyle(color: primaryColorDark, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16),
                                       decorationStyle:
                                           TextDecorationStyle.solid,
                                       decoration: TextDecoration.underline),
