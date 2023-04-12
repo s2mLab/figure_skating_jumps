@@ -22,6 +22,7 @@ class ProgressionTab extends StatefulWidget {
 
 class _ProgressionTabState extends State<ProgressionTab> {
   Season? _selectedSeason;
+  final double _spacing = 100.0;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
             _getCapturesBySeason(_selectedSeason)),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator();
+            return Padding(
+              padding: EdgeInsets.all(_spacing),
+              child: const CircularProgressIndicator(),
+            );
           }
           return SfCartesianChart(
               primaryXAxis: CategoryAxis(),
@@ -152,7 +156,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
             _getCapturesBySeason(_selectedSeason)),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator();
+            return Padding(
+              padding: EdgeInsets.all(_spacing),
+              child: const CircularProgressIndicator(),
+            );
           }
           return SfCartesianChart(
               primaryXAxis: CategoryAxis(),
@@ -189,7 +196,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
             _getCapturesBySeason(_selectedSeason)),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator();
+            return Padding(
+              padding: EdgeInsets.all(_spacing),
+              child: const CircularProgressIndicator(),
+            );
           }
           return SfCartesianChart(
               primaryXAxis: CategoryAxis(),

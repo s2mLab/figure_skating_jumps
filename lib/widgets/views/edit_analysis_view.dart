@@ -43,10 +43,14 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
 
   Future<void> _loadVideoData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
-    for (String id in _capture!.jumpsID) {
-      _jumps.add(await CaptureClient().getJumpByID(uID: id));
-    }
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
+    if (_capture!.jumpsID.length != _jumps.length) {
+      _jumps.clear();
+      for (String id in _capture!.jumpsID) {
+        _jumps.add(await CaptureClient().getJumpByID(uID: id));
+      }
+    }
+    _jumps.sort((a, b) => a.time.compareTo(b.time));
     setState(() {});
   }
 
@@ -133,7 +137,6 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       child: IceButton(
                           text: reorderJumpList,
                           onPressed: () {
-                            Capture.sortJumps(_capture!);
                             Navigator.pushReplacementNamed(
                                 context, '/EditAnalysis',
                                 arguments: _capture);
@@ -161,8 +164,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                 });
                               },
                               elevation: 0,
-                              children: List.generate(_jumps.length,
-                                  (index) {
+                              children: List.generate(_jumps.length, (index) {
                                 _isPanelsOpen.add(false);
                                 return ExpansionPanel(
                                     canTapOnHeader: true,
