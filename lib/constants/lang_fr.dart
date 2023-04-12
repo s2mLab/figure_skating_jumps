@@ -7,6 +7,10 @@ const String goBackLabel = "Retour";
 const String pleaseWaitLabel = "Veuillez patienter";
 const String saveLabel = "Enregistrer";
 const String noneLabel = "Aucun";
+const String minuteLabel = "minutes";
+const String secondsLabel = "secondes";
+const String calculatingLabel = "Calcul en cours...";
+const String remainingTimeLabel = "Temps restant: ";
 
 // enums/season
 const String preparationSeasonLabel = "Préparation";
@@ -224,6 +228,7 @@ const String captureViewCameraSwitchLabel = "Caméra activée ?";
 const String stopCaptureButton = "Arrêter la capture";
 const String exportingDataLabel = "Enregistrement des données...";
 const String analyzingDataLabel = "Analyse des données...";
+
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
