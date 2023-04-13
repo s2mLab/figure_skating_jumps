@@ -14,7 +14,8 @@ import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 
 class RawDataView extends StatelessWidget {
-  const RawDataView({super.key});
+  final RouteObserver<ModalRoute<void>> routeObserver;
+  const RawDataView({super.key, required this.routeObserver });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class RawDataView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
                 child: const InstructionPrompt(warnRawDataPromptInfo, secondaryColor),
               ),
-              const _LoggerView()
+              _LoggerView(routeObserver: routeObserver,)
             ]),
       ),
     );
@@ -41,31 +42,59 @@ class RawDataView extends StatelessWidget {
 }
 
 class _LoggerView extends StatefulWidget {
-  const _LoggerView({Key? key}) : super(key: key);
+  final RouteObserver<ModalRoute<void>> routeObserver;
+  const _LoggerView({Key? key, required this.routeObserver}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LoggerViewState();
 }
 
 class _LoggerViewState extends State<_LoggerView>
-    implements IXSensDotMeasuringDataSubscriber {
+    with RouteAware implements IXSensDotMeasuringDataSubscriber {
   final ScrollController _scrollController = ScrollController();
   late List<XSensDotData> _displayedData;
+  final XSensDotStreamingDataService _xSensDotStreamingDataService = XSensDotStreamingDataService();
 
   @override
   void initState() {
     super.initState();
-    XSensDotStreamingDataService()
-        .startMeasuring(XSensDotConnectionService().isInitialized);
-    _displayedData = XSensDotStreamingDataService().subscribe(this);
+  }
+
+  @override
+  void didChangeDependencies(){
+    widget.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    XSensDotStreamingDataService().stopMeasuring();
-    XSensDotStreamingDataService().unsubscribe(this);
+    widget.routeObserver.unsubscribe(this);
     super.dispose();
+  }
+
+  @override
+  void didPush() {
+    _startStreaming();
+    super.didPush();
+  }
+
+  @override
+  void didPushNext() {
+    _stopStreaming();
+    super.didPush();
+  }
+
+  @override
+  void didPop() {
+    _stopStreaming();
+    super.didPopNext();
+  }
+
+  @override
+  void didPopNext() {
+    _startStreaming();
+    super.didPopNext();
   }
 
   @override
@@ -94,5 +123,16 @@ class _LoggerViewState extends State<_LoggerView>
             duration: const Duration(milliseconds: 100), curve: Curves.easeOut);
       });
     }
+  }
+
+  void _startStreaming() {
+    XSensDotStreamingDataService()
+        .startMeasuring(XSensDotConnectionService().isInitialized);
+    _displayedData = _xSensDotStreamingDataService.subscribe(this);
+  }
+
+  void _stopStreaming() {
+    _xSensDotStreamingDataService.stopMeasuring();
+    _xSensDotStreamingDataService.unsubscribe(this);
   }
 }
