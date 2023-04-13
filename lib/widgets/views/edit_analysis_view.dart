@@ -31,9 +31,10 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
-  final List<Jump> _jumps = [];
+  List<Jump> _jumps = [];
   LocalCapture? _captureInfo;
   List<bool> _isPanelsOpen = [];
+  late Map<JumpType, int> _jumpTypeCount;
   late ScrollController _jumpListScrollController;
   bool _timeWasModified = false;
 
@@ -48,9 +49,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
     if (_capture!.jumpsID.length != _jumps.length) {
       _jumps.clear();
-      for (String id in _capture!.jumpsID) {
-        _jumps.add(await CaptureClient().getJumpByID(uID: id));
-      }
+      _jumps = await _capture!.getJumpsData();
+      _jumpTypeCount = Capture.getJumpTypeCount(_jumps);
     }
     _jumps.sort((a, b) => a.time.compareTo(b.time));
     setState(() {});
@@ -204,13 +204,13 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                             _timeWasModified = true;
                                           }
                                           setState(() {
-                                            _capture!.jumpTypeCount[
+                                            _jumpTypeCount[
                                                     initialJumpType] =
-                                                _capture!.jumpTypeCount[
+                                                _jumpTypeCount[
                                                         initialJumpType]! -
                                                     1;
-                                            _capture!.jumpTypeCount[j.type] =
-                                                _capture!.jumpTypeCount[
+                                            _jumpTypeCount[j.type] =
+                                                _jumpTypeCount[
                                                         j.type]! +
                                                     1;
                                             CaptureClient()
@@ -234,8 +234,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         },
                                         onDeleted: (Jump j, JumpType initial) {
                                           setState(() {
-                                            _capture!.jumpTypeCount[initial] =
-                                                _capture!.jumpTypeCount[
+                                            _jumpTypeCount[initial] =
+                                                _jumpTypeCount[
                                                         initial]! -
                                                     1;
                                             _jumps.remove(j);
