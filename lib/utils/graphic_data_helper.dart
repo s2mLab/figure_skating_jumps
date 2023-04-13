@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../enums/jump_type.dart';
 import '../models/capture.dart';
@@ -47,7 +46,6 @@ class GraphicDataHelper {
       scoresOfJumps.add(j.score);
     }
     DateTime statDay = DateTime.parse(day);
-    debugPrint("original $day parsed $statDay");
     return scoresOfJumps.isEmpty ? null : GraphStatsDatePair(scoresOfJumps.average, _standardDeviation(scoresOfJumps), scoresOfJumps.min, scoresOfJumps.max, statDay);
   }
 
@@ -69,7 +67,6 @@ class GraphicDataHelper {
       durationsOfJumps.add(j.duration);
     }
     DateTime statDay = DateTime.parse(day);
-    debugPrint("original $day parsed $statDay");
     return durationsOfJumps.isEmpty ? null : GraphStatsDatePair(durationsOfJumps.average, _standardDeviation(durationsOfJumps), durationsOfJumps.min, durationsOfJumps.max, statDay);
   }
 
