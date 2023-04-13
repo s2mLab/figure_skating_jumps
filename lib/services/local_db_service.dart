@@ -14,6 +14,8 @@ class LocalDbService {
   static const activeSessionTableName = "activeSession";
   static const globalSettingsTableName = "globalSettings";
 
+  final Map<int, String> _migrationScripts = {};
+
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
   factory LocalDbService() {
@@ -26,16 +28,13 @@ class LocalDbService {
   Future<void> ensureInitialized() async {
     WidgetsFlutterBinding.ensureInitialized();
     _database = await openDatabase(
-        version: 1, join(await getDatabasesPath(), _databaseName),
-        onCreate: (db, version) async {
-      await db.execute(
-          'CREATE TABLE $bluetoothDeviceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userId TEXT, macAddress TEXT, name TEXT);');
-      await db.execute(
-          'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
-      await db.execute(
-          'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY, email TEXT, password TEXT);');
-      await db.execute(
-          'CREATE TABLE $globalSettingsTableName(id INTEGER PRIMARY KEY, season TEXT);');
+        join(await getDatabasesPath(), _databaseName),
+        version: _migrationScripts.length + 1, onCreate: (db, version) async {
+      await _createDB(db, version);
+    }, onUpgrade: (db, oldVersion, version) async {
+      for (int i = 1; i <= _migrationScripts.length; i++) {
+        await db.execute(_migrationScripts[i]!);
+      }
     });
   }
 
@@ -85,4 +84,15 @@ class LocalDbService {
           String table, String column, String whereArg) async =>
       (await _database
           .query(table, where: '$column = ?', whereArgs: [whereArg]));
+
+  Future<void> _createDB(Database db, int version) async {
+    await db.execute(
+        'CREATE TABLE $bluetoothDeviceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, userId TEXT, macAddress TEXT, name TEXT);');
+    await db.execute(
+        'CREATE TABLE $localCapturesTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, captureID TEXT, path TEXT);');
+    await db.execute(
+        'CREATE TABLE $activeSessionTableName(id INTEGER PRIMARY KEY, email TEXT, password TEXT);');
+    await db.execute(
+        'CREATE TABLE $globalSettingsTableName(id INTEGER PRIMARY KEY, season TEXT);');
+  }
 }
