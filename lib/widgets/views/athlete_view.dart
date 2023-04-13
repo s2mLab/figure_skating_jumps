@@ -36,6 +36,7 @@ class _AthleteViewState extends State<AthleteView> {
 
   @override
   Widget build(BuildContext context) {
+    ReactiveLayoutHelper.updateDimensions(context);
     skater ??= ModalRoute.of(context)!.settings.arguments as SkatingUser;
     _futureCaptures ??= skater?.getCapturesData();
     return Scaffold(
