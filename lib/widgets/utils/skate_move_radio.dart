@@ -1,6 +1,7 @@
 //Inspired by : https://api.flutter.dev/flutter/material/RadioListTile-class.html
 
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class SkateMoveRadio extends StatelessWidget {
@@ -36,7 +37,7 @@ class SkateMoveRadio extends StatelessWidget {
               _onChanged(newValue!);
             },
           ),
-          Text(_value.abbreviation, style: TextStyle(color: _value.color, fontSize: 14, fontWeight: FontWeight.w600)),
+          Text(_value.abbreviation, style: TextStyle(color: _value.color, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), fontWeight: FontWeight.w600)),
         ],
       ),
     );
