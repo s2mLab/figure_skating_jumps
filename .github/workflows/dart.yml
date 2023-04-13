@@ -26,7 +26,7 @@ jobs:
 
       # Makes sure you can download the sdk
       - name: Clean
-        run: rm -rf /home/docker/actions-runner/_work/_tool/dart-sdk
+        run: rm -rf /home/ubuntu/actions-runner/_work/_tool/dart-sdk
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
