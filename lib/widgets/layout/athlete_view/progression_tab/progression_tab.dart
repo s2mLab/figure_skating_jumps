@@ -151,8 +151,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
             builder: (dynamic data, dynamic point, dynamic series,
                 int pointIndex, int seriesIndex) {
               return Container(
-                height: 100,
-                width: 140,
+                height: ReactiveLayoutHelper.getHeightFromFactor(100),
+                width: ReactiveLayoutHelper.getWidthFromFactor(140),
                 decoration: BoxDecoration(
                     color: primaryColorDark,
                   borderRadius: BorderRadius.circular(8),
