@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class InstructionPrompt extends StatelessWidget {
@@ -12,10 +13,11 @@ class InstructionPrompt extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: EdgeInsets.only(
+              right: ReactiveLayoutHelper.getWidthFromFactor(8.0)),
           child: Container(
             height: double.infinity,
-            width: 4,
+            width: ReactiveLayoutHelper.getWidthFromFactor(4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: _color,
@@ -24,8 +26,10 @@ class InstructionPrompt extends StatelessWidget {
         ),
         Expanded(
           child: Text(_text,
-              style: const TextStyle(
-                  fontSize: 16, color: darkText, height: promptTextHeight),
+              style: TextStyle(
+                  fontSize: ReactiveLayoutHelper.getHeightFromFactor(16),
+                  color: darkText,
+                  height: promptTextHeight),
               textAlign: TextAlign.left,
               softWrap: true),
         ),

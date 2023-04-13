@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class NoCameraRecordingDialog extends StatelessWidget {
@@ -11,25 +12,28 @@ class NoCameraRecordingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text(
-        recordingPrompt,
+      title: Text(
+        style:
+            TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+        recordingLabel,
         textAlign: TextAlign.center,
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding:
+                  EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
               child: SizedBox(
-                  width: 50,
-                  child: LinearProgressIndicator(
+                  width: ReactiveLayoutHelper.getWidthFromFactor(50),
+                  child: const LinearProgressIndicator(
                     color: primaryColor,
                     backgroundColor: discreetText,
                   )),
             ),
             IceButton(
-                text: stopCapture,
+                text: stopCaptureButton,
                 onPressed: () {
                   Navigator.pop(context);
                 },

@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/utils/time_converter.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modification_info_dialog.dart';
 import 'package:figure_skating_jumps/widgets/layout/color_circle.dart';
@@ -17,12 +18,15 @@ class CaptureListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(
+          vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
       child: MaterialButton(
         color: cardBackground,
         padding: EdgeInsets.zero,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                ReactiveLayoutHelper.getHeightFromFactor(8))),
         onLongPress: () {
           showDialog(
               context: context,
@@ -39,11 +43,14 @@ class CaptureListTile extends StatelessWidget {
               }
             : null,
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
           decoration: _isInteractive
-              ? BoxDecoration(borderRadius: BorderRadius.circular(8))
+              ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)))
               : BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)),
                   color: cardBackground),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,16 +64,20 @@ class CaptureListTile extends StatelessWidget {
                       Text(
                           TimeConverter.dateTimeToHoursAndMinutes(
                               _currentCapture.date),
-                          style:
-                              const TextStyle(fontSize: 24, color: darkText)),
+                          style: TextStyle(
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(24),
+                              color: darkText)),
                       Text(
                           TimeConverter.dateTimeToSeconds(_currentCapture.date),
-                          style:
-                              const TextStyle(fontSize: 14, color: darkText)),
+                          style: TextStyle(
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(14),
+                              color: darkText)),
                     ],
                   ),
                   SizedBox(
-                    width: 200,
+                    width: ReactiveLayoutHelper.getWidthFromFactor(200),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -76,15 +87,20 @@ class CaptureListTile extends StatelessWidget {
                                 : Icons.videocam_off,
                             color: darkText),
                         Row(children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 4.0),
-                            child: Icon(Icons.schedule, color: darkText),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left:
+                                    ReactiveLayoutHelper.getWidthFromFactor(4)),
+                            child: const Icon(Icons.schedule, color: darkText),
                           ),
                           Text(
                             TimeConverter.msToFormatSMs(
                                 _currentCapture.duration),
-                            style:
-                                const TextStyle(fontSize: 16, color: darkText),
+                            style: TextStyle(
+                                fontSize:
+                                    ReactiveLayoutHelper.getHeightFromFactor(
+                                        16),
+                                color: darkText),
                           )
                         ]),
                       ],
@@ -93,7 +109,8 @@ class CaptureListTile extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: EdgeInsets.only(
+                    top: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
@@ -103,12 +120,18 @@ class CaptureListTile extends StatelessWidget {
                           ColorCircle(
                               colorCircle: JumpType.values[index].color),
                           Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          5)),
                               child: Text(
                                   _currentCapture
                                       .jumpTypeCount[JumpType.values[index]]
                                       .toString(),
-                                  style: const TextStyle(color: darkText))),
+                                  style: TextStyle(
+                                      color: darkText,
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)))),
                         ],
                       );
                     })),

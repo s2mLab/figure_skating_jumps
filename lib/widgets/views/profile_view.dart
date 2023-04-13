@@ -14,6 +14,9 @@ import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
+import '../../utils/reactive_layout_helper.dart';
+import '../layout/scaffold/tablet_topbar.dart';
+
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
@@ -55,19 +58,19 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     _loadData();
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: Container(
-            margin: const EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const PageTitle(text: profileTitle),
               Container(
                 margin:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                padding: const EdgeInsets.all(16),
+                    EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24), horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
                 decoration: BoxDecoration(
                     color: cardBackground,
                     borderRadius: BorderRadius.circular(10)),
@@ -76,14 +79,14 @@ class _ProfileViewState extends State<ProfileView> {
                     children: [
                       Text(UserClient().currentSkatingUser!.firstName,
                           style:
-                              const TextStyle(fontSize: 24, color: darkText)),
+                              TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24), color: darkText)),
                       Text(UserClient().currentSkatingUser!.lastName,
                           style:
-                              const TextStyle(fontSize: 20, color: darkText)),
+                              TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(20), color: darkText)),
                       Align(
                           alignment: Alignment.centerRight,
                           child: IconButton(
-                              padding: const EdgeInsets.all(4),
+                              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(4)),
                               constraints: const BoxConstraints(),
                               onPressed: () {
                                 showDialog<String>(
@@ -97,10 +100,10 @@ class _ProfileViewState extends State<ProfileView> {
                     ]),
               ),
               Container(
-                  margin: const EdgeInsets.only(right: 24),
+                  margin: EdgeInsets.only(right: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   alignment: Alignment.centerRight,
                   child: IceButton(
-                      text: modifyPassword,
+                      text: modifyPasswordButton,
                       onPressed: () {
                         showDialog<String>(
                             context: context,
@@ -113,15 +116,15 @@ class _ProfileViewState extends State<ProfileView> {
                       iceButtonImportance: IceButtonImportance.secondaryAction,
                       iceButtonSize: IceButtonSize.small)),
               Container(
-                  margin: const EdgeInsets.only(right: 16, left: 16, top: 32),
-                  child: const Text(
-                    listCoaches,
-                    style: TextStyle(color: darkText, fontSize: 20),
+                  margin: EdgeInsets.only(right: ReactiveLayoutHelper.getHeightFromFactor(16), left: ReactiveLayoutHelper.getHeightFromFactor(16), top: ReactiveLayoutHelper.getHeightFromFactor(32)),
+                  child: Text(
+                    listCoachesTitle,
+                    style: TextStyle(color: darkText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                   )),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(4)),
                   decoration: BoxDecoration(
                       color: cardBackground,
                       borderRadius: BorderRadius.circular(10)),
@@ -132,17 +135,17 @@ class _ProfileViewState extends State<ProfileView> {
                           loaderstrokeWidth: 5,
                         ))
                       : _coaches.isEmpty
-                          ? const Center(child: Text(noCoaches))
+                          ? Center(child: Text(noCoachesInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
                           : ListView.builder(
                               itemCount: _coaches.length,
                               itemBuilder: (context, index) {
                                 SkatingUser item = _coaches[index];
                                 return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                      horizontal: 8,
+                                    margin: EdgeInsets.symmetric(
+                                      vertical: ReactiveLayoutHelper.getHeightFromFactor(4),
+                                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(8),
                                     ),
-                                    padding: const EdgeInsets.all(8),
+                                    padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
@@ -152,7 +155,7 @@ class _ProfileViewState extends State<ProfileView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              "${item.firstName} ${item.lastName}"),
+                                              "${item.firstName} ${item.lastName}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                                           IconButton(
                                               padding: EdgeInsets.zero,
                                               constraints:

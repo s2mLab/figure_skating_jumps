@@ -9,6 +9,7 @@ import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
 import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
@@ -16,6 +17,7 @@ import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_pane
 import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_panel_header.dart';
 import 'package:figure_skating_jumps/widgets/layout/legend_move.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -50,14 +52,23 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Widget build(BuildContext context) {
     _loadVideoData();
     return Scaffold(
-        appBar: const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet()
+            ? const TabletTopbar(isUserDebuggingFeature: false)
+                as PreferredSizeWidget
+            : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: SizedBox(
-          height: MediaQuery.of(context).size.height - topbarHeight,
+          height: MediaQuery.of(context).size.height -
+              (ReactiveLayoutHelper.isTablet()
+                  ? bigTopbarHeight
+                  : topbarHeight),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.isTablet()
+                    ? ReactiveLayoutHelper.getWidthFromFactor(24, true)
+                    : ReactiveLayoutHelper.getWidthFromFactor(24)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,7 +80,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                         _captureInfo != null &&
                         _captureInfo!.videoPath.isNotEmpty)
                       IceButton(
-                          text: seeVideoAgain,
+                          text: seeVideoAgainButton,
                           onPressed: () {
                             showDialog<String>(
                                 context: context,
@@ -85,21 +96,24 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           iceButtonSize: IceButtonSize.small)
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 24.0),
-                  child: InstructionPrompt(analysisDonePrompt, secondaryColor),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                  child:
+                      const InstructionPrompt(analysisDoneInfo, secondaryColor),
                 ),
                 Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    margin: EdgeInsets.symmetric(
+                        vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                     child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const PageTitle(text: detectedJumps),
+                    const PageTitle(text: detectedJumpsTitle),
                     IceButton(
-                        text: addAJump,
+                        text: addAJumpButton,
                         onPressed: () async {
                           Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
                               0, _capture!.uID!, 0, 0, 0);
@@ -127,7 +141,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 if (_timeWasModified)
                   Center(
                       child: IceButton(
-                          text: reorderJumpList,
+                          text: reorderJumpListButton,
                           onPressed: () {
                             Capture.sortJumps(_capture!);
                             Navigator.pushReplacementNamed(
@@ -143,9 +157,15 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
                     child: _capture!.jumps.isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.only(top: 8.0),
-                            child: Center(child: Text(noJump)),
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                top: ReactiveLayoutHelper.getHeightFromFactor(
+                                    8)),
+                            child: Center(
+                                child: Text(noJumpInfo,
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16)))),
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(8),
@@ -191,12 +211,18 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                 .updateJump(jump: j)
                                                 .then((value) {
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      duration:
-                                                          Duration(seconds: 2),
+                                                  .showSnackBar(SnackBar(
+                                                      duration: const Duration(
+                                                          seconds: 2),
                                                       backgroundColor: confirm,
                                                       content: Text(
-                                                          savedModificationsSnack)));
+                                                        savedModificationsSnackInfo,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                ReactiveLayoutHelper
+                                                                    .getHeightFromFactor(
+                                                                        16)),
+                                                      )));
                                             });
                                           });
                                         },

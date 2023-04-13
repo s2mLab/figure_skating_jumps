@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -24,20 +25,28 @@ class OptionsTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(
+                top: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child: _athlete.uID == UserClient().currentSkatingUser!.uID!
-                ? const Text(noOptionsAvailable)
+                ? Text(
+                    noOptionsAvailableInfo,
+                    style: TextStyle(
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  )
                 : IceButton(
-                    text: removeThisAthlete,
+                    text: removeThisAthleteButton,
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                                title: const Text(confirmAthleteRemoval),
+                                title: Text(confirmAthleteRemovalButton,
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16))),
                                 actions: [
                                   IceButton(
-                                      text: cancel,
+                                      text: cancelLabel,
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -47,7 +56,7 @@ class OptionsTab extends StatelessWidget {
                                           IceButtonImportance.secondaryAction,
                                       iceButtonSize: IceButtonSize.small),
                                   IceButton(
-                                      text: confirmText,
+                                      text: confirmLabel,
                                       onPressed: () async {
                                         await UserClient().unlinkSkaterAndCoach(
                                             skaterId: _athlete.uID!,
@@ -59,10 +68,12 @@ class OptionsTab extends StatelessWidget {
                                             .traineesID
                                             .removeWhere((element) =>
                                                 element == _athlete.uID!);
-                                        if (context.mounted)
+
+                                        if (context.mounted) {
                                           Navigator.pushReplacementNamed(
                                               context, '/ListAthletes',
                                               arguments: true);
+                                        }
                                       },
                                       textColor: paleText,
                                       color: errorColorDark,
@@ -71,7 +82,7 @@ class OptionsTab extends StatelessWidget {
                                       iceButtonSize: IceButtonSize.small)
                                 ],
                                 content: const InstructionPrompt(
-                                    confirmDelete, errorColor));
+                                    confirmDeleteInfo, errorColor));
                           });
                     },
                     textColor: primaryColor,
