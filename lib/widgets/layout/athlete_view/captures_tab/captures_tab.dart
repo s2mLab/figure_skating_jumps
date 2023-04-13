@@ -11,19 +11,25 @@ class CapturesTab extends StatelessWidget {
   const CapturesTab({Key? key, required this.groupedCaptures})
       : super(key: key);
   final Map<String, List<Capture>> groupedCaptures;
-  final double heightContainer = 116;
+  final double heightContainer = 118;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)), child: const LegendMove()),
+        Container(
+            margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
+            child: const LegendMove()),
         Expanded(
             child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+          padding: EdgeInsets.symmetric(
+              horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
           child: groupedCaptures.isEmpty
               ? Center(
-                  child: Text(noCaptureInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                  child: Text(noCaptureInfo,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16))),
                 )
               : ListView.builder(
                   itemCount: groupedCaptures.length,
@@ -36,13 +42,16 @@ class CapturesTab extends StatelessWidget {
                           Text(
                             key.replaceAll('-', '/'),
                             style: TextStyle(
-                                fontSize: ReactiveLayoutHelper.getHeightFromFactor(26),
+                                fontSize:
+                                    ReactiveLayoutHelper.getHeightFromFactor(
+                                        26),
                                 color: primaryColorLight,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
-                              height:
-                                  capturesToDisplay.length * ReactiveLayoutHelper.getHeightFromFactor(heightContainer),
+                              height: capturesToDisplay.length *
+                                  ReactiveLayoutHelper.getHeightFromFactor(
+                                      heightContainer),
                               child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: capturesToDisplay.length,
