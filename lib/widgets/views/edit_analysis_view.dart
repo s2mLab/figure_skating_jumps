@@ -31,6 +31,7 @@ class EditAnalysisView extends StatefulWidget {
 
 class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
+  final List<Jump> _jumps = [];
   LocalCapture? _captureInfo;
   List<bool> _isPanelsOpen = [];
   late ScrollController _jumpListScrollController;
@@ -45,6 +46,13 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Future<void> _loadVideoData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
+    if (_capture!.jumpsID.length != _jumps.length) {
+      _jumps.clear();
+      for (String id in _capture!.jumpsID) {
+        _jumps.add(await CaptureClient().getJumpByID(uID: id));
+      }
+    }
+    _jumps.sort((a, b) => a.time.compareTo(b.time));
     setState(() {});
   }
 
@@ -118,7 +126,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                           Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
                               0, _capture!.uID!, 0, 0, 0);
                           setState(() {
-                            _capture!.jumps.insert(0, newJump);
+                            _jumps.insert(0, newJump);
                           });
                           _jumpListScrollController.animateTo(0,
                               duration: const Duration(milliseconds: 400),
@@ -143,7 +151,6 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       child: IceButton(
                           text: reorderJumpListButton,
                           onPressed: () {
-                            Capture.sortJumps(_capture!);
                             Navigator.pushReplacementNamed(
                                 context, '/EditAnalysis',
                                 arguments: _capture);
@@ -156,7 +163,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _jumpListScrollController,
-                    child: _capture!.jumps.isEmpty
+                    child: _jumps.isEmpty
                         ? Padding(
                             padding: EdgeInsets.only(
                                 top: ReactiveLayoutHelper.getHeightFromFactor(
@@ -177,8 +184,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                 });
                               },
                               elevation: 0,
-                              children: List.generate(_capture!.jumps.length,
-                                  (index) {
+                              children: List.generate(_jumps.length, (index) {
                                 _isPanelsOpen.add(false);
                                 return ExpansionPanel(
                                     canTapOnHeader: true,
@@ -187,10 +193,10 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                     headerBuilder: (BuildContext context,
                                         bool isExpanded) {
                                       return JumpPanelHeader(
-                                          jump: _capture!.jumps[index]);
+                                          jump: _jumps[index]);
                                     },
                                     body: JumpPanelContent(
-                                        jump: _capture!.jumps[index],
+                                        jump: _jumps[index],
                                         onModified: (Jump j,
                                             JumpType initialJumpType,
                                             int initialTime) {
@@ -232,7 +238,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                 _capture!.jumpTypeCount[
                                                         initial]! -
                                                     1;
-                                            _capture!.jumps.remove(j);
+                                            _jumps.remove(j);
                                             _capture = _capture;
                                             _isPanelsOpen = [];
                                           });
