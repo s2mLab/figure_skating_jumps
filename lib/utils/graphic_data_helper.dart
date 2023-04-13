@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../enums/jump_type.dart';
 import '../models/capture.dart';
@@ -13,7 +14,8 @@ class GraphicDataHelper {
     List<GraphStatsDatePair> graphData = [];
     List<String> dates = _getAllDates(captures);
     for(String day in dates) {
-      GraphStatsDatePair pair = _getAverageJumpScorePerTypeOnDate(captures, day, type);
+      GraphStatsDatePair? pair = _getAverageJumpScorePerTypeOnDate(captures, day, type);
+      if(pair == null) continue;
       graphData.add(pair);
     }
     return graphData;
@@ -23,7 +25,8 @@ class GraphicDataHelper {
     List<GraphStatsDatePair> graphData = [];
     List<String> dates = _getAllDates(captures);
     for(String day in dates) {
-      GraphStatsDatePair pair = _getAverageJumpDurationOnDate(captures, day);
+      GraphStatsDatePair? pair = _getAverageJumpDurationOnDate(captures, day);
+      if(pair == null) continue;
       graphData.add(pair);
     }
     return graphData;
@@ -33,7 +36,7 @@ class GraphicDataHelper {
     return captures.keys.toList();
   }
 
-  static GraphStatsDatePair _getAverageJumpScorePerTypeOnDate(Map<String, List<Capture>> captures, String day, JumpType type) {
+  static GraphStatsDatePair? _getAverageJumpScorePerTypeOnDate(Map<String, List<Capture>> captures, String day, JumpType type) {
     if(captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
     }
@@ -43,7 +46,9 @@ class GraphicDataHelper {
     for(Jump j in jumpsOfType) {
       scoresOfJumps.add(j.score);
     }
-    return scoresOfJumps.isEmpty ? GraphStatsDatePair.empty(day: day) : GraphStatsDatePair(scoresOfJumps.average, _standardDeviation(scoresOfJumps), scoresOfJumps.min, scoresOfJumps.max, day);
+    DateTime statDay = DateTime.parse(day);
+    debugPrint("original $day parsed $statDay");
+    return scoresOfJumps.isEmpty ? null : GraphStatsDatePair(scoresOfJumps.average, _standardDeviation(scoresOfJumps), scoresOfJumps.min, scoresOfJumps.max, statDay);
   }
 
   static double _standardDeviation(List<int> list) {
@@ -53,7 +58,7 @@ class GraphicDataHelper {
     return sqrt(variance);
   }
 
-  static GraphStatsDatePair _getAverageJumpDurationOnDate(Map<String, List<Capture>> captures, String day) {
+  static GraphStatsDatePair? _getAverageJumpDurationOnDate(Map<String, List<Capture>> captures, String day) {
     if(captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
     }
@@ -63,7 +68,9 @@ class GraphicDataHelper {
     for(Jump j in jumpsOfDate) {
       durationsOfJumps.add(j.duration);
     }
-    return durationsOfJumps.isEmpty ? GraphStatsDatePair.empty(day: day) : GraphStatsDatePair(durationsOfJumps.average, _standardDeviation(durationsOfJumps), durationsOfJumps.min, durationsOfJumps.max, day);
+    DateTime statDay = DateTime.parse(day);
+    debugPrint("original $day parsed $statDay");
+    return durationsOfJumps.isEmpty ? null : GraphStatsDatePair(durationsOfJumps.average, _standardDeviation(durationsOfJumps), durationsOfJumps.min, durationsOfJumps.max, statDay);
   }
 
   static List<Jump> _getRequiredJumpsFromCaptures(List<Capture> captures, [bool Function(Jump)? test]) {
