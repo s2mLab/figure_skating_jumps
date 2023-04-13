@@ -19,8 +19,10 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import '../../constants/lang_fr.dart';
 import '../../enums/season.dart';
+import '../../utils/reactive_layout_helper.dart';
 import '../dialogs/capture/no_camera_recording_dialog.dart';
 import '../layout/scaffold/ice_drawer_menu.dart';
+import '../layout/scaffold/tablet_topbar.dart';
 import '../layout/scaffold/topbar.dart';
 import 'dart:developer' as developer;
 
@@ -99,43 +101,55 @@ class _CaptureViewState extends State<CaptureView>
             );
           })
         : Scaffold(
-            appBar: const Topbar(isUserDebuggingFeature: false),
+            appBar: ReactiveLayoutHelper.isTablet()
+                ? const TabletTopbar(isUserDebuggingFeature: false)
+                    as PreferredSizeWidget
+                : const Topbar(isUserDebuggingFeature: false),
             drawerEnableOpenDragGesture: false,
             drawerScrimColor: Colors.transparent,
             drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
             body: Builder(builder: (context) {
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 32.0, vertical: 16.0),
+                padding: EdgeInsets.symmetric(
+                    horizontal:
+                        ReactiveLayoutHelper.getWidthFromFactor(24, true),
+                    vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const PageTitle(text: captureViewStartLabel),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child:
-                            InstructionPrompt(captureViewInfo, secondaryColor),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        child: const InstructionPrompt(
+                            captureViewInfo, secondaryColor),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: InstructionPrompt(
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        child: const InstructionPrompt(
                             captureViewCameraInfo, secondaryColor),
                       ),
-                      if (_isCameraActivated)
-                        FutureBuilder<void>(
-                            future: _initializeControllerFuture,
-                            builder: _buildCameraPreview),
                       Expanded(
-                          child: Center(
-                              child: _isCameraActivated
-                                  ? const SizedBox()
-                                  : const Icon(Icons.no_photography_outlined,
+                          child: _isCameraActivated
+                              ? FutureBuilder<void>(
+                                  future: _initializeControllerFuture,
+                                  builder: _buildCameraPreview)
+                              : const Center(
+                                  child: Icon(Icons.no_photography_outlined,
                                       size: 56))),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(captureViewCameraSwitchLabel),
+                            Text(
+                              captureViewCameraSwitchLabel,
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
+                            ),
                             Switch(
                                 value: _isCameraActivated,
                                 onChanged: (val) {
@@ -148,9 +162,15 @@ class _CaptureViewState extends State<CaptureView>
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Text(selectSeasonLabel),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          8)),
+                              child: Text(selectSeasonLabel,
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16))),
                             ),
                             DropdownButton<Season>(
                                 selectedItemBuilder: (context) {
@@ -160,8 +180,9 @@ class _CaptureViewState extends State<CaptureView>
                                     // Here custom text style, alignment and layout size can be applied
                                     // to selected item string.
                                     return Container(
-                                      constraints:
-                                          const BoxConstraints(minWidth: 80),
+                                      constraints: BoxConstraints(
+                                          minWidth: ReactiveLayoutHelper
+                                              .getWidthFromFactor(80)),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -170,7 +191,9 @@ class _CaptureViewState extends State<CaptureView>
                                         children: [
                                           Text(
                                             item.displayedString,
-                                            style: const TextStyle(
+                                            style: TextStyle(
+                                                fontSize: ReactiveLayoutHelper
+                                                    .getHeightFromFactor(16),
                                                 color: darkText,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -180,13 +203,19 @@ class _CaptureViewState extends State<CaptureView>
                                   }).toList();
                                 },
                                 value: _selectedSeason,
-                                menuMaxHeight: 300,
+                                menuMaxHeight:
+                                    ReactiveLayoutHelper.getWidthFromFactor(
+                                        300),
                                 items: List.generate(Season.values.length,
                                     (index) {
                                   return DropdownMenuItem<Season>(
                                     value: Season.values[index],
                                     child: Text(
-                                        Season.values[index].displayedString),
+                                      Season.values[index].displayedString,
+                                      style: TextStyle(
+                                          fontSize: ReactiveLayoutHelper
+                                              .getHeightFromFactor(16)),
+                                    ),
                                   );
                                 }),
                                 onChanged: (val) {
@@ -200,17 +229,21 @@ class _CaptureViewState extends State<CaptureView>
                                   });
                                 }),
                           ]),
-                      Center(
-                        child: IceButton(
-                          onPressed: () async {
-                            await _onCaptureStartPressed();
-                          },
-                          text: captureViewStartLabel,
-                          textColor: primaryColor,
-                          color: primaryColor,
-                          iceButtonImportance:
-                              IceButtonImportance.secondaryAction,
-                          iceButtonSize: IceButtonSize.medium,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                        child: Center(
+                          child: IceButton(
+                            onPressed: () async {
+                              await _onCaptureStartPressed();
+                            },
+                            text: captureViewStartLabel,
+                            textColor: primaryColor,
+                            color: primaryColor,
+                            iceButtonImportance:
+                                IceButtonImportance.secondaryAction,
+                            iceButtonSize: IceButtonSize.medium,
+                          ),
                         ),
                       ),
                     ]),
@@ -283,9 +316,12 @@ class _CaptureViewState extends State<CaptureView>
       }
 
       if (!_isFullscreen) {
+        double cameraScalingFactor =
+            ReactiveLayoutHelper.getCameraScalingFactor(
+                width: cameraWidth, height: cameraHeight);
         //Reduce size to let place for other UI elements=
-        cameraWidth /= 2;
-        cameraHeight /= 2;
+        cameraWidth = cameraWidth / (cameraScalingFactor);
+        cameraHeight = cameraHeight / (cameraScalingFactor);
       }
 
       return Center(
