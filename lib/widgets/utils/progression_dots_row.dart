@@ -1,6 +1,5 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
 
 class ProgressionDotsRow extends StatelessWidget {
   final int _steps;

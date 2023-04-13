@@ -1,13 +1,11 @@
 import 'dart:async';
-
+import 'package:figure_skating_jumps/enums/event_channel_names.dart';
+import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../enums/event_channel_names.dart';
-import '../../enums/method_channel_names.dart';
 
 class XSensDotBluetoothDiscoveryService
     implements

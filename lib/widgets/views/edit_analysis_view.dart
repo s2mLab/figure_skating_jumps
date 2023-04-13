@@ -1,27 +1,27 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/video_player_dialog.dart';
+import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
+import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_panel_content.dart';
+import 'package:figure_skating_jumps/widgets/layout/edit_analysis_view/jump_panel_header.dart';
+import 'package:figure_skating_jumps/widgets/layout/legend_move.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_size.dart';
-import '../../models/capture.dart';
-import '../../models/jump.dart';
-import '../../utils/reactive_layout_helper.dart';
-import '../layout/capture_list_tile.dart';
-import '../layout/edit_analysis_view/jump_panel_content.dart';
-import '../layout/edit_analysis_view/jump_panel_header.dart';
-import '../layout/legend_move.dart';
-import '../layout/scaffold/ice_drawer_menu.dart';
-import '../layout/scaffold/tablet_topbar.dart';
-import '../layout/scaffold/topbar.dart';
 
 class EditAnalysisView extends StatefulWidget {
   const EditAnalysisView({super.key});
@@ -105,11 +105,14 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(24)),
-                  child: const InstructionPrompt(analysisDoneInfo, secondaryColor),
+                  padding: EdgeInsets.only(
+                      top: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                  child:
+                      const InstructionPrompt(analysisDoneInfo, secondaryColor),
                 ),
                 Container(
-                    margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                    margin: EdgeInsets.symmetric(
+                        vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                     child: const LegendMove()),
                 CaptureListTile(currentCapture: _capture, isInteractive: false),
                 Row(
@@ -162,8 +165,14 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     controller: _jumpListScrollController,
                     child: _jumps.isEmpty
                         ? Padding(
-                            padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                            child: Center(child: Text(noJumpInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
+                            padding: EdgeInsets.only(
+                                top: ReactiveLayoutHelper.getHeightFromFactor(
+                                    8)),
+                            child: Center(
+                                child: Text(noJumpInfo,
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16)))),
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(8),
@@ -209,12 +218,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                                 .then((value) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
-                                                      duration:
-                                                          const Duration(seconds: 2),
+                                                      duration: const Duration(
+                                                          seconds: 2),
                                                       backgroundColor: confirm,
                                                       content: Text(
-                                                          savedModificationsSnackInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)));
-
+                                                        savedModificationsSnackInfo,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                ReactiveLayoutHelper
+                                                                    .getHeightFromFactor(
+                                                                        16)),
+                                                      )));
                                             });
                                           });
                                         },

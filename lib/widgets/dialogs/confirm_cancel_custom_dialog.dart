@@ -1,10 +1,10 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
 
 class ConfirmCancelCustomDialog extends StatelessWidget {
   const ConfirmCancelCustomDialog(
