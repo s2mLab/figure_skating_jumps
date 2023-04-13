@@ -79,7 +79,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   future: _loadVideoData(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
-                      return Center(child: const CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
