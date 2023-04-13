@@ -253,7 +253,6 @@ class XSensDotRecordingService
       List<Jump> analyzedJumps =
           await CaptureClient().createJumps(jumps: jumps!);
       _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
-      _currentCapture?.jumps.addAll(analyzedJumps);
     }
     _changeState(RecorderState.idle);
   }
