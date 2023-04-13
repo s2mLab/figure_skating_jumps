@@ -124,7 +124,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
   Widget _succeededJumpsGraphic() {
     TooltipArgs t = TooltipArgs();
     return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
+        primaryXAxis: DateTimeAxis(),
         primaryYAxis: NumericAxis(
             maximum: jumpScores.first.toDouble(),
             minimum: jumpScores.last.toDouble()),
@@ -176,9 +176,9 @@ class _ProgressionTabState extends State<ProgressionTab> {
                 ),
               );
             }),
-        series: List<ChartSeries<GraphStatsDatePair, String>>.generate(
+        series: List<ChartSeries<GraphStatsDatePair, DateTime>>.generate(
             JumpType.values.length - 1, (index) {
-          return LineSeries<GraphStatsDatePair, String>(
+          return LineSeries<GraphStatsDatePair, DateTime>(
             enableTooltip: true,
               color: JumpType.values[index].color,
               dataSource: GraphicDataHelper.getJumpScorePerTypeGraphData(
@@ -205,7 +205,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
 
   Widget _averageJumpDurationGraphic() {
     return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
+        primaryXAxis: DateTimeAxis(),
         // Chart title
         title: ChartTitle(
             text: averageJumpDurationGraphicTitle,
@@ -254,7 +254,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
               );
             }),
         series: [
-          LineSeries<GraphStatsDatePair, String>(
+          LineSeries<GraphStatsDatePair, DateTime>(
               color: secondaryColor,
               dataSource: GraphicDataHelper.getAverageFlyTimeGraphData(
                   _getCapturesBySeason(_selectedSeason)),

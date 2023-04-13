@@ -4,7 +4,7 @@ class GraphStatsDatePair {
   final num? min;
   final num? max;
   bool wasRendered = false;
-  final String day;
+  final DateTime day;
   GraphStatsDatePair(this.average, this.stdDev, this.min,
       this.max, this.day);
 
