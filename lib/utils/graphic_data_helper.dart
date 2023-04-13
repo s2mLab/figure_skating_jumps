@@ -94,10 +94,7 @@ class GraphicDataHelper {
     List<Jump> jumps = [];
     List<Jump> captureJumps;
     for (Capture capture in captures) {
-      captureJumps = [];
-      for (String id in capture.jumpsID) {
-        captureJumps.add(await CaptureClient().getJumpByID(uID: id));
-      }
+      captureJumps = await capture.getJumpsData();
       jumps.addAll(test == null ? captureJumps : captureJumps.where(test));
     }
     return jumps;
