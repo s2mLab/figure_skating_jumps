@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
-
-import '../enums/season.dart';
 
 class Capture {
   late String? uID;
@@ -70,8 +69,8 @@ class Capture {
     return _jumpTypeCount;
   }
 
-  Capture(
-      this._file, this._userID, this._duration, this._hasVideo, this._date, this._season, this._jumpsID, this._modifications,
+  Capture(this._file, this._userID, this._duration, this._hasVideo, this._date,
+      this._season, this._jumpsID, this._modifications,
       [this.uID]);
 
   factory Capture.fromFirestore(
@@ -82,7 +81,8 @@ class Capture {
         captureInfo.get('duration'),
         captureInfo.get('hasVideo'),
         (captureInfo.get('date') as Timestamp).toDate(),
-        Season.values.firstWhere((element) => element.toString() == captureInfo.get('season')),
+        Season.values.firstWhere(
+            (element) => element.toString() == captureInfo.get('season')),
         List<String>.from(captureInfo.get('jumps') as List),
         List<Modification>.from((captureInfo.get('modifications') as List)
             .map((element) => Modification.buildFromMap(element))),

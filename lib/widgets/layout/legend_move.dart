@@ -1,8 +1,7 @@
+import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/layout/color_circle.dart';
 import 'package:flutter/material.dart';
-
-import '../../enums/jump_type.dart';
-import '../../utils/reactive_layout_helper.dart';
-import 'color_circle.dart';
 
 class LegendMove extends StatelessWidget {
   const LegendMove({Key? key}) : super(key: key);
@@ -16,8 +15,12 @@ class LegendMove extends StatelessWidget {
             children: [
               ColorCircle(colorCircle: JumpType.values[index].color),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(5)),
-                  child: Text(JumpType.values[index].abbreviation, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(5)),
+                  child: Text(JumpType.values[index].abbreviation,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16)))),
             ],
           );
         }));

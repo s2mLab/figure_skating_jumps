@@ -1,18 +1,17 @@
 import 'dart:io';
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/models/modification.dart';
+import 'package:figure_skating_jumps/models/skating_user.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/services/external_storage_service.dart';
 import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../enums/season.dart';
-import '../models/xsens_dot_data.dart';
-import 'external_storage_service.dart';
-import '../models/skating_user.dart';
 
 class CaptureClient {
   static final CaptureClient _captureClient = CaptureClient._internal();
@@ -145,7 +144,8 @@ class CaptureClient {
     await _saveCaptureCsv(fullPath: fullPath, fileName: exportFileName);
 
     // ExportedData is in us while we want it in ms
-    int duration = ((exportedData.last.time - exportedData.first.time) / 1000).floor();
+    int duration =
+        ((exportedData.last.time - exportedData.first.time) / 1000).floor();
     Capture capture = Capture(exportFileName, _capturingSkatingUser!.uID!,
         duration, hasVideo, DateTime.now(), season, [], []);
 

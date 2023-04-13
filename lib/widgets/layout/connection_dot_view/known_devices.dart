@@ -1,18 +1,17 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_bluetooth_discovery_subscriber.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/models/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_bluetooth_discovery_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
+import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
+import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
-
-import '../../../enums/x_sens_device_state.dart';
-import '../../../interfaces/i_bluetooth_discovery_subscriber.dart';
-import '../../../services/manager/bluetooth_device_manager.dart';
-import '../../buttons/x_sens_dot_list_element.dart';
-import '../../dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
-import '../../icons/x_sens_state_icon.dart';
 
 class KnownDevices extends StatefulWidget {
   final Function refreshParentCallback;
@@ -64,23 +63,32 @@ class _KnownDevicesState extends State<KnownDevices>
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
+            padding: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (XSensDotConnectionService().currentXSensDevice != null)
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                    margin: EdgeInsets.symmetric(
+                        vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                     child: Text(
                       connectedDeviceTitle,
-                      style: TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                      style: TextStyle(
+                          color: primaryColorLight,
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(20)),
                     ),
                   ),
                 if (XSensDotConnectionService().currentXSensDevice != null)
                   Container(
-                      margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                      margin: EdgeInsets.symmetric(
+                          vertical:
+                              ReactiveLayoutHelper.getHeightFromFactor(8)),
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                        margin: EdgeInsets.symmetric(
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(8)),
                         child: XSensDotListElement(
                             hasLine: true,
                             lineColor: connectedXSensDotButtonIndicator,
@@ -94,16 +102,20 @@ class _KnownDevicesState extends State<KnownDevices>
                             }),
                       )),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  margin: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: Row(
                     children: [
                       Text(
                         knownDevicesNearTitle,
-                        style:
-                            TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                        style: TextStyle(
+                            color: primaryColorLight,
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(20)),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16)),
+                        padding: EdgeInsets.only(
+                            left: ReactiveLayoutHelper.getWidthFromFactor(16)),
                         child: SizedBox(
                           height: ReactiveLayoutHelper.getHeightFromFactor(20),
                           width: ReactiveLayoutHelper.getHeightFromFactor(20),
@@ -122,7 +134,9 @@ class _KnownDevicesState extends State<KnownDevices>
                     itemCount: _nearDevices.length,
                     itemBuilder: (context, index) {
                       return Container(
-                          margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                          margin: EdgeInsets.symmetric(
+                              vertical:
+                                  ReactiveLayoutHelper.getHeightFromFactor(8)),
                           child: XSensDotListElement(
                             hasLine: true,
                             text: _nearDevices[index].name,
@@ -133,10 +147,13 @@ class _KnownDevicesState extends State<KnownDevices>
                           ));
                     }),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  margin: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: Text(
                     myDevicesTitle,
-                    style: TextStyle(color: primaryColorLight, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                    style: TextStyle(
+                        color: primaryColorLight,
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                   ),
                 ),
                 ListView.builder(
@@ -145,7 +162,9 @@ class _KnownDevicesState extends State<KnownDevices>
                     itemCount: _farDevices.length,
                     itemBuilder: (context, index) {
                       return Container(
-                          margin: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                          margin: EdgeInsets.symmetric(
+                              vertical:
+                                  ReactiveLayoutHelper.getHeightFromFactor(8)),
                           child: XSensDotListElement(
                             hasLine: true,
                             text: _farDevices[index].name,
@@ -209,8 +228,7 @@ class _KnownDevicesState extends State<KnownDevices>
   void _updateKnowDevices() {
     if (_knownDevices.length != BluetoothDeviceManager().devices.length) {
       _knownDevices.clear();
-      _knownDevices.addAll(BluetoothDeviceManager()
-          .devices);
+      _knownDevices.addAll(BluetoothDeviceManager().devices);
       _updateDeviceLists();
     }
   }

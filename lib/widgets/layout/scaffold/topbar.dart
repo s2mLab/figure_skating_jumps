@@ -1,13 +1,13 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
+import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_connection_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../buttons/x_sens_dot_connection_button.dart';
-
 class Topbar extends StatefulWidget implements PreferredSizeWidget {
   final bool isUserDebuggingFeature;
-  const Topbar({required this.isUserDebuggingFeature, Key? key}) : super(key: key);
+  const Topbar({required this.isUserDebuggingFeature, Key? key})
+      : super(key: key);
   @override
   State<Topbar> createState() => _TopbarState();
 

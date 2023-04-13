@@ -1,15 +1,14 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/jump_scores.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/enums/season.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
 import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
-import '../../../../constants/jump_scores.dart';
-import '../../../../constants/lang_fr.dart';
-import '../../../../enums/season.dart';
-import '../../../../models/capture.dart';
-import '../../../../models/graphic_data_classes/value_date_pair.dart';
-import '../../../../utils/reactive_layout_helper.dart';
 
 class ProgressionTab extends StatefulWidget {
   final Map<String, List<Capture>> _captures;
