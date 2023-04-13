@@ -3,7 +3,6 @@ import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
-import 'package:figure_skating_jumps/services/capture_client.dart';
 
 class GraphicDataHelper {
   static Future<Map<JumpType, List<ValueDatePair>>>
@@ -94,10 +93,7 @@ class GraphicDataHelper {
     List<Jump> jumps = [];
     List<Jump> captureJumps;
     for (Capture capture in captures) {
-      captureJumps = [];
-      for (String id in capture.jumpsID) {
-        captureJumps.add(await CaptureClient().getJumpByID(uID: id));
-      }
+      captureJumps = await capture.getJumpsData();
       jumps.addAll(test == null ? captureJumps : captureJumps.where(test));
     }
     return jumps;
