@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 
 class HttpClient {
   static final HttpClient _httpClient = HttpClient._internal();
-  static const String _serverAddress = "148.113.140.6:8080";
+  static const String _serverAddress = "54.39.129.236:6666";
   static const String _addFileRoute = "file";
   static const String _analyzeRoute = "analyze";
 

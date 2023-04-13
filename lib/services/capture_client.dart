@@ -162,9 +162,7 @@ class CaptureClient {
 
   Future<Capture> getCaptureByID({required String uID}) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> captureInfo =
-          await _firestore.collection(_captureCollectionString).doc(uID).get();
-      return await Capture.createFromFirebase(uID, captureInfo);
+      return Capture.fromFirestore(uID, await _firestore.collection(_captureCollectionString).doc(uID).get());
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

@@ -22,6 +22,7 @@ class ProgressionTab extends StatefulWidget {
 
 class _ProgressionTabState extends State<ProgressionTab> {
   Season? _selectedSeason;
+  final double _spacing = 100.0;
 
   @override
   Widget build(BuildContext context) {
@@ -121,46 +122,56 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _succeededJumpsGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(
-            maximum: jumpScores.first.toDouble(),
-            minimum: jumpScores.last.toDouble()),
-        // Chart title
-        title: ChartTitle(
-            text: succeededJumpsGraphicTitle,
-            textStyle: TextStyle(
-                fontFamily: 'Jost',
-                fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-          textStyle: TextStyle(
-              fontFamily: 'Jost',
-              fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
-          padding: ReactiveLayoutHelper.getWidthFromFactor(8),
-          iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
-          iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: List<ChartSeries<ValueDatePair, String>>.generate(
-            JumpType.values.length - 1, (index) {
-          return LineSeries<ValueDatePair, String>(
-              color: JumpType.values[index].color,
-              dataSource: GraphicDataHelper.getJumpScorePerTypeGraphData(
-                  _getCapturesBySeason(_selectedSeason),
-                  JumpType.values[index]),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings: MarkerSettings(
-                  isVisible: true,
-                  height: ReactiveLayoutHelper.getWidthFromFactor(4),
-                  width: ReactiveLayoutHelper.getWidthFromFactor(4)),
-              name: JumpType.values[index].abbreviation);
-        }));
+    return FutureBuilder(
+        future: GraphicDataHelper.getJumpScorePerTypeGraphData(
+            _getCapturesBySeason(_selectedSeason)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Padding(
+              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(_spacing)),
+              child: const CircularProgressIndicator(),
+            );
+          }
+          return SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              primaryYAxis: NumericAxis(
+                  maximum: jumpScores.first.toDouble(),
+                  minimum: jumpScores.last.toDouble()),
+              // Chart title
+              title: ChartTitle(
+                  text: succeededJumpsGraphicTitle,
+                  textStyle: TextStyle(
+                      fontFamily: 'Jost',
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+              // Enable legend
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+                textStyle: TextStyle(
+                    fontFamily: 'Jost',
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
+                padding: ReactiveLayoutHelper.getWidthFromFactor(8),
+                iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
+                iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
+              ),
+              // Enable tooltip
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: List<ChartSeries<ValueDatePair, String>>.generate(
+                  JumpType.values.length - 1, (index) {
+                return LineSeries<ValueDatePair, String>(
+                    color: JumpType.values[index].color,
+                    dataSource: snapshot.data![JumpType.values[index]]!,
+                    emptyPointSettings:
+                        EmptyPointSettings(mode: EmptyPointMode.drop),
+                    xValueMapper: (ValueDatePair data, _) => data.day,
+                    yValueMapper: (ValueDatePair data, _) => data.value,
+                    markerSettings: MarkerSettings(
+                        isVisible: true,
+                        height: ReactiveLayoutHelper.getWidthFromFactor(4),
+                        width: ReactiveLayoutHelper.getWidthFromFactor(4)),
+                    name: JumpType.values[index].abbreviation);
+              }));
+        });
   }
 
   Map<String, List<Capture>> _getCapturesBySeason(Season? s) {
@@ -172,40 +183,51 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _averageJumpDurationGraphic() {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        // Chart title
-        title: ChartTitle(
-            text: averageJumpDurationGraphicTitle,
-            textStyle: TextStyle(
-                fontFamily: 'Jost',
-                fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
-        // Enable legend
-        legend: Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-          textStyle: TextStyle(
-              fontFamily: 'Jost',
-              fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
-          padding: ReactiveLayoutHelper.getWidthFromFactor(8),
-          iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
-          iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
-        ),
-        // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: [
-          LineSeries<ValueDatePair, String>(
-              color: secondaryColor,
-              dataSource: GraphicDataHelper.getAverageFlyTimeGraphData(
-                  _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
-              markerSettings: MarkerSettings(
-                  isVisible: true,
-                  height: ReactiveLayoutHelper.getWidthFromFactor(4),
-                  width: ReactiveLayoutHelper.getWidthFromFactor(4)),
-              name: averageFlyTimeLegend)
-        ]);
+    return FutureBuilder(
+        future: GraphicDataHelper.getAverageFlyTimeGraphData(
+            _getCapturesBySeason(_selectedSeason)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Padding(
+              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(_spacing)),
+              child: const CircularProgressIndicator(),
+            );
+          }
+          return SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              // Chart title
+              title: ChartTitle(
+                  text: averageJumpDurationGraphicTitle,
+                  textStyle: TextStyle(
+                      fontFamily: 'Jost',
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+              // Enable legend
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+                textStyle: TextStyle(
+                    fontFamily: 'Jost',
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
+                padding: ReactiveLayoutHelper.getWidthFromFactor(8),
+                iconHeight: ReactiveLayoutHelper.getWidthFromFactor(12),
+                iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
+              ),
+              // Enable tooltip
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: [
+                LineSeries<ValueDatePair, String>(
+                    color: secondaryColor,
+                    dataSource: snapshot.data!,
+                    emptyPointSettings:
+                        EmptyPointSettings(mode: EmptyPointMode.drop),
+                    xValueMapper: (ValueDatePair data, _) => data.day,
+                    yValueMapper: (ValueDatePair data, _) => data.value,
+                    markerSettings: MarkerSettings(
+                        isVisible: true,
+                        height: ReactiveLayoutHelper.getWidthFromFactor(4),
+                        width: ReactiveLayoutHelper.getWidthFromFactor(4)),
+                    name: averageFlyTimeLegend)
+              ]);
+        });
   }
 }
