@@ -7,7 +7,6 @@ import 'package:figure_skating_jumps/widgets/buttons/nav_menu_element.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/helper_dialog.dart';
-import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
