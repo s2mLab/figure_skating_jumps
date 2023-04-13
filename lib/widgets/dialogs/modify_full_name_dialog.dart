@@ -2,6 +2,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class ModifyFullName extends StatelessWidget {
@@ -33,18 +34,28 @@ class ModifyFullName extends StatelessWidget {
     _firstNameController.text = _currentUser.firstName;
     _lastNameController.text = _currentUser.lastName;
     return AlertDialog(
-      title: const Text(modificationTitle),
+      title: Text(modificationTitle,
+          style: TextStyle(
+              fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
       content: SizedBox(
-          height: 160,
-          width: 300,
+          height: ReactiveLayoutHelper.getHeightFromFactor(160),
+          width: ReactiveLayoutHelper.getWidthFromFactor(300),
           child: Form(
               key: _modificationInfoKey,
               child: Column(children: [
                 Row(
                   children: [
-                    const Text(firstName),
+                    Text(firstNameField,
+                        style: TextStyle(
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(16))),
+
                     Expanded(
                         child: TextFormField(
+                            style: TextStyle(
+                                fontSize:
+                                    ReactiveLayoutHelper.getHeightFromFactor(
+                                        16)),
                             maxLength: _maxLength,
                             controller: _firstNameController,
                             autovalidateMode:
@@ -54,12 +65,16 @@ class ModifyFullName extends StatelessWidget {
                             }))
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 Row(
                   children: [
-                    const Text(lastName),
+                    const Text(lastNameField),
                     Expanded(
                         child: TextFormField(
+                            style: TextStyle(
+                                fontSize:
+                                    ReactiveLayoutHelper.getHeightFromFactor(
+                                        16)),
                             maxLength: _maxLength,
                             controller: _lastNameController,
                             autovalidateMode:
@@ -75,11 +90,11 @@ class ModifyFullName extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(cancel),
+          child: Text(cancelLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: const Text(confirmLabel),
+          child: Text(modifyButton, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
       ],
     );
