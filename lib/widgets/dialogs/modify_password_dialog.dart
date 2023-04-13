@@ -2,6 +2,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/skating_user.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class ModifyPassword extends StatelessWidget {
@@ -27,16 +28,17 @@ class ModifyPassword extends StatelessWidget {
     return AlertDialog(
       title: const Text(modificationPasswordTitle),
       content: SizedBox(
-          height: 200,
-          width: 300,
+          height: ReactiveLayoutHelper.getHeightFromFactor(200),
+          width: ReactiveLayoutHelper.getWidthFromFactor(300),
           child: Form(
               key: _modificationInfoKey,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(passwordInput),
+                    Text(passwordField, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
+                            style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                             controller: _passwordController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
@@ -44,9 +46,10 @@ class ModifyPassword extends StatelessWidget {
                               return FieldValidators.newPassValidator(value);
                             })),
                     const SizedBox(height: 24),
-                    const Text(passwordConfirmationInput),
+                    Text(passwordConfirmationField, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
+                            style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                             controller: _passwordConfirmationController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
@@ -60,11 +63,11 @@ class ModifyPassword extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(cancel),
+          child: Text(cancelLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
         TextButton(
           onPressed: () => _confirmModification(context),
-          child: const Text(confirmLabel),
+          child: Text(modifyButton, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
         ),
       ],
     );

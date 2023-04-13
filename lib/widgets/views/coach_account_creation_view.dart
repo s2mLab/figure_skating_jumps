@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -72,17 +73,17 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             height: MediaQuery.of(context).size.height,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 48.0, horizontal: 32.0),
+                  EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(48), horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                      height: 100,
+                      height: ReactiveLayoutHelper.getHeightFromFactor(100),
                       child: SvgPicture.asset(
                           'assets/vectors/blanc-logo-patinage-quebec.svg')),
                   Expanded(
                       child: Padding(
-                    padding: const EdgeInsets.only(top: 48.0),
+                    padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(48)),
                     child: Container(
                       height: double.infinity,
                       width: double.infinity,
@@ -93,28 +94,28 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                         boxShadow: [connectionShadow],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
                         child: Column(
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                                  EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                      height: 12,
+                                      height: ReactiveLayoutHelper.getHeightFromFactor(12),
                                       child: ProgressionDotsRow(
                                           steps: 2, state: 1)),
                                 ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: PageTitle(text: coachCreateAccountTitle),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                              child: const PageTitle(text: coachCreateAccountTitle),
                             ),
                             const InstructionPrompt(
-                                ifNotAnAthletePrompt, secondaryColor),
+                                ifNotAnAthleteInfo, secondaryColor),
                             Expanded(
                               child: IndexedStack(
                                 index: _pageIndex,
@@ -142,6 +143,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         child: Column(
           children: [
             TextFormField(
+              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
               keyboardType: TextInputType.name,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _surnameController,
@@ -153,12 +155,14 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               validator: (value) {
                 return FieldValidators.newNameValidator(value);
               },
-              decoration: const InputDecoration(
-                labelText: surname,
-                labelStyle: TextStyle(fontSize: 16, color: discreetText),
+              decoration: InputDecoration(
+                labelText: surnameField,
+                labelStyle: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
+
               ),
             ),
             TextFormField(
+              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
               keyboardType: TextInputType.name,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _nameController,
@@ -170,12 +174,13 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               validator: (value) {
                 return FieldValidators.newNameValidator(value);
               },
-              decoration: const InputDecoration(
-                labelText: name,
-                labelStyle: TextStyle(fontSize: 16, color: discreetText),
+              decoration: InputDecoration(
+                labelText: nameField,
+                labelStyle: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
               ),
             ),
             TextFormField(
+              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
               keyboardType: TextInputType.emailAddress,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _emailController,
@@ -187,9 +192,10 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               validator: (value) {
                 return FieldValidators.newEmailValidator(value);
               },
-              decoration: const InputDecoration(
-                labelText: email,
-                labelStyle: TextStyle(fontSize: 16, color: discreetText),
+              decoration: InputDecoration(
+                labelText: emailField,
+                labelStyle: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
+
               ),
             ),
           ],
@@ -200,7 +206,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IceButton(
-                text: continueTo,
+                text: continueToLabel,
                 onPressed: () {
                   if (_personalInfoKey.currentState != null &&
                       _personalInfoKey.currentState!.validate()) {
@@ -216,7 +222,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: IceButton(
-                  text: alreadyHaveAccount,
+                  text: alreadyHaveAccountButton,
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                       context,
@@ -241,6 +247,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         child: Column(
           children: [
             TextFormField(
+              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _passwordController,
               obscureText: true,
@@ -252,12 +259,13 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               validator: (value) {
                 return FieldValidators.newPassValidator(value);
               },
-              decoration: const InputDecoration(
-                labelText: password,
-                labelStyle: TextStyle(fontSize: 16, color: discreetText),
+              decoration: InputDecoration(
+                labelText: passwordField,
+                labelStyle: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
               ),
             ),
             TextFormField(
+              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _confirmPassController,
               obscureText: true,
@@ -270,9 +278,9 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 return FieldValidators.newPassConfirmValidator(
                     value, _coachPassword);
               },
-              decoration: const InputDecoration(
-                labelText: passConfirmSame,
-                labelStyle: TextStyle(fontSize: 16, color: discreetText),
+              decoration: InputDecoration(
+                labelText: passConfirmSameLabel,
+                labelStyle: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
               ),
             ),
           ],
@@ -283,7 +291,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IceButton(
-                text: confirmCreateCoachAccount,
+                text: confirmCreateCoachAccountButton,
                 onPressed: () async {
                   await onAccountCreatePressed();
                 },
@@ -292,9 +300,9 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                 iceButtonImportance: IceButtonImportance.mainAction,
                 iceButtonSize: IceButtonSize.medium),
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
               child: IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     setState(() {
                       _toAccount();
@@ -336,7 +344,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         _passwordKey.currentState!.validate()) {
       if (await _createAccount()) {
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/ManageDevices');
+          Navigator.of(context).pushNamedAndRemoveUntil('/ManageDevices', (route) => false);
         }
       } else {
         if (mounted) {
@@ -344,10 +352,10 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
               context: context,
               builder: (_) {
                 return AlertDialog(
-                    title: const Text(accountCreationError),
-                    titleTextStyle: const TextStyle(
-                        fontSize: 20, color: errorColor, fontFamily: 'Jost'),
-                    content: Text('$_errorStateMessage\n$tryLater'));
+                    title: const Text(accountCreationErrorLabel),
+                    titleTextStyle: TextStyle(
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(20), color: errorColor, fontFamily: 'Jost'),
+                    content: Text('$_errorStateMessage\n$tryLaterLabel'));
               });
         }
       }

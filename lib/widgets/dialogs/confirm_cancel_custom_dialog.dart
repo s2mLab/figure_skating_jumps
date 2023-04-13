@@ -1,5 +1,6 @@
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
@@ -16,23 +17,26 @@ class ConfirmCancelCustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         backgroundColor: primaryBackground,
-        insetPadding: const EdgeInsets.only(left: 16, right: 16),
+        insetPadding: EdgeInsets.symmetric(
+            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
         clipBehavior: Clip.antiAlias,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 description,
-                style: const TextStyle(fontSize: 20),
+                style: TextStyle(
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                padding: EdgeInsets.symmetric(
+                    vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: IceButton(
-                    text: confirmText,
+                    text: confirmLabel,
                     onPressed: () => confirmAction(),
                     textColor: paleText,
                     color: primaryColor,
@@ -40,7 +44,7 @@ class ConfirmCancelCustomDialog extends StatelessWidget {
                     iceButtonSize: IceButtonSize.large),
               ),
               IceButton(
-                  text: goBack,
+                  text: goBackLabel,
                   onPressed: () {
                     Navigator.pop(context);
                   },

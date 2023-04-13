@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
+import 'package:figure_skating_jumps/models/export_status_event.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/http_client.dart';
@@ -37,7 +39,14 @@ class XSensDotRecordingService
 
   static Season season = Season.preparation;
   static Capture? _currentCapture;
-  static const _recordingOutputRate = 120;
+  static const int _recordingOutputRate = 120;
+  static const int _estimatedExportRate = 30;
+  static late DateTime _startTime;
+  static late int _totalRecordingData;
+  static final StreamController<ExportStatusEvent>
+      _exportStatusStreamController = StreamController<ExportStatusEvent>();
+  static final Stream<ExportStatusEvent> _exportStream =
+      _exportStatusStreamController.stream.asBroadcastStream();
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
@@ -91,6 +100,7 @@ class XSensDotRecordingService
     _exportFileName = "";
     _currentRecordingHasVideo = false;
     _currentRecordingVideoPath = "";
+    _totalRecordingData = 0;
     _changeState(RecorderState.preparing);
     await _setRate();
   }
@@ -101,6 +111,10 @@ class XSensDotRecordingService
 
   Capture get currentCapture {
     return _currentCapture!;
+  }
+
+  Stream<ExportStatusEvent> get exportStatusStream {
+    return _exportStream;
   }
 
   Future<void> stopRecording(bool hasVideo, String videoPath) async {
@@ -148,12 +162,17 @@ class XSensDotRecordingService
 
   static void _handleRecordingStarted() {
     if (_recorderState == RecorderState.preparing) {
+      _startTime = DateTime.now();
       _changeState(RecorderState.recording);
     }
   }
 
   static Future<void> _handleRecordingStopped() async {
     if (_recorderState == RecorderState.recording) {
+      int recordingDuration = DateTime.now().millisecondsSinceEpoch -
+          _startTime.millisecondsSinceEpoch;
+      _totalRecordingData =
+          (_recordingOutputRate * recordingDuration / 1000.0).ceil().toInt();
       _changeState(RecorderState.exporting);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
@@ -196,6 +215,15 @@ class XSensDotRecordingService
     if (_recorderState == RecorderState.exporting) {
       if (data != null) {
         _exportedData.add(XSensDotData.fromEventChannel(data));
+        double exportPct =
+            _exportedData.length.toDouble() / _totalRecordingData.toDouble();
+        int remainingSeconds = ((_totalRecordingData - _exportedData.length) /
+                _estimatedExportRate)
+            .ceil()
+            .toInt();
+        Duration timeRemaining = Duration(seconds: remainingSeconds);
+        _exportStatusStreamController.add(ExportStatusEvent(
+            exportPct: exportPct, timeRemaining: timeRemaining));
       }
     }
   }
@@ -222,7 +250,8 @@ class XSensDotRecordingService
       List<Jump>? jumps = await HttpClient()
           .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
 
-      List<Jump> analyzedJumps = await CaptureClient().createJumps(jumps: jumps!);
+      List<Jump> analyzedJumps =
+          await CaptureClient().createJumps(jumps: jumps!);
       _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
     }
     _changeState(RecorderState.idle);

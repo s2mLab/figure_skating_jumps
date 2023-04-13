@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:smooth_video_progress/smooth_video_progress.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:video_player/video_player.dart';
@@ -60,12 +61,12 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: primaryBackground,
-      insetPadding: const EdgeInsets.only(left: 16, right: 16),
+      insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getHeightFromFactor(16)),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
         child: FutureBuilder(
           future: _initializeVideoPlayerFuture,
           builder: (context, snapshot) {
@@ -85,7 +86,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                         onDoubleTap: () =>
                             _jumpTime(const Duration(seconds: -3)),
                         child:
-                            Container(height: 620, color: Colors.transparent),
+                            Container(height: ReactiveLayoutHelper.getHeightFromFactor(620), color: Colors.transparent),
                       )),
                       Flexible(
                           child: GestureDetector(
@@ -93,7 +94,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                         onDoubleTap: () =>
                             _jumpTime(const Duration(seconds: 3)),
                         child:
-                            Container(height: 620, color: Colors.transparent),
+                            Container(height: ReactiveLayoutHelper.getHeightFromFactor(620), color: Colors.transparent),
                       ))
                     ],
                   ),
@@ -119,7 +120,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                               onChanged: (value) => _controller.seekTo(
                                   Duration(milliseconds: value.toInt())),
                             )),
-                            Text(position.toString().substring(2, 11))
+                            Text(position.toString().substring(2, 11), style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)
                           ]));
                     }),
               ]);
