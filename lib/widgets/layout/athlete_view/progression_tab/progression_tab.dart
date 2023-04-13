@@ -129,7 +129,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Padding(
-              padding: EdgeInsets.all(_spacing),
+              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(_spacing)),
               child: const CircularProgressIndicator(),
             );
           }
@@ -190,7 +190,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Padding(
-              padding: EdgeInsets.all(_spacing),
+              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(_spacing)),
               child: const CircularProgressIndicator(),
             );
           }
