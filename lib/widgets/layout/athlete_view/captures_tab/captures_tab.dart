@@ -11,7 +11,7 @@ class CapturesTab extends StatelessWidget {
   const CapturesTab({Key? key, required this.groupedCaptures})
       : super(key: key);
   final Map<String, List<Capture>> groupedCaptures;
-  final double heightContainer = 116;
+  final double heightContainer = 130;
 
   @override
   Widget build(BuildContext context) {

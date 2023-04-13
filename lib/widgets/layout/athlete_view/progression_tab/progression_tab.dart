@@ -122,6 +122,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _succeededJumpsGraphic() {
+    TooltipArgs t = TooltipArgs();
     return SfCartesianChart(
         primaryXAxis: CategoryAxis(),
         primaryYAxis: NumericAxis(
@@ -136,7 +137,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
         // Enable legend
         legend: Legend(
           isVisible: true,
-          position: LegendPosition.bottom,
+          position: LegendPosition.top,
           textStyle: TextStyle(
               fontFamily: 'Jost',
               fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
@@ -146,13 +147,14 @@ class _ProgressionTabState extends State<ProgressionTab> {
         ),
         // Enable tooltip
         tooltipBehavior: TooltipBehavior(
+          canShowMarker: true,
           color: primaryColorDark,
             enable: true,
             builder: (dynamic data, dynamic point, dynamic series,
                 int pointIndex, int seriesIndex) {
               return Container(
-                height: ReactiveLayoutHelper.getHeightFromFactor(100),
-                width: ReactiveLayoutHelper.getWidthFromFactor(140),
+                height: ReactiveLayoutHelper.getHeightFromFactor(80),
+                width: ReactiveLayoutHelper.getWidthFromFactor(100),
                 decoration: BoxDecoration(
                     color: primaryColorDark,
                   borderRadius: BorderRadius.circular(8),
@@ -160,20 +162,31 @@ class _ProgressionTabState extends State<ProgressionTab> {
                 child: Padding(
                   padding: EdgeInsets.all(
                       ReactiveLayoutHelper.getHeightFromFactor(8)),
-                  child: Column(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                      data.average == null ? [Text("Aucune donnée à cette date", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText), textAlign: TextAlign.center,)] : [
+                      Text("Moyenne: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+                      Text("Min: ${data.min}, Max: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+                      Text("Écart type: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
+                    ],
+
+                  ),
                 ),
               );
             }),
-        series: List<ChartSeries<ValueDatePair, String>>.generate(
+        series: List<ChartSeries<GraphStatsDatePair, String>>.generate(
             JumpType.values.length - 1, (index) {
-          return LineSeries<ValueDatePair, String>(
+          return LineSeries<GraphStatsDatePair, String>(
+            enableTooltip: true,
               color: JumpType.values[index].color,
               dataSource: GraphicDataHelper.getJumpScorePerTypeGraphData(
                   _getCapturesBySeason(_selectedSeason),
                   JumpType.values[index]),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
+              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop, color: Colors.transparent),
+              xValueMapper: (GraphStatsDatePair data, _) => data.day,
+              yValueMapper: (GraphStatsDatePair data, _) => data.average,
               markerSettings: MarkerSettings(
                   isVisible: true,
                   height: ReactiveLayoutHelper.getWidthFromFactor(4),
@@ -202,7 +215,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
         // Enable legend
         legend: Legend(
           isVisible: true,
-          position: LegendPosition.bottom,
+          position: LegendPosition.top,
           textStyle: TextStyle(
               fontFamily: 'Jost',
               fontSize: ReactiveLayoutHelper.getHeightFromFactor(12)),
@@ -211,15 +224,43 @@ class _ProgressionTabState extends State<ProgressionTab> {
           iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
         ),
         // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
+        tooltipBehavior: TooltipBehavior(
+            color: primaryColorDark,
+            enable: true,
+            builder: (dynamic data, dynamic point, dynamic series,
+                int pointIndex, int seriesIndex) {
+              print(data.average == null ? "null" : data.average);
+              return Container(
+                height: ReactiveLayoutHelper.getHeightFromFactor(80),
+                width: ReactiveLayoutHelper.getWidthFromFactor(100),
+                decoration: BoxDecoration(
+                  color: primaryColorDark,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Moyenne: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+                      Text("Min: ${data.min}, Max: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+                      Text("Écart type: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
+                    ],
+
+                  ),
+                ),
+              );
+            }),
         series: [
-          LineSeries<ValueDatePair, String>(
+          LineSeries<GraphStatsDatePair, String>(
               color: secondaryColor,
               dataSource: GraphicDataHelper.getAverageFlyTimeGraphData(
                   _getCapturesBySeason(_selectedSeason)),
-              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-              xValueMapper: (ValueDatePair data, _) => data.day,
-              yValueMapper: (ValueDatePair data, _) => data.value,
+              emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop, color: Colors.transparent),
+              xValueMapper: (GraphStatsDatePair data, _) => data.day,
+              yValueMapper: (GraphStatsDatePair data, _) => data.average,
               markerSettings: MarkerSettings(
                   isVisible: true,
                   height: ReactiveLayoutHelper.getWidthFromFactor(4),

@@ -1,5 +1,12 @@
-class ValueDatePair {
-  final double? value;
+class GraphStatsDatePair {
+  final double? average;
+  final double? stdDev;
+  final num? min;
+  final num? max;
+  bool wasRendered = false;
   final String day;
-  const ValueDatePair(this.value, this.day);
+  GraphStatsDatePair(this.average, this.stdDev, this.min,
+      this.max, this.day);
+
+  GraphStatsDatePair.empty({required this.day, this.average, this.stdDev, this.min, this.max});
 }
