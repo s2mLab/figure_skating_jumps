@@ -145,7 +145,25 @@ class _ProgressionTabState extends State<ProgressionTab> {
           iconWidth: ReactiveLayoutHelper.getWidthFromFactor(12),
         ),
         // Enable tooltip
-        tooltipBehavior: TooltipBehavior(enable: true),
+        tooltipBehavior: TooltipBehavior(
+          color: primaryColorDark,
+            enable: true,
+            builder: (dynamic data, dynamic point, dynamic series,
+                int pointIndex, int seriesIndex) {
+              return Container(
+                height: 100,
+                width: 140,
+                decoration: BoxDecoration(
+                    color: primaryColorDark,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child: Column(),
+                ),
+              );
+            }),
         series: List<ChartSeries<ValueDatePair, String>>.generate(
             JumpType.values.length - 1, (index) {
           return LineSeries<ValueDatePair, String>(
