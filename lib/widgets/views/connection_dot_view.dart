@@ -1,5 +1,8 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/known_devices.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
@@ -22,7 +25,20 @@ class ConnectionDotView extends StatefulWidget {
   State<ConnectionDotView> createState() => _ConnectionDotViewState();
 }
 
-class _ConnectionDotViewState extends State<ConnectionDotView> {
+class _ConnectionDotViewState extends State<ConnectionDotView> implements IXSensStateSubscriber {
+  final XSensDotConnectionService _xSensDotConnectionService = XSensDotConnectionService();
+
+  @override
+  void initState() {
+    super.initState();
+    _xSensDotConnectionService.subscribe(this);
+  }
+
+  @override
+  void dispose() {
+    _xSensDotConnectionService.unsubscribe(this);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +62,8 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
         Center(
             child: Padding(
           padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
-          child: IceButton(
+          child: _xSensDotConnectionService.currentXSensDevice == null ?
+          IceButton(
               text: connectNewXSensDotButton,
               onPressed: () {
                 showDialog(
@@ -60,9 +77,23 @@ class _ConnectionDotViewState extends State<ConnectionDotView> {
               textColor: paleText,
               color: primaryColor,
               iceButtonImportance: IceButtonImportance.mainAction,
-              iceButtonSize: IceButtonSize.large),
-        ))
+              iceButtonSize: IceButtonSize.large) :
+          IceButton(
+              text: disconnectDeviceButton,
+              onPressed: () {
+                _xSensDotConnectionService.disconnect().then((_) => setState(() => {}));
+              },
+              textColor: errorColor,
+              color: errorColor,
+              iceButtonImportance: IceButtonImportance.secondaryAction,
+              iceButtonSize: IceButtonSize.large)
+            ))
       ]),
     );
+  }
+
+  @override
+  void onStateChange(XSensDeviceState state) {
+    setState(() {});
   }
 }
