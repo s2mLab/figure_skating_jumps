@@ -53,12 +53,10 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
       _jumpTypeCount = Capture.getJumpTypeCount(_jumps);
     }
     _jumps.sort((a, b) => a.time.compareTo(b.time));
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    _loadVideoData();
     return Scaffold(
         appBar: ReactiveLayoutHelper.isTablet()
             ? const TabletTopbar(isUserDebuggingFeature: false)
@@ -73,191 +71,202 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   ? bigTopbarHeight
                   : topbarHeight),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: ReactiveLayoutHelper.isTablet()
-                    ? ReactiveLayoutHelper.getWidthFromFactor(24, true)
-                    : ReactiveLayoutHelper.getWidthFromFactor(24)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const PageTitle(text: editAnalysisPageTitle),
-                    if (_capture!.hasVideo &&
-                        _captureInfo != null &&
-                        _captureInfo!.videoPath.isNotEmpty)
-                      IceButton(
-                          text: seeVideoAgainButton,
-                          onPressed: () {
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return VideoPlayerDialog(
-                                      videoPath: _captureInfo!.videoPath);
-                                });
-                          },
-                          textColor: primaryColor,
-                          color: primaryColor,
-                          iceButtonImportance:
-                              IceButtonImportance.secondaryAction,
-                          iceButtonSize: IceButtonSize.small)
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: ReactiveLayoutHelper.getHeightFromFactor(24)),
-                  child:
-                      const InstructionPrompt(analysisDoneInfo, secondaryColor),
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                    child: const LegendMove()),
-                CaptureListTile(currentCapture: _capture, isInteractive: false),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const PageTitle(text: detectedJumpsTitle),
-                    IceButton(
-                        text: addAJumpButton,
-                        onPressed: () async {
-                          Jump newJump = Jump(0, 0, true, JumpType.unknown, "",
-                              0, _capture!.uID!, 0, 0, 0);
-                          setState(() {
-                            _jumps.insert(0, newJump);
-                          });
-                          _jumpListScrollController.animateTo(0,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.ease);
-                          await CaptureClient()
-                              .createJump(jump: newJump)
-                              .then((value) {
-                            Navigator.pushReplacementNamed(
-                                context, '/EditAnalysis',
-                                arguments: _capture);
-                          });
-                        },
-                        textColor: primaryColor,
-                        color: primaryColor,
-                        iceButtonImportance:
-                            IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.small)
-                  ],
-                ),
-                if (_timeWasModified)
-                  Center(
-                      child: IceButton(
-                          text: reorderJumpListButton,
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/EditAnalysis',
-                                arguments: _capture);
-                          },
-                          textColor: secondaryColor,
-                          color: secondaryColor,
-                          iceButtonImportance:
-                              IceButtonImportance.discreetAction,
-                          iceButtonSize: IceButtonSize.small)),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _jumpListScrollController,
-                    child: _jumps.isEmpty
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                                top: ReactiveLayoutHelper.getHeightFromFactor(
-                                    8)),
-                            child: Center(
-                                child: Text(noJumpInfo,
-                                    style: TextStyle(
-                                        fontSize: ReactiveLayoutHelper
-                                            .getHeightFromFactor(16)))),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: ExpansionPanelList(
-                              expandedHeaderPadding: EdgeInsets.zero,
-                              expansionCallback: (i, isOpen) {
-                                setState(() {
-                                  _isPanelsOpen[i] = !isOpen;
-                                });
-                              },
-                              elevation: 0,
-                              children: List.generate(_jumps.length, (index) {
-                                _isPanelsOpen.add(false);
-                                return ExpansionPanel(
-                                    canTapOnHeader: true,
-                                    backgroundColor: Colors.transparent,
-                                    isExpanded: _isPanelsOpen[index],
-                                    headerBuilder: (BuildContext context,
-                                        bool isExpanded) {
-                                      return JumpPanelHeader(
-                                          jump: _jumps[index]);
-                                    },
-                                    body: JumpPanelContent(
-                                        jump: _jumps[index],
-                                        onModified: (Jump j,
-                                            JumpType initialJumpType,
-                                            int initialTime) {
-                                          if (j.time != initialTime) {
-                                            _timeWasModified = true;
-                                          }
-                                          setState(() {
-                                            _jumpTypeCount[
-                                                    initialJumpType] =
-                                                _jumpTypeCount[
-                                                        initialJumpType]! -
-                                                    1;
-                                            _jumpTypeCount[j.type] =
-                                                _jumpTypeCount[
-                                                        j.type]! +
-                                                    1;
-                                            CaptureClient()
-                                                .updateJump(jump: j)
-                                                .then((value) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      duration: const Duration(
-                                                          seconds: 2),
-                                                      backgroundColor: confirm,
-                                                      content: Text(
-                                                        savedModificationsSnackInfo,
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                ReactiveLayoutHelper
-                                                                    .getHeightFromFactor(
-                                                                        16)),
-                                                      )));
+                padding: EdgeInsets.symmetric(
+                    horizontal: ReactiveLayoutHelper.isTablet()
+                        ? ReactiveLayoutHelper.getWidthFromFactor(24, true)
+                        : ReactiveLayoutHelper.getWidthFromFactor(24)),
+                child: FutureBuilder(
+                  future: _loadVideoData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return Center(child: const CircularProgressIndicator());
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const PageTitle(text: editAnalysisPageTitle),
+                            if (_capture!.hasVideo &&
+                                _captureInfo != null &&
+                                _captureInfo!.videoPath.isNotEmpty)
+                              IceButton(
+                                  text: seeVideoAgainButton,
+                                  onPressed: () {
+                                    showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return VideoPlayerDialog(
+                                              videoPath: _captureInfo!.videoPath);
+                                        });
+                                  },
+                                  textColor: primaryColor,
+                                  color: primaryColor,
+                                  iceButtonImportance:
+                                  IceButtonImportance.secondaryAction,
+                                  iceButtonSize: IceButtonSize.small)
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                          child: const InstructionPrompt(
+                              analysisDoneInfo, secondaryColor),
+                        ),
+                        Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(8)),
+                            child: const LegendMove()),
+                        CaptureListTile(
+                            currentCapture: _capture, isInteractive: false),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const PageTitle(text: detectedJumpsTitle),
+                            IceButton(
+                                text: addAJumpButton,
+                                onPressed: () async {
+                                  Jump newJump = Jump(0, 0, true, JumpType.unknown,
+                                      "", 0, _capture!.uID!, 0, 0, 0);
+                                  setState(() {
+                                    _jumps.insert(0, newJump);
+                                  });
+                                  _jumpListScrollController.animateTo(0,
+                                      duration: const Duration(milliseconds: 400),
+                                      curve: Curves.ease);
+                                  await CaptureClient()
+                                      .createJump(jump: newJump)
+                                      .then((value) {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/EditAnalysis',
+                                        arguments: _capture);
+                                  });
+                                },
+                                textColor: primaryColor,
+                                color: primaryColor,
+                                iceButtonImportance:
+                                IceButtonImportance.secondaryAction,
+                                iceButtonSize: IceButtonSize.small)
+                          ],
+                        ),
+                        if (_timeWasModified)
+                          Center(
+                              child: IceButton(
+                                  text: reorderJumpListButton,
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/EditAnalysis',
+                                        arguments: _capture);
+                                  },
+                                  textColor: secondaryColor,
+                                  color: secondaryColor,
+                                  iceButtonImportance:
+                                  IceButtonImportance.discreetAction,
+                                  iceButtonSize: IceButtonSize.small)),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            controller: _jumpListScrollController,
+                            child: _jumps.isEmpty
+                                ? Padding(
+                              padding: EdgeInsets.only(
+                                  top: ReactiveLayoutHelper
+                                      .getHeightFromFactor(8)),
+                              child: Center(
+                                  child: Text(noJumpInfo,
+                                      style: TextStyle(
+                                          fontSize: ReactiveLayoutHelper
+                                              .getHeightFromFactor(16)))),
+                            )
+                                : ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: ExpansionPanelList(
+                                expandedHeaderPadding: EdgeInsets.zero,
+                                expansionCallback: (i, isOpen) {
+                                  setState(() {
+                                    _isPanelsOpen[i] = !isOpen;
+                                  });
+                                },
+                                elevation: 0,
+                                children:
+                                List.generate(_jumps.length, (index) {
+                                  _isPanelsOpen.add(false);
+                                  return ExpansionPanel(
+                                      canTapOnHeader: true,
+                                      backgroundColor: Colors.transparent,
+                                      isExpanded: _isPanelsOpen[index],
+                                      headerBuilder: (BuildContext context,
+                                          bool isExpanded) {
+                                        return JumpPanelHeader(
+                                            jump: _jumps[index]);
+                                      },
+                                      body: JumpPanelContent(
+                                          jump: _jumps[index],
+                                          onModified: (Jump j,
+                                              JumpType initialJumpType,
+                                              int initialTime) {
+                                            if (j.time != initialTime) {
+                                              _timeWasModified = true;
+                                            }
+                                            setState(() {
+                                              _jumpTypeCount[
+                                              initialJumpType] =
+                                                  _jumpTypeCount[
+                                                  initialJumpType]! -
+                                                      1;
+                                              _jumpTypeCount[j.type] =
+                                                  _jumpTypeCount[j.type]! + 1;
+                                              CaptureClient()
+                                                  .updateJump(jump: j)
+                                                  .then((value) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                    duration:
+                                                    const Duration(
+                                                        seconds: 2),
+                                                    backgroundColor:
+                                                    confirm,
+                                                    content: Text(
+                                                      savedModificationsSnackInfo,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                          ReactiveLayoutHelper
+                                                              .getHeightFromFactor(
+                                                              16)),
+                                                    )));
+                                              });
                                             });
-                                          });
-                                        },
-                                        onDeleted: (Jump j, JumpType initial) {
-                                          setState(() {
-                                            _jumpTypeCount[initial] =
-                                                _jumpTypeCount[
-                                                        initial]! -
-                                                    1;
-                                            _jumps.remove(j);
-                                            _capture = _capture;
-                                            _isPanelsOpen = [];
-                                          });
-                                          CaptureClient()
-                                              .deleteJump(jump: j)
-                                              .then((value) {
-                                            Navigator.pushReplacementNamed(
-                                                context, '/EditAnalysis',
-                                                arguments: _capture);
-                                          }); //no need to await, done in the background
-                                        }));
-                              }),
+                                          },
+                                          onDeleted:
+                                              (Jump j, JumpType initial) {
+                                            setState(() {
+                                              _jumpTypeCount[initial] =
+                                                  _jumpTypeCount[initial]! -
+                                                      1;
+                                              _jumps.remove(j);
+                                              _capture = _capture;
+                                              _isPanelsOpen = [];
+                                            });
+                                            CaptureClient()
+                                                .deleteJump(jump: j)
+                                                .then((value) {
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/EditAnalysis',
+                                                  arguments: _capture);
+                                            }); //no need to await, done in the background
+                                          }));
+                                }),
+                              ),
                             ),
                           ),
-                  ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-              ],
-            ),
-          ),
+              ),
         ));
   }
 }
