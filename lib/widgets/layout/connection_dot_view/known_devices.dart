@@ -10,6 +10,7 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_servi
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/xsens_management/configure_x_sens_dot_dialog.dart';
 import 'package:figure_skating_jumps/widgets/icons/x_sens_state_icon.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class KnownDevices extends StatefulWidget {
@@ -62,23 +63,32 @@ class _KnownDevicesState extends State<KnownDevices>
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (XSensDotConnectionService().currentXSensDevice != null)
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text(
-                      connectedDevice,
-                      style: TextStyle(color: primaryColorLight, fontSize: 20),
+                    margin: EdgeInsets.symmetric(
+                        vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                    child: Text(
+                      connectedDeviceTitle,
+                      style: TextStyle(
+                          color: primaryColorLight,
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(20)),
                     ),
                   ),
                 if (XSensDotConnectionService().currentXSensDevice != null)
                   Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      margin: EdgeInsets.symmetric(
+                          vertical:
+                              ReactiveLayoutHelper.getHeightFromFactor(8)),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        margin: EdgeInsets.symmetric(
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(8)),
                         child: XSensDotListElement(
                             hasLine: true,
                             lineColor: connectedXSensDotButtonIndicator,
@@ -92,20 +102,24 @@ class _KnownDevicesState extends State<KnownDevices>
                             }),
                       )),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  margin: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: Row(
-                    children: const [
+                    children: [
                       Text(
-                        knownDevicesNear,
-                        style:
-                            TextStyle(color: primaryColorLight, fontSize: 20),
+                        knownDevicesNearTitle,
+                        style: TextStyle(
+                            color: primaryColorLight,
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(20)),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16.0),
+                        padding: EdgeInsets.only(
+                            left: ReactiveLayoutHelper.getWidthFromFactor(16)),
                         child: SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
+                          height: ReactiveLayoutHelper.getHeightFromFactor(20),
+                          width: ReactiveLayoutHelper.getHeightFromFactor(20),
+                          child: const CircularProgressIndicator(
                             color: discreetText,
                             value: null,
                           ),
@@ -120,7 +134,9 @@ class _KnownDevicesState extends State<KnownDevices>
                     itemCount: _nearDevices.length,
                     itemBuilder: (context, index) {
                       return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          margin: EdgeInsets.symmetric(
+                              vertical:
+                                  ReactiveLayoutHelper.getHeightFromFactor(8)),
                           child: XSensDotListElement(
                             hasLine: true,
                             text: _nearDevices[index].name,
@@ -131,10 +147,13 @@ class _KnownDevicesState extends State<KnownDevices>
                           ));
                     }),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  child: const Text(
-                    myDevices,
-                    style: TextStyle(color: primaryColorLight, fontSize: 20),
+                  margin: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: Text(
+                    myDevicesTitle,
+                    style: TextStyle(
+                        color: primaryColorLight,
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                   ),
                 ),
                 ListView.builder(
@@ -143,7 +162,9 @@ class _KnownDevicesState extends State<KnownDevices>
                     itemCount: _farDevices.length,
                     itemBuilder: (context, index) {
                       return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          margin: EdgeInsets.symmetric(
+                              vertical:
+                                  ReactiveLayoutHelper.getHeightFromFactor(8)),
                           child: XSensDotListElement(
                             hasLine: true,
                             text: _farDevices[index].name,

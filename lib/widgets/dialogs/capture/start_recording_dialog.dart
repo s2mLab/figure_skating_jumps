@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
@@ -43,23 +44,26 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _startingRecording() {
-    return _loadingDialog(captureStartingPrompt);
+    return _loadingDialog(captureStartingLabel);
   }
 
   SimpleDialog _fullMemory() {
     return SimpleDialog(
-      title: const Text(
-        errorCaptureStartingPrompt,
+      title: Text(
+        errorCaptureStartingLabel,
         textAlign: TextAlign.center,
-        style: TextStyle(color: errorColor),
+        style: TextStyle(
+            color: errorColor,
+            fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: InstructionPrompt(memoryErrorMessage, errorColor)),
+            Padding(
+                padding: EdgeInsets.all(
+                    ReactiveLayoutHelper.getHeightFromFactor(16)),
+                child: const InstructionPrompt(memoryErrorInfo, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -70,7 +74,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
                 iceButtonImportance: IceButtonImportance.mainAction,
                 iceButtonSize: IceButtonSize.medium),
             IceButton(
-                text: goBack,
+                text: goBackLabel,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -85,7 +89,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   SimpleDialog _erasingMemory() {
-    return _loadingDialog(erasingDataPrompt);
+    return _loadingDialog(erasingDataLabel);
   }
 
   SimpleDialog _loadingDialog(String message) {
@@ -93,21 +97,27 @@ class _StartRecordingState extends State<StartRecordingDialog>
       title: Text(
         message,
         textAlign: TextAlign.center,
+        style:
+            TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding:
+                  EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
               child: SizedBox(
-                  width: 50,
-                  child: LinearProgressIndicator(
+                  width: ReactiveLayoutHelper.getWidthFromFactor(50),
+                  child: const LinearProgressIndicator(
                     color: primaryColor,
                     backgroundColor: discreetText,
                   )),
             ),
-            Text(pleaseWait)
+            Text(pleaseWaitLabel,
+                style: TextStyle(
+                    color: errorColor,
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
           ],
         )
       ],

@@ -119,14 +119,11 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
             Log.i("XSensDot", "File info list is empty")
             return
         }
-        for (file in fileInfoList) {
-            Log.i("XSensDot", file.fileName)
-        }
 
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
                 RecordingStatus.GetFileInfoDone,
-                XSensFileInfoSerializer.serialize(fileInfoList[fileInfoList.size - 1])
+                XSensFileInfoSerializer.serialize(fileInfoList.last())
             )
         )
 
@@ -166,12 +163,14 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         recordingId: Int,
         isSuccess: Boolean,
         recordingState: XsensDotRecordingState?
-    ) {}
+    ) {
+    }
 
     override fun onXsensDotGetRecordingTime(
         address: String?,
         startUTCSeconds: Int,
         totalRecordingSeconds: Int,
         remainingRecordingSeconds: Int
-    ) {}
+    ) {
+    }
 }

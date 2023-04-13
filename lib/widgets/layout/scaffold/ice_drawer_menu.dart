@@ -4,6 +4,7 @@ import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/nav_menu_element.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/helper_dialog.dart';
 import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
@@ -17,8 +18,11 @@ class IceDrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: topbarHeight),
+      padding: EdgeInsets.only(
+          top:
+              ReactiveLayoutHelper.isTablet() ? bigTopbarHeight : topbarHeight),
       child: Drawer(
+        elevation: 0,
         backgroundColor: isUserDebuggingFeature ? darkText : primaryColor,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +50,7 @@ class IceDrawerMenu extends StatelessWidget {
                         );
                       }),
                   NavMenuElement(
-                      text: myAcquisitions,
+                      text: myAcquisitionsTitle,
                       iconData: Icons.history,
                       onPressed: () {
                         Navigator.pushNamed(context, '/Acquisitions',
@@ -54,7 +58,7 @@ class IceDrawerMenu extends StatelessWidget {
                       }),
                   if (UserClient().currentSkatingUser!.role == UserRole.coach)
                     NavMenuElement(
-                        text: myAthletes,
+                        text: myAthletesTitle,
                         iconData: Icons.groups_rounded,
                         onPressed: () {
                           Navigator.pushNamed(
@@ -65,35 +69,49 @@ class IceDrawerMenu extends StatelessWidget {
                         }),
                 ],
               )),
-              Container(
-                  margin: const EdgeInsets.all(16),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                NavMenuElement(
+                    text: rawDataDrawerTile,
+                    iconData: Icons.terminal,
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/RawDataView',
+                      );
+                    }),
+                Padding(
+                  padding: ReactiveLayoutHelper.isTablet()
+                      ? EdgeInsets.symmetric(
+                          vertical:
+                              ReactiveLayoutHelper.getHeightFromFactor(16),
+                          horizontal:
+                              ReactiveLayoutHelper.getWidthFromFactor(16))
+                      : const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        NavMenuElement(
-                            text: rawDataDrawerTile,
-                            iconData: Icons.terminal,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const RawDataView()),
-                              );
-                            }),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const HelperDialog();
-                                });
-                          },
-                          icon: const Icon(Icons.help_outline),
-                          iconSize: 40,
-                          color: discreetText,
-                        ),
-                        Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const HelperDialog();
+                              });
+                        },
+                        icon: const Icon(Icons.help_outline),
+                        iconSize: ReactiveLayoutHelper.isTablet()
+                            ? ReactiveLayoutHelper.getHeightFromFactor(40)
+                            : 40,
+                        color: discreetText,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: ReactiveLayoutHelper.isTablet()
+                                ? ReactiveLayoutHelper.getHeightFromFactor(16)
+                                : 16),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Transform(
@@ -105,7 +123,7 @@ class IceDrawerMenu extends StatelessWidget {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return ConfirmCancelCustomDialog(
-                                              description: disconnect,
+                                              description: disconnectLabel,
                                               confirmAction: () async {
                                                 await UserClient().signOut();
                                                 if (context.mounted) {
@@ -119,7 +137,10 @@ class IceDrawerMenu extends StatelessWidget {
                                         });
                                   },
                                   icon: const Icon(Icons.logout),
-                                  iconSize: 40,
+                                  iconSize: ReactiveLayoutHelper.isTablet()
+                                      ? ReactiveLayoutHelper
+                                          .getHeightFromFactor(40)
+                                      : 40,
                                   color: errorColor,
                                 )),
                             IconButton(
@@ -130,12 +151,18 @@ class IceDrawerMenu extends StatelessWidget {
                                 );
                               },
                               icon: const Icon(Icons.account_circle),
-                              iconSize: 40,
+                              iconSize: ReactiveLayoutHelper.isTablet()
+                                  ? ReactiveLayoutHelper.getHeightFromFactor(40)
+                                  : 40,
                               color: secondaryColor,
                             )
                           ],
-                        )
-                      ]))
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ])
             ]),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class IceButton extends StatelessWidget {
@@ -47,25 +48,25 @@ class IceButton extends StatelessWidget {
           _iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
       highlightElevation:
           _iceButtonImportance == IceButtonImportance.discreetAction ? 0 : null,
-      height: _heights[_iceButtonSize.index],
+      height: ReactiveLayoutHelper.getHeightFromFactor(_heights[_iceButtonSize.index]),
       minWidth: _iceButtonImportance == IceButtonImportance.discreetAction
           ? null
-          : _widths[_iceButtonSize.index],
+          :  ReactiveLayoutHelper.getHeightFromFactor(_widths[_iceButtonSize.index]),
       shape: _iceButtonImportance == IceButtonImportance.secondaryAction
           ? RoundedRectangleBorder(
               side: BorderSide(width: 1, color: _color),
-              borderRadius: BorderRadius.circular(32))
+              borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(32)))
           : (_iceButtonImportance == IceButtonImportance.discreetAction
               ? null
               : RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32))),
+                  borderRadius: BorderRadius.circular(ReactiveLayoutHelper.getHeightFromFactor(32)))),
       onPressed: _onPressed,
       child: Text(
         _text,
         style: TextStyle(
             fontFamily: 'Nunito',
             fontWeight: FontWeight.bold,
-            fontSize: _textSizes[_iceButtonSize.index]),
+            fontSize: ReactiveLayoutHelper.getHeightFromFactor(_textSizes[_iceButtonSize.index])),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
 class XSensDotListElement extends StatelessWidget {
@@ -27,17 +28,18 @@ class XSensDotListElement extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         hasLine
             ? Container(
-                height: 64,
-                width: 4,
+                height: ReactiveLayoutHelper.getHeightFromFactor(64),
+                width: ReactiveLayoutHelper.getWidthFromFactor(4),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: lineColor ?? primaryColorLight),
               )
             : Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: EdgeInsets.only(
+                    left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                 child: Container(
-                  height: 64,
-                  width: 4,
+                  height: ReactiveLayoutHelper.getHeightFromFactor(64),
+                  width: ReactiveLayoutHelper.getWidthFromFactor(4),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.transparent),
@@ -46,10 +48,11 @@ class XSensDotListElement extends StatelessWidget {
         graphic,
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: EdgeInsets.only(
+                left: ReactiveLayoutHelper.getWidthFromFactor(8)),
             child: Text(text,
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(18),
                     color: textColor ?? darkText,
                     overflow: TextOverflow.ellipsis)),
           ),

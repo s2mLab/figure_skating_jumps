@@ -13,7 +13,7 @@ class FieldValidators {
       return pleaseFillField;
     }
     if (value.length > 255) {
-      return reduceCharacter;
+      return reduceCharacterLabel;
     }
     return null;
   }
@@ -29,7 +29,7 @@ class FieldValidators {
       return pleaseFillField;
     }
     if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]+$').hasMatch(value)) {
-      return invalidEmailFormat;
+      return invalidEmailFormatLabel;
     }
     return null;
   }
@@ -39,7 +39,7 @@ class FieldValidators {
       return pleaseFillField;
     }
     if (!RegExp(r'^(0|[1-9]\d*)(\.\d+)?$').hasMatch(value)) {
-      return invalidDigitFormat;
+      return invalidDigitFormatLabel;
     }
     return null;
   }
@@ -50,11 +50,11 @@ class FieldValidators {
     }
     try {
       if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9]\d*)$').hasMatch(value)) {
-        return invalidDigitFormat;
+        return invalidDigitFormatLabel;
       }
     } on FormatException catch (e) {
       debugPrint(e.message);
-      return invalidDigitFormat;
+      return invalidDigitFormatLabel;
     }
     return null;
   }
@@ -70,7 +70,7 @@ class FieldValidators {
       return pleaseFillField;
     }
     if (value.length < 10) {
-      return addCharacters;
+      return addCharactersLabel;
     }
     return null;
   }
@@ -82,7 +82,7 @@ class FieldValidators {
   ///
   /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? newPassConfirmValidator(String? value, String? password) {
-    return value == password ? null : passwordMismatch;
+    return value == password ? null : passwordMismatchLabel;
   }
 
   /// Validates a login email string and returns an error message if the validation fails.

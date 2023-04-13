@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_list_element.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,10 @@ class NavMenuElement extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.symmetric(
+              vertical: ReactiveLayoutHelper.isTablet()
+                  ? ReactiveLayoutHelper.getHeightFromFactor(8.0)
+                  : 8.0),
           child: XSensDotListElement(
             hasLine: false,
             textColor: paleText,
@@ -29,7 +33,9 @@ class NavMenuElement extends StatelessWidget {
         ),
         Container(
           color: primaryColorLight,
-          height: 1,
+          height: ReactiveLayoutHelper.isTablet()
+              ? ReactiveLayoutHelper.getHeightFromFactor(1)
+              : 1,
         ),
       ],
     );
