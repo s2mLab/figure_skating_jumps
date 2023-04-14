@@ -1,23 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
+import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/recording/recording_status.dart';
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
+import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/export_status_event.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:figure_skating_jumps/services/capture_client.dart';
 import 'package:figure_skating_jumps/services/http_client.dart';
 import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import '../../enums/method_channel_names.dart';
-import '../../enums/season.dart';
-import '../../interfaces/i_recorder_state_subscriber.dart';
-import '../../models/capture.dart';
-import '../../models/xsens_dot_data.dart';
 
 class XSensDotRecordingService
     implements IObservable<IRecorderSubscriber, RecorderState> {
@@ -253,7 +251,6 @@ class XSensDotRecordingService
       List<Jump> analyzedJumps =
           await CaptureClient().createJumps(jumps: jumps!);
       _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
-      _currentCapture?.jumps.addAll(analyzedJumps);
     }
     _changeState(RecorderState.idle);
   }

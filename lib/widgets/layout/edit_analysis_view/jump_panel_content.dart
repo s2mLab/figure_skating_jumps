@@ -1,18 +1,17 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/jump_scores.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/colors.dart';
-import '../../../constants/jump_scores.dart';
-import '../../../constants/lang_fr.dart';
-import '../../../enums/ice_button_importance.dart';
-import '../../../enums/ice_button_size.dart';
-import '../../../models/jump.dart';
-import '../../buttons/ice_button.dart';
 
 class JumpPanelContent extends StatefulWidget {
   final Jump _j;
@@ -178,23 +177,30 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   Widget _jumpModificationForm() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+      padding: EdgeInsets.symmetric(
+          horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("$rotationDegreesField${_j!.rotationDegrees.toStringAsFixed(3)}",
-                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
+              Text(
+                  "$rotationDegreesField${_j!.rotationDegrees.toStringAsFixed(3)}",
+                  style: TextStyle(
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(
+                          _labelFontSizeInPanel))),
               Row(
                 children: [
                   Text(
                     scoreField,
-                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
+                    style: TextStyle(
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(
+                            _labelFontSizeInPanel)),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
+                    padding: EdgeInsets.only(
+                        left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                     child: DropdownButton<int>(
                         selectedItemBuilder: (context) {
                           return jumpScores.map<Widget>((int item) {
@@ -202,7 +208,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             // Here custom text style, alignment and layout size can be applied
                             // to selected item string.
                             return Container(
-                              constraints: BoxConstraints(minWidth: ReactiveLayoutHelper.getWidthFromFactor(50)),
+                              constraints: BoxConstraints(
+                                  minWidth:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          50)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,7 +219,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                   Text(
                                     item.toString(),
                                     style: TextStyle(
-                                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16),
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16),
                                         color: darkText,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -220,11 +230,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           }).toList();
                         },
                         value: _selectedScore,
-                        menuMaxHeight: ReactiveLayoutHelper.getWidthFromFactor(300),
+                        menuMaxHeight:
+                            ReactiveLayoutHelper.getWidthFromFactor(300),
                         items: List.generate(jumpScores.length, (index) {
                           return DropdownMenuItem<int>(
                             value: jumpScores[index],
-                            child: Text(jumpScores[index].toString(), style: TextStyle(fontSize:ReactiveLayoutHelper.getHeightFromFactor(16))),
+                            child: Text(jumpScores[index].toString(),
+                                style: TextStyle(
+                                    fontSize: ReactiveLayoutHelper
+                                        .getHeightFromFactor(16))),
                           );
                         }),
                         onChanged: (val) {
@@ -238,7 +252,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         }),
                   ),
                   IconButton(
-                    iconSize: ReactiveLayoutHelper.getHeightFromFactor(24),
+                      iconSize: ReactiveLayoutHelper.getHeightFromFactor(24),
                       onPressed: () {
                         showDialog(
                             barrierDismissible: false,
@@ -266,14 +280,19 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
             children: [
               Text(
                 turnsField,
-                style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel)),
+                style: TextStyle(
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(
+                        _labelFontSizeInPanel)),
               ),
               Padding(
-                padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
+                padding: EdgeInsets.only(
+                    left: ReactiveLayoutHelper.getWidthFromFactor(8)),
                 child: SizedBox(
-                    width:ReactiveLayoutHelper.getWidthFromFactor(120),
+                    width: ReactiveLayoutHelper.getWidthFromFactor(120),
                     child: TextFormField(
-                      style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16)),
                       autovalidateMode: AutovalidateMode.always,
                       keyboardType: TextInputType.number,
                       validator: (val) {
@@ -297,14 +316,21 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _confirmDeleteJumpDialog() {
     return SimpleDialog(
-      title: Text(deleteJumpDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24)),),
+      title: Text(
+        deleteJumpDialogTitle,
+        style:
+            TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24)),
+      ),
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16), bottom: ReactiveLayoutHelper.getHeightFromFactor(24), top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+              padding: EdgeInsets.only(
+                  left: ReactiveLayoutHelper.getWidthFromFactor(16),
+                  bottom: ReactiveLayoutHelper.getHeightFromFactor(24),
+                  top: ReactiveLayoutHelper.getHeightFromFactor(8)),
               child: const InstructionPrompt(confirmDeleteInfo, errorColor),
             ),
             Row(
@@ -340,8 +366,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the context and returns a value through it
   Widget _commentDialog() {
     return SimpleDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
-        title: Text(commentDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
+        insetPadding: EdgeInsets.symmetric(
+            horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
+        title: Text(commentDialogTitle,
+            style: TextStyle(
+                fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
         children: [
           Form(
             key: _commentFormKey,
@@ -350,13 +379,20 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16), right: ReactiveLayoutHelper.getWidthFromFactor(16),bottom: ReactiveLayoutHelper.getHeightFromFactor(24), top: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                  child: const InstructionPrompt(howToCommentInfo, secondaryColor),
+                  padding: EdgeInsets.only(
+                      left: ReactiveLayoutHelper.getWidthFromFactor(16),
+                      right: ReactiveLayoutHelper.getWidthFromFactor(16),
+                      bottom: ReactiveLayoutHelper.getHeightFromFactor(24),
+                      top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child:
+                      const InstructionPrompt(howToCommentInfo, secondaryColor),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   child: TextFormField(
-                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                    style: TextStyle(
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                     controller: _commentController,
                     minLines: 2,
                     maxLines: 5,
@@ -368,11 +404,16 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                  child: Text(chooseBelowCommentsLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                  padding: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  child: Text(chooseBelowCommentsLabel,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16))),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -404,7 +445,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+                        padding: EdgeInsets.symmetric(
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(8.0)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -449,7 +492,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                             IceButtonImportance.secondaryAction,
                         iceButtonSize: IceButtonSize.small),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              ReactiveLayoutHelper.getWidthFromFactor(16)),
                       child: IceButton(
                           text: saveLabel,
                           onPressed: () {
@@ -471,26 +516,34 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   //This dialog is kept in this class because it references the jump and modifies its value through it
   Widget _temporalValuesDialog() {
     return SimpleDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
-        title: Text(metricsDialogTitle, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
+        insetPadding: EdgeInsets.symmetric(
+            horizontal: ReactiveLayoutHelper.getWidthFromFactor(8, true)),
+        title: Text(metricsDialogTitle,
+            style: TextStyle(
+                fontSize: ReactiveLayoutHelper.getHeightFromFactor(24))),
         children: [
           Form(
             key: _metricsFormKey,
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                        padding: EdgeInsets.only(
+                            bottom:
+                                ReactiveLayoutHelper.getHeightFromFactor(24)),
                         child: const InstructionPrompt(
                             advancedMetricsPromptInfo, secondaryColor),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                        padding: EdgeInsets.only(
+                            bottom:
+                                ReactiveLayoutHelper.getHeightFromFactor(24)),
                         child: const InstructionPrompt(
                             irreversibleDataModificationInfo, errorColor),
                       ),
@@ -498,12 +551,17 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("$durationField (sec)",
-                              style:
-                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          _labelFontSizeInPanel))),
                           SizedBox(
                             width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
-                              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _durationController,
@@ -521,12 +579,17 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("$startTimeField (sec)",
-                              style:
-                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          _labelFontSizeInPanel))),
                           SizedBox(
                             width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
-                              style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               controller: _startTimeController,
@@ -544,12 +607,18 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("$timeToMaxSpeedLabel (sec)",
-                              style:
-                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          _labelFontSizeInPanel))),
                           SizedBox(
                             width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
-                              style: TextStyle(color: discreetText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                              style: TextStyle(
+                                  color: discreetText,
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               enabled: false,
@@ -565,14 +634,20 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("$maxSpeedLabel (deg/sec)",
-                              style:
-                                  TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(_labelFontSizeInPanel))),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          _labelFontSizeInPanel))),
                           SizedBox(
                             width: ReactiveLayoutHelper.getWidthFromFactor(100),
                             child: TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              style: TextStyle(color: discreetText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                              style: TextStyle(
+                                  color: discreetText,
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                               enabled: false,
                               controller: _maxSpeedController,
                               maxLines: 1,
@@ -586,7 +661,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+                  padding: EdgeInsets.only(
+                      top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

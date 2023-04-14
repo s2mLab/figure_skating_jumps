@@ -1,18 +1,17 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../enums/user_role.dart';
-import '../../utils/reactive_layout_helper.dart';
-import '../buttons/ice_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -81,8 +80,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Container(
                     margin: EdgeInsets.symmetric(
-                        horizontal:
-                            ReactiveLayoutHelper.getWidthFromFactor(32),
+                        horizontal: ReactiveLayoutHelper.getWidthFromFactor(32),
                         vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
                     height: ReactiveLayoutHelper.getHeightFromFactor(100),
                     child: SvgPicture.asset(
@@ -90,8 +88,7 @@ class _LoginViewState extends State<LoginView> {
                 Container(
                     width: ReactiveLayoutHelper.getWidthFromFactor(300),
                     margin: EdgeInsets.symmetric(
-                        horizontal:
-                            ReactiveLayoutHelper.getWidthFromFactor(32),
+                        horizontal: ReactiveLayoutHelper.getWidthFromFactor(32),
                         vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
                     decoration: BoxDecoration(
                       color: primaryBackground,
@@ -100,14 +97,17 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     child: Container(
                         margin: EdgeInsets.symmetric(
-                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true),
-                            vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
+                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(
+                                16, true),
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(32)),
                         child: Column(
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                  vertical: ReactiveLayoutHelper
-                                          .getHeightFromFactor(8)),
+                                  vertical:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          8)),
                               child: const PageTitle(text: loginTitle),
                             ),
                             Form(
@@ -115,7 +115,9 @@ class _LoginViewState extends State<LoginView> {
                                 child: Column(children: [
                                   TextFormField(
                                     keyboardType: TextInputType.emailAddress,
-                                    style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16)),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     controller: _emailController,
@@ -131,14 +133,15 @@ class _LoginViewState extends State<LoginView> {
                                     decoration: InputDecoration(
                                       labelText: emailField,
                                       labelStyle: TextStyle(
-                                          fontSize:
-                                              ReactiveLayoutHelper
-                                                  .getHeightFromFactor(16),
+                                          fontSize: ReactiveLayoutHelper
+                                              .getHeightFromFactor(16),
                                           color: discreetText),
                                     ),
                                   ),
                                   TextFormField(
-                                    style: TextStyle(fontSize:  ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16)),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     controller: _passwordController,
@@ -156,17 +159,24 @@ class _LoginViewState extends State<LoginView> {
                                       labelText: passwordLabel,
                                       labelStyle: TextStyle(
                                           fontSize: ReactiveLayoutHelper
-                                                  .getHeightFromFactor(16),
+                                              .getHeightFromFactor(16),
                                           color: discreetText),
                                     ),
                                   )
                                 ])),
                             Container(
-                                margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(8), vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                        ReactiveLayoutHelper.getWidthFromFactor(
+                                            8),
+                                    vertical: ReactiveLayoutHelper
+                                        .getHeightFromFactor(8)),
                                 child: Text(
                                   _errorMessage,
                                   style: TextStyle(
-                                      color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                                      color: errorColor,
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)),
                                 )),
                             IceButton(
                                 text: _connectionLabelBtn,
@@ -180,8 +190,8 @@ class _LoginViewState extends State<LoginView> {
                                 iceButtonSize: IceButtonSize.medium),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: ReactiveLayoutHelper
-                                          .getHeightFromFactor(8)),
+                                  top: ReactiveLayoutHelper.getHeightFromFactor(
+                                      8)),
                               child: IceButton(
                                   text: createAccountButton,
                                   onPressed: () {

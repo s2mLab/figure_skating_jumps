@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
@@ -19,9 +21,6 @@ import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
 
 class ConnectionNewXSensDotDialog extends StatefulWidget {
   const ConnectionNewXSensDotDialog({super.key});
@@ -302,8 +301,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   void _addScannedDevices(List<BluetoothDevice> scannedDevices) {
     _devices.clear();
     List<String> knownMacAddresses = [];
-    knownMacAddresses.addAll(
-        BluetoothDeviceManager().devices.map((e) => e.macAddress));
+    knownMacAddresses
+        .addAll(BluetoothDeviceManager().devices.map((e) => e.macAddress));
     Iterable<BluetoothDevice> devicesToAdd = scannedDevices.where(
         (scannedDevice) =>
             !knownMacAddresses.contains(scannedDevice.macAddress));

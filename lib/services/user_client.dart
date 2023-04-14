@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:figure_skating_jumps/constants/generator_constants.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
@@ -10,8 +9,7 @@ import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
-
-import '../constants/generator_constants.dart';
+import 'dart:math';
 
 class UserClient {
   static final UserClient _userClient = UserClient._internal();

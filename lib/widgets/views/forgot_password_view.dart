@@ -1,17 +1,16 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
+import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../constants/colors.dart';
-import '../../constants/styles.dart';
-import '../../constants/lang_fr.dart';
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../../utils/field_validators.dart';
-import '../buttons/ice_button.dart';
-import '../titles/page_title.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
@@ -32,13 +31,15 @@ class ForgotPasswordView extends StatelessWidget {
                     child: Column(
               children: [
                 Container(
-                    margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
+                    margin: EdgeInsets.all(
+                        ReactiveLayoutHelper.getHeightFromFactor(32)),
                     height: ReactiveLayoutHelper.getHeightFromFactor(100),
                     child: SvgPicture.asset(
                         'assets/vectors/blanc-logo-patinage-quebec.svg')),
                 Container(
                     width: double.infinity,
-                    margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(32)),
+                    margin: EdgeInsets.all(
+                        ReactiveLayoutHelper.getHeightFromFactor(32)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -46,16 +47,25 @@ class ForgotPasswordView extends StatelessWidget {
                     ),
                     child: Container(
                         margin: EdgeInsets.symmetric(
-                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16), vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
+                            horizontal:
+                                ReactiveLayoutHelper.getWidthFromFactor(16),
+                            vertical:
+                                ReactiveLayoutHelper.getHeightFromFactor(32)),
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                              padding: EdgeInsets.symmetric(
+                                  vertical:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          8)),
                               child: const PageTitle(text: forgotPasswordTitle),
                             ),
                             Form(
                                 child: TextFormField(
-                                  style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
                               key: _forgotPasswordInfoKey,
                               keyboardType: TextInputType.emailAddress,
                               autovalidateMode:
@@ -67,11 +77,15 @@ class ForgotPasswordView extends StatelessWidget {
                               decoration: InputDecoration(
                                 labelText: emailField,
                                 labelStyle: TextStyle(
-                                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16), color: discreetText),
+                                    fontSize: ReactiveLayoutHelper
+                                        .getHeightFromFactor(16),
+                                    color: discreetText),
                               ),
                             )),
                             Padding(
-                              padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                              padding: EdgeInsets.only(
+                                  top: ReactiveLayoutHelper.getHeightFromFactor(
+                                      8)),
                               child: IceButton(
                                   text: sendEmailButton,
                                   onPressed: () async {
