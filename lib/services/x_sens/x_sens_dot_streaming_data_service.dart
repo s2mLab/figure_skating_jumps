@@ -1,13 +1,12 @@
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/measuring/measurer_state.dart';
 import 'package:figure_skating_jumps/enums/measuring/measuring_status.dart';
+import 'package:figure_skating_jumps/enums/method_channel_names.dart';
+import 'package:figure_skating_jumps/interfaces/i_observable.dart';
+import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../enums/method_channel_names.dart';
-import '../../interfaces/i_observable.dart';
-import '../../interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
 
 class XSensDotStreamingDataService
     implements
@@ -15,7 +14,8 @@ class XSensDotStreamingDataService
   static const int _streamingRate = 12;
   static final XSensDotStreamingDataService _xSensDotDataService =
       XSensDotStreamingDataService._internal();
-  static final _xSensMeasuringMethodChannel = MethodChannel(MethodChannelNames.measuringChannel.channelName);
+  static final _xSensMeasuringMethodChannel =
+      MethodChannel(MethodChannelNames.measuringChannel.channelName);
   static final _xSensMeasuringChannel =
       EventChannel(EventChannelNames.measuringChannel.channelName);
   static final _xSensMeasuringStatusChannel =
@@ -54,17 +54,16 @@ class XSensDotStreamingDataService
   }
 
   static Future<void> _handleMeasuringStateChange(String event) async {
-    var status =
-    MeasuringStatus.values.firstWhere((el) => el.status == event);
+    var status = MeasuringStatus.values.firstWhere((el) => el.status == event);
 
-    switch(status) {
+    switch (status) {
       case MeasuringStatus.initDone:
-        if(_state == MeasurerState.preparing) {
+        if (_state == MeasurerState.preparing) {
           await _setMeasuringRate();
         }
         break;
       case MeasuringStatus.setRate:
-        if(_state == MeasurerState.preparing) {
+        if (_state == MeasurerState.preparing) {
           await _xSensMeasuringMethodChannel.invokeMethod('startMeasuring');
           _state = MeasurerState.measuring;
         }

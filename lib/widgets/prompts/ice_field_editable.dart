@@ -1,7 +1,6 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
 
 class IceFieldEditable extends StatefulWidget {
   final String _text;
@@ -41,7 +40,9 @@ class _IceFieldEditableState extends State<IceFieldEditable> {
                   ? SizedBox(
                       width: ReactiveLayoutHelper.getWidthFromFactor(200),
                       child: TextField(
-                        style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                        style: TextStyle(
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(24)),
                         onEditingComplete: widget._onEditComplete(baseText),
                         controller: controller,
                       ),
@@ -50,7 +51,8 @@ class _IceFieldEditableState extends State<IceFieldEditable> {
                       baseText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: ReactiveLayoutHelper.getHeightFromFactor(24),
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(24),
                           overflow: TextOverflow.ellipsis,
                           color:
                               widget._text.isEmpty ? discreetText : darkText),

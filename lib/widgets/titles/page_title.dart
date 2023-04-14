@@ -1,7 +1,6 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
 
 class PageTitle extends StatelessWidget {
   final String text;

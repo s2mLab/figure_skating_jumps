@@ -6,9 +6,9 @@ import 'package:figure_skating_jumps/services/user_client.dart';
 
 class SkatingUser {
   late String? uID;
+  late UserRole role;
   late String _firstName;
   late String _lastName;
-  late UserRole role;
   late String _email;
   late List<String> _capturesID = [];
   late List<String> _traineesID = [];

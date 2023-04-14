@@ -1,8 +1,7 @@
+import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/db_models/global_settings.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
-
-import '../../enums/season.dart';
 
 class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
   static GlobalSettings? _settings;
@@ -21,7 +20,8 @@ class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
   List<GlobalSettings> constructObject(List<Map<String, dynamic>> objMaps) {
     return List.generate(objMaps.length, (i) {
       return GlobalSettings(
-          id: objMaps[i]['id'], season: Season.values.byName(objMaps[i]['season']));
+          id: objMaps[i]['id'],
+          season: Season.values.byName(objMaps[i]['season']));
     });
   }
 

@@ -1,15 +1,14 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
-import '../../../services/x_sens/x_sens_dot_recording_service.dart';
 
 class StartRecordingDialog extends StatefulWidget {
   const StartRecordingDialog({super.key});
@@ -53,14 +52,18 @@ class _StartRecordingState extends State<StartRecordingDialog>
       title: Text(
         errorCaptureStartingLabel,
         textAlign: TextAlign.center,
-        style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+        style: TextStyle(
+            color: errorColor,
+            fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)), child: const InstructionPrompt(memoryErrorInfo, errorColor)),
+                padding: EdgeInsets.all(
+                    ReactiveLayoutHelper.getHeightFromFactor(16)),
+                child: const InstructionPrompt(memoryErrorInfo, errorColor)),
             IceButton(
                 text: emptyMemoryButton,
                 onPressed: () {
@@ -94,14 +97,16 @@ class _StartRecordingState extends State<StartRecordingDialog>
       title: Text(
         message,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+        style:
+            TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
       ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+              padding:
+                  EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
               child: SizedBox(
                   width: ReactiveLayoutHelper.getWidthFromFactor(50),
                   child: const LinearProgressIndicator(
@@ -109,7 +114,10 @@ class _StartRecordingState extends State<StartRecordingDialog>
                     backgroundColor: discreetText,
                   )),
             ),
-            Text(pleaseWaitLabel, style: TextStyle(color: errorColor, fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
+            Text(pleaseWaitLabel,
+                style: TextStyle(
+                    color: errorColor,
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
           ],
         )
       ],

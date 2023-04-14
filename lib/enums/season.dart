@@ -1,4 +1,4 @@
-import '../constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 
 enum Season {
   preparation(preparationSeasonLabel),

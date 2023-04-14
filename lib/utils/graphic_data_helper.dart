@@ -1,30 +1,28 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
-
-import '../enums/jump_type.dart';
-import '../models/capture.dart';
-import '../models/jump.dart';
+import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
+import 'package:figure_skating_jumps/models/jump.dart';
 
 class GraphicDataHelper {
 
-  static List<GraphStatsDatePair> getJumpScorePerTypeGraphData(Map<String, List<Capture>> captures, JumpType type) {
-    List<GraphStatsDatePair> graphData = [];
-    List<String> dates = _getAllDates(captures);
-    for(String day in dates) {
-      GraphStatsDatePair? pair = _getAverageJumpScorePerTypeOnDate(captures, day, type);
-      if(pair == null) continue;
-      graphData.add(pair);
+  static Future<Map<JumpType, List<GraphStatsDatePair>>>
+      getJumpScorePerTypeGraphData(Map<String, List<Capture>> captures) async {
+    Map<JumpType, List<GraphStatsDatePair>> mappedJumps = {};
+    for (JumpType type in JumpType.values) {
+      mappedJumps[type] = await _getJumpScorePerType(captures, type);
     }
-    return graphData;
+    return mappedJumps;
   }
 
-  static List<GraphStatsDatePair> getAverageFlyTimeGraphData(Map<String, List<Capture>> captures) {
+  static Future<List<GraphStatsDatePair>> getAverageFlyTimeGraphData(
+      Map<String, List<Capture>> captures) async {
     List<GraphStatsDatePair> graphData = [];
     List<String> dates = _getAllDates(captures);
-    for(String day in dates) {
-      GraphStatsDatePair? pair = _getAverageJumpDurationOnDate(captures, day);
+    for (String day in dates) {
+      GraphStatsDatePair? pair = await _getAverageJumpDurationOnDate(captures, day);
       if(pair == null) continue;
       graphData.add(pair);
     }
@@ -35,14 +33,16 @@ class GraphicDataHelper {
     return captures.keys.toList();
   }
 
-  static GraphStatsDatePair? _getAverageJumpScorePerTypeOnDate(Map<String, List<Capture>> captures, String day, JumpType type) {
-    if(captures[day] == null || captures[day]!.isEmpty) {
+  static Future<GraphStatsDatePair?> _getAverageJumpScorePerTypeOnDate(
+      Map<String, List<Capture>> captures, String day, JumpType type) async {
+    if (captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
     }
     List<Capture> capturesOnDate = captures[day]!;
-    List<Jump> jumpsOfType = _getRequiredJumpsFromCaptures(capturesOnDate, (jump) => jump.type==type);
+    List<Jump> jumpsOfType = await _getRequiredJumpsFromCaptures(
+        capturesOnDate, (jump) => jump.type == type);
     List<int> scoresOfJumps = [];
-    for(Jump j in jumpsOfType) {
+    for (Jump j in jumpsOfType) {
       scoresOfJumps.add(j.score);
     }
     DateTime statDay = DateTime.parse(day);
@@ -56,25 +56,44 @@ class GraphicDataHelper {
     return sqrt(variance);
   }
 
-  static GraphStatsDatePair? _getAverageJumpDurationOnDate(Map<String, List<Capture>> captures, String day) {
-    if(captures[day] == null || captures[day]!.isEmpty) {
+  static Future<GraphStatsDatePair?> _getAverageJumpDurationOnDate(
+      Map<String, List<Capture>> captures, String day) async {
+    if (captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
     }
     List<Capture> capturesOnDate = captures[day]!;
-    List<Jump> jumpsOfDate = _getRequiredJumpsFromCaptures(capturesOnDate);
+    List<Jump> jumpsOfDate =
+        await _getRequiredJumpsFromCaptures(capturesOnDate);
     List<int> durationsOfJumps = [];
-    for(Jump j in jumpsOfDate) {
+    for (Jump j in jumpsOfDate) {
       durationsOfJumps.add(j.duration);
     }
     DateTime statDay = DateTime.parse(day);
     return durationsOfJumps.isEmpty ? null : GraphStatsDatePair(durationsOfJumps.average, _standardDeviation(durationsOfJumps), durationsOfJumps.min, durationsOfJumps.max, statDay);
   }
 
-  static List<Jump> _getRequiredJumpsFromCaptures(List<Capture> captures, [bool Function(Jump)? test]) {
+  static Future<List<Jump>> _getRequiredJumpsFromCaptures(
+      List<Capture> captures,
+      [bool Function(Jump)? test]) async {
     List<Jump> jumps = [];
-    for (Capture c in captures) {
-      jumps.addAll(test == null ? c.jumps : c.jumps.where(test));
+    List<Jump> captureJumps;
+    for (Capture capture in captures) {
+      captureJumps = await capture.getJumpsData();
+      jumps.addAll(test == null ? captureJumps : captureJumps.where(test));
     }
     return jumps;
+  }
+
+  static Future<List<GraphStatsDatePair>> _getJumpScorePerType(
+      Map<String, List<Capture>> captures, JumpType type) async {
+    List<GraphStatsDatePair> graphData = [];
+    List<String> dates = _getAllDates(captures);
+    for (String day in dates) {
+      GraphStatsDatePair? pair =
+          await _getAverageJumpScorePerTypeOnDate(captures, day, type);
+      if(pair == null) continue;
+      graphData.add(pair);
+    }
+    return graphData;
   }
 }
