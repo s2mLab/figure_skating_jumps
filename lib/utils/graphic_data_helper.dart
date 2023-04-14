@@ -1,38 +1,30 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:figure_skating_jumps/models/graphic_data_classes/value_date_pair.dart';
+import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
 
 class GraphicDataHelper {
-  static Future<Map<JumpType, List<ValueDatePair>>>
+
+  static Future<Map<JumpType, List<GraphStatsDatePair>>>
       getJumpScorePerTypeGraphData(Map<String, List<Capture>> captures) async {
-    Map<JumpType, List<ValueDatePair>> mappedJumps = {};
+    Map<JumpType, List<GraphStatsDatePair>> mappedJumps = {};
     for (JumpType type in JumpType.values) {
       mappedJumps[type] = await _getJumpScorePerType(captures, type);
     }
     return mappedJumps;
   }
 
-  static Future<List<ValueDatePair>> getPercentageSucceededGraphData(
+  static Future<List<GraphStatsDatePair>> getAverageFlyTimeGraphData(
       Map<String, List<Capture>> captures) async {
-    List<ValueDatePair> graphData = [];
+    List<GraphStatsDatePair> graphData = [];
     List<String> dates = _getAllDates(captures);
     for (String day in dates) {
-      double? percentage =
-          await _getPercentageOfSuccessfulJumpsOnDate(captures, day);
-      graphData.add(ValueDatePair(percentage, day));
-    }
-    return graphData;
-  }
-
-  static Future<List<ValueDatePair>> getAverageFlyTimeGraphData(
-      Map<String, List<Capture>> captures) async {
-    List<ValueDatePair> graphData = [];
-    List<String> dates = _getAllDates(captures);
-    for (String day in dates) {
-      double? flyTime = await _getAverageJumpDurationOnDate(captures, day);
-      graphData.add(ValueDatePair(flyTime, day));
+      GraphStatsDatePair? pair = await _getAverageJumpDurationOnDate(captures, day);
+      if(pair == null) continue;
+      graphData.add(pair);
     }
     return graphData;
   }
@@ -41,7 +33,7 @@ class GraphicDataHelper {
     return captures.keys.toList();
   }
 
-  static Future<double?> _getAverageJumpScorePerTypeOnDate(
+  static Future<GraphStatsDatePair?> _getAverageJumpScorePerTypeOnDate(
       Map<String, List<Capture>> captures, String day, JumpType type) async {
     if (captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
@@ -53,26 +45,18 @@ class GraphicDataHelper {
     for (Jump j in jumpsOfType) {
       scoresOfJumps.add(j.score);
     }
-    return scoresOfJumps.isEmpty ? null : scoresOfJumps.average;
+    DateTime statDay = DateTime.parse(day);
+    return scoresOfJumps.isEmpty ? null : GraphStatsDatePair(scoresOfJumps.average, _standardDeviation(scoresOfJumps), scoresOfJumps.min, scoresOfJumps.max, statDay);
   }
 
-  static Future<double?> _getPercentageOfSuccessfulJumpsOnDate(
-      Map<String, List<Capture>> captures, String day) async {
-    if (captures[day] == null || captures[day]!.isEmpty) {
-      throw ArgumentError('captures at date was null or empty');
-    }
-    List<Capture> capturesOnDate = captures[day]!;
-    List<Jump> jumpsOfDate =
-        await _getRequiredJumpsFromCaptures(capturesOnDate);
-    // Jumps are considered a success if the score is one or more.
-    List<Jump> succeededJumps =
-        jumpsOfDate.where((element) => element.score > 0).toList();
-    return jumpsOfDate.isEmpty
-        ? null
-        : (succeededJumps.length * 1.0 / jumpsOfDate.length) * 100.0;
+  static double _standardDeviation(List<int> list) {
+    final double mean = list.average;
+    final List<num> squaredDiffs = list.map((x) => pow(x - mean, 2)).toList();
+    final double variance = squaredDiffs.sum / squaredDiffs.length;
+    return sqrt(variance);
   }
 
-  static Future<double?> _getAverageJumpDurationOnDate(
+  static Future<GraphStatsDatePair?> _getAverageJumpDurationOnDate(
       Map<String, List<Capture>> captures, String day) async {
     if (captures[day] == null || captures[day]!.isEmpty) {
       throw ArgumentError('captures at date was null or empty');
@@ -84,7 +68,8 @@ class GraphicDataHelper {
     for (Jump j in jumpsOfDate) {
       durationsOfJumps.add(j.duration);
     }
-    return durationsOfJumps.isEmpty ? null : durationsOfJumps.average;
+    DateTime statDay = DateTime.parse(day);
+    return durationsOfJumps.isEmpty ? null : GraphStatsDatePair(durationsOfJumps.average, _standardDeviation(durationsOfJumps), durationsOfJumps.min, durationsOfJumps.max, statDay);
   }
 
   static Future<List<Jump>> _getRequiredJumpsFromCaptures(
@@ -99,14 +84,15 @@ class GraphicDataHelper {
     return jumps;
   }
 
-  static Future<List<ValueDatePair>> _getJumpScorePerType(
+  static Future<List<GraphStatsDatePair>> _getJumpScorePerType(
       Map<String, List<Capture>> captures, JumpType type) async {
-    List<ValueDatePair> graphData = [];
+    List<GraphStatsDatePair> graphData = [];
     List<String> dates = _getAllDates(captures);
     for (String day in dates) {
-      double? score =
+      GraphStatsDatePair? pair =
           await _getAverageJumpScorePerTypeOnDate(captures, day, type);
-      graphData.add(ValueDatePair(score, day));
+      if(pair == null) continue;
+      graphData.add(pair);
     }
     return graphData;
   }
