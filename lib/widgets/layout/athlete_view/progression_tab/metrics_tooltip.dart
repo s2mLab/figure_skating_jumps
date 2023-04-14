@@ -1,7 +1,6 @@
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../../../../constants/colors.dart';
-import '../../../../utils/reactive_layout_helper.dart';
 
 class MetricsTooltip extends StatelessWidget {
   final double tooltipDefaultWidth = 130;
