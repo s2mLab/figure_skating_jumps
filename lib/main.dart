@@ -40,6 +40,7 @@ Future<void> main() async {
   hasNecessaryPermissions = await initializeStoragePermissions();
 
   await LocalDbService().ensureInitialized();
+
   await ActiveSessionManager().loadActiveSession();
   if (ActiveSessionManager().activeSession != null) {
     await UserClient().signIn(
