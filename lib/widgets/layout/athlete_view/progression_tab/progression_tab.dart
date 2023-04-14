@@ -10,10 +10,9 @@ import '../../../../enums/season.dart';
 import '../../../../models/capture.dart';
 import '../../../../models/graphic_data_classes/value_date_pair.dart';
 import '../../../../utils/reactive_layout_helper.dart';
+import 'metrics_tooltip.dart';
 
 class ProgressionTab extends StatefulWidget {
-  final double tooltipDefaultWidth = 130;
-  final double tooltipDefaultHeight = 80;
   final Map<String, List<Capture>> _captures;
   const ProgressionTab(
       {required Map<String, List<Capture>> groupedCaptures, super.key})
@@ -124,7 +123,6 @@ class _ProgressionTabState extends State<ProgressionTab> {
   }
 
   Widget _succeededJumpsGraphic() {
-    TooltipArgs t = TooltipArgs();
     return SfCartesianChart(
         primaryXAxis: DateTimeAxis(),
         primaryYAxis: NumericAxis(
@@ -154,29 +152,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
             enable: true,
             builder: (dynamic data, dynamic point, dynamic series,
                 int pointIndex, int seriesIndex) {
-              return Container(
-                height: ReactiveLayoutHelper.getHeightFromFactor(widget.tooltipDefaultHeight),
-                width: ReactiveLayoutHelper.getWidthFromFactor(widget.tooltipDefaultWidth),
-                decoration: BoxDecoration(
-                    color: primaryColorDark,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(
-                      ReactiveLayoutHelper.getHeightFromFactor(8)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                      data.average == null ? [Text("Aucune donnée à cette date", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText), textAlign: TextAlign.center,)] : [
-                      Text("Moyenne: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-                      Text("Min: ${data.min}, Max: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-                      Text("Écart type: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
-                    ],
-
-                  ),
-                ),
-              );
+              return MetricsTooltip(data: data);
             }),
         series: List<ChartSeries<GraphStatsDatePair, DateTime>>.generate(
             JumpType.values.length - 1, (index) {
@@ -231,29 +207,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
             enable: true,
             builder: (dynamic data, dynamic point, dynamic series,
                 int pointIndex, int seriesIndex) {
-              print(data.average == null ? "null" : data.average);
-              return Container(
-                height: ReactiveLayoutHelper.getHeightFromFactor(widget.tooltipDefaultHeight),
-                width: ReactiveLayoutHelper.getWidthFromFactor(widget.tooltipDefaultWidth),
-                decoration: BoxDecoration(
-                  color: primaryColorDark,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(
-                      ReactiveLayoutHelper.getHeightFromFactor(8)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Moyenne: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-                      Text("Min: ${data.min}, Max: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-                      Text("Écart type: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
-                    ],
-
-                  ),
-                ),
-              );
+              return MetricsTooltip(data: data);
             }),
         series: [
           LineSeries<GraphStatsDatePair, DateTime>(
