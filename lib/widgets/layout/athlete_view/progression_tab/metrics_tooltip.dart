@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -24,9 +25,9 @@ class MetricsTooltip extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Moyenne: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-            Text("Min: ${data.min}, Max: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
-            Text("Écart type: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
+            Text("$averageTooltip: ${(data.average as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+            Text("$minTooltip: ${data.min}, $maxTooltip: ${data.max}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText)),
+            Text("$stdDevTooltip: ${(data.stdDev as double).toStringAsFixed(2)}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(10), color: paleText))
           ],
 
         ),

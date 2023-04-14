@@ -99,6 +99,12 @@ const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
 
+// widgets/layout/athlete_view/progression_tab/metrics_tooltip
+const String averageTooltip = "Moyenne";
+const String minTooltip = "Min";
+const String maxTooltip = "Max";
+const String stdDevTooltip = "Écart-type";
+
 // widgets/layout/options_tab/options_tab
 const String confirmAthleteRemovalButton = "Confirmer le retrait";
 const String removeThisAthleteButton = "Enlever cet athlète";
