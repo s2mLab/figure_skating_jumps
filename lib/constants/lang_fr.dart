@@ -193,6 +193,7 @@ const String connectingButton = "Connexion...";
 const String connectionImpossibleLabel = "Connexion impossible";
 const String createAccountButton = "Créer un compte";
 const String forgotPasswordButton = "Mot de passe oublié?";
+const String dataMessageInfo = "L'utilisation de cette application est destinée aux athlètes de Patinage Québec et aux personnes autorisées par Patinage Québec. En utilisant cette application, vous consentez aux différentes politiques de Patinage Québec, notamment concernant la rétention des informations reliées à votre compte. Les détails peuvent être obtenus auprès de Patinage Québec et sont inhérents à votre affiliation avec Patinage Québec.";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";
