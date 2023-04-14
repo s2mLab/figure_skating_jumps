@@ -12,6 +12,8 @@ import '../../../../models/graphic_data_classes/value_date_pair.dart';
 import '../../../../utils/reactive_layout_helper.dart';
 
 class ProgressionTab extends StatefulWidget {
+  final double tooltipDefaultWidth = 130;
+  final double tooltipDefaultHeight = 80;
   final Map<String, List<Capture>> _captures;
   const ProgressionTab(
       {required Map<String, List<Capture>> groupedCaptures, super.key})
@@ -153,8 +155,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
             builder: (dynamic data, dynamic point, dynamic series,
                 int pointIndex, int seriesIndex) {
               return Container(
-                height: ReactiveLayoutHelper.getHeightFromFactor(80),
-                width: ReactiveLayoutHelper.getWidthFromFactor(100),
+                height: ReactiveLayoutHelper.getHeightFromFactor(widget.tooltipDefaultHeight),
+                width: ReactiveLayoutHelper.getWidthFromFactor(widget.tooltipDefaultWidth),
                 decoration: BoxDecoration(
                     color: primaryColorDark,
                   borderRadius: BorderRadius.circular(8),
@@ -231,8 +233,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
                 int pointIndex, int seriesIndex) {
               print(data.average == null ? "null" : data.average);
               return Container(
-                height: ReactiveLayoutHelper.getHeightFromFactor(80),
-                width: ReactiveLayoutHelper.getWidthFromFactor(100),
+                height: ReactiveLayoutHelper.getHeightFromFactor(widget.tooltipDefaultHeight),
+                width: ReactiveLayoutHelper.getWidthFromFactor(widget.tooltipDefaultWidth),
                 decoration: BoxDecoration(
                   color: primaryColorDark,
                   borderRadius: BorderRadius.circular(8),
