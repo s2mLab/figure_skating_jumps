@@ -172,6 +172,7 @@ const String goodJobComment = "Bien fait";
 const String stepOutComment = "Step out";
 const String chooseBelowCommentsLabel =
     "Ou choisir parmi les commentaires suivants:";
+const String continueModifOfAllJumps = "Cette action changera le type de tous les sauts.";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
