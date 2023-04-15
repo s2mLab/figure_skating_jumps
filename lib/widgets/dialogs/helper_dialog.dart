@@ -90,7 +90,15 @@ class _HelperDialogState extends State<HelperDialog> {
                       ])
                   ]);
                 }),
-          )
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: ReactiveLayoutHelper.getWidthFromFactor(32)),
+              child: Text(
+                "Cette application a été développée par Thomas Beauchamp, Jimmy Bell, David Saikali et Christophe St-Georges en Hiver 2023 dans le cadre d'un projet intégrateur de fin de baccaulauréat en génie logiciel à Polytechnique Montréal.",
+                style: TextStyle(
+                    fontSize: ReactiveLayoutHelper.getHeightFromFactor(10)),
+              ))
         ]);
   }
 }

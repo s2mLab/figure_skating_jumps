@@ -1,12 +1,15 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/jump_scores.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
+import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
 import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/date_filter_dialog_content.dart';
 import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/metrics_tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -34,75 +37,105 @@ class _ProgressionTabState extends State<ProgressionTab> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      right: ReactiveLayoutHelper.getWidthFromFactor(8)),
-                  child: Text(selectSeasonLabel,
-                      style: TextStyle(
-                          fontSize:
-                              ReactiveLayoutHelper.getHeightFromFactor(16)))),
-              DropdownButton<Season>(
-                  selectedItemBuilder: (context) {
-                    List<Season?> filters = <Season?>[null] + Season.values;
-                    return filters.map<Widget>((Season? item) {
-                      // This is the widget that will be shown when you select an item.
-                      // Here custom text style, alignment and layout size can be applied
-                      // to selected item string.
-                      return Container(
-                        constraints: BoxConstraints(
-                            minWidth:
-                                ReactiveLayoutHelper.getWidthFromFactor(80)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              item == null ? noneLabel : item.displayedString,
-                              style: TextStyle(
-                                  color: darkText,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize:
-                                      ReactiveLayoutHelper.getHeightFromFactor(
-                                          16)),
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(
+                          right: ReactiveLayoutHelper.getWidthFromFactor(8)),
+                      child: Text(selectSeasonLabel,
+                          style: TextStyle(
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(
+                                      16)))),
+                  DropdownButton<Season>(
+                      selectedItemBuilder: (context) {
+                        List<Season?> filters = <Season?>[null] + Season.values;
+                        return filters.map<Widget>((Season? item) {
+                          // This is the widget that will be shown when you select an item.
+                          // Here custom text style, alignment and layout size can be applied
+                          // to selected item string.
+                          return Container(
+                            constraints: BoxConstraints(
+                                minWidth:
+                                    ReactiveLayoutHelper.getWidthFromFactor(
+                                        80)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item == null
+                                      ? noneLabel
+                                      : item.displayedString,
+                                  style: TextStyle(
+                                      color: darkText,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList();
-                  },
-                  value: _selectedSeason,
-                  menuMaxHeight: ReactiveLayoutHelper.getHeightFromFactor(300),
-                  items: [
-                        DropdownMenuItem<Season>(
-                          value: null,
-                          child: Text(noneLabel,
-                              style: TextStyle(
-                                  fontSize:
-                                      ReactiveLayoutHelper.getHeightFromFactor(
-                                          16))),
-                        )
-                      ] +
-                      List<DropdownMenuItem<Season>>.generate(
-                          Season.values.length, (index) {
-                        return DropdownMenuItem<Season>(
-                          value: Season.values[index],
-                          child: Text(Season.values[index].displayedString,
-                              style: TextStyle(
-                                  fontSize:
-                                      ReactiveLayoutHelper.getHeightFromFactor(
-                                          16))),
-                        );
+                          );
+                        }).toList();
+                      },
+                      value: _selectedSeason,
+                      menuMaxHeight:
+                          ReactiveLayoutHelper.getHeightFromFactor(300),
+                      items: [
+                            DropdownMenuItem<Season>(
+                              value: null,
+                              child: Text(noneLabel,
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16))),
+                            )
+                          ] +
+                          List<DropdownMenuItem<Season>>.generate(
+                              Season.values.length, (index) {
+                            return DropdownMenuItem<Season>(
+                              value: Season.values[index],
+                              child: Text(Season.values[index].displayedString,
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16))),
+                            );
+                          }),
+                      onChanged: (val) {
+                        setState(() {
+                          _selectedSeason = val;
+                        });
                       }),
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedSeason = val;
-                    });
-                  }),
+                ],
+              ),
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return SimpleDialog(
+                            title: const Text(filterByDateDialogTitle),
+                            contentPadding: EdgeInsets.all(
+                                ReactiveLayoutHelper.getWidthFromFactor(16)),
+                            insetPadding: EdgeInsets.symmetric(
+                                horizontal:
+                                    ReactiveLayoutHelper.getWidthFromFactor(
+                                        16, true)),
+                            children: [
+                              DateFilterDialogContent(setStateCallback: () {
+                                setState(() {});
+                              }),
+                            ],
+                          );
+                        }).then((value) {});
+                  },
+                  icon: Icon(Icons.calendar_month_outlined,
+                      size: ReactiveLayoutHelper.getHeightFromFactor(24)))
             ],
           ),
+          Center(child: Text('${dateDisplayFormat.format(GraphDatePreferencesService.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesService.end)}')),
           Expanded(
               child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
@@ -112,7 +145,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
                 vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
             child: Column(
               children: [
-                _succeededJumpsGraphic(),
+                _scorePerJumpsGraphic(),
                 _averageJumpDurationGraphic(),
               ],
             ),
@@ -122,7 +155,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
     );
   }
 
-  Widget _succeededJumpsGraphic() {
+  Widget _scorePerJumpsGraphic() {
     return FutureBuilder(
         future: GraphicDataHelper.getJumpScorePerTypeGraphData(
             _getCapturesBySeason(_selectedSeason)),
@@ -131,7 +164,16 @@ class _ProgressionTabState extends State<ProgressionTab> {
             return Padding(
               padding: EdgeInsets.all(
                   ReactiveLayoutHelper.getHeightFromFactor(_spacing)),
-              child: const CircularProgressIndicator(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  Text(calculatingLabel,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(14)))
+                ],
+              ),
             );
           }
           return SfCartesianChart(
