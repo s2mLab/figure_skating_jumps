@@ -284,7 +284,6 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         (Jump j, JumpType initial) async {
                                       _capture!.jumpsID.removeWhere(
                                           (element) => element == j.uID!);
-                                      // _jumps.removeWhere((element) => element.uID! == j.uID!);
                                       await CaptureClient().deleteJump(jump: j);
                                       if (mounted) {
                                         Navigator.of(context)
