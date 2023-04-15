@@ -136,7 +136,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                         ReactiveLayoutHelper.getWidthFromFactor(
                                             16, true)),
                                     title: Text(
-                                        continueModifOfAllJumps,
+                                        continueModifOfAllJumpsInfo,
                                         style: TextStyle(
                                             fontSize: ReactiveLayoutHelper
                                                 .getHeightFromFactor(14))),
