@@ -33,10 +33,10 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
   Capture? _capture;
   List<Jump> _jumps = [];
   LocalCapture? _captureInfo;
-  List<bool> _isPanelsOpen = [];
+  final List<bool> _isPanelsOpen = [];
+  final Set<int> _misplacedJumpIndex = {};
   late Map<JumpType, int> _jumpTypeCount;
   late ScrollController _jumpListScrollController;
-  bool _timeWasModified = false;
 
   @override
   void initState() {
@@ -53,6 +53,15 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
       _jumpTypeCount = Capture.getJumpTypeCount(_jumps);
     }
     _jumps.sort((a, b) => a.time.compareTo(b.time));
+  }
+
+  bool _jumpsNeedsReorder(int initialTime, int index) {
+    return _jumps[index].time != initialTime && !_isJumpWellPlaced(index);
+  }
+
+  bool _isJumpWellPlaced(int index) {
+    return (index == 0 || _jumps[index - 1].time <= _jumps[index].time) &&
+        (index == _jumps.length - 1 || _jumps[index + 1].time >= _jumps[index].time);
   }
 
   @override
@@ -122,7 +131,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 margin: EdgeInsets.symmetric(
                     vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 child: const LegendMove()),
-            CaptureListTile(currentCapture: _capture!, isInteractive: false, jumps: _jumps),
+            CaptureListTile(
+                currentCapture: _capture!, isInteractive: false, jumps: _jumps),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,18 +143,12 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     onPressed: () async {
                       Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0,
                           _capture!.uID!, 0, 0, 0);
-                      setState(() {
-                        _jumps.insert(0, newJump);
-                      });
-                      _jumpListScrollController.animateTo(0,
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.ease);
-                      await CaptureClient()
-                          .createJump(jump: newJump)
-                          .then((value) {
+                      newJump = await CaptureClient().createJump(jump: newJump);
+                      _capture!.jumpsID.add(newJump.uID!);
+                      if (mounted) {
                         Navigator.pushReplacementNamed(context, '/EditAnalysis',
                             arguments: _capture);
-                      });
+                      }
                     },
                     textColor: primaryColor,
                     color: primaryColor,
@@ -152,7 +156,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     iceButtonSize: IceButtonSize.small)
               ],
             ),
-            if (_timeWasModified && _jumps.length > 1)
+            if (_misplacedJumpIndex.isNotEmpty && _jumps.length > 1)
               Center(
                   child: IceButton(
                       text: reorderJumpListButton,
@@ -202,8 +206,16 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                     onModified: (Jump j,
                                         JumpType initialJumpType,
                                         int initialTime) {
-                                      if (j.time != initialTime) {
-                                        _timeWasModified = true;
+                                      _misplacedJumpIndex.remove(index);
+                                      List<int> reorderedJumpsAfterMod = [];
+                                      for (int i in _misplacedJumpIndex) {
+                                        if (_isJumpWellPlaced(i)) {
+                                          reorderedJumpsAfterMod.add(i);
+                                        }
+                                      }
+                                      _misplacedJumpIndex.removeAll(reorderedJumpsAfterMod);
+                                      if (_jumpsNeedsReorder(initialTime, index)) {
+                                        _misplacedJumpIndex.add(index);
                                       }
                                       setState(() {
                                         _jumpTypeCount[initialJumpType] =
@@ -230,21 +242,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         });
                                       });
                                     },
-                                    onDeleted: (Jump j, JumpType initial) {
-                                      setState(() {
-                                        _jumpTypeCount[initial] =
-                                            _jumpTypeCount[initial]! - 1;
-                                        _jumps.remove(j);
-                                        _capture = _capture;
-                                        _isPanelsOpen = [];
-                                      });
-                                      CaptureClient()
-                                          .deleteJump(jump: j)
-                                          .then((value) {
+                                    onDeleted:
+                                        (Jump j, JumpType initial) async {
+                                      _capture!.jumpsID.removeWhere(
+                                          (element) => element == j.uID!);
+                                      // _jumps.removeWhere((element) => element.uID! == j.uID!);
+                                      await CaptureClient().deleteJump(jump: j);
+                                      if (mounted) {
                                         Navigator.pushReplacementNamed(
                                             context, '/EditAnalysis',
                                             arguments: _capture);
-                                      }); //no need to await, done in the background
+                                      }
                                     }));
                           }),
                         ),
