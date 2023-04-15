@@ -52,7 +52,7 @@ class CaptureListTileState extends State<CaptureListTile> {
         future: _loadCaptureData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator();
+            return Container(height: ReactiveLayoutHelper.getHeightFromFactor(115));//CircularProgressIndicator();
           }
           return _captureListTileContent();
         }) : _captureListTileContent();

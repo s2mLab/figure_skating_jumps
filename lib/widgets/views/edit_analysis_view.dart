@@ -202,6 +202,30 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                   return JumpPanelHeader(jump: _jumps[index]);
                                 },
                                 body: JumpPanelContent(
+                                  onChangeAllTypes: (JumpType jumpType) async {
+                                    for(Jump j in _jumps){
+                                      j.type = jumpType;
+                                      await CaptureClient().updateJump(jump: j);
+                                    }
+                                    setState(() {
+                                    });
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                          duration: const Duration(
+                                              seconds: 2),
+                                          backgroundColor: confirm,
+                                          content: Text(
+                                            savedModificationsSnackInfo,
+                                            style: TextStyle(
+                                                fontSize:
+                                                ReactiveLayoutHelper
+                                                    .getHeightFromFactor(
+                                                    16)),
+                                          )));
+                                    }
+
+                                  },
                                     jump: _jumps[index],
                                     onModified: (Jump j,
                                         JumpType initialJumpType,
