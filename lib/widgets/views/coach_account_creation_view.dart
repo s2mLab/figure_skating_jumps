@@ -105,7 +105,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
                                   SizedBox(
                                       height: ReactiveLayoutHelper.getHeightFromFactor(12),
                                       child: ProgressionDotsRow(
-                                          steps: 2, state: 1)),
+                                          steps: 2, state: _pageIndex+1)),
                                 ],
                               ),
                             ),
