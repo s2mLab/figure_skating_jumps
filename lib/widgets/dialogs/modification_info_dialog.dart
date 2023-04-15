@@ -32,46 +32,46 @@ class ModificationInfoDialog extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: ReactiveLayoutHelper.getWidthFromFactor(200),
+            height: ReactiveLayoutHelper.getWidthFromFactor(500),
             child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
-                child: Column(
-                  children: [
-                    ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: _orderedModifications.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: ReactiveLayoutHelper
-                                        .getHeightFromFactor(4)),
-                                child: Text(
-                                  dateSecondsDisplayFormat.format(
-                                      _orderedModifications[index].date),
-                                  style: TextStyle(
-                                      color: primaryColorDark,
-                                      fontSize: ReactiveLayoutHelper
-                                          .getHeightFromFactor(16),
-                                      decorationStyle:
-                                          TextDecorationStyle.solid,
-                                      decoration: TextDecoration.underline),
-                                ),
+              child: Column(
+                children: [
+                  ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _orderedModifications.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: ReactiveLayoutHelper
+                                      .getHeightFromFactor(32)),
+                              child: Text(
+                                dateSecondsDisplayFormat.format(
+                                    _orderedModifications[index].date),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: primaryColorDark,
+                                    fontSize: ReactiveLayoutHelper
+                                        .getHeightFromFactor(16),
+                                    decorationStyle:
+                                        TextDecorationStyle.solid,
+                                    decoration: TextDecoration.underline),
                               ),
-                              InstructionPrompt(
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16.0), bottom: ReactiveLayoutHelper.getWidthFromFactor(16.0)),
+                              child: InstructionPrompt(
                                   _orderedModifications[index].action,
                                   primaryColorLight),
-                            ],
-                          );
-                        }),
-                  ],
-                ),
+                            ),
+                          ],
+                        );
+                      }),
+                ],
               ),
             ),
           ),

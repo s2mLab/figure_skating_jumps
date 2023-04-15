@@ -48,7 +48,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     return PageRouteBuilder(
       settings: RouteSettings(name: '/EditAnalysis', arguments: _capture),
       pageBuilder: (context, animation, secondaryAnimation) =>
-      const EditAnalysisView(),
+          const EditAnalysisView(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
@@ -72,7 +72,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
 
   bool _isJumpWellPlaced(int index) {
     return (index == 0 || _jumps[index - 1].time <= _jumps[index].time) &&
-        (index == _jumps.length - 1 || _jumps[index + 1].time >= _jumps[index].time);
+        (index == _jumps.length - 1 ||
+            _jumps[index + 1].time >= _jumps[index].time);
   }
 
   @override
@@ -211,30 +212,32 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                   return JumpPanelHeader(jump: _jumps[index]);
                                 },
                                 body: JumpPanelContent(
-                                  onChangeAllTypes: (JumpType jumpType) async {
-                                    for(Jump j in _jumps){
-                                      j.type = jumpType;
-                                      await CaptureClient().updateJump(jump: j);
-                                    }
-                                    setState(() {
-                                    });
-                                    if (mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                          duration: const Duration(
-                                              seconds: 2),
-                                          backgroundColor: confirm,
-                                          content: Text(
-                                            savedModificationsSnackInfo,
-                                            style: TextStyle(
-                                                fontSize:
-                                                ReactiveLayoutHelper
-                                                    .getHeightFromFactor(
-                                                    16)),
-                                          )));
-                                    }
-
-                                  },
+                                    onChangeAllTypes:
+                                        (JumpType jumpType) async {
+                                      for (Jump j in _jumps) {
+                                        j.type = jumpType;
+                                        await CaptureClient()
+                                            .updateJump(jump: j);
+                                      }
+                                      setState(() {});
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                duration:
+                                                    const Duration(seconds: 2),
+                                                backgroundColor: confirm,
+                                                content: Text(
+                                                  savedModificationsSnackInfo,
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          ReactiveLayoutHelper
+                                                              .getHeightFromFactor(
+                                                                  16)),
+                                                )));
+                                        Navigator.of(context)
+                                            .pushReplacement(_createRoute());
+                                      }
+                                    },
                                     jump: _jumps[index],
                                     onModified: (Jump j,
                                         JumpType initialJumpType,
@@ -246,8 +249,10 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                           reorderedJumpsAfterMod.add(i);
                                         }
                                       }
-                                      _misplacedJumpIndex.removeAll(reorderedJumpsAfterMod);
-                                      if (_jumpsNeedsReorder(initialTime, index)) {
+                                      _misplacedJumpIndex
+                                          .removeAll(reorderedJumpsAfterMod);
+                                      if (_jumpsNeedsReorder(
+                                          initialTime, index)) {
                                         _misplacedJumpIndex.add(index);
                                       }
                                       setState(() {
@@ -282,7 +287,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                       // _jumps.removeWhere((element) => element.uID! == j.uID!);
                                       await CaptureClient().deleteJump(jump: j);
                                       if (mounted) {
-                                        Navigator.of(context).pushReplacement(_createRoute());
+                                        Navigator.of(context)
+                                            .pushReplacement(_createRoute());
                                       }
                                     }));
                           }),

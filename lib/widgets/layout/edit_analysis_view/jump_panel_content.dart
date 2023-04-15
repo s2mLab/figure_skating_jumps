@@ -129,8 +129,14 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                 context: context,
                                 builder: (context) {
                                   return SimpleDialog(
+                                    contentPadding: EdgeInsets.all(
+                                        ReactiveLayoutHelper.getWidthFromFactor(16)),
+                                    insetPadding: EdgeInsets.symmetric(
+                                        horizontal:
+                                        ReactiveLayoutHelper.getWidthFromFactor(
+                                            16, true)),
                                     title: Text(
-                                        "Confirmer la modification de tous les sauts",
+                                        continueModifOfAllJumps,
                                         style: TextStyle(
                                             fontSize: ReactiveLayoutHelper
                                                 .getHeightFromFactor(14))),
