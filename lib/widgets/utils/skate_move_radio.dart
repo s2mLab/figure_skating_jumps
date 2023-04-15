@@ -10,14 +10,17 @@ class SkateMoveRadio extends StatelessWidget {
     required groupValue,
     required value,
     required onChanged,
+    required onLongPressChanged
   }):
   _groupValue = groupValue,
   _value = value,
+  _onLongPressChanged = onLongPressChanged,
   _onChanged = onChanged;
 
   final JumpType _groupValue;
   final JumpType _value;
   final ValueChanged<JumpType> _onChanged;
+  final ValueChanged<JumpType> _onLongPressChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,9 @@ class SkateMoveRadio extends StatelessWidget {
         if (_value != _groupValue) {
           _onChanged(_value);
         }
+      },
+      onLongPress: () {
+        _onLongPressChanged(_value);
       },
       child: Column(
         children: <Widget>[
