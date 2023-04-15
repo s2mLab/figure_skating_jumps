@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
 import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
 
 class GraphicDataHelper {
 
@@ -30,7 +31,9 @@ class GraphicDataHelper {
   }
 
   static List<String> _getAllDates(Map<String, List<Capture>> captures) {
-    return captures.keys.toList();
+    List<String> dates = captures.keys.toList();
+    dates.removeWhere((element) => DateTime.parse(element).isBefore(GraphDatePreferencesService.begin) || DateTime.parse(element).isAfter(GraphDatePreferencesService.end));
+    return dates;
   }
 
   static Future<GraphStatsDatePair?> _getAverageJumpScorePerTypeOnDate(

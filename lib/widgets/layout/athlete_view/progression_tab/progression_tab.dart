@@ -1,8 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/jump_scores.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
@@ -10,7 +9,7 @@ import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_dat
 import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
 import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
-import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/date_filter_dialog_content.dart';
 import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/metrics_tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -113,24 +112,30 @@ class _ProgressionTabState extends State<ProgressionTab> {
               ),
               IconButton(
                   onPressed: () {
-                    showDialog(context: context, builder: (_) {
-
-                      return SimpleDialog(
-                        title: Text("Filter par date"),
-                        contentPadding: EdgeInsets.all(ReactiveLayoutHelper.getWidthFromFactor(16)),
-                        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true)),
-                        children: [
-
-                        ],
-                      );
-                    }).then((value) {
-
-                    });
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return SimpleDialog(
+                            title: const Text(filterByDateDialogTitle),
+                            contentPadding: EdgeInsets.all(
+                                ReactiveLayoutHelper.getWidthFromFactor(16)),
+                            insetPadding: EdgeInsets.symmetric(
+                                horizontal:
+                                    ReactiveLayoutHelper.getWidthFromFactor(
+                                        16, true)),
+                            children: [
+                              DateFilterDialogContent(setStateCallback: () {
+                                setState(() {});
+                              }),
+                            ],
+                          );
+                        }).then((value) {});
                   },
                   icon: Icon(Icons.calendar_month_outlined,
                       size: ReactiveLayoutHelper.getHeightFromFactor(24)))
             ],
           ),
+          Center(child: Text('${dateDisplayFormat.format(GraphDatePreferencesService.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesService.end)}')),
           Expanded(
               child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(

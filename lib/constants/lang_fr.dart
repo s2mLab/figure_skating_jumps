@@ -100,12 +100,17 @@ const String averageJumpDurationGraphicTitle =
 const String averageFlyTimeLegend = "Temps de vol moyen";
 const String notBeforeInfo = "Ne peut pas être avant la date de début.";
 const String notAfterInfo = "Ne peut pas être après la date de fin.";
+const String filterByDateDialogTitle = "Filtrer par date";
 
 // widgets/layout/athlete_view/progression_tab/metrics_tooltip
 const String averageTooltip = "Moyenne";
 const String minTooltip = "Min";
 const String maxTooltip = "Max";
 const String stdDevTooltip = "Écart-type";
+
+// widgets/layout/athlete_view/progression_tab/date_filter_dialog_content
+const String beginDateButton = "Date de début";
+const String endDateButton = "Date de fin";
 
 // widgets/layout/options_tab/options_tab
 const String confirmAthleteRemovalButton = "Confirmer le retrait";
