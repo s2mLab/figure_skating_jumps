@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/measuring/measurer_state.dart';
 import 'package:figure_skating_jumps/enums/measuring/measuring_status.dart';
@@ -23,6 +25,8 @@ class XSensDotStreamingDataService
   static MeasurerState _state = MeasurerState.idle;
   static final List<XSensDotData> _measuredData = [];
   final List<IXSensDotMeasuringDataSubscriber> _subscribers = [];
+  static Timer? _errorTimer;
+  static const Duration _maxDelay = Duration(seconds: 30);
 
   factory XSensDotStreamingDataService() {
     _xSensMeasuringChannel.receiveBroadcastStream().listen((event) {
@@ -64,6 +68,7 @@ class XSensDotStreamingDataService
         break;
       case MeasuringStatus.setRate:
         if (_state == MeasurerState.preparing) {
+          _errorTimer?.cancel();
           await _xSensMeasuringMethodChannel.invokeMethod('startMeasuring');
           _state = MeasurerState.measuring;
         }
@@ -83,6 +88,10 @@ class XSensDotStreamingDataService
     } on PlatformException catch (e) {
       debugPrint(e.message);
     }
+    _errorTimer = Timer(_maxDelay, () {
+      _state = MeasurerState.idle;
+      debugPrint("Setting measuring rate was too long");
+    });
   }
 
   @override
