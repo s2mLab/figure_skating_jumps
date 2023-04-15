@@ -3,6 +3,7 @@ import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
 import 'package:flutter/material.dart';
 
 class XSensDotConnectionButton extends StatefulWidget {
@@ -29,6 +30,16 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     super.dispose();
   }
 
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const ConnectionDotView(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,10 +57,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           onPressed: () {
-            Navigator.pushReplacementNamed(
-              context,
-              '/ManageDevices',
-            );
+            Navigator.of(context).pushReplacement(_createRoute());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

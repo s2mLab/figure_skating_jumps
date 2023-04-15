@@ -46,10 +46,11 @@ class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
   }
 
   Future<void> removeDevice(BluetoothDevice device) async {
-    if (!_devices.remove(device)) {
+    if (!_devices.any((element) => element.macAddress == device.macAddress)) {
       debugPrint("Could not find device ${device.macAddress} in local storage");
       return;
     }
+    _devices.removeWhere((element) => element.macAddress == device.macAddress);
     await LocalDbService()
         .deleteOne(device, LocalDbService.bluetoothDeviceTableName);
   }

@@ -1,17 +1,17 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
+import 'package:figure_skating_jumps/widgets/layout/legend_move.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../utils/reactive_layout_helper.dart';
-import '../../capture_list_tile.dart';
-import '../../legend_move.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 
 class CapturesTab extends StatelessWidget {
   const CapturesTab({Key? key, required this.groupedCaptures})
       : super(key: key);
   final Map<String, List<Capture>> groupedCaptures;
-  final double heightContainer = 118;
+  final double heightContainer = 130;
 
   @override
   Widget build(BuildContext context) {

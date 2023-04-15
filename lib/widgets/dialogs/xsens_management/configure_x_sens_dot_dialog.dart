@@ -25,12 +25,15 @@ class ConfigureXSensDotDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         backgroundColor: primaryBackground,
-        insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+        insetPadding: EdgeInsets.symmetric(
+            horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
         clipBehavior: Clip.antiAlias,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24), vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
+          padding: EdgeInsets.symmetric(
+              horizontal: ReactiveLayoutHelper.getWidthFromFactor(24),
+              vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -42,6 +45,14 @@ class ConfigureXSensDotDialog extends StatelessWidget {
               IceButton(
                   text: forgetDeviceButton,
                   onPressed: () async {
+                    if (XSensDotConnectionService().currentXSensDevice !=
+                            null &&
+                        XSensDotConnectionService()
+                                .currentXSensDevice!
+                                .macAddress ==
+                            xSensDot.macAddress) {
+                      await XSensDotConnectionService().disconnect();
+                    }
                     await BluetoothDeviceManager().removeDevice(xSensDot);
                     close();
                   },
@@ -50,7 +61,8 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                   iceButtonImportance: IceButtonImportance.discreetAction,
                   iceButtonSize: IceButtonSize.medium),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                padding: EdgeInsets.symmetric(
+                    vertical: ReactiveLayoutHelper.getHeightFromFactor(24)),
                 child: Center(
                   child: XSensStateIcon(
                       false,
@@ -60,7 +72,8 @@ class ConfigureXSensDotDialog extends StatelessWidget {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  padding: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: _connectionManagementButton()),
               IceButton(
                   text: goBackLabel,
