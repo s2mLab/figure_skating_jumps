@@ -44,6 +44,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     super.initState();
   }
 
+  Route _createRoute() {
+    return PageRouteBuilder(
+      settings: RouteSettings(name: '/EditAnalysis', arguments: _capture),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+      const EditAnalysisView(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
+    );
+  }
+
   Future<void> _loadCaptureData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
@@ -146,8 +157,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       newJump = await CaptureClient().createJump(jump: newJump);
                       _capture!.jumpsID.add(newJump.uID!);
                       if (mounted) {
-                        Navigator.pushReplacementNamed(context, '/EditAnalysis',
-                            arguments: _capture);
+                        Navigator.of(context).pushReplacement(_createRoute());
                       }
                     },
                     textColor: primaryColor,
@@ -161,8 +171,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   child: IceButton(
                       text: reorderJumpListButton,
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/EditAnalysis',
-                            arguments: _capture);
+                        Navigator.of(context).pushReplacement(_createRoute());
                       },
                       textColor: secondaryColor,
                       color: secondaryColor,
@@ -273,9 +282,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                       // _jumps.removeWhere((element) => element.uID! == j.uID!);
                                       await CaptureClient().deleteJump(jump: j);
                                       if (mounted) {
-                                        Navigator.pushReplacementNamed(
-                                            context, '/EditAnalysis',
-                                            arguments: _capture);
+                                        Navigator.of(context).pushReplacement(_createRoute());
                                       }
                                     }));
                           }),
