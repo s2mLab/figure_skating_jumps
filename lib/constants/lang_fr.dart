@@ -98,12 +98,19 @@ const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
+const String notBeforeInfo = "Ne peut pas être avant la date de début.";
+const String notAfterInfo = "Ne peut pas être après la date de fin.";
+const String filterByDateDialogTitle = "Filtrer par date";
 
 // widgets/layout/athlete_view/progression_tab/metrics_tooltip
 const String averageTooltip = "Moyenne";
 const String minTooltip = "Min";
 const String maxTooltip = "Max";
 const String stdDevTooltip = "Écart-type";
+
+// widgets/layout/athlete_view/progression_tab/date_filter_dialog_content
+const String beginDateButton = "Date de début";
+const String endDateButton = "Date de fin";
 
 // widgets/layout/options_tab/options_tab
 const String confirmAthleteRemovalButton = "Confirmer le retrait";
@@ -193,6 +200,7 @@ const String connectingButton = "Connexion...";
 const String connectionImpossibleLabel = "Connexion impossible";
 const String createAccountButton = "Créer un compte";
 const String forgotPasswordButton = "Mot de passe oublié?";
+const String dataMessageInfo = "L'utilisation de cette application est destinée aux athlètes de Patinage Québec et aux personnes autorisées par Patinage Québec. En utilisant cette application, vous consentez aux différentes politiques de Patinage Québec, notamment concernant la rétention des informations reliées à votre compte. Les détails peuvent être obtenus auprès de Patinage Québec et sont inhérents à votre affiliation avec Patinage Québec.";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";

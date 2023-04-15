@@ -224,6 +224,16 @@ class _LoginViewState extends State<LoginView> {
                             )
                           ],
                         ))),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          ReactiveLayoutHelper.getWidthFromFactor(32, true)),
+                  child: Text(dataMessageInfo,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(10))),
+                ),
               ],
             )))));
   }

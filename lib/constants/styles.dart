@@ -19,5 +19,7 @@ final TextStyle tabStyle =
 final TextStyle connectingStyle = TextStyle(color: darkText, fontSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(14): 14);
 final TextStyle connectedStyle = TextStyle(color: connectedXSensDotButtonForeground, fontSize: ReactiveLayoutHelper.isTablet() ? ReactiveLayoutHelper.getHeightFromFactor(14) : 14);
 
-const dateFormatString = 'dd/MM/yyyy - hh:mm:ss';
-final dateSecondsDisplayFormat = DateFormat(dateFormatString);
+const dateSecondsFormatString = 'dd/MM/yyyy - hh:mm:ss';
+const dateFormatString = 'dd/MM/yyyy';
+final dateSecondsDisplayFormat = DateFormat(dateSecondsFormatString);
+final dateDisplayFormat = DateFormat(dateFormatString);
