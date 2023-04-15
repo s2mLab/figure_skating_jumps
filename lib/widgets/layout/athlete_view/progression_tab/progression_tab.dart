@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/enums/jump_type.dart';
 import 'package:figure_skating_jumps/enums/season.dart';
 import 'package:figure_skating_jumps/models/capture.dart';
 import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
+import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
 import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -119,12 +120,6 @@ class _ProgressionTabState extends State<ProgressionTab> {
                         contentPadding: EdgeInsets.all(ReactiveLayoutHelper.getWidthFromFactor(16)),
                         insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true)),
                         children: [
-                          IceButton(text: "Date de début", onPressed: () {
-                            showDatePicker(context: context, initialDate: DateTime(2023), firstDate: DateTime(2023), lastDate: DateTime.now());
-                          }, textColor: primaryColor, color: primaryColor, iceButtonImportance: IceButtonImportance.secondaryAction, iceButtonSize: IceButtonSize.medium),
-                          IceButton(text: "Date de fin", onPressed: () {
-
-                          }, textColor: primaryColor, color: primaryColor, iceButtonImportance: IceButtonImportance.secondaryAction, iceButtonSize: IceButtonSize.medium),
 
                         ],
                       );
