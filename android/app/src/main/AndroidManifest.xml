@@ -31,7 +31,7 @@
 
     <application
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_patinage_quebec"
         android:label="figure_skating_jumps">
         <activity
             android:name=".MainActivity"
