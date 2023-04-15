@@ -18,15 +18,18 @@ class JumpPanelContent extends StatefulWidget {
   final void Function(Jump j, JumpType initialJumpType, int initialTime)
       _onModified;
   final void Function(Jump j, JumpType initialJumpType) _onDeleted;
+  final void Function(JumpType jumpType) _onChangeAllTypes;
   const JumpPanelContent(
       {super.key,
       required jump,
+      required void Function(JumpType jumpType) onChangeAllTypes,
       required void Function(Jump j, JumpType initialJumpType, int initialTime)
           onModified,
       required void Function(Jump j, JumpType initial) onDeleted})
       : _j = jump,
         _onModified = onModified,
-        _onDeleted = onDeleted;
+        _onDeleted = onDeleted,
+        _onChangeAllTypes = onChangeAllTypes;
 
   @override
   State<JumpPanelContent> createState() => _JumpPanelContentState();
@@ -121,6 +124,44 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                       return SkateMoveRadio(
                           value: JumpType.values[index],
                           groupValue: _selectedType,
+                          onLongPressChanged: (JumpType type) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SimpleDialog(
+                                    title: Text(
+                                        "Confirmer la modification de tous les sauts",
+                                        style: TextStyle(
+                                            fontSize: ReactiveLayoutHelper
+                                                .getHeightFromFactor(14))),
+                                    children: [
+                                      IceButton(
+                                          text: continueToLabel,
+                                          onPressed: () {
+                                            Navigator.pop(context, true);
+                                          },
+                                          textColor: primaryColor,
+                                          color: primaryColor,
+                                          iceButtonImportance: IceButtonImportance.secondaryAction,
+                                          iceButtonSize: IceButtonSize.small),
+                                      IceButton(
+                                          text: cancelLabel,
+                                          onPressed: () {
+                                            Navigator.pop(context, false);
+                                          },
+                                          textColor: paleText,
+                                          color: primaryColor,
+                                          iceButtonImportance: IceButtonImportance.mainAction,
+                                          iceButtonSize: IceButtonSize.small),
+                                      ],
+                                  );
+                                }).then((value) {
+                              if (!value) return;
+                              setState(() {
+                                widget._onChangeAllTypes(type);
+                              });
+                            });
+                          },
                           onChanged: (JumpType newValue) {
                             setState(() {
                               _selectedType = newValue;
