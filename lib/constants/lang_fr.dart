@@ -242,6 +242,7 @@ const String captureViewCameraSwitchLabel = "Caméra activée ?";
 const String stopCaptureButton = "Arrêter la capture";
 const String exportingDataLabel = "Enregistrement des données...";
 const String analyzingDataLabel = "Analyse des données...";
+const String missingPermsCameraInfo = "Les permissions de la caméra sont désactivées";
 
 
 // widgets/screens/coach_account_creation_view
