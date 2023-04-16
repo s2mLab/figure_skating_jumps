@@ -77,7 +77,7 @@ const String emptyMemoryButton = "Vider la mémoire";
 // widgets/dialog/capture/capture_error_dialog
 const String errorCaptureLabel = "Erreur lors de la capture";
 const String errorCaptureInfo =
-    "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
+    "Une erreur est survenue lors de la capture de données. Veuillez redémarrer le XSens DOT et réessayer.";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
