@@ -2,11 +2,11 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/jump_scores.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
-import 'package:figure_skating_jumps/enums/jump_type.dart';
-import 'package:figure_skating_jumps/enums/season.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
-import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
+import 'package:figure_skating_jumps/enums/models/jump_type.dart';
+import 'package:figure_skating_jumps/enums/models/season.dart';
+import 'package:figure_skating_jumps/models/firebase/capture.dart';
+import 'package:figure_skating_jumps/models/graph_stats_date_pair.dart';
+import 'package:figure_skating_jumps/utils/graph_date_preferences_utils.dart';
 import 'package:figure_skating_jumps/utils/graphic_data_helper.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/layout/athlete_view/progression_tab/date_filter_dialog_content.dart';
@@ -137,7 +137,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
         ),
         Center(
             child: Text(
-          '${dateDisplayFormat.format(GraphDatePreferencesService.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesService.end)}',
+          '${dateDisplayFormat.format(GraphDatePreferencesUtils.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesUtils.end)}',
           style: TextStyle(
               fontSize: ReactiveLayoutHelper.getHeightFromFactor(14)),
         )),

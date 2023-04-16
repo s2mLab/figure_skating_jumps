@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
-import 'package:figure_skating_jumps/models/db_models/abstract_local_db_object.dart';
+import 'package:figure_skating_jumps/models/local_db/abstract_local_db_object.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

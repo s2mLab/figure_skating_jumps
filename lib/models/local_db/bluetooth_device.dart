@@ -1,7 +1,6 @@
-import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
-
-import 'db_models/abstract_local_db_object.dart';
+import 'package:figure_skating_jumps/models/local_db/abstract_local_db_object.dart';
+import 'package:figure_skating_jumps/services/local_db/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 
 class BluetoothDevice extends AbstractLocalDbObject {
   late final String _userId;

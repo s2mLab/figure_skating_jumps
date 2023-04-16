@@ -1,12 +1,12 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
+import 'package:figure_skating_jumps/services/local_db/bluetooth_device_manager.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/xsens_management/connection_new_xsens_dot_dialog.dart';
-import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/x_sens_management/connection_new_xsens_dot_dialog.dart';
+import 'package:figure_skating_jumps/enums/x_sens/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/widgets/layout/connection_dot_view/known_devices.dart';

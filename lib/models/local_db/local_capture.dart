@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/models/db_models/abstract_local_db_object.dart';
+import 'package:figure_skating_jumps/models/local_db/abstract_local_db_object.dart';
 
 class LocalCapture extends AbstractLocalDbObject {
   final String _captureID;

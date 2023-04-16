@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../utils/reactive_layout_helper.dart';
-import 'colors.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/constants/colors.dart';
 
 BoxShadow connectionShadow = BoxShadow(
   color: Colors.black.withOpacity(0.2),
