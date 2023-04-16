@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/firebase_options.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
@@ -39,16 +40,25 @@ Future<void> main() async {
 
   hasNecessaryPermissions = await initializeStoragePermissions();
 
-  await LocalDbService().ensureInitialized();
-
-  await ActiveSessionManager().loadActiveSession();
-  if (ActiveSessionManager().activeSession != null) {
-    await UserClient().signIn(
-        email: ActiveSessionManager().activeSession!.email,
-        password: ActiveSessionManager().activeSession!.password);
+  if (hasNecessaryPermissions) {
+    ConnectivityResult connectivityResult =
+        await Connectivity().checkConnectivity();
+    hasNecessaryPermissions = connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile;
   }
 
-  await GlobalSettingsManager().loadSettings();
+  if(hasNecessaryPermissions) {
+    await LocalDbService().ensureInitialized();
+
+    await ActiveSessionManager().loadActiveSession();
+    if (ActiveSessionManager().activeSession != null) {
+      await UserClient().signIn(
+          email: ActiveSessionManager().activeSession!.email,
+          password: ActiveSessionManager().activeSession!.password);
+    }
+
+    await GlobalSettingsManager().loadSettings();
+  }
 
   // prevent phone rotation
   SystemChrome.setPreferredOrientations([
@@ -88,6 +98,7 @@ Future<bool> initializeStoragePermissions() async {
 class FigureSkatingJumpApp extends StatelessWidget {
   final bool canFunction;
   final RouteObserver<ModalRoute<void>> routeObserver;
+
   const FigureSkatingJumpApp(
       {super.key, required this.canFunction, required this.routeObserver});
 

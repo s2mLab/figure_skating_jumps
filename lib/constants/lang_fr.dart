@@ -276,6 +276,8 @@ const String tryLaterLabel = 'Veuillez réessayer plus tard.';
 // widgets/screens/missing_permissions_view
 const String pleaseActivatePermissionsInfo =
     "Veuillez activer les permissions dans vos paramètres, puis redémarrer l'application. Si cela ne fonctionne pas, veuillez réinstaller l'application.";
+const String pleaseActivateNetworkInfo =
+    "Veuillez activer les données mobiles ou le Wi-Fi dans vos paramètres, puis redémarrer l'application.";
 
 // widgets/screens/skater_creation_view
 const String createAthleteExplainInfo =
