@@ -74,6 +74,10 @@ const String memoryErrorInfo =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
 const String emptyMemoryButton = "Vider la mémoire";
 
+// widgets/dialog/capture/capture_error_dialog
+const String errorCaptureLabel = "Erreur lors de la capture";
+const String errorCaptureInfo = "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
+
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordField = "Mot de passe: ";

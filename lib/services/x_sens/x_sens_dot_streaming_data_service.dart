@@ -82,16 +82,17 @@ class XSensDotStreamingDataService
   }
 
   static Future<void> _setMeasuringRate() async {
+    _errorTimer?.cancel();
+    _errorTimer = Timer(_maxDelay, () {
+      _state = MeasurerState.idle;
+      debugPrint("Setting measuring rate was too long");
+    });
     try {
       await _xSensMeasuringMethodChannel
           .invokeMethod('setRate', <String, dynamic>{'rate': _streamingRate});
     } on PlatformException catch (e) {
       debugPrint(e.message);
     }
-    _errorTimer = Timer(_maxDelay, () {
-      _state = MeasurerState.idle;
-      debugPrint("Setting measuring rate was too long");
-    });
   }
 
   @override
