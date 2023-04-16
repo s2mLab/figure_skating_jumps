@@ -284,6 +284,8 @@ const String architectureNotPermittedInfo =
 const String architectureUntrusted =
     "L'architecture de votre appareil pourrait ne pas être compatible avec les requis du XSens Dot et des plantages imprévus pourraient survenir.";
 const String bypassButton = "Continuer malgré le risque.";
+const String pleaseActivateNetworkInfo =
+    "Veuillez activer les données mobiles ou le Wi-Fi dans vos paramètres, puis redémarrer l'application.";
 
 // widgets/screens/skater_creation_view
 const String createAthleteExplainInfo =
