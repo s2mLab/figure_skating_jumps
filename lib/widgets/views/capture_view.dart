@@ -72,183 +72,191 @@ class _CaptureViewState extends State<CaptureView>
 
   @override
   Widget build(BuildContext context) {
-    return _isFullscreen
-        ? Builder(builder: (context) {
-            return Stack(
-              children: [
-                FutureBuilder<void>(
-                    future: _initializeControllerFuture,
-                    builder: _buildCameraPreview),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: IceButton(
-                        onPressed: () async {
-                          await _onCaptureStopPressed();
-                        },
-                        text: stopCaptureButton,
-                        textColor: primaryColor,
-                        color: primaryColor,
-                        iceButtonImportance:
-                            IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.medium,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            );
-          })
-        : Scaffold(
-            appBar: ReactiveLayoutHelper.isTablet()
-                ? const TabletTopbar(isUserDebuggingFeature: false)
-                    as PreferredSizeWidget
-                : const Topbar(isUserDebuggingFeature: false),
-            drawerEnableOpenDragGesture: false,
-            drawerScrimColor: Colors.transparent,
-            drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-            body: Builder(builder: (context) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal:
-                        ReactiveLayoutHelper.getWidthFromFactor(24, true),
-                    vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () {
+        bool canPop =
+            _xSensDotRecordingService.recorderState == RecorderState.idle ||
+                _xSensDotRecordingService.recorderState == RecorderState.full;
+        return Future<bool>.value(canPop);
+      },
+      child: _isFullscreen
+          ? Builder(builder: (context) {
+              return Stack(
+                children: [
+                  FutureBuilder<void>(
+                      future: _initializeControllerFuture,
+                      builder: _buildCameraPreview),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const PageTitle(text: captureViewStartLabel),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: ReactiveLayoutHelper.getHeightFromFactor(20)),
-                        child: const InstructionPrompt(
-                            captureViewInfo, secondaryColor),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical:
-                                ReactiveLayoutHelper.getHeightFromFactor(20)),
-                        child: const InstructionPrompt(
-                            captureViewCameraInfo, secondaryColor),
-                      ),
-                      Expanded(
-                          child: _isCameraActivated && !_cameraInError
-                              ? FutureBuilder<void>(
-                                  future: _initializeControllerFuture,
-                                  builder: _buildCameraPreview)
-                              : _noCameraIcon()),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              captureViewCameraSwitchLabel,
-                              style: TextStyle(
-                                  fontSize:
-                                      ReactiveLayoutHelper.getHeightFromFactor(
-                                          16)),
-                            ),
-                            Switch(
-                                value: _isCameraActivated,
-                                onChanged: (val) {
-                                  setState(() {
-                                    _isCameraActivated = val;
-                                  });
-                                })
-                          ]),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  right:
-                                      ReactiveLayoutHelper.getWidthFromFactor(
-                                          8)),
-                              child: Text(selectSeasonLabel,
-                                  style: TextStyle(
-                                      fontSize: ReactiveLayoutHelper
-                                          .getHeightFromFactor(16))),
-                            ),
-                            DropdownButton<Season>(
-                                selectedItemBuilder: (context) {
-                                  return Season.values
-                                      .map<Widget>((Season item) {
-                                    // This is the widget that will be shown when you select an item.
-                                    // Here custom text style, alignment and layout size can be applied
-                                    // to selected item string.
-                                    return Container(
-                                      constraints: BoxConstraints(
-                                          minWidth: ReactiveLayoutHelper
-                                              .getWidthFromFactor(80)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            item.displayedString,
-                                            style: TextStyle(
-                                                fontSize: ReactiveLayoutHelper
-                                                    .getHeightFromFactor(16),
-                                                color: darkText,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList();
-                                },
-                                value: _selectedSeason,
-                                menuMaxHeight:
-                                    ReactiveLayoutHelper.getWidthFromFactor(
-                                        300),
-                                items: List.generate(Season.values.length,
-                                    (index) {
-                                  return DropdownMenuItem<Season>(
-                                    value: Season.values[index],
-                                    child: Text(
-                                      Season.values[index].displayedString,
-                                      style: TextStyle(
-                                          fontSize: ReactiveLayoutHelper
-                                              .getHeightFromFactor(16)),
-                                    ),
-                                  );
-                                }),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _selectedSeason = val!;
-                                    GlobalSettingsManager().saveSettings(
-                                        GlobalSettings(
-                                            season: _selectedSeason));
-                                    XSensDotRecordingService.season =
-                                        _selectedSeason;
-                                  });
-                                }),
-                          ]),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: ReactiveLayoutHelper.getHeightFromFactor(8)),
-                        child: Center(
-                          child: IceButton(
-                            onPressed: () async {
-                              await _onCaptureStartPressed();
-                            },
-                            text: captureViewStartLabel,
-                            textColor: primaryColor,
-                            color: primaryColor,
-                            iceButtonImportance:
-                                IceButtonImportance.secondaryAction,
-                            iceButtonSize: IceButtonSize.medium,
-                          ),
+                      Center(
+                        child: IceButton(
+                          onPressed: () async {
+                            await _onCaptureStopPressed();
+                          },
+                          text: stopCaptureButton,
+                          textColor: primaryColor,
+                          color: primaryColor,
+                          iceButtonImportance:
+                              IceButtonImportance.secondaryAction,
+                          iceButtonSize: IceButtonSize.medium,
                         ),
                       ),
-                    ]),
+                    ],
+                  )
+                ],
               );
-            }),
-          );
+            })
+          : Scaffold(
+              appBar: ReactiveLayoutHelper.isTablet()
+                  ? const TabletTopbar(isUserDebuggingFeature: false)
+                      as PreferredSizeWidget
+                  : const Topbar(isUserDebuggingFeature: false),
+              drawerEnableOpenDragGesture: false,
+              drawerScrimColor: Colors.transparent,
+              drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
+              body: Builder(builder: (context) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          ReactiveLayoutHelper.getWidthFromFactor(24, true),
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const PageTitle(text: captureViewStartLabel),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top:
+                                  ReactiveLayoutHelper.getHeightFromFactor(20)),
+                          child: const InstructionPrompt(
+                              captureViewInfo, secondaryColor),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  ReactiveLayoutHelper.getHeightFromFactor(20)),
+                          child: const InstructionPrompt(
+                              captureViewCameraInfo, secondaryColor),
+                        ),
+                        Expanded(
+                            child: _isCameraActivated && !_cameraInError
+                                ? FutureBuilder<void>(
+                                    future: _initializeControllerFuture,
+                                    builder: _buildCameraPreview)
+                                : _noCameraIcon()),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                captureViewCameraSwitchLabel,
+                                style: TextStyle(
+                                    fontSize: ReactiveLayoutHelper
+                                        .getHeightFromFactor(16)),
+                              ),
+                              Switch(
+                                  value: _isCameraActivated,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _isCameraActivated = val;
+                                    });
+                                  })
+                            ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right:
+                                        ReactiveLayoutHelper.getWidthFromFactor(
+                                            8)),
+                                child: Text(selectSeasonLabel,
+                                    style: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16))),
+                              ),
+                              DropdownButton<Season>(
+                                  selectedItemBuilder: (context) {
+                                    return Season.values
+                                        .map<Widget>((Season item) {
+                                      // This is the widget that will be shown when you select an item.
+                                      // Here custom text style, alignment and layout size can be applied
+                                      // to selected item string.
+                                      return Container(
+                                        constraints: BoxConstraints(
+                                            minWidth: ReactiveLayoutHelper
+                                                .getWidthFromFactor(80)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              item.displayedString,
+                                              style: TextStyle(
+                                                  fontSize: ReactiveLayoutHelper
+                                                      .getHeightFromFactor(16),
+                                                  color: darkText,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList();
+                                  },
+                                  value: _selectedSeason,
+                                  menuMaxHeight:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          300),
+                                  items: List.generate(Season.values.length,
+                                      (index) {
+                                    return DropdownMenuItem<Season>(
+                                      value: Season.values[index],
+                                      child: Text(
+                                        Season.values[index].displayedString,
+                                        style: TextStyle(
+                                            fontSize: ReactiveLayoutHelper
+                                                .getHeightFromFactor(16)),
+                                      ),
+                                    );
+                                  }),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _selectedSeason = val!;
+                                      GlobalSettingsManager().saveSettings(
+                                          GlobalSettings(
+                                              season: _selectedSeason));
+                                      XSensDotRecordingService.season =
+                                          _selectedSeason;
+                                    });
+                                  }),
+                            ]),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                          child: Center(
+                            child: IceButton(
+                              onPressed: () async {
+                                await _onCaptureStartPressed();
+                              },
+                              text: captureViewStartLabel,
+                              textColor: primaryColor,
+                              color: primaryColor,
+                              iceButtonImportance:
+                                  IceButtonImportance.secondaryAction,
+                              iceButtonSize: IceButtonSize.medium,
+                            ),
+                          ),
+                        ),
+                      ]),
+                );
+              }),
+            ),
+    );
   }
 
   Future<void> _onCaptureStopPressed() async {
@@ -286,7 +294,7 @@ class _CaptureViewState extends State<CaptureView>
         }
 
         if (!_isCameraActivated) {
-          _displayStepDialog(const NoCameraRecordingDialog())
+          _displayStepDialog(NoCameraRecordingDialog())
               .then((value) async {
             await _onCaptureStopPressed();
           });
@@ -367,7 +375,7 @@ class _CaptureViewState extends State<CaptureView>
 
   @override
   void onStateChange(RecorderState state) {
-    if(state == RecorderState.error) {
+    if (state == RecorderState.error) {
       Navigator.of(context, rootNavigator: true).pop();
       _displayStepDialog(const CaptureErrorDialog());
       _lastState = state;

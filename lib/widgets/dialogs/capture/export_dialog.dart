@@ -1,3 +1,4 @@
+import 'package:figure_skating_jumps/enums/x_sens/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/models/export_status_event.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:flutter/material.dart';
@@ -15,39 +16,45 @@ class ExportDialog extends StatefulWidget {
 class _ExportDialogState extends State<ExportDialog> {
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: const Text(
-        exportingDataLabel,
-        textAlign: TextAlign.center,
+    return WillPopScope(
+      onWillPop: () {
+        bool canPop =
+            XSensDotRecordingService().recorderState != RecorderState.exporting;
+        return Future<bool>.value(canPop);
+      },
+      child: SimpleDialog(
+        title: const Text(
+          exportingDataLabel,
+          textAlign: TextAlign.center,
+        ),
+        children: [
+          StreamBuilder<ExportStatusEvent>(
+              stream: XSensDotRecordingService().exportStatusStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                            width: 150,
+                            child: LinearProgressIndicator(
+                              color: primaryColor,
+                              backgroundColor: discreetText,
+                              value: snapshot.data?.exportPct,
+                            )),
+                      ),
+                      Text(remainingTimeLabel +
+                          snapshot.data!.formattedTimeRemaining)
+                    ],
+                  );
+                } else {
+                  return const Center(child: Text(calculatingLabel));
+                }
+              })
+        ],
       ),
-      children: [
-        StreamBuilder<ExportStatusEvent>(
-          stream: XSensDotRecordingService().exportStatusStream,
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                        width: 150,
-                        child:
-                        LinearProgressIndicator(
-                          color: primaryColor,
-                          backgroundColor: discreetText,
-                          value: snapshot.data?.exportPct,
-                        )),
-                  ),
-                  Text(remainingTimeLabel + snapshot.data!.formattedTimeRemaining)
-                ],
-              );
-            } else {
-              return const Center(child: Text(calculatingLabel));
-            }
-          }
-        )
-      ],
     );
   }
 }
