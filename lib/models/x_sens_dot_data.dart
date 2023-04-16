@@ -38,11 +38,7 @@ class XSensDotData {
 
     String gyrX = "g-x:${gyr[2].toStringAsFixed(maxDigit)} ";
     String gyrY = "g-y:${gyr[2].toStringAsFixed(maxDigit)} ";
-    String gyrZ = "g-z:${gyr[2].toStringAsFixed(maxDigit)} ";
-
-    String eulX = "e-x:${euler[2].toStringAsFixed(maxDigit)} ";
-    String eulY = "e-y:${euler[2].toStringAsFixed(maxDigit)} ";
-    String eulZ = "e-z:${euler[2].toStringAsFixed(maxDigit)}\n";
-    return info + accX + accY + accZ + gyrX + gyrY + gyrZ + eulX + eulY + eulZ;
+    String gyrZ = "g-z:${gyr[2].toStringAsFixed(maxDigit)}\n";
+    return info + accX + accY + accZ + gyrX + gyrY + gyrZ;
   }
 }
