@@ -26,7 +26,8 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   void initState() {
-    _xSensDotRecordingService.subscribe(this);
+    RecorderState state = _xSensDotRecordingService.subscribe(this);
+    if(state == RecorderState.full) _currentId = 1;
     _startingState = [_startingRecording(), _fullMemory(), _erasingMemory()];
     super.initState();
   }
