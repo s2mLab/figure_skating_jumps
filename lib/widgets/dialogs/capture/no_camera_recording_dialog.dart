@@ -8,9 +8,14 @@ import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';
 
-class NoCameraRecordingDialog extends StatelessWidget {
-  NoCameraRecordingDialog({super.key});
+class NoCameraRecordingDialog extends StatefulWidget {
+  const NoCameraRecordingDialog({super.key});
 
+  @override
+  State<NoCameraRecordingDialog> createState() => _NoCameraRecordingDialogState();
+}
+
+class _NoCameraRecordingDialogState extends State<NoCameraRecordingDialog> {
   bool _captureStopped = false;
 
   @override

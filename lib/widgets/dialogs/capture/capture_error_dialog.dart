@@ -13,38 +13,44 @@ class CaptureErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Text(
-        errorCaptureLabel,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: errorColor,
-            fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+    return WillPopScope(
+      onWillPop: () {
+        XSensDotRecordingService().acknowledgeError();
+        return Future<bool>.value(true);
+      },
+      child: SimpleDialog(
+        title: Text(
+          errorCaptureLabel,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: errorColor,
+              fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+        ),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(
+                      ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: const InstructionPrompt(errorCaptureInfo, errorColor)),
+              Padding(
+                  padding: EdgeInsets.only(
+                      top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
+                  child: IceButton(
+                      text: goBackLabel,
+                      onPressed: () {
+                        XSensDotRecordingService().acknowledgeError();
+                        Navigator.pop(context);
+                      },
+                      textColor: paleText,
+                      color: primaryColor,
+                      iceButtonImportance: IceButtonImportance.mainAction,
+                      iceButtonSize: IceButtonSize.medium))
+            ],
+          )
+        ],
       ),
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-                padding: EdgeInsets.all(
-                    ReactiveLayoutHelper.getHeightFromFactor(16)),
-                child: const InstructionPrompt(errorCaptureInfo, errorColor)),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: ReactiveLayoutHelper.getHeightFromFactor(8.0)),
-              child: IceButton(
-                  text: goBackLabel,
-                  onPressed: () {
-                    XSensDotRecordingService().acknowledgeError();
-                    Navigator.pop(context);
-                  },
-                  textColor: paleText,
-                  color: primaryColor,
-                  iceButtonImportance: IceButtonImportance.mainAction,
-                  iceButtonSize: IceButtonSize.medium))
-          ],
-        )
-      ],
     );
   }
 }
