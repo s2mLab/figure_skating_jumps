@@ -294,7 +294,7 @@ class _CaptureViewState extends State<CaptureView>
         }
 
         if (!_isCameraActivated) {
-          _displayStepDialog(NoCameraRecordingDialog())
+          _displayStepDialog(const NoCameraRecordingDialog())
               .then((value) async {
             await _onCaptureStopPressed();
           });
