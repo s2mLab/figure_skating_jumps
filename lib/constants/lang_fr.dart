@@ -76,7 +76,8 @@ const String emptyMemoryButton = "Vider la mémoire";
 
 // widgets/dialog/capture/capture_error_dialog
 const String errorCaptureLabel = "Erreur lors de la capture";
-const String errorCaptureInfo = "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
+const String errorCaptureInfo =
+    "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
@@ -176,7 +177,8 @@ const String goodJobComment = "Bien fait";
 const String stepOutComment = "Step out";
 const String chooseBelowCommentsLabel =
     "Ou choisir parmi les commentaires suivants:";
-const String continueModifOfAllJumpsInfo = "Cette action changera le type de tous les sauts.";
+const String continueModifOfAllJumpsInfo =
+    "Cette action changera le type de tous les sauts.";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
@@ -205,7 +207,8 @@ const String connectingButton = "Connexion...";
 const String connectionImpossibleLabel = "Connexion impossible";
 const String createAccountButton = "Créer un compte";
 const String forgotPasswordButton = "Mot de passe oublié?";
-const String dataMessageInfo = "L'utilisation de cette application est destinée aux athlètes de Patinage Québec et aux personnes autorisées par Patinage Québec. En utilisant cette application, vous consentez aux différentes politiques de Patinage Québec, notamment concernant la rétention des informations reliées à votre compte. Les détails peuvent être obtenus auprès de Patinage Québec et sont inhérents à votre affiliation avec Patinage Québec.";
+const String dataMessageInfo =
+    "L'utilisation de cette application est destinée aux athlètes de Patinage Québec et aux personnes autorisées par Patinage Québec. En utilisant cette application, vous consentez aux différentes politiques de Patinage Québec, notamment concernant la rétention des informations reliées à votre compte. Les détails peuvent être obtenus auprès de Patinage Québec et sont inhérents à votre affiliation avec Patinage Québec.";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";
@@ -247,8 +250,8 @@ const String captureViewCameraSwitchLabel = "Caméra activée ?";
 const String stopCaptureButton = "Arrêter la capture";
 const String exportingDataLabel = "Enregistrement des données...";
 const String analyzingDataLabel = "Analyse des données...";
-const String missingPermsCameraInfo = "Les permissions de la caméra sont désactivées";
-
+const String missingPermsCameraInfo =
+    "Les permissions de la caméra sont désactivées";
 
 // widgets/screens/coach_account_creation_view
 const String coachCreateAccountTitle = "Créer un compte";
@@ -276,6 +279,11 @@ const String tryLaterLabel = 'Veuillez réessayer plus tard.';
 // widgets/screens/missing_permissions_view
 const String pleaseActivatePermissionsInfo =
     "Veuillez activer les permissions dans vos paramètres, puis redémarrer l'application. Si cela ne fonctionne pas, veuillez réinstaller l'application.";
+const String architectureNotPermittedInfo =
+    "L'architecture de votre appareil n'est pas compatible avec les requis du XSens Dot et l'application ne pourra pas fonctionner.";
+const String architectureUntrusted =
+    "L'architecture de votre appareil pourrait ne pas être compatible avec les requis du XSens Dot et des plantages imprévus pourraient survenir.";
+const String bypassButton = "Continuer malgré le risque.";
 const String pleaseActivateNetworkInfo =
     "Veuillez activer les données mobiles ou le Wi-Fi dans vos paramètres, puis redémarrer l'application.";
 
