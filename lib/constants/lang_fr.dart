@@ -102,7 +102,7 @@ const String percentageJumpsSucceededGraphicTitle =
 const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
-const String averageFlyTimeLegend = "Temps de vol moyen";
+const String averageFlyTimeLegend = "Temps de vol moyen (ms)";
 const String notBeforeInfo = "Ne peut pas être avant la date de début.";
 const String notAfterInfo = "Ne peut pas être après la date de fin.";
 const String filterByDateDialogTitle = "Filtrer par date";
