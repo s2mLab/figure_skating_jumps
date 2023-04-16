@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:system_info2/system_info2.dart';
 
 class InitialRedirectRoute extends StatelessWidget {
-  late final bool _canFunction;
+  late final bool _hasStoragePermissions;
+  late final bool _hasNetwork;
   final List<ProcessorArchitecture> _unsupportedArchitectures = [
     ProcessorArchitecture.mips
   ];
@@ -21,9 +22,11 @@ class InitialRedirectRoute extends StatelessWidget {
     ProcessorArchitecture.unknown
   ];
 
-  InitialRedirectRoute(bool canFunction, {Key? key}) : super(key: key) {
-    _canFunction = canFunction;
-  }
+  InitialRedirectRoute(
+      {required bool hasStoragePermissions, required bool hasNetwork, Key? key})
+      : _hasNetwork = hasNetwork,
+        _hasStoragePermissions = hasStoragePermissions,
+        super(key: key);
 
   Route _getRedirectRoute() {
     if (ActiveSessionManager().activeSession == null) {
@@ -52,6 +55,7 @@ class InitialRedirectRoute extends StatelessWidget {
     ReactiveLayoutHelper.updateDimensions(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Route route = _getRedirectRoute();
+
       // Architectures that crash
       if (_unsupportedArchitectures.contains(SysInfo.kernelArchitecture)) {
         Navigator.pushReplacement(
@@ -59,6 +63,24 @@ class InitialRedirectRoute extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => const MissingPermissionsView(
                     message: architectureNotPermittedInfo)));
+        return;
+      }
+      // Missing permissions to keep going
+      if (!_hasStoragePermissions) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MissingPermissionsView(
+                    message: pleaseActivatePermissionsInfo)));
+        return;
+      }
+      // Missing permissions to keep going
+      if (!_hasNetwork) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MissingPermissionsView(
+                    message: pleaseActivateNetworkInfo)));
         return;
       }
       // Architectures that might crash
@@ -70,15 +92,7 @@ class InitialRedirectRoute extends StatelessWidget {
                     message: architectureUntrusted, routeToOnBypass: route)));
         return;
       }
-      // Missing permissions to keep going
-      if (!_canFunction) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MissingPermissionsView(
-                    message: pleaseActivatePermissionsInfo)));
-        return;
-      }
+
       Navigator.pushReplacement(context, route);
     });
     return const CircularProgressIndicator();

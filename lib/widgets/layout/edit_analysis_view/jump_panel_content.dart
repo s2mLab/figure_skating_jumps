@@ -2,14 +2,14 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/jump_scores.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/models/jump_type.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
-import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/layout/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/utils/skate_move_radio.dart';
 import 'package:flutter/material.dart';
 

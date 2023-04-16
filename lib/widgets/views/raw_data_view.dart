@@ -8,7 +8,7 @@ import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
-import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/layout/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 

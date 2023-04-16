@@ -1,10 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/x_sens/recording/recorder_state.dart';
-import 'package:figure_skating_jumps/enums/season.dart';
+import 'package:figure_skating_jumps/enums/models/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/models/local_db/global_settings.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
@@ -23,7 +23,7 @@ import 'package:figure_skating_jumps/widgets/dialogs/capture/start_recording_dia
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
-import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/layout/instruction_prompt.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 

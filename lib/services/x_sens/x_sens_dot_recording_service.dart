@@ -4,7 +4,7 @@ import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/enums/x_sens/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/enums/x_sens/recording/recording_status.dart';
-import 'package:figure_skating_jumps/enums/season.dart';
+import 'package:figure_skating_jumps/enums/models/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';

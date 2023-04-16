@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/enums/models/jump_type.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';

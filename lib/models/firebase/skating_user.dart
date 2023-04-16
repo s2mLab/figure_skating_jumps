@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/services/firebase/capture_client.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';

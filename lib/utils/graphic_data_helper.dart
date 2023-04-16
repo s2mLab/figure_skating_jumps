@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:figure_skating_jumps/enums/jump_type.dart';
+import 'package:figure_skating_jumps/enums/models/jump_type.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/models/graph_stats_date_pair.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';
