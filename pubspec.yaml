@@ -57,6 +57,7 @@ dependencies:
     http:
     smooth_video_progress: ^0.0.4
     system_info2:
+    connectivity_plus: ^3.0.4
 
 dev_dependencies:
     flutter_test:
