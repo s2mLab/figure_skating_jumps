@@ -13,9 +13,8 @@ import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-
-import '../../utils/reactive_layout_helper.dart';
-import '../layout/scaffold/tablet_topbar.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);

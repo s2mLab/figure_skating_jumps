@@ -2,9 +2,8 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../utils/reactive_layout_helper.dart';
-import '../../buttons/x_sens_dot_connection_button.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/buttons/x_sens_dot_connection_button.dart';
 
 class TabletTopbar extends StatefulWidget implements PreferredSizeWidget {
   final bool isUserDebuggingFeature;

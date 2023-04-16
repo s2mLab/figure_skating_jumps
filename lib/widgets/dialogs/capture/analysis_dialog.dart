@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
-import '../../../constants/lang_fr.dart';
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/constants/lang_fr.dart';
 
 class AnalysisDialog extends StatelessWidget {
   const AnalysisDialog({super.key});
