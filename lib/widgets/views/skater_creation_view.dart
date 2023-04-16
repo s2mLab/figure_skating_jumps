@@ -85,8 +85,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                     Padding(
                       padding: EdgeInsets.only(
                           left: ReactiveLayoutHelper.getWidthFromFactor(8),
-                          bottom: ReactiveLayoutHelper.getHeightFromFactor(24),
-                          top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                          bottom: ReactiveLayoutHelper.getHeightFromFactor(24)),
                       child: const PageTitle(text: addASkaterTitle),
                     ),
                     const InstructionPrompt(
