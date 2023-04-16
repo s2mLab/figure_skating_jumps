@@ -42,7 +42,7 @@ class ModifyFullName extends StatelessWidget {
           style: TextStyle(
               fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
       content: SizedBox(
-          height: ReactiveLayoutHelper.getHeightFromFactor(160),
+          height: ReactiveLayoutHelper.getHeightFromFactor(260),
           width: ReactiveLayoutHelper.getWidthFromFactor(300),
           child: Form(
               key: _modificationInfoKey,

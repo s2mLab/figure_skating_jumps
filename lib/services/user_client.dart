@@ -42,7 +42,6 @@ class UserClient {
     String uID = await _createUserInDb(
         email: email, password: password, userInfo: userInfo);
     _currentSkatingUser = userInfo;
-    await ActiveSessionManager().saveActiveSession(email, password);
     return uID;
   }
 
