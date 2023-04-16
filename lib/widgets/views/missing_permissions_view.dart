@@ -1,11 +1,13 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
-import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
 class MissingPermissionsView extends StatelessWidget {
-  const MissingPermissionsView({super.key});
+  final String _message;
+
+  const MissingPermissionsView({super.key, required String message})
+      : _message = message;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class MissingPermissionsView extends StatelessWidget {
               child: Padding(
                 padding:
                     EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
-                child: const InstructionPrompt(
-                    pleaseActivatePermissionsInfo, errorColor),
+                child: InstructionPrompt(
+                    _message, errorColor),
               ),
             ),
           ),
