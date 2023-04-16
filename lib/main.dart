@@ -15,7 +15,6 @@ import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
 import 'package:figure_skating_jumps/widgets/views/initial_redirect_route.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
-import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
 import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
@@ -120,7 +119,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/ProfileView': (context) => const ProfileView(),
         '/RawDataView': (context) => RawDataView(routeObserver: routeObserver),
         '/ForgotPasswordView': (context) => ForgotPasswordView(),
-        '/MissingPermissions': (context) => const MissingPermissionsView(),
       },
       navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
