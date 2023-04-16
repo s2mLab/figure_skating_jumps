@@ -115,11 +115,13 @@ class _LoggerViewState extends State<_LoggerView>
               controller: _scrollController,
               itemCount: _displayedData.length,
               itemBuilder: (context, i) {
-                return Text(_displayedData[i].toString(),
-                    style: TextStyle(
-                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(5),
-                        color: paleText,
-                        fontFamily: 'monospace'));
+                return Center(
+                  child: Text(_displayedData[i].toString(),
+                      style: TextStyle(
+                          fontSize: ReactiveLayoutHelper.getHeightFromFactor(8),
+                          color: paleText,
+                          fontFamily: 'monospace')),
+                );
               })),
     );
   }
