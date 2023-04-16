@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:figure_skating_jumps/enums/jump_type.dart';
-import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 

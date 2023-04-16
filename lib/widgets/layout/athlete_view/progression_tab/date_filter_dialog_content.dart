@@ -3,7 +3,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
+import 'package:figure_skating_jumps/utils/graph_date_preferences_utils.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +20,9 @@ class DateFilterDialogContent extends StatefulWidget {
 
 class _DateFilterDialogContentState extends State<DateFilterDialogContent> {
   String displayedBegin =
-      dateDisplayFormat.format(GraphDatePreferencesService.begin);
+      dateDisplayFormat.format(GraphDatePreferencesUtils.begin);
   String displayedEnd =
-      dateDisplayFormat.format(GraphDatePreferencesService.end);
+      dateDisplayFormat.format(GraphDatePreferencesUtils.end);
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +38,19 @@ class _DateFilterDialogContentState extends State<DateFilterDialogContent> {
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: GraphDatePreferencesService.begin,
+                          initialDate: GraphDatePreferencesUtils.begin,
                           firstDate: DateTime(2023),
-                          lastDate: GraphDatePreferencesService.end)
+                          lastDate: GraphDatePreferencesUtils.end)
                       .then((value) {
                     if (value == null) return;
-                    if (value.isAfter(GraphDatePreferencesService.end)) {
+                    if (value.isAfter(GraphDatePreferencesUtils.end)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text(notAfterInfo)));
                     }
                     setState(() {
-                      GraphDatePreferencesService.begin = value;
+                      GraphDatePreferencesUtils.begin = value;
                       displayedBegin = dateDisplayFormat
-                          .format(GraphDatePreferencesService.begin);
+                          .format(GraphDatePreferencesUtils.begin);
                     });
                     widget._setStateCallback();
                   });
@@ -73,19 +73,19 @@ class _DateFilterDialogContentState extends State<DateFilterDialogContent> {
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: GraphDatePreferencesService.end,
-                          firstDate: GraphDatePreferencesService.begin,
+                          initialDate: GraphDatePreferencesUtils.end,
+                          firstDate: GraphDatePreferencesUtils.begin,
                           lastDate: DateTime.now())
                       .then((value) {
                     if (value == null) return;
-                    if (value.isBefore(GraphDatePreferencesService.begin)) {
+                    if (value.isBefore(GraphDatePreferencesUtils.begin)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text(notBeforeInfo)));
                     }
                     setState(() {
-                      GraphDatePreferencesService.end = value;
+                      GraphDatePreferencesUtils.end = value;
                       displayedEnd = dateDisplayFormat
-                          .format(GraphDatePreferencesService.end);
+                          .format(GraphDatePreferencesUtils.end);
                     });
                     widget._setStateCallback();
                   });
@@ -104,13 +104,13 @@ class _DateFilterDialogContentState extends State<DateFilterDialogContent> {
           icon: Icon(Icons.restart_alt_outlined, size: ReactiveLayoutHelper.getHeightFromFactor(24),),
           onPressed: () {
             setState(() {
-              GraphDatePreferencesService.begin =
+              GraphDatePreferencesUtils.begin =
                   DateTime.now().subtract(const Duration(days: 7));
-              GraphDatePreferencesService.end = DateTime.now();
+              GraphDatePreferencesUtils.end = DateTime.now();
               displayedBegin =
-                  dateDisplayFormat.format(GraphDatePreferencesService.begin);
+                  dateDisplayFormat.format(GraphDatePreferencesUtils.begin);
               displayedEnd =
-                  dateDisplayFormat.format(GraphDatePreferencesService.end);
+                  dateDisplayFormat.format(GraphDatePreferencesUtils.end);
             });
             widget._setStateCallback();
           },

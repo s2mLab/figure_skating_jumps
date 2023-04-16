@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
+import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/widgets/layout/capture_list_tile.dart';
 import 'package:figure_skating_jumps/widgets/layout/legend_move.dart';
 import 'package:flutter/material.dart';

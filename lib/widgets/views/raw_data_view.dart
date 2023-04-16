@@ -1,7 +1,7 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_streaming_data_service.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';

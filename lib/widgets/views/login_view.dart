@@ -4,8 +4,8 @@ import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/user_role.dart';
-import 'package:figure_skating_jumps/exceptions/ice_exception.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/exceptions/abstract_ice_exception.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -53,7 +53,7 @@ class _LoginViewState extends State<LoginView> {
             : Navigator.pushReplacementNamed(context, '/Acquisitions',
                 arguments: UserClient().currentSkatingUser);
       }
-    } on IceException catch (e) {
+    } on AbstractIceException catch (e) {
       setState(() {
         _errorMessage = e.uiMessage;
       });

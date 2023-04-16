@@ -2,7 +2,7 @@ import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
 import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/enums/recording/recorder_state.dart';
+import 'package:figure_skating_jumps/enums/x_sens/recording/recorder_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';

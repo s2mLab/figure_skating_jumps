@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:path_provider/path_provider.dart';

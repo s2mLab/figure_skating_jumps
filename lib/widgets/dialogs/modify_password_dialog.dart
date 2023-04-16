@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:flutter/material.dart';

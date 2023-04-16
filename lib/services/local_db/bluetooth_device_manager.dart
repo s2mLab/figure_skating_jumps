@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
-import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/local_db_service.dart';
+import 'package:figure_skating_jumps/models/local_db/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
