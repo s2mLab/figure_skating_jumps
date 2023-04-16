@@ -120,7 +120,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                               onChanged: (value) => _controller.seekTo(
                                   Duration(milliseconds: value.toInt())),
                             )),
-                            Text(position.toString().substring(2, 11), style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),)
+                            SizedBox(width: ReactiveLayoutHelper.getWidthFromFactor(100), child: Text(position.toString().substring(2, 11), style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
                           ]));
                     }),
               ]);
