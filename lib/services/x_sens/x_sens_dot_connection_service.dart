@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
@@ -20,7 +22,9 @@ class XSensDotConnectionService
       XSensDotConnectionService._internal();
   final List<IXSensStateSubscriber> _subscribers = [];
   static XSensDeviceState _connectionState = XSensDeviceState.disconnected;
-  BluetoothDevice? _currentXSensDevice;
+  static BluetoothDevice? _currentXSensDevice;
+  static Timer? _errorTimer;
+  static const Duration _maxDelay = Duration(seconds: 30);
 
   // Dart's factory constructor allows us to get the same instance everytime this class is constructed
   // This helps having to refer to a static class .instance attribute for every call.
@@ -92,12 +96,32 @@ class XSensDotConnectionService
     XSensDeviceState? newState = XSensDeviceState.values
         .firstWhereOrNull((element) => element.state == state);
     if (newState == null) return;
+    switch (newState) {
+      case XSensDeviceState.disconnected:
+      case XSensDeviceState.connected:
+      case XSensDeviceState.initialized:
+        _errorTimer?.cancel();
+        _errorTimer = null;
+        break;
+      case XSensDeviceState.connecting:
+      case XSensDeviceState.reconnecting:
+      case XSensDeviceState.startReconnecting:
+        _errorTimer?.cancel();
+        _errorTimer = Timer(_maxDelay, () {
+          XSensDotConnectionService()
+              .notifySubscribers(XSensDeviceState.disconnected);
+        });
+        break;
+    }
     XSensDotConnectionService().notifySubscribers(newState);
   }
 
   @override
   void notifySubscribers(XSensDeviceState state) {
     _connectionState = state;
+    if(_connectionState == XSensDeviceState.disconnected) {
+      _currentXSensDevice = null;
+    }
     for (IXSensStateSubscriber s in _subscribers) {
       s.onStateChange(state);
     }
