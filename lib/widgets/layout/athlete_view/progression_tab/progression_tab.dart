@@ -30,13 +30,12 @@ class _ProgressionTabState extends State<ProgressionTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24), vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -135,23 +134,28 @@ class _ProgressionTabState extends State<ProgressionTab> {
                       size: ReactiveLayoutHelper.getHeightFromFactor(24)))
             ],
           ),
-          Center(child: Text('${dateDisplayFormat.format(GraphDatePreferencesService.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesService.end)}')),
-          Expanded(
-              child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-                horizontal: ReactiveLayoutHelper.isTablet()
-                    ? ReactiveLayoutHelper.getWidthFromFactor(8, true)
-                    : ReactiveLayoutHelper.getWidthFromFactor(8),
-                vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
-            child: Column(
-              children: [
-                _scorePerJumpsGraphic(),
-                _averageJumpDurationGraphic(),
-              ],
-            ),
-          )),
-        ],
-      ),
+        ),
+        Center(
+            child: Text(
+          '${dateDisplayFormat.format(GraphDatePreferencesService.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesService.end)}',
+          style: TextStyle(
+              fontSize: ReactiveLayoutHelper.getHeightFromFactor(14)),
+        )),
+        Expanded(
+            child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              horizontal: ReactiveLayoutHelper.isTablet()
+                  ? ReactiveLayoutHelper.getWidthFromFactor(8)
+                  : ReactiveLayoutHelper.getWidthFromFactor(8),
+              vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+          child: Column(
+            children: [
+              _scorePerJumpsGraphic(),
+              _averageJumpDurationGraphic(),
+            ],
+          ),
+        )),
+      ],
     );
   }
 

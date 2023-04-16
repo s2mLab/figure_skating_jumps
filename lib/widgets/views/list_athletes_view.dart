@@ -111,14 +111,15 @@ class _ListAthletesViewState extends State<ListAthletesView> {
               margin: EdgeInsets.symmetric(
                   vertical: ReactiveLayoutHelper.getHeightFromFactor(16),
                   horizontal:
-                      ReactiveLayoutHelper.getWidthFromFactor(16, true)),
+                      ReactiveLayoutHelper.getWidthFromFactor(24, true)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                       margin: EdgeInsets.only(
-                          bottom: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                          bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const PageTitle(text: listAthletesTitle),
