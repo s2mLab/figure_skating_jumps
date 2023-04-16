@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/enums/user_role.dart';
-import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/reactive_layout_helper.dart';

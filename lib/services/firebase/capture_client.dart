@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:figure_skating_jumps/enums/season.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:figure_skating_jumps/models/db_models/local_capture.dart';
-import 'package:figure_skating_jumps/models/jump.dart';
+import 'package:figure_skating_jumps/models/firebase/capture.dart';
+import 'package:figure_skating_jumps/models/local_db/local_capture.dart';
+import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:figure_skating_jumps/models/modification.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/models/firebase/modification.dart';
+import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
+import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
-import 'package:figure_skating_jumps/services/manager/local_captures_manager.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/services/local_db/local_captures_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 

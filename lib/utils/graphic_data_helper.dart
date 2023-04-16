@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/jump_type.dart';
-import 'package:figure_skating_jumps/models/capture.dart';
-import 'package:figure_skating_jumps/models/graphic_data_classes/graph_stats_date_pair.dart';
-import 'package:figure_skating_jumps/models/jump.dart';
-import 'package:figure_skating_jumps/services/graph_date_preferences_service.dart';
+import 'package:figure_skating_jumps/models/firebase/capture.dart';
+import 'package:figure_skating_jumps/models/graph_stats_date_pair.dart';
+import 'package:figure_skating_jumps/models/firebase/jump.dart';
+import 'package:figure_skating_jumps/utils/graph_date_preferences_utils.dart';
 
 class GraphicDataHelper {
 
@@ -32,7 +32,7 @@ class GraphicDataHelper {
 
   static List<String> _getAllDates(Map<String, List<Capture>> captures) {
     List<String> dates = captures.keys.toList();
-    dates.removeWhere((element) => DateTime.parse(element).isBefore(GraphDatePreferencesService.begin) || DateTime.parse(element).isAfter(GraphDatePreferencesService.end));
+    dates.removeWhere((element) => DateTime.parse(element).isBefore(GraphDatePreferencesUtils.begin) || DateTime.parse(element).isAfter(GraphDatePreferencesUtils.end));
     return dates;
   }
 

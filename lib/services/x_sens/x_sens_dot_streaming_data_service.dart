@@ -6,7 +6,7 @@ import 'package:figure_skating_jumps/enums/measuring/measuring_status.dart';
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
