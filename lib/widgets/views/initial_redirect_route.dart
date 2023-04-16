@@ -13,7 +13,6 @@ import 'package:system_info2/system_info2.dart';
 class InitialRedirectRoute extends StatelessWidget {
   late final bool _canFunction;
   final List<ProcessorArchitecture> _unsupportedArchitectures = [
-    ProcessorArchitecture.arm64,
     ProcessorArchitecture.mips
   ];
   final List<ProcessorArchitecture> _untrustedArchitectures = [
@@ -53,7 +52,6 @@ class InitialRedirectRoute extends StatelessWidget {
     ReactiveLayoutHelper.updateDimensions(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Route route = _getRedirectRoute();
-
       // Architectures that crash
       if (_unsupportedArchitectures.contains(SysInfo.kernelArchitecture)) {
         Navigator.pushReplacement(
