@@ -114,7 +114,12 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const PageTitle(text: editAnalysisPageTitle),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top:
+                      ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: const PageTitle(text: editAnalysisPageTitle),
+                ),
                 if (_capture!.hasVideo &&
                     _captureInfo != null &&
                     _captureInfo!.videoPath.isNotEmpty)
@@ -136,7 +141,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  top: ReactiveLayoutHelper.getHeightFromFactor(24)),
+                  top: ReactiveLayoutHelper.getHeightFromFactor(16)),
               child: const InstructionPrompt(analysisDoneInfo, secondaryColor),
             ),
             Container(

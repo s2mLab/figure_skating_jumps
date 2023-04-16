@@ -51,54 +51,59 @@ class _ConnectionDotViewState extends State<ConnectionDotView>
       drawerEnableOpenDragGesture: false,
       drawerScrimColor: Colors.transparent,
       drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(
-          margin: EdgeInsets.symmetric(
-              vertical: ReactiveLayoutHelper.getHeightFromFactor(16),
-              horizontal: ReactiveLayoutHelper.getHeightFromFactor(32)),
-          child: const PageTitle(text: managingXSensDotTitle),
-        ),
-        Expanded(
-            child: BluetoothDeviceManager().devices.isNotEmpty
-                ? KnownDevices(
-                    refreshParentCallback: () {
-                      if (mounted) setState(() {});
-                    },
-                  )
-                : const NoKnownDevices()),
-        Center(
-            child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
-                child: _xSensDotConnectionService.currentXSensDevice == null
-                    ? IceButton(
-                        text: connectNewXSensDotButton,
-                        onPressed: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const ConnectionNewXSensDotDialog();
-                            },
-                          ).then((value) => setState(() => {}));
-                        },
-                        textColor: paleText,
-                        color: primaryColor,
-                        iceButtonImportance: IceButtonImportance.mainAction,
-                        iceButtonSize: IceButtonSize.large)
-                    : IceButton(
-                        text: disconnectDeviceButton,
-                        onPressed: () {
-                          _xSensDotConnectionService
-                              .disconnect()
-                              .then((_) => setState(() => {}));
-                        },
-                        textColor: errorColor,
-                        color: errorColor,
-                        iceButtonImportance:
-                            IceButtonImportance.secondaryAction,
-                        iceButtonSize: IceButtonSize.large)))
-      ]),
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal:
+            ReactiveLayoutHelper.getWidthFromFactor(24, true)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical:
+                ReactiveLayoutHelper.getHeightFromFactor(16)),
+            child: const PageTitle(text: managingXSensDotTitle),
+          ),
+          Expanded(
+              child: BluetoothDeviceManager().devices.isNotEmpty
+                  ? KnownDevices(
+                      refreshParentCallback: () {
+                        if (mounted) setState(() {});
+                      },
+                    )
+                  : const NoKnownDevices()),
+          Center(
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: _xSensDotConnectionService.currentXSensDevice == null
+                      ? IceButton(
+                          text: connectNewXSensDotButton,
+                          onPressed: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ConnectionNewXSensDotDialog();
+                              },
+                            ).then((value) => setState(() => {}));
+                          },
+                          textColor: paleText,
+                          color: primaryColor,
+                          iceButtonImportance: IceButtonImportance.mainAction,
+                          iceButtonSize: IceButtonSize.large)
+                      : IceButton(
+                          text: disconnectDeviceButton,
+                          onPressed: () {
+                            _xSensDotConnectionService
+                                .disconnect()
+                                .then((_) => setState(() => {}));
+                          },
+                          textColor: errorColor,
+                          color: errorColor,
+                          iceButtonImportance:
+                              IceButtonImportance.secondaryAction,
+                          iceButtonSize: IceButtonSize.large)))
+        ]),
+      ),
     );
   }
 
