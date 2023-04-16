@@ -144,17 +144,21 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                   context: context,
                                   builder: (context) {
                                     return SimpleDialog(
-                                      contentPadding: EdgeInsets.all(
-                                          ReactiveLayoutHelper.getWidthFromFactor(16)),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: ReactiveLayoutHelper.getWidthFromFactor(8),
+                                          horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
                                       insetPadding: EdgeInsets.symmetric(
                                           horizontal:
                                           ReactiveLayoutHelper.getWidthFromFactor(
                                               16, true)),
-                                      title: Text(
-                                          continueModifOfAllJumpsInfo,
-                                          style: TextStyle(
-                                              fontSize: ReactiveLayoutHelper
-                                                  .getHeightFromFactor(14))),
+                                      title: Center(
+                                        child: Text(
+                                            continueModifOfAllJumpsInfo,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: ReactiveLayoutHelper
+                                                    .getHeightFromFactor(14))),
+                                      ),
                                       children: [
                                         IceButton(
                                             text: continueToLabel,
