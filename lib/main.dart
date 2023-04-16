@@ -22,6 +22,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'constants/lang_fr.dart';
 import 'firebase_options.dart';
 import 'package:camera/camera.dart';
 
@@ -107,7 +108,6 @@ class FigureSkatingJumpApp extends StatelessWidget {
         '/ProfileView': (context) => const ProfileView(),
         '/RawDataView': (context) => RawDataView(routeObserver: routeObserver),
         '/ForgotPasswordView': (context) => ForgotPasswordView(),
-        '/MissingPermissions': (context) => const MissingPermissionsView(),
       },
       navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,

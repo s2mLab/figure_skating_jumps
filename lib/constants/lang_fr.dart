@@ -262,6 +262,7 @@ const String tryLaterLabel = 'Veuillez réessayer plus tard.';
 // widgets/screens/missing_permissions_view
 const String pleaseActivatePermissionsInfo =
     "Veuillez activer les permissions dans vos paramètres, puis redémarrer l'application. Si cela ne fonctionne pas, veuillez réinstaller l'application.";
+const String architectureNotPermittedInfo = "L'architecture de votre appareil n'est pas compatible avec les requis du XSens Dot et l'application ne pourra pas fonctionner.";
 
 // widgets/screens/skater_creation_view
 const String createAthleteExplainInfo =

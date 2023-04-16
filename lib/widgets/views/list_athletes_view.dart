@@ -10,11 +10,6 @@ import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:system_info2/system_info2.dart';
-
-import '../../enums/ice_button_importance.dart';
-import '../../enums/ice_button_size.dart';
-import '../buttons/ice_button.dart';
 
 class ListAthletesView extends StatefulWidget {
   const ListAthletesView({Key? key}) : super(key: key);
@@ -293,11 +288,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                 },
                                               ))
                                         ]);
-                                  })),
-                  IceButton(text: "I am Gay", onPressed: () {
-                    debugPrint(SysInfo.kernelName);
-                    debugPrint(SysInfo.kernelArchitecture.toString());
-                  }, textColor: Colors.white, color: Colors.black, iceButtonImportance: IceButtonImportance.mainAction, iceButtonSize: IceButtonSize.medium)
+                                  }))
                 ],
               ))),
       floatingActionButton: FloatingActionButton(
