@@ -20,8 +20,11 @@ class HttpClient {
   Future<bool> uploadFile(
       {required String fileName, required String fileContent}) async {
     Uri uri = Uri.http(_serverAddress, _addFileRoute, {"fileName": fileName});
-    try{
+    try {
       Response resp = await put(uri, body: fileContent);
+
+      debugPrint(resp.statusCode.toString());
+
       return resp.statusCode == 200;
     } catch (e) {
       debugPrint(e.toString());
@@ -39,6 +42,9 @@ class HttpClient {
       Response resp = await post(uri,
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(content));
+
+      debugPrint(resp.statusCode.toString());
+
       if (resp.statusCode != 200) return null;
       List<Jump> jumps = [];
       for (var jump in jsonDecode(resp.body)) {
