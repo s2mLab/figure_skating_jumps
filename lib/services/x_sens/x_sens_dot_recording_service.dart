@@ -45,6 +45,8 @@ class XSensDotRecordingService
       _exportStatusStreamController = StreamController<ExportStatusEvent>();
   static final Stream<ExportStatusEvent> _exportStream =
       _exportStatusStreamController.stream.asBroadcastStream();
+  static Timer? _timeoutTimer;
+  static const Duration _timeoutDuration = Duration(seconds: 30);
 
   factory XSensDotRecordingService() {
     _recordingEventChannel.receiveBroadcastStream().listen((event) async {
@@ -100,6 +102,7 @@ class XSensDotRecordingService
     _currentRecordingVideoPath = "";
     _totalRecordingData = 0;
     _changeState(RecorderState.preparing);
+
     await _setRate();
   }
 
@@ -126,13 +129,18 @@ class XSensDotRecordingService
   }
 
   Future<void> eraseMemory() async {
-    if (_recorderState == RecorderState.idle) {
+    if (_recorderState == RecorderState.full) {
       _changeState(RecorderState.erasing);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
   }
 
+  void acknowledgeError() {
+    _changeState(RecorderState.idle);
+  }
+
   static Future<void> _setRate() async {
+    _resetTimer();
     try {
       await _recordingMethodChannel.invokeMethod(
           'setRate', <String, dynamic>{'rate': _recordingOutputRate});
@@ -142,12 +150,14 @@ class XSensDotRecordingService
   }
 
   static Future<void> _handleSetRate() async {
+    _resetTimer();
     await _recordingMethodChannel.invokeMethod('prepareRecording');
   }
 
   static Future<void> _handleEnableRecordingNotificationDone(
       String data) async {
     if (data == "true") {
+      _resetTimer();
       await _recordingMethodChannel
           .invokeMethod('getFlashInfo', <String, dynamic>{
         'isManagingFiles': _recorderState == RecorderState.exporting ||
@@ -160,6 +170,7 @@ class XSensDotRecordingService
 
   static void _handleRecordingStarted() {
     if (_recorderState == RecorderState.preparing) {
+      _timeoutTimer?.cancel();
       _startTime = DateTime.now();
       _changeState(RecorderState.recording);
     }
@@ -172,20 +183,24 @@ class XSensDotRecordingService
       _totalRecordingData =
           (_recordingOutputRate * recordingDuration / 1000.0).ceil().toInt();
       _changeState(RecorderState.exporting);
+      _resetTimer();
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
   }
 
   static Future<void> _handleGetFlashInfoDone(String? data) async {
+    _resetTimer();
     switch (_recorderState) {
       case RecorderState.preparing:
         bool canRecord = data == "true";
         if (!canRecord) {
-          _changeState(RecorderState.idle);
+          _timeoutTimer?.cancel();
+          _changeState(RecorderState.full);
           return;
         }
         try {
           await _recordingMethodChannel.invokeMethod('startRecording');
+          _timeoutTimer?.cancel();
         } on PlatformException catch (e) {
           debugPrint(e.message!);
         }
@@ -195,6 +210,7 @@ class XSensDotRecordingService
         break;
       case RecorderState.erasing:
         await _recordingMethodChannel.invokeMethod('eraseMemory');
+        _timeoutTimer?.cancel();
         break;
       default:
         break;
@@ -203,6 +219,7 @@ class XSensDotRecordingService
 
   static Future<void> _handleGetFileInfoDone(String data) async {
     if (_recorderState == RecorderState.exporting) {
+      _resetTimer();
       _exportFileName = "${data.split(",")[1].split(": ")[1]}.csv";
       await _recordingMethodChannel
           .invokeMethod('extractFile', <String, dynamic>{'fileInfo': data});
@@ -212,6 +229,7 @@ class XSensDotRecordingService
   static void _handleExtractingFile(String? data) {
     if (_recorderState == RecorderState.exporting) {
       if (data != null) {
+        _resetTimer();
         _exportedData.add(XSensDotData.fromEventChannel(data));
         double exportPct =
             _exportedData.length.toDouble() / _totalRecordingData.toDouble();
@@ -228,6 +246,7 @@ class XSensDotRecordingService
 
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
+      _timeoutTimer?.cancel();
       _currentCapture = await CaptureClient().saveCapture(
           exportFileName: _exportFileName,
           exportedData: _exportedData,
@@ -248,9 +267,17 @@ class XSensDotRecordingService
       List<Jump>? jumps = await HttpClient()
           .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
 
+      if(jumps == null) {
+        _changeState(RecorderState.error);
+        return;
+      }
+
       List<Jump> analyzedJumps =
-          await CaptureClient().createJumps(jumps: jumps!);
+          await CaptureClient().createJumps(jumps: jumps);
       _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
+    } else {
+      _changeState(RecorderState.error);
+      return;
     }
     _changeState(RecorderState.idle);
   }
@@ -262,6 +289,13 @@ class XSensDotRecordingService
   static void _changeState(RecorderState state) {
     _recorderState = state;
     XSensDotRecordingService().notifySubscribers(state);
+  }
+
+  static void _resetTimer() {
+    _timeoutTimer?.cancel();
+    _timeoutTimer = Timer(_timeoutDuration, () {
+      _changeState(RecorderState.error);
+    });
   }
 
   @override

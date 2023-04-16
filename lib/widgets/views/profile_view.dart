@@ -63,7 +63,7 @@ class _ProfileViewState extends State<ProfileView> {
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: Container(
-            margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+            margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const PageTitle(text: profileTitle),

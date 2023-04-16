@@ -18,15 +18,18 @@ class JumpPanelContent extends StatefulWidget {
   final void Function(Jump j, JumpType initialJumpType, int initialTime)
       _onModified;
   final void Function(Jump j, JumpType initialJumpType) _onDeleted;
+  final void Function(JumpType jumpType) _onChangeAllTypes;
   const JumpPanelContent(
       {super.key,
       required jump,
+      required void Function(JumpType jumpType) onChangeAllTypes,
       required void Function(Jump j, JumpType initialJumpType, int initialTime)
           onModified,
       required void Function(Jump j, JumpType initial) onDeleted})
       : _j = jump,
         _onModified = onModified,
-        _onDeleted = onDeleted;
+        _onDeleted = onDeleted,
+        _onChangeAllTypes = onChangeAllTypes;
 
   @override
   State<JumpPanelContent> createState() => _JumpPanelContentState();
@@ -48,6 +51,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   late TextEditingController _maxSpeedController;
   final _commentFormKey = GlobalKey<FormState>();
   final _metricsFormKey = GlobalKey<FormState>();
+  final _rotationFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -62,9 +66,13 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   void _initializeAllTextControllers() {
     _initializeCommentController();
+    _initializeRotationController();
+    _initializeAdvancedMetricsControllers();
+  }
+
+  void _initializeRotationController() {
     _rotationController = TextEditingController(
         text: _j!.turns.toStringAsFixed(_maxDigitsForDoubleData));
-    _initializeAdvancedMetricsControllers();
   }
 
   void _initializeCommentController() {
@@ -93,85 +101,140 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-          left: ReactiveLayoutHelper.getWidthFromFactor(8),
-          right: ReactiveLayoutHelper.getWidthFromFactor(8),
-          bottom: ReactiveLayoutHelper.getHeightFromFactor(12),
-          top: ReactiveLayoutHelper.getHeightFromFactor(2)),
-      child: Container(
-          height: ReactiveLayoutHelper.getHeightFromFactor(300),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            boxShadow: [connectionShadow],
-            color: primaryBackground,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children:
-                        List.generate(JumpType.values.length - 1, (index) {
-                      return SkateMoveRadio(
-                          value: JumpType.values[index],
-                          groupValue: _selectedType,
-                          onChanged: (JumpType newValue) {
-                            setState(() {
-                              _selectedType = newValue;
-                              _j!.type = _selectedType;
-                              widget._onModified(
-                                  _j!, _initialJumpType, _initialTime);
-                              _initialJumpType = _selectedType;
+    return GestureDetector(
+      onTap: () {
+        if(!_rotationFormKey.currentState!.validate()) {
+          _initializeRotationController();
+        }
+        if(_rotationController.text != _j!.turns.toStringAsFixed(_maxDigitsForDoubleData)) {
+          _updateRotationData();
+        }
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: ReactiveLayoutHelper.getWidthFromFactor(8),
+            right: ReactiveLayoutHelper.getWidthFromFactor(8),
+            bottom: ReactiveLayoutHelper.getHeightFromFactor(12),
+            top: ReactiveLayoutHelper.getHeightFromFactor(2)),
+        child: Container(
+            height: ReactiveLayoutHelper.getHeightFromFactor(300),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              boxShadow: [connectionShadow],
+              color: primaryBackground,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:
+                          List.generate(JumpType.values.length - 1, (index) {
+                        return SkateMoveRadio(
+                            value: JumpType.values[index],
+                            groupValue: _selectedType,
+                            onLongPressChanged: (JumpType type) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      contentPadding: EdgeInsets.all(
+                                          ReactiveLayoutHelper.getWidthFromFactor(16)),
+                                      insetPadding: EdgeInsets.symmetric(
+                                          horizontal:
+                                          ReactiveLayoutHelper.getWidthFromFactor(
+                                              16, true)),
+                                      title: Text(
+                                          continueModifOfAllJumpsInfo,
+                                          style: TextStyle(
+                                              fontSize: ReactiveLayoutHelper
+                                                  .getHeightFromFactor(14))),
+                                      children: [
+                                        IceButton(
+                                            text: continueToLabel,
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                            textColor: primaryColor,
+                                            color: primaryColor,
+                                            iceButtonImportance: IceButtonImportance.secondaryAction,
+                                            iceButtonSize: IceButtonSize.small),
+                                        IceButton(
+                                            text: cancelLabel,
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                            textColor: paleText,
+                                            color: primaryColor,
+                                            iceButtonImportance: IceButtonImportance.mainAction,
+                                            iceButtonSize: IceButtonSize.small),
+                                        ],
+                                    );
+                                  }).then((value) {
+                                if (!value) return;
+                                setState(() {
+                                  widget._onChangeAllTypes(type);
+                                });
+                              });
+                            },
+                            onChanged: (JumpType newValue) {
+                              setState(() {
+                                _selectedType = newValue;
+                                _j!.type = _selectedType;
+                                widget._onModified(
+                                    _j!, _initialJumpType, _initialTime);
+                                _initialJumpType = _selectedType;
+                              });
                             });
-                          });
-                    }),
-                  ),
-                  _jumpModificationForm(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IceButton(
-                          text: deleteAJumpButton,
-                          onPressed: () {
-                            showDialog(
+                      }),
+                    ),
+                    _jumpModificationForm(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IceButton(
+                            text: deleteAJumpButton,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return _confirmDeleteJumpDialog();
+                                  });
+                            },
+                            textColor: errorColor,
+                            color: errorColorDark,
+                            iceButtonImportance:
+                                IceButtonImportance.secondaryAction,
+                            iceButtonSize: IceButtonSize.small),
+                        IceButton(
+                            text: editTemporalValuesButton,
+                            onPressed: () {
+                              showDialog(
+                                barrierDismissible: false,
                                 context: context,
                                 builder: (context) {
-                                  return _confirmDeleteJumpDialog();
-                                });
-                          },
-                          textColor: errorColor,
-                          color: errorColorDark,
-                          iceButtonImportance:
-                              IceButtonImportance.secondaryAction,
-                          iceButtonSize: IceButtonSize.small),
-                      IceButton(
-                          text: editTemporalValuesButton,
-                          onPressed: () {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return _temporalValuesDialog();
-                              },
-                            );
-                          },
-                          textColor: primaryColor,
-                          color: primaryColor,
-                          iceButtonImportance:
-                              IceButtonImportance.secondaryAction,
-                          iceButtonSize: IceButtonSize.small)
-                    ],
-                  )
-                ],
-              )),
-            ],
-          )),
+                                  return _temporalValuesDialog();
+                                },
+                              );
+                            },
+                            textColor: primaryColor,
+                            color: primaryColor,
+                            iceButtonImportance:
+                                IceButtonImportance.secondaryAction,
+                            iceButtonSize: IceButtonSize.small)
+                      ],
+                    )
+                  ],
+                )),
+              ],
+            )),
+      ),
     );
   }
 
@@ -287,30 +350,38 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
               Padding(
                 padding: EdgeInsets.only(
                     left: ReactiveLayoutHelper.getWidthFromFactor(8)),
-                child: SizedBox(
-                    width: ReactiveLayoutHelper.getWidthFromFactor(120),
-                    child: TextFormField(
-                      style: TextStyle(
-                          fontSize:
-                              ReactiveLayoutHelper.getHeightFromFactor(16)),
-                      autovalidateMode: AutovalidateMode.always,
-                      keyboardType: TextInputType.number,
-                      validator: (val) {
-                        return FieldValidators.doubleValidator(val);
-                      },
-                      onEditingComplete: () {
-                        _j!.turns = double.parse(_rotationController.text);
-                        widget._onModified(_j!, _initialJumpType, _initialTime);
-                        _initialJumpType = _selectedType;
-                      },
-                      controller: _rotationController,
-                    )),
+                child: Form(
+                  key: _rotationFormKey,
+                  child: SizedBox(
+                      width: ReactiveLayoutHelper.getWidthFromFactor(120),
+                      child: TextFormField(
+                        style: TextStyle(
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(16)),
+                        autovalidateMode: AutovalidateMode.always,
+                        keyboardType: TextInputType.number,
+                        validator: (val) {
+                          return FieldValidators.doubleValidator(val);
+                        },
+                        onEditingComplete: () {
+                          if(!_rotationFormKey.currentState!.validate()) return;
+                          _updateRotationData();
+                        },
+                        controller: _rotationController,
+                      )),
+                ),
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  void _updateRotationData() {
+    _j!.turns = double.parse(_rotationController.text);
+    widget._onModified(_j!, _initialJumpType, _initialTime);
+    _initialJumpType = _selectedType;
   }
 
   //This dialog is kept in this class because it references the jump and modifies its value through it

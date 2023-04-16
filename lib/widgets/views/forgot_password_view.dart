@@ -37,9 +37,10 @@ class ForgotPasswordView extends StatelessWidget {
                     child: SvgPicture.asset(
                         'assets/vectors/blanc-logo-patinage-quebec.svg')),
                 Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(
-                        ReactiveLayoutHelper.getHeightFromFactor(32)),
+                    margin: EdgeInsets.symmetric(
+                        horizontal:
+                            ReactiveLayoutHelper.getWidthFromFactor(32, true),
+                        vertical: ReactiveLayoutHelper.getHeightFromFactor(32)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -47,8 +48,8 @@ class ForgotPasswordView extends StatelessWidget {
                     ),
                     child: Container(
                         margin: EdgeInsets.symmetric(
-                            horizontal:
-                                ReactiveLayoutHelper.getWidthFromFactor(16),
+                            horizontal: ReactiveLayoutHelper.getWidthFromFactor(
+                                16, true),
                             vertical:
                                 ReactiveLayoutHelper.getHeightFromFactor(32)),
                         child: Column(
@@ -61,31 +62,31 @@ class ForgotPasswordView extends StatelessWidget {
                               child: const PageTitle(text: forgotPasswordTitle),
                             ),
                             Form(
+                                key: _forgotPasswordInfoKey,
                                 child: TextFormField(
-                              style: TextStyle(
-                                  fontSize:
-                                      ReactiveLayoutHelper.getHeightFromFactor(
-                                          16)),
-                              key: _forgotPasswordInfoKey,
-                              keyboardType: TextInputType.emailAddress,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              controller: _emailController,
-                              validator: (value) {
-                                return FieldValidators.newEmailValidator(value);
-                              },
-                              decoration: InputDecoration(
-                                labelText: emailField,
-                                labelStyle: TextStyle(
-                                    fontSize: ReactiveLayoutHelper
-                                        .getHeightFromFactor(16),
-                                    color: discreetText),
-                              ),
-                            )),
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)),
+                                  keyboardType: TextInputType.emailAddress,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  controller: _emailController,
+                                  validator: (value) {
+                                    return FieldValidators.newEmailValidator(
+                                        value);
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: emailField,
+                                    labelStyle: TextStyle(
+                                        fontSize: ReactiveLayoutHelper
+                                            .getHeightFromFactor(16),
+                                        color: discreetText),
+                                  ),
+                                )),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: ReactiveLayoutHelper.getHeightFromFactor(
-                                      8)),
+                                      32)),
                               child: IceButton(
                                   text: sendEmailButton,
                                   onPressed: () async {
@@ -103,6 +104,9 @@ class ForgotPasswordView extends StatelessWidget {
                                     } finally {
                                       Fluttertoast.showToast(
                                           msg: forgotPasswordInfo);
+                                      if(context.mounted) {
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   },
                                   textColor: paleText,

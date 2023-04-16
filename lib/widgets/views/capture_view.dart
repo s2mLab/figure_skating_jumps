@@ -15,6 +15,7 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_servic
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/analysis_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/capture_error_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/no_camera_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/export_dialog.dart';
@@ -39,6 +40,7 @@ class CaptureView extends StatefulWidget {
 
 class _CaptureViewState extends State<CaptureView>
     implements IRecorderSubscriber {
+  bool _cameraInError = false;
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
   late CameraController _controller;
@@ -58,7 +60,6 @@ class _CaptureViewState extends State<CaptureView>
       ResolutionPreset.high,
     );
     _initializeControllerFuture = _controller.initialize();
-
     super.initState();
   }
 
@@ -133,13 +134,11 @@ class _CaptureViewState extends State<CaptureView>
                             captureViewCameraInfo, secondaryColor),
                       ),
                       Expanded(
-                          child: _isCameraActivated
+                          child: _isCameraActivated && !_cameraInError
                               ? FutureBuilder<void>(
                                   future: _initializeControllerFuture,
                                   builder: _buildCameraPreview)
-                              : const Center(
-                                  child: Icon(Icons.no_photography_outlined,
-                                      size: 56))),
+                              : _noCameraIcon()),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -281,7 +280,8 @@ class _CaptureViewState extends State<CaptureView>
       await _initializeControllerFuture;
       await _xSensDotRecordingService.startRecording();
       _displayStepDialog(const StartRecordingDialog()).then((_) async {
-        if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
+        if (_xSensDotRecordingService.recorderState !=
+            RecorderState.recording) {
           return;
         }
 
@@ -306,31 +306,36 @@ class _CaptureViewState extends State<CaptureView>
   Widget _buildCameraPreview(
       BuildContext context, AsyncSnapshot<void> snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
-      Size screenSize = MediaQuery.of(context).size;
-      double cameraHeight = screenSize.height;
-      double cameraWidth = screenSize.height / _controller.value.aspectRatio;
+      try {
+        Size screenSize = MediaQuery.of(context).size;
+        double cameraHeight = screenSize.height;
+        double cameraWidth = screenSize.height / _controller.value.aspectRatio;
 
-      if (cameraWidth > screenSize.width) {
-        cameraWidth = screenSize.width;
-        cameraHeight = screenSize.width * _controller.value.aspectRatio;
+        if (cameraWidth > screenSize.width) {
+          cameraWidth = screenSize.width;
+          cameraHeight = screenSize.width * _controller.value.aspectRatio;
+        }
+
+        if (!_isFullscreen) {
+          double cameraScalingFactor =
+              ReactiveLayoutHelper.getCameraScalingFactor(
+                  width: cameraWidth, height: cameraHeight);
+          //Reduce size to let place for other UI elements=
+          cameraWidth = cameraWidth / (cameraScalingFactor);
+          cameraHeight = cameraHeight / (cameraScalingFactor);
+        }
+
+        return Center(
+          child: SizedBox(
+            width: cameraWidth,
+            height: cameraHeight,
+            child: _controller.buildPreview(),
+          ),
+        );
+      } catch (e) {
+        _cameraInError = true;
+        return _noCameraIcon();
       }
-
-      if (!_isFullscreen) {
-        double cameraScalingFactor =
-            ReactiveLayoutHelper.getCameraScalingFactor(
-                width: cameraWidth, height: cameraHeight);
-        //Reduce size to let place for other UI elements=
-        cameraWidth = cameraWidth / (cameraScalingFactor);
-        cameraHeight = cameraHeight / (cameraScalingFactor);
-      }
-
-      return Center(
-        child: SizedBox(
-          width: cameraWidth,
-          height: cameraHeight,
-          child: _controller.buildPreview(),
-        ),
-      );
     }
     return const Center(child: CircularProgressIndicator());
   }
@@ -344,14 +349,37 @@ class _CaptureViewState extends State<CaptureView>
         });
   }
 
+  Widget _noCameraIcon() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.no_photography_outlined, size: 56),
+        if (_cameraInError)
+          Text(
+            missingPermsCameraInfo,
+            style: TextStyle(
+                fontSize: ReactiveLayoutHelper.getHeightFromFactor(14)),
+          )
+      ],
+    ));
+  }
+
   @override
   void onStateChange(RecorderState state) {
+    if(state == RecorderState.error) {
+      Navigator.of(context, rootNavigator: true).pop();
+      _displayStepDialog(const CaptureErrorDialog());
+      _lastState = state;
+      return;
+    }
+
     if (state == RecorderState.analyzing) {
       Navigator.of(context, rootNavigator: true).pop();
       _displayStepDialog(const AnalysisDialog());
     }
 
-    if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
+    if (_lastState == RecorderState.analyzing) {
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushNamed(context, '/EditAnalysis',
           arguments: _xSensDotRecordingService.currentCapture);

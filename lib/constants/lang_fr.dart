@@ -74,6 +74,10 @@ const String memoryErrorInfo =
     "Il semblerait que votre capteur est saturé. Afin de réaliser la capture, veuillez vider la mémoire du capteur et réessayer.";
 const String emptyMemoryButton = "Vider la mémoire";
 
+// widgets/dialog/capture/capture_error_dialog
+const String errorCaptureLabel = "Erreur lors de la capture";
+const String errorCaptureInfo = "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
+
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
 const String passwordField = "Mot de passe: ";
@@ -98,12 +102,19 @@ const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
 const String averageFlyTimeLegend = "Temps de vol moyen";
+const String notBeforeInfo = "Ne peut pas être avant la date de début.";
+const String notAfterInfo = "Ne peut pas être après la date de fin.";
+const String filterByDateDialogTitle = "Filtrer par date";
 
 // widgets/layout/athlete_view/progression_tab/metrics_tooltip
 const String averageTooltip = "Moyenne";
 const String minTooltip = "Min";
 const String maxTooltip = "Max";
 const String stdDevTooltip = "Écart-type";
+
+// widgets/layout/athlete_view/progression_tab/date_filter_dialog_content
+const String beginDateButton = "Date de début";
+const String endDateButton = "Date de fin";
 
 // widgets/layout/options_tab/options_tab
 const String confirmAthleteRemovalButton = "Confirmer le retrait";
@@ -165,6 +176,7 @@ const String goodJobComment = "Bien fait";
 const String stepOutComment = "Step out";
 const String chooseBelowCommentsLabel =
     "Ou choisir parmi les commentaires suivants:";
+const String continueModifOfAllJumpsInfo = "Cette action changera le type de tous les sauts.";
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
@@ -193,6 +205,7 @@ const String connectingButton = "Connexion...";
 const String connectionImpossibleLabel = "Connexion impossible";
 const String createAccountButton = "Créer un compte";
 const String forgotPasswordButton = "Mot de passe oublié?";
+const String dataMessageInfo = "L'utilisation de cette application est destinée aux athlètes de Patinage Québec et aux personnes autorisées par Patinage Québec. En utilisant cette application, vous consentez aux différentes politiques de Patinage Québec, notamment concernant la rétention des informations reliées à votre compte. Les détails peuvent être obtenus auprès de Patinage Québec et sont inhérents à votre affiliation avec Patinage Québec.";
 
 // widgets/screens/forgot_password_view
 const String forgotPasswordTitle = "Mot de passe oublié";
@@ -234,6 +247,7 @@ const String captureViewCameraSwitchLabel = "Caméra activée ?";
 const String stopCaptureButton = "Arrêter la capture";
 const String exportingDataLabel = "Enregistrement des données...";
 const String analyzingDataLabel = "Analyse des données...";
+const String missingPermsCameraInfo = "Les permissions de la caméra sont désactivées";
 
 
 // widgets/screens/coach_account_creation_view
