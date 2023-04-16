@@ -1,6 +1,6 @@
 import 'package:csv/csv.dart';
-import 'package:figure_skating_jumps/enums/x_sens_dot_csv_columns.dart';
-import 'package:figure_skating_jumps/models/xsens_dot_data.dart';
+import 'package:figure_skating_jumps/enums/x_sens/x_sens_dot_csv_columns.dart';
+import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 
 class CsvCreator {
   static String createXSensDotCsv(List<XSensDotData> extractedData) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 
 class ColorCircle extends StatelessWidget {
   const ColorCircle({Key? key, required this.colorCircle}) : super(key: key);

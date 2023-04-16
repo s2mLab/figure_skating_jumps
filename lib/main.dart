@@ -2,10 +2,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/firebase_options.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
-import 'package:figure_skating_jumps/services/local_db_service.dart';
-import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
-import 'package:figure_skating_jumps/services/manager/global_settings_manager.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';
+import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
+import 'package:figure_skating_jumps/services/local_db/global_settings_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
@@ -26,7 +26,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
 
 Future<void> main() async {
-  bool hasNecessaryPermissions = true;
+  bool hasStoragePermissions = false;
+  bool hasNetwork = false;
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -37,16 +38,16 @@ Future<void> main() async {
   var cameras = await availableCameras();
   CameraService().rearCamera = cameras.first;
 
-  hasNecessaryPermissions = await initializeStoragePermissions();
+  hasStoragePermissions = await initializeStoragePermissions();
 
-  if (hasNecessaryPermissions) {
+  if (hasStoragePermissions) {
     ConnectivityResult connectivityResult =
         await Connectivity().checkConnectivity();
-    hasNecessaryPermissions = connectivityResult == ConnectivityResult.wifi ||
+    hasNetwork = connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile;
   }
 
-  if(hasNecessaryPermissions) {
+  if(hasNetwork) {
     await LocalDbService().ensureInitialized();
 
     await ActiveSessionManager().loadActiveSession();
@@ -66,7 +67,8 @@ Future<void> main() async {
   ]);
 
   runApp(FigureSkatingJumpApp(
-      canFunction: hasNecessaryPermissions,
+      hasStoragePermissions: hasStoragePermissions,
+      hasNetwork: hasNetwork,
       routeObserver: RouteObserver<ModalRoute<void>>()));
 }
 
@@ -95,11 +97,12 @@ Future<bool> initializeStoragePermissions() async {
 }
 
 class FigureSkatingJumpApp extends StatelessWidget {
-  final bool canFunction;
+  final bool hasStoragePermissions;
+  final bool hasNetwork;
   final RouteObserver<ModalRoute<void>> routeObserver;
 
   const FigureSkatingJumpApp(
-      {super.key, required this.canFunction, required this.routeObserver});
+      {super.key, required this.hasStoragePermissions, required this.hasNetwork, required this.routeObserver});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +110,7 @@ class FigureSkatingJumpApp extends StatelessWidget {
       title: 'Figure Skating Jump App',
       initialRoute: '/InitialRedirectRoute',
       routes: {
-        '/InitialRedirectRoute': (context) => InitialRedirectRoute(canFunction),
+        '/InitialRedirectRoute': (context) => InitialRedirectRoute(hasNetwork: hasNetwork, hasStoragePermissions: hasStoragePermissions),
         '/ManageDevices': (context) => const ConnectionDotView(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         '/CaptureData': (context) => const CaptureView(),

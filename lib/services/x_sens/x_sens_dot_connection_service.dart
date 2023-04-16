@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
-import 'package:figure_skating_jumps/enums/x_sens_device_state.dart';
+import 'package:figure_skating_jumps/enums/x_sens/x_sens_device_state.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_state_subscriber.dart';
-import 'package:figure_skating_jumps/models/bluetooth_device.dart';
-import 'package:figure_skating_jumps/services/manager/bluetooth_device_manager.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/models/local_db/bluetooth_device.dart';
+import 'package:figure_skating_jumps/services/local_db/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 

@@ -1,9 +1,9 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/models/skating_user.dart';
-import 'package:figure_skating_jumps/services/user_client.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
+import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modify_full_name_dialog.dart';
@@ -13,9 +13,8 @@ import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-
-import '../../utils/reactive_layout_helper.dart';
-import '../layout/scaffold/tablet_topbar.dart';
+import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
+import 'package:figure_skating_jumps/widgets/layout/scaffold/tablet_topbar.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
