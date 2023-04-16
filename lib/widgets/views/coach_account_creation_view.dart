@@ -325,6 +325,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
           password: _coachPassword,
           userInfo: SkatingUser(
               _coachSurname, _coachName, UserRole.coach, _coachEmail));
+      await UserClient().signIn(email: _coachEmail, password: _coachPassword);
       return Future.value(true);
     } on Exception catch (e) {
       _errorStateMessage = e.toString();
@@ -343,7 +344,8 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
         _passwordKey.currentState!.validate()) {
       if (await _createAccount()) {
         if (mounted) {
-          Navigator.of(context).pushNamedAndRemoveUntil('/ManageDevices', (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil('/ListAthletes',
+              arguments: false, (route) => false);
         }
       } else {
         if (mounted) {
