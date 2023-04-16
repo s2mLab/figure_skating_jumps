@@ -370,7 +370,7 @@ class _CaptureViewState extends State<CaptureView>
       _displayStepDialog(const AnalysisDialog());
     }
 
-    if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
+    if (_lastState == RecorderState.analyzing) {
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushNamed(context, '/EditAnalysis',
           arguments: _xSensDotRecordingService.currentCapture);

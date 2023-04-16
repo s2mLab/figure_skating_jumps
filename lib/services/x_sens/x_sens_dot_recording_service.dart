@@ -126,7 +126,7 @@ class XSensDotRecordingService
   }
 
   Future<void> eraseMemory() async {
-    if (_recorderState == RecorderState.idle) {
+    if (_recorderState == RecorderState.full) {
       _changeState(RecorderState.erasing);
       await _recordingMethodChannel.invokeMethod('prepareExtract');
     }
@@ -181,7 +181,7 @@ class XSensDotRecordingService
       case RecorderState.preparing:
         bool canRecord = data == "true";
         if (!canRecord) {
-          _changeState(RecorderState.idle);
+          _changeState(RecorderState.full);
           return;
         }
         try {
