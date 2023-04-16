@@ -15,6 +15,7 @@ import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_servic
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/analysis_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/capture/capture_error_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/device_not_ready_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/no_camera_recording_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/capture/export_dialog.dart';
@@ -279,7 +280,8 @@ class _CaptureViewState extends State<CaptureView>
       await _initializeControllerFuture;
       await _xSensDotRecordingService.startRecording();
       _displayStepDialog(const StartRecordingDialog()).then((_) async {
-        if (_xSensDotRecordingService.recorderState == RecorderState.idle) {
+        if (_xSensDotRecordingService.recorderState !=
+            RecorderState.recording) {
           return;
         }
 
@@ -365,12 +367,19 @@ class _CaptureViewState extends State<CaptureView>
 
   @override
   void onStateChange(RecorderState state) {
+    if(state == RecorderState.error) {
+      Navigator.of(context, rootNavigator: true).pop();
+      _displayStepDialog(const CaptureErrorDialog());
+      _lastState = state;
+      return;
+    }
+
     if (state == RecorderState.analyzing) {
       Navigator.of(context, rootNavigator: true).pop();
       _displayStepDialog(const AnalysisDialog());
     }
 
-    if (_lastState == RecorderState.analyzing && state == RecorderState.idle) {
+    if (_lastState == RecorderState.analyzing) {
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushNamed(context, '/EditAnalysis',
           arguments: _xSensDotRecordingService.currentCapture);

@@ -21,13 +21,13 @@ class _StartRecordingState extends State<StartRecordingDialog>
     implements IRecorderSubscriber {
   int _currentId = 0;
   late List<SimpleDialog> _startingState;
-  RecorderState _lastState = RecorderState.idle;
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
 
   @override
   void initState() {
-    _lastState = _xSensDotRecordingService.subscribe(this);
+    RecorderState state = _xSensDotRecordingService.subscribe(this);
+    if(state == RecorderState.full) _currentId = 1;
     _startingState = [_startingRecording(), _fullMemory(), _erasingMemory()];
     super.initState();
   }
@@ -126,25 +126,23 @@ class _StartRecordingState extends State<StartRecordingDialog>
 
   @override
   void onStateChange(RecorderState state) {
-    if (state == RecorderState.idle) {
-      if (_lastState == RecorderState.preparing) {
+    switch (state) {
+      case RecorderState.idle:
+      case RecorderState.recording:
+        Navigator.pop(context);
+        break;
+      case RecorderState.erasing:
+        setState(() {
+          _currentId = 2;
+        });
+        break;
+      case RecorderState.full:
         setState(() {
           _currentId = 1;
         });
-      }
-      if (_lastState == RecorderState.erasing) {
-        Navigator.pop(context);
+        break;
+      default:
         return;
-      }
     }
-
-    _lastState = state;
-    if (_lastState == RecorderState.erasing) {
-      setState(() {
-        _currentId = 2;
-      });
-    }
-    if (_lastState != RecorderState.recording) return;
-    Navigator.pop(context);
   }
 }
