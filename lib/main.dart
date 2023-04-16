@@ -1,4 +1,5 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/firebase_options.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/local_db_service.dart';
 import 'package:figure_skating_jumps/services/manager/active_session_manager.dart';
@@ -13,7 +14,6 @@ import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
 import 'package:figure_skating_jumps/widgets/views/initial_redirect_route.dart';
 import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
 import 'package:figure_skating_jumps/widgets/views/login_view.dart';
-import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
 import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
@@ -22,8 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'constants/lang_fr.dart';
-import 'firebase_options.dart';
 import 'package:camera/camera.dart';
 
 Future<void> main() async {
@@ -57,8 +55,9 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-      FigureSkatingJumpApp(canFunction: hasNecessaryPermissions, routeObserver: RouteObserver<ModalRoute<void>>(),));
+  runApp(FigureSkatingJumpApp(
+      canFunction: hasNecessaryPermissions,
+      routeObserver: RouteObserver<ModalRoute<void>>()));
 }
 
 Future<bool> initializeStoragePermissions() async {
@@ -88,7 +87,8 @@ Future<bool> initializeStoragePermissions() async {
 class FigureSkatingJumpApp extends StatelessWidget {
   final bool canFunction;
   final RouteObserver<ModalRoute<void>> routeObserver;
-  const FigureSkatingJumpApp({super.key, required this.canFunction, required this.routeObserver});
+  const FigureSkatingJumpApp(
+      {super.key, required this.canFunction, required this.routeObserver});
 
   @override
   Widget build(BuildContext context) {

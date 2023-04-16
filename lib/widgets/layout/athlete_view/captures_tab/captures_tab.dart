@@ -31,7 +31,7 @@ class CapturesTab extends StatelessWidget {
                           fontSize:
                               ReactiveLayoutHelper.getHeightFromFactor(16))),
                 )
-              : ListView.builder(
+              : ListView.builder( // This will have to be adapted to lazy loading when the # of captures will increase
                   itemCount: groupedCaptures.length,
                   itemBuilder: (context, dateIndex) {
                     String key = groupedCaptures.keys.elementAt(dateIndex);
