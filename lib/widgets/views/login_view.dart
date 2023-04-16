@@ -1,9 +1,9 @@
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
-import 'package:figure_skating_jumps/enums/ice_button_importance.dart';
-import 'package:figure_skating_jumps/enums/ice_button_size.dart';
-import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart';
+import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
+import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/abstract_ice_exception.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';

@@ -3,7 +3,7 @@ import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/constants/styles.dart';
 import 'package:figure_skating_jumps/models/firebase/modification.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
-import 'package:figure_skating_jumps/widgets/prompts/instruction_prompt.dart';
+import 'package:figure_skating_jumps/widgets/layout/instruction_prompt.dart';
 import 'package:flutter/material.dart';
 
 class ModificationInfoDialog extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:figure_skating_jumps/enums/season.dart';
+import 'package:figure_skating_jumps/enums/models/season.dart';
 import 'package:figure_skating_jumps/interfaces/i_local_db_manager.dart';
 import 'package:figure_skating_jumps/models/local_db/global_settings.dart';
 import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:figure_skating_jumps/enums/season.dart';
+import 'package:figure_skating_jumps/enums/models/season.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/models/local_db/local_capture.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:figure_skating_jumps/enums/event_channel_names.dart';
-import 'package:figure_skating_jumps/enums/measuring/measurer_state.dart';
-import 'package:figure_skating_jumps/enums/measuring/measuring_status.dart';
+import 'package:figure_skating_jumps/enums/x_sens/measuring/measurer_state.dart';
+import 'package:figure_skating_jumps/enums/x_sens/measuring/measuring_status.dart';
 import 'package:figure_skating_jumps/enums/method_channel_names.dart';
 import 'package:figure_skating_jumps/interfaces/i_observable.dart';
 import 'package:figure_skating_jumps/interfaces/i_x_sens_dot_streaming_data_subscriber.dart';

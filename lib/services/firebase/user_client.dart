@@ -1,5 +1,5 @@
 import 'package:figure_skating_jumps/constants/generator_constants.dart';
-import 'package:figure_skating_jumps/enums/user_role.dart';
+import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/exceptions/conflict_exception.dart';
 import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/firebase/skating_user.dart';

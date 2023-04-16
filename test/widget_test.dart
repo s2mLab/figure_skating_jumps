@@ -13,7 +13,7 @@ import 'package:figure_skating_jumps/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(FigureSkatingJumpApp(canFunction: true, routeObserver: RouteObserver(),));
+    await tester.pumpWidget(FigureSkatingJumpApp(hasStoragePermissions: true, hasNetwork: true, routeObserver: RouteObserver(),));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
