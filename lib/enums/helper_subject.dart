@@ -1,5 +1,7 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 
+/// This enum represents the different subjet and description in the helper page
+/// for the user.
 enum HelperSubject {
   connectDot(connectDotTitle, connectDotDescription, "/ManageDevices"),
   addSkater(addSkaterTitle, addSkaterDescription, "/CreateSkater"),

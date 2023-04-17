@@ -22,7 +22,7 @@ class XSensDotStreamingDataService
       EventChannel(EventChannelNames.measuringChannel.channelName);
   static final _xSensMeasuringStatusChannel =
       EventChannel(EventChannelNames.measuringStatusChannel.channelName);
-  static MeasurerState _state = MeasurerState.idle;
+  static MesurerState _state = MesurerState.idle;
   static final List<XSensDotData> _measuredData = [];
   final List<IXSensDotMeasuringDataSubscriber> _subscribers = [];
   static Timer? _errorTimer;
@@ -46,7 +46,7 @@ class XSensDotStreamingDataService
 
   Future<void> startMeasuring(bool isDeviceInitDone) async {
     _measuredData.clear();
-    _state = MeasurerState.preparing;
+    _state = MesurerState.preparing;
     if (isDeviceInitDone) {
       await _setMeasuringRate();
     }
@@ -54,7 +54,7 @@ class XSensDotStreamingDataService
 
   Future<void> stopMeasuring() async {
     await _xSensMeasuringMethodChannel.invokeMethod('stopMeasuring');
-    _state = MeasurerState.idle;
+    _state = MesurerState.idle;
   }
 
   static Future<void> _handleMeasuringStateChange(String event) async {
@@ -62,15 +62,15 @@ class XSensDotStreamingDataService
 
     switch (status) {
       case MeasuringStatus.initDone:
-        if (_state == MeasurerState.preparing) {
+        if (_state == MesurerState.preparing) {
           await _setMeasuringRate();
         }
         break;
       case MeasuringStatus.setRate:
-        if (_state == MeasurerState.preparing) {
+        if (_state == MesurerState.preparing) {
           _errorTimer?.cancel();
           await _xSensMeasuringMethodChannel.invokeMethod('startMeasuring');
-          _state = MeasurerState.measuring;
+          _state = MesurerState.measuring;
         }
         break;
     }
@@ -84,7 +84,7 @@ class XSensDotStreamingDataService
   static Future<void> _setMeasuringRate() async {
     _errorTimer?.cancel();
     _errorTimer = Timer(_maxDelay, () {
-      _state = MeasurerState.idle;
+      _state = MesurerState.idle;
       debugPrint("Setting measuring rate was too long");
     });
     try {
