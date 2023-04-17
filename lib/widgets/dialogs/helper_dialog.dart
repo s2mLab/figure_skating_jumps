@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart
 import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
+import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 
 class HelperDialog extends StatefulWidget {
@@ -23,9 +24,7 @@ class _HelperDialogState extends State<HelperDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        title: Text(helperTitle,
-            style: TextStyle(
-                fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+        title: const PageTitle(text:helperTitle),
         children: [
           Container(
             margin:
