@@ -1,4 +1,4 @@
-/// This enum contains the differents method channel names used to invoke function
+/// This enum contains the different method channel names used to invoke function
 /// declared in the Kotlin project.
 enum MethodChannelNames {
   bluetoothChannel("bluetooth-permission-method-channel"),

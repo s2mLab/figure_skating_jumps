@@ -1,4 +1,4 @@
-/// This enum represents state of the measuring process.
+/// This enum represents the status of the measuring process.
 enum MeasuringStatus {
   initDone("InitDone"),
   setRate("SetRate");
