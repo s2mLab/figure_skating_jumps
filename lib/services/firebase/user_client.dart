@@ -144,8 +144,9 @@ class UserClient {
   }
 
   Future<void> changePassword(
-      {required String userID, required String password}) async {
+      {required String email, required String oldPassword, required String password}) async {
     try {
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: oldPassword);
       await _firebaseAuth.currentUser?.updatePassword(password);
       await ActiveSessionManager().changeSessionPassword(password);
     } on FirebaseAuthException catch (e) {

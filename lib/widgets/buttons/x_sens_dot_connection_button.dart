@@ -33,7 +33,7 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const ConnectionDotView(),
+          const DeviceManagementView(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
