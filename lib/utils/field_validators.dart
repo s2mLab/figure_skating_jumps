@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:flutter/cupertino.dart';
 
 class FieldValidators {
   /// Validates a new name string and returns an error message if the validation fails.
