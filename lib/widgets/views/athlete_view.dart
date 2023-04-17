@@ -116,6 +116,18 @@ class _CapturesViewState extends State<CapturesView> {
     );
   }
 
+
+  /// Builds the captures tab widget.
+  ///
+  /// If the snapshot's connection state is not [ConnectionState.done], this
+  /// function will display a [CircularProgressIndicator] centered on the screen
+  /// while the data is still loading.
+  ///
+  /// Parameters:
+  /// - [context] : the build context
+  /// - [snapshot] : the async snapshot of a list of captures
+  ///
+  /// Returns a [CapturesTab] widget displaying the grouped captures.
   Widget _buildCapturesTab(
       BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
@@ -132,6 +144,17 @@ class _CapturesViewState extends State<CapturesView> {
             snapshot.data!, (obj) => obj.date.toString().substring(0, 10)));
   }
 
+  /// Builds the progression tab widget.
+  ///
+  /// If the snapshot's connection state is not [ConnectionState.done], this
+  /// function will display a [CircularProgressIndicator] centered on the screen
+  /// while the data is still loading.
+  ///
+  /// Parameters:
+  /// - [context] : the build context
+  /// - [snapshot] : the async snapshot of a list of captures
+  ///
+  /// Returns a [ProgressionTab] widget displaying the .
   Widget _buildProgressionTab(
       BuildContext context, AsyncSnapshot<List<Capture>> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
