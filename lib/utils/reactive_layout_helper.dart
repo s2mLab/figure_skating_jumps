@@ -25,33 +25,34 @@ class ReactiveLayoutHelper {
     return _screenWidth;
   }
 
-// Checks whether the current device is a tablet based on the screen width.
+  /// Checks whether the current device is a tablet based on the screen width.
   ///
   /// Returns true if the screen width is greater than the _tabletWidthThreshold,
   static bool isTablet() {
     return _screenWidth > _tabletWidthThreshold;
   }
 
-  /// Calculates and returns the height of a UI element based on a given factor value and an optional flag for padding.
+  /// Returns the height value from a factor calculated with the screen height and an expected height.
   ///
-  /// This function takes a [double] value representing the factor by which to scale the element's height, as well as an
-  /// optional [bool] flag to indicate whether the element should include padding for enclosing elements. If the flag is
-  /// set to true and the device is a tablet, the function adds an extra amount of vertical padding.
+  /// Parameters:
+  /// - [value]: The factor to calculate the height from.
+  /// - [isEnglobingPadding] (optional): If true, adds an extra vertical padding to the height on tablet devices.
   ///
-  /// Returns a [double] value representing the calculated height of the UI element.
+  /// Returns: A double value representing the calculated height.
   static double getHeightFromFactor(double value,
       [bool isEnglobingPadding = false]) {
     return value * _screenHeight / _expectedHeight +
         (isEnglobingPadding && isTablet() ? extraEnglobingVerticalPadding : 0);
   }
 
-  /// Calculates and returns the width of a UI element based on a given factor value and an optional flag for padding.
+  /// Returns the width value, given a factor value, in the current screen size, adjusted to the expectedWidth value,
+  /// optionally accounting for englobing padding (if isEnglobingPadding is true) in case the screen is a tablet.
   ///
-  /// This function takes a [double] value representing the factor by which to scale the element's width, as well as an
-  /// optional [bool] flag to indicate whether the element should include padding for enclosing elements. If the flag is
-  /// set to true and the device is a tablet, the function adds an extra amount of horizontal padding.
+  /// Parameters:
+  /// - [value]: The factor value to calculate the width from.
+  /// - [isEnglobingPadding] (optional): Indicates whether to account for englobing padding in case of tablet screen.
   ///
-  /// Returns a [double] value representing the calculated width of the UI element.
+  /// Returns: The calculated width value.
   static double getWidthFromFactor(double value,
       [bool isEnglobingPadding = false]) {
     return value * _screenWidth / _expectedWidth +
@@ -60,23 +61,27 @@ class ReactiveLayoutHelper {
             : 0);
   }
 
-  /// Updates the stored dimensions of the device screen based on the provided [BuildContext].
+  /// This method updates the dimensions of the screen, including the width and height,
+  /// by taking a [BuildContext] as input and retrieving the screen size through
+  /// [MediaQuery.of(context)]. The values are then stored in static variables [_screenHeight]
+  /// and [_screenWidth] for later use.
   ///
-  /// This function takes a [BuildContext] value and uses it to retrieve the height and width of the device screen
-  /// using the `MediaQuery` API. It then updates the stored `_screenHeight` and `_screenWidth` values to reflect
-  /// the new dimensions.
+  /// Parameters:
+  /// - [context]: The build context of the widget being built.
   static void updateDimensions(BuildContext context) {
     _screenHeight = MediaQuery.of(context).size.height;
     _screenWidth = MediaQuery.of(context).size.width;
   }
 
-  /// Computes and returns the camera scaling factor for the device screen based on the provided width and height values.
+  /// Calculates the scaling factor to fit a camera preview with the given dimensions
+  /// into the current screen dimensions. This method takes into account whether the device is a tablet
+  /// or not, in which case a different factor is used to account for the larger screen size.
   ///
-  /// This function takes a `width` and a `height` value and computes the scaling factor required to ensure that
-  /// the camera view fits within the bounds of the screen. It computes separate scaling factors for the width and height,
-  /// and returns the minimum of the two values multiplied by a device-specific scaling factor.
+  /// Parameters:
+  /// - [width]: The width of the camera preview.
+  /// - [height]: The height of the camera preview.
   ///
-  /// Returns a [double] value representing the camera scaling factor.
+  /// Return: A scaling factor that can be used to adjust the size of the camera preview to fit the screen.
   static double getCameraScalingFactor(
       {required double width, required double height}) {
     double widthFactor = width / _screenWidth;

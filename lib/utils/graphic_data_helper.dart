@@ -8,14 +8,17 @@ import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:figure_skating_jumps/utils/graph_date_preferences_utils.dart';
 
 class GraphicDataHelper {
-  /// Returns a map of JumpType to a list of GraphStatsDatePair for each JumpType,
-  /// calculated from the given [captures] data.
+  /// Returns a Future that resolves to a map of jump types and their corresponding list of
+  /// [GraphStatsDatePair]s for each jump type. This function takes a [captures] parameter of
+  /// type Map<String, List<Capture>> and retrieves the jump score data for each jump type.
   ///
-  /// This function iterates over each JumpType and calls [_getJumpScorePerType]
-  /// with the given [captures] data to calculate the corresponding GraphStatsDatePair.
+  /// Parameters:
+  /// - [captures] : A map of the capture data. The keys are the dates, and the values are lists
+  /// of Captures that were taken on that date.
   ///
-  /// Returns a Future<Map<JumpType, List<GraphStatsDatePair>>> that maps each JumpType to
-  /// its corresponding list of GraphStatsDatePair.
+  /// Returns:
+  /// - A map where the keys are jump types and the values are lists of [GraphStatsDatePair]s,
+  /// which represent the jump score and the corresponding date for each score.
   static Future<Map<JumpType, List<GraphStatsDatePair>>>
       getJumpScorePerTypeGraphData(Map<String, List<Capture>> captures) async {
     Map<JumpType, List<GraphStatsDatePair>> mappedJumps = {};
@@ -25,15 +28,15 @@ class GraphicDataHelper {
     return mappedJumps;
   }
 
-  /// Retrieves a list of graph data representing the average fly time per day
-  /// from a map of captures, where the key is a date string and the value is a list
-  /// of jump [Capture]s for that day.
+  /// Returns a Future that resolves to a list of [GraphStatsDatePair] objects that represent the average fly time for each
+  /// day in the given map of [captures].
   ///
-  /// The function iterates over each date in the map, retrieves the average fly time
-  /// for that day using [_getAverageJumpDurationOnDate] and adds the result to
-  /// a list of [GraphStatsDatePair]s, which is returned by the function.
+  /// Parameters:
+  /// - [captures]: a Map of strings to lists of [Capture] objects that represent the user's jump data
   ///
-  /// The returned [GraphStatsDatePair]s represent the average fly time and date
+  /// Returns:
+  /// - A Future that resolves to a list of [GraphStatsDatePair] objects, where each object contains a date and the
+  /// average fly time for that day. If there is no jump data for a given day, no [GraphStatsDatePair] object is included in the list.
   /// for each day in the input [captures] map.
   static Future<List<GraphStatsDatePair>> getAverageFlyTimeGraphData(
       Map<String, List<Capture>> captures) async {
@@ -48,15 +51,13 @@ class GraphicDataHelper {
     return graphData;
   }
 
-  /// Retrieves all dates within the date range specified in [GraphDatePreferencesUtils].
+  /// This function returns a list of dates that are included in a given map of [captures].
   ///
-  /// This function takes a [Map] of [String] and [List] of [Capture] as input, and returns
-  /// a [List] of [String] representing all the dates within the date range specified in
-  /// [GraphDatePreferencesUtils]. Dates that fall outside the date range are removed from
-  /// the returned list.
+  /// Parameters:
+  /// - [captures]: a map of dates with corresponding captures
   ///
-  /// Returns a [List] of [String] representing all the dates within the date range specified
-  /// in [GraphDatePreferencesUtils].
+  /// Return:
+  /// - A list of strings representing dates that are included in the given map of captures.
   static List<String> _getAllDates(Map<String, List<Capture>> captures) {
     List<String> dates = captures.keys.toList();
     dates.removeWhere((element) =>
@@ -65,14 +66,16 @@ class GraphicDataHelper {
     return dates;
   }
 
-  /// Calculates and returns average jump score statistics for a given JumpType and date.
+  /// Calculates the average jump score per type on a specific day and returns the result as a [GraphStatsDatePair].
   ///
-  /// This function takes a [Map] of [String] keys (representing dates) and [List] of [Capture] values,
-  /// along with a [String] representing a date and a [JumpType]. It retrieves all jumps of the given type
-  /// on the given date, calculates the average score, standard deviation, minimum, and maximum score of those jumps,
-  /// and returns those values wrapped in a [GraphStatsDatePair] object.
+  /// Parameters:
+  /// - [captures]: A [Map] containing a list of [Capture] objects for each date.
+  /// - [day]: A [String] representing the day to calculate the average jump score on.
+  /// - [type]: A [JumpType] representing the type of jump to calculate the average score for.
   ///
-  /// If no jumps of the given type are found on the given date, returns `null`.
+  /// Return:
+  /// - A [GraphStatsDatePair] object containing the average score, standard deviation, minimum score, maximum score,
+  /// and the date of the calculated values. If no jumps of the specified type were found on the given day, null is returned.
   static Future<GraphStatsDatePair?> _getAverageJumpScorePerTypeOnDate(
       Map<String, List<Capture>> captures, String day, JumpType type) async {
     if (captures[day] == null || captures[day]!.isEmpty) {
@@ -96,13 +99,13 @@ class GraphicDataHelper {
             statDay);
   }
 
-  /// Calculates the standard deviation of a list of integers.
+  /// This function calculates the standard deviation of a list of integers.
   ///
-  /// Calculates the mean of the input list, then calculates the variance using the
-  /// squared differences of each item from the mean. The variance is then square rooted
-  /// to get the standard deviation.
+  /// Parameters:
+  /// - [list]: The list of integers for which to calculate the standard deviation.
   ///
-  /// Returns a [double] value representing the standard deviation of the input list.
+  /// Return:
+  /// A double representing the standard deviation of the input list of integers.
   static double _standardDeviation(List<int> list) {
     final double mean = list.average;
     final List<num> squaredDiffs = list.map((x) => pow(x - mean, 2)).toList();
@@ -110,13 +113,18 @@ class GraphicDataHelper {
     return sqrt(variance);
   }
 
-  /// Retrieves the average jump duration for a given day, based on a map of captures.
+  /// Calculates the average duration of all jumps captured on a specific date.
+  /// Returns null if there are no jumps on that date.
   ///
-  /// This function takes a [Map] of [String] keys and [List] values representing captures of jumps for a set of days,
-  /// and a [String] representing the day for which to retrieve the average jump duration.
+  /// Exceptions:
+  /// - throws ArgumentError if the captures map does not contain the specified day or if it is empty.
   ///
-  /// Returns a [Future] that completes with a [GraphStatsDatePair] object containing information about the average jump duration,
-  /// including the mean, standard deviation, minimum, maximum, and date of the statistics calculation. Returns `null` if no jumps
+  /// Parameters:
+  /// - [captures] : a map with dates as keys and lists of Capture objects as values.
+  /// - [day] : the specific date to calculate the average jump duration for, in the format 'yyyy-MM-dd'.
+  ///
+  /// Return:
+  /// - a GraphStatsDatePair object containing the average jump duration, standard
   /// were found on the specified date.
   static Future<GraphStatsDatePair?> _getAverageJumpDurationOnDate(
       Map<String, List<Capture>> captures, String day) async {
@@ -141,13 +149,14 @@ class GraphicDataHelper {
             statDay);
   }
 
-  /// Retrieves a list of jumps from a list of captures that meet the specified test criteria.
+  /// Extracts all jumps from a list of captures and optionally applies a test to filter the results.
   ///
-  /// This function takes a [List] of [Capture] objects and an optional [bool Function] test parameter,
-  /// which is used to filter the jumps that are retrieved from the captures. If no test is provided,
-  /// all jumps will be included.
+  /// Parameters:
+  /// - [captures]: the list of captures from which to extract jumps.
+  /// - [test] (optional): a test to apply to filter the jumps. Only jumps that pass the test will be included in the result.
   ///
-  /// Returns a [Future] that completes with a [List] of [Jump] objects that meet the specified test criteria.
+  /// Returns: a Future that completes with a list of jumps extracted from the captures. If [test] is provided and
+  /// no jump passed it, the function returns an empty list. If [captures] is empty or null, the function returns an empty list.
   static Future<List<Jump>> _getRequiredJumpsFromCaptures(
       List<Capture> captures,
       [bool Function(Jump)? test]) async {
@@ -160,13 +169,18 @@ class GraphicDataHelper {
     return jumps;
   }
 
-  /// Retrieves the jump score per type for a given set of captures, based on the specified [JumpType].
+  /// Returns a list of GraphStatsDatePair, which represents the average jump score of the given type for each day
+  /// in the captures data.
   ///
-  /// This function takes a [Map] of [String] keys and [List] values representing captures of jumps for a set of days,
-  /// and a [JumpType] parameter representing the type of jump for which to retrieve scores.
+  /// Parameters:
+  /// - [captures]: a map of captured data for different days, where the key is the day in the format of "yyyy-MM-dd",
+  /// and the value is a list of Capture objects.
+  /// - [type]: a JumpType enum value that specifies the type of jump score to be retrieved.
   ///
-  /// Returns a [Future] that completes with a [List] of [GraphStatsDatePair] objects containing information about the
-  /// jump score per type, including the mean, standard deviation, minimum, maximum, and date of the statistics calculation.
+  /// Return:
+  /// - A Future that resolves to a list of GraphStatsDatePair objects. Each GraphStatsDatePair object contains the
+  /// date and the corresponding average jump score of the given type on that date. If no data is available for a
+  /// particular date, it will be excluded from the list.
   static Future<List<GraphStatsDatePair>> _getJumpScorePerType(
       Map<String, List<Capture>> captures, JumpType type) async {
     List<GraphStatsDatePair> graphData = [];
