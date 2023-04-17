@@ -29,6 +29,12 @@ class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
     return _settings;
   }
 
+  /// Saves the given global settings object to local storage.
+  ///
+  /// Parameters:
+  /// - [settings] : The global settings object to save.
+  ///
+  /// Returns void.
   Future<void> saveSettings(GlobalSettings settings) async {
     _settings = settings;
     _settings?.id = 1;
@@ -40,6 +46,9 @@ class GlobalSettingsManager implements ILocalDbManager<GlobalSettings> {
     }
   }
 
+  /// Loads the global settings object.
+  ///
+  /// Returns void.
   Future<void> loadSettings() async {
     List<GlobalSettings> settingsList = constructObject(await LocalDbService()
         .readWhere(LocalDbService.globalSettingsTableName, 'id', '1'));
