@@ -81,8 +81,10 @@ const String errorCaptureInfo =
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
+const String previousPasswordField = "Ancien mot de passe: ";
 const String passwordField = "Mot de passe: ";
 const String passwordConfirmationField = "Confirmation mot de passe: ";
+const String errorModification = "Erreur dans la modification";
 
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnectedLabel = "XSens DOT connecté";
@@ -182,7 +184,8 @@ const String continueModifOfAllJumpsInfo =
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
-const String connectNewXSensDotButton = "Connecter un nouvel appareil XSens DOT";
+const String connectNewXSensDotButton =
+    "Connecter un nouvel appareil XSens DOT";
 const String noDataLabel = "Aucune donnée n'a été collectée";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
