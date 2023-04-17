@@ -13,6 +13,8 @@ import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
+/// A singleton used to communicate with Firebase.
+/// It handles anything related to captures and jumps.
 class CaptureClient {
   static final CaptureClient _captureClient = CaptureClient._internal();
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
