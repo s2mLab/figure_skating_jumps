@@ -259,6 +259,19 @@ class _CaptureDataViewState extends State<CaptureDataView>
     );
   }
 
+  /// Stops the current capture and saves the video file.
+  ///
+  /// This function initializes the controller and stops the video recording if
+  /// the camera is activated. It then saves the video file using the
+  /// [ExternalStorageService] and stops the xSensDot recording service. If an
+  /// error occurs during the process, the error message is logged using
+  /// [developer.log].
+  ///
+  /// After the capture is stopped, this function sets the [_isFullscreen] state to
+  /// `false`.
+  ///
+  /// Returns a [Future] that completes when the capture is stopped and the video
+  /// file is saved.
   Future<void> _onCaptureStopPressed() async {
     try {
       _displayStepDialog(const ExportDialog());
@@ -278,6 +291,23 @@ class _CaptureDataViewState extends State<CaptureDataView>
     });
   }
 
+  /// Starts a new capture and displays the appropriate dialogs.
+  ///
+  /// This function checks if the `XSensDotConnectionService` is initialized. If
+  /// it is not, it displays a `DeviceNotReadyDialog` and returns. Otherwise, it
+  /// initializes the controller and starts the xSensDot recording service.
+  ///
+  /// After the xSensDot recording service is started, this function displays a
+  /// `StartRecordingDialog`. Otherwise, if the camera is not activated, it displays
+  /// a `NoCameraRecordingDialog`.
+  /// Otherwise, it sets the [_isFullscreen] state to `true` and starts video recording
+  /// using the controller.
+  ///
+  /// If an error occurs during the process, the error message is logged using
+  /// [developer.log].
+  ///
+  /// Returns a [Future] that completes when the capture is started and the appropriate
+  /// dialogs are displayed.
   Future<void> _onCaptureStartPressed() async {
     if (!XSensDotConnectionService().isInitialized) {
       await _displayStepDialog(const DeviceNotReadyDialog());
@@ -311,6 +341,16 @@ class _CaptureDataViewState extends State<CaptureDataView>
     }
   }
 
+  /// Builds a camera preview widget that shows the camera feed on the screen.
+  ///
+  /// Exceptions:
+  /// - Returns [_noCameraIcon()] if an error occurred while building the preview.
+  ///
+  /// Parameters:
+  /// - [context]: The build context.
+  /// - [snapshot]: An [AsyncSnapshot] object that represents the current state of the camera preview.
+  ///
+  /// Return: A [Widget] object that displays the camera preview or a loading indicator if the preview is not ready.
   Widget _buildCameraPreview(
       BuildContext context, AsyncSnapshot<void> snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
@@ -348,6 +388,14 @@ class _CaptureDataViewState extends State<CaptureDataView>
     return const Center(child: CircularProgressIndicator());
   }
 
+  /// Displays a dialog on top of the current screen with the given dialog widget.
+  ///
+  /// The barrierDismissible parameter is set to false, meaning the user cannot dismiss the dialog by tapping outside of it.
+  ///
+  /// Parameters:
+  /// - [dialog] : A Widget that represents the dialog to be displayed.
+  ///
+  /// Return: A Future that completes when the dialog is closed.
   Future<void> _displayStepDialog(Widget dialog) async {
     await showDialog(
         context: context,
@@ -357,6 +405,12 @@ class _CaptureDataViewState extends State<CaptureDataView>
         });
   }
 
+  /// Returns a widget displaying an icon and optional error message
+  ///
+  /// Displays an icon indicating that the camera is not available, along with an optional error message if [_cameraInError] is true.
+  ///
+  /// Returns:
+  /// - A camera deactivated icon and optional error message.
   Widget _noCameraIcon() {
     return Center(
         child: Column(

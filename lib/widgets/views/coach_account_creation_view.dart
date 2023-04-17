@@ -135,6 +135,15 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     );
   }
 
+  /// Returns a [Column] widget that contains a [Form] widget with [TextFormField]s for entering personal information.
+  ///
+  /// The returned widget includes three [TextFormField]s for entering the user's surname, name, and email address.
+  ///
+  /// If the form is valid and the "Continue" button is pressed, the [_toPassword] function is called, which navigates to the password entry step.
+  ///
+  /// If any of the [TextFormField]s fail validation, the "Continue" button is disabled.
+  ///
+  /// Returns a [Widget] representing the form.
   Widget _informationForm() {
     return Column(children: [
       Form(
@@ -239,6 +248,10 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
+  /// Returns a [Column] widget containing a Form widget with two [TextFormField] widgets for entering a new password and confirming
+  /// the entered password.
+  ///
+  /// Returns a [Widget] representing the form.
   Widget _passwordForm() {
     return Column(children: [
       Form(
@@ -318,6 +331,13 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     ]);
   }
 
+  /// Creates a new coach account using the email and password stored in _coachEmail and _coachPassword, respectively,
+  /// and signs the user in using the same email and password.
+  ///
+  /// Exceptions:
+  /// - Throws an [Exception] if an error occurs during the sign-up or sign-in process.
+  ///
+  /// Returns a Future<bool> that is true if the sign-up and sign-in process was successful, and false otherwise.
   Future<bool> _createAccount() async {
     try {
       await UserClient().signUp(
@@ -333,12 +353,21 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
   }
 
+  /// Changes the page index to show the [_passwordForm]
   void _toPassword() {
     setState(() {
       _pageIndex = 1;
     });
   }
 
+
+  /// Validates the password form using the current state of _passwordKey. If the form is valid, calls the _createAccount()
+  /// function to create a new coach account using the entered email and password. If the account creation is successful,
+  /// navigates to the '/ListAthletes' page. If the account creation is unsuccessful, displays an error dialog with the
+  /// error message stored in _errorStateMessage.
+  ///
+  /// Exceptions:
+  /// - Throws an Exception if an error occurs during the account creation process.
   Future<void> onAccountCreatePressed() async {
     if (_passwordKey.currentState != null &&
         _passwordKey.currentState!.validate()) {
@@ -363,6 +392,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
     }
   }
 
+  /// Changes the page index to show the [_informationForm]
   void _toAccount() {
     setState(() {
       _pageIndex = 0;
