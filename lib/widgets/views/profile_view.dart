@@ -57,19 +57,26 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     _loadData();
     return Scaffold(
-        appBar: ReactiveLayoutHelper.isTablet() ? const TabletTopbar(isUserDebuggingFeature: false) as PreferredSizeWidget : const Topbar(isUserDebuggingFeature: false),
+        appBar: ReactiveLayoutHelper.isTablet()
+            ? const TabletTopbar(isUserDebuggingFeature: false)
+                as PreferredSizeWidget
+            : const Topbar(isUserDebuggingFeature: false),
         drawerEnableOpenDragGesture: false,
         drawerScrimColor: Colors.transparent,
         drawer: const IceDrawerMenu(isUserDebuggingFeature: false),
         body: Container(
-            margin: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+            margin: EdgeInsets.symmetric(
+                horizontal: ReactiveLayoutHelper.getWidthFromFactor(24, true),
+                vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const PageTitle(text: profileTitle),
               Container(
-                margin:
-                    EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(24), horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
-                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+                margin: EdgeInsets.symmetric(
+                    vertical: ReactiveLayoutHelper.getHeightFromFactor(24),
+                    horizontal: ReactiveLayoutHelper.getWidthFromFactor(16)),
+                padding: EdgeInsets.all(
+                    ReactiveLayoutHelper.getHeightFromFactor(16)),
                 decoration: BoxDecoration(
                     color: cardBackground,
                     borderRadius: BorderRadius.circular(10)),
@@ -77,15 +84,20 @@ class _ProfileViewState extends State<ProfileView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(UserClient().currentSkatingUser!.firstName,
-                          style:
-                              TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(24), color: darkText)),
+                          style: TextStyle(
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(24),
+                              color: darkText)),
                       Text(UserClient().currentSkatingUser!.lastName,
-                          style:
-                              TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(20), color: darkText)),
+                          style: TextStyle(
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(20),
+                              color: darkText)),
                       Align(
                           alignment: Alignment.centerRight,
                           child: IconButton(
-                              padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(4)),
+                              padding: EdgeInsets.all(
+                                  ReactiveLayoutHelper.getHeightFromFactor(4)),
                               constraints: const BoxConstraints(),
                               onPressed: () {
                                 showDialog<String>(
@@ -99,7 +111,8 @@ class _ProfileViewState extends State<ProfileView> {
                     ]),
               ),
               Container(
-                  margin: EdgeInsets.only(right: ReactiveLayoutHelper.getWidthFromFactor(24)),
+                  margin: EdgeInsets.only(
+                      right: ReactiveLayoutHelper.getWidthFromFactor(24)),
                   alignment: Alignment.centerRight,
                   child: IceButton(
                       text: modifyPasswordButton,
@@ -107,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                         showDialog<String>(
                             context: context,
                             builder: (BuildContext context) {
-                              return ModifyPassword();
+                              return const ModifyPasswordDialog();
                             });
                       },
                       textColor: primaryColor,
@@ -115,15 +128,22 @@ class _ProfileViewState extends State<ProfileView> {
                       iceButtonImportance: IceButtonImportance.secondaryAction,
                       iceButtonSize: IceButtonSize.small)),
               Container(
-                  margin: EdgeInsets.only(right: ReactiveLayoutHelper.getHeightFromFactor(16), left: ReactiveLayoutHelper.getHeightFromFactor(16), top: ReactiveLayoutHelper.getHeightFromFactor(32)),
+                  margin: EdgeInsets.only(
+                      right: ReactiveLayoutHelper.getHeightFromFactor(16),
+                      left: ReactiveLayoutHelper.getHeightFromFactor(16),
+                      top: ReactiveLayoutHelper.getHeightFromFactor(32)),
                   child: Text(
                     listCoachesTitle,
-                    style: TextStyle(color: darkText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                    style: TextStyle(
+                        color: darkText,
+                        fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                   )),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
-                  padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(4)),
+                  margin: EdgeInsets.all(
+                      ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  padding: EdgeInsets.symmetric(
+                      vertical: ReactiveLayoutHelper.getHeightFromFactor(4)),
                   decoration: BoxDecoration(
                       color: cardBackground,
                       borderRadius: BorderRadius.circular(10)),
@@ -134,17 +154,27 @@ class _ProfileViewState extends State<ProfileView> {
                           loaderstrokeWidth: 5,
                         ))
                       : _coaches.isEmpty
-                          ? Center(child: Text(noCoachesInfo, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
+                          ? Center(
+                              child: Text(
+                              noCoachesInfo,
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          16)),
+                            ))
                           : ListView.builder(
                               itemCount: _coaches.length,
                               itemBuilder: (context, index) {
                                 SkatingUser item = _coaches[index];
                                 return Container(
                                     margin: EdgeInsets.symmetric(
-                                      vertical: ReactiveLayoutHelper.getHeightFromFactor(4),
-                                      horizontal: ReactiveLayoutHelper.getWidthFromFactor(8),
+                                      vertical: ReactiveLayoutHelper
+                                          .getHeightFromFactor(4),
+                                      horizontal: ReactiveLayoutHelper
+                                          .getWidthFromFactor(8),
                                     ),
-                                    padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
+                                    padding: EdgeInsets.all(ReactiveLayoutHelper
+                                        .getHeightFromFactor(8)),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
@@ -154,7 +184,11 @@ class _ProfileViewState extends State<ProfileView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              "${item.firstName} ${item.lastName}", style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16))),
+                                              "${item.firstName} ${item.lastName}",
+                                              style: TextStyle(
+                                                  fontSize: ReactiveLayoutHelper
+                                                      .getHeightFromFactor(
+                                                          16))),
                                           IconButton(
                                               padding: EdgeInsets.zero,
                                               constraints:
