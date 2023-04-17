@@ -34,7 +34,7 @@ class IceDrawerMenu extends StatelessWidget {
                       text: manageDevicesDrawerTile,
                       iconData: Icons.settings_bluetooth_outlined,
                       onPressed: () {
-                        Navigator.pushNamed(
+                        Navigator.popAndPushNamed(
                           context,
                           '/ManageDevices',
                         );
@@ -43,7 +43,7 @@ class IceDrawerMenu extends StatelessWidget {
                       text: addSkaterDrawerTile,
                       iconData: Icons.add_reaction_outlined,
                       onPressed: () {
-                        Navigator.pushNamed(
+                        Navigator.popAndPushNamed(
                           context,
                           '/CreateSkater',
                         );
@@ -52,7 +52,7 @@ class IceDrawerMenu extends StatelessWidget {
                       text: myAcquisitionsTitle,
                       iconData: Icons.history,
                       onPressed: () {
-                        Navigator.pushNamed(context, '/Captures',
+                        Navigator.popAndPushNamed(context, '/Captures',
                             arguments: UserClient().currentSkatingUser!);
                       }),
                   if (UserClient().currentSkatingUser!.role == UserRole.coach)
@@ -60,7 +60,7 @@ class IceDrawerMenu extends StatelessWidget {
                         text: myAthletesTitle,
                         iconData: Icons.groups_rounded,
                         onPressed: () {
-                          Navigator.pushNamed(
+                          Navigator.popAndPushNamed(
                             context,
                             '/ListAthletes',
                             arguments: true,
@@ -73,7 +73,7 @@ class IceDrawerMenu extends StatelessWidget {
                     text: rawDataDrawerTile,
                     iconData: Icons.terminal,
                     onPressed: () {
-                      Navigator.pushNamed(
+                      Navigator.popAndPushNamed(
                         context,
                         '/RawData',
                       );
@@ -143,7 +143,7 @@ class IceDrawerMenu extends StatelessWidget {
                                 )),
                             IconButton(
                               onPressed: () {
-                                Navigator.pushNamed(
+                                Navigator.popAndPushNamed(
                                   context,
                                   '/Profile',
                                 );
