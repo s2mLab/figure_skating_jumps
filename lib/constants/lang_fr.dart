@@ -6,7 +6,7 @@ const String continueToLabel = "Poursuivre";
 const String goBackLabel = "Retour";
 const String pleaseWaitLabel = "Veuillez patienter";
 const String saveLabel = "Enregistrer";
-const String noneLabel = "Aucun";
+const String allLabel = "Toutes";
 const String minuteLabel = "minutes";
 const String secondsLabel = "secondes";
 const String calculatingLabel = "Calcul en cours...";
@@ -77,7 +77,7 @@ const String emptyMemoryButton = "Vider la mémoire";
 // widgets/dialog/capture/capture_error_dialog
 const String errorCaptureLabel = "Erreur lors de la capture";
 const String errorCaptureInfo =
-    "Une erreur est survenue lors de la capture de données. Veuillez réessayer.";
+    "Une erreur est survenue lors de la capture de données. Veuillez redémarrer le XSens DOT et réessayer.";
 
 // widgets/dialogs/modify_password
 const String modificationPasswordTitle = "Modification mot de passe";
@@ -102,7 +102,7 @@ const String percentageJumpsSucceededGraphicTitle =
 const String percentageJumpsSucceededLegend = "% Sauts réussis";
 const String averageJumpDurationGraphicTitle =
     "Durée moyenne de vol dans le temps";
-const String averageFlyTimeLegend = "Temps de vol moyen";
+const String averageFlyTimeLegend = "Temps de vol moyen (ms)";
 const String notBeforeInfo = "Ne peut pas être avant la date de début.";
 const String notAfterInfo = "Ne peut pas être après la date de fin.";
 const String filterByDateDialogTitle = "Filtrer par date";
@@ -182,7 +182,7 @@ const String continueModifOfAllJumpsInfo =
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
-const String connectNewXSensDotButton = "Connecter un appareil XSens DOT";
+const String connectNewXSensDotButton = "Connecter un nouvel appareil XSens DOT";
 const String noDataLabel = "Aucune donnée n'a été collectée";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";

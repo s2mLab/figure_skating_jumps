@@ -230,7 +230,15 @@ class XSensDotRecordingService
     if (_recorderState == RecorderState.exporting) {
       if (data != null) {
         _resetTimer();
-        _exportedData.add(XSensDotData.fromEventChannel(data));
+        try{
+          _exportedData.add(XSensDotData.fromEventChannel(data));
+        } catch (e) {
+          debugPrint(e.toString());
+          _timeoutTimer?.cancel();
+          _changeState(RecorderState.error);
+          return;
+        }
+
         double exportPct =
             _exportedData.length.toDouble() / _totalRecordingData.toDouble();
         int remainingSeconds = ((_totalRecordingData - _exportedData.length) /
