@@ -19,16 +19,16 @@ import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_switcher/slide_switcher.dart';
 
-class AthleteView extends StatefulWidget {
-  const AthleteView({Key? key}) : super(key: key);
+class CapturesView extends StatefulWidget {
+  const CapturesView({Key? key}) : super(key: key);
 
   @override
-  State<AthleteView> createState() {
-    return _AthleteViewState();
+  State<CapturesView> createState() {
+    return _CapturesViewState();
   }
 }
 
-class _AthleteViewState extends State<AthleteView> {
+class _CapturesViewState extends State<CapturesView> {
   int _switcherIndex = 0;
   SkatingUser? skater;
   Future<List<Capture>>? _futureCaptures;

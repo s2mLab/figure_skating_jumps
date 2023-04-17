@@ -5,7 +5,7 @@ import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/confirm_remove_coach_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modify_full_name_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/modify_password_dialog.dart';
 import 'package:figure_skating_jumps/widgets/layout/scaffold/ice_drawer_menu.dart';
@@ -198,9 +198,8 @@ class _ProfileViewState extends State<ProfileView> {
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return ConfirmCancelCustomDialog(
-                                                          description:
-                                                              "Voulez-vous retirer ${item.firstName} de votre liste d'entraineurs ?",
+                                                      return ConfirmRemoveCoachDialog(
+                                                          name: item.name,
                                                           confirmAction: () =>
                                                               removeCoachAction(
                                                                   item.uID!));
