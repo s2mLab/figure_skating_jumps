@@ -10,8 +10,6 @@ import 'package:figure_skating_jumps/widgets/dialogs/confirm_logout_dialog.dart'
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import '../../dialogs/confirm_remove_coach_dialog.dart';
-
 class IceDrawerMenu extends StatelessWidget {
   final bool isUserDebuggingFeature;
   const IceDrawerMenu({super.key, required this.isUserDebuggingFeature});
