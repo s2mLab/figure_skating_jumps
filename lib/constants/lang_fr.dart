@@ -86,6 +86,10 @@ const String passwordField = "Mot de passe: ";
 const String passwordConfirmationField = "Confirmation mot de passe: ";
 const String errorModification = "Erreur dans la modification";
 
+// widgets/dialogs/confirm_logout_custom
+const String disconnectLabel = "Voulez-vous vraiment vous déconnecter?";
+const String continueDisconnectButton = "Me déconnecter";
+
 // widgets/button/x_sens_dot_connection_button
 const String connectionStateMessageConnectedLabel = "XSens DOT connecté";
 const String connectionStateMessageInitializedLabel = "XSens DOT prêt";
@@ -139,7 +143,6 @@ const String rawDataDrawerTile = "Données brutes";
 const String addSkaterDrawerTile = "Ajouter un patineur";
 const String manageDevicesDrawerTile = "Gérer les XSens DOT";
 const String myAcquisitionsTitle = "Mes acquisitions";
-const String disconnectLabel = "Voulez-vous vraiment vous déconnecter?";
 const String myAthletesTitle = "Mes athlètes";
 
 // widgets/layout/configure_x_sens_dot_dialog

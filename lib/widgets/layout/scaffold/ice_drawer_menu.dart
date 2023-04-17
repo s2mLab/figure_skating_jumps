@@ -5,10 +5,12 @@ import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/widgets/buttons/nav_menu_element.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
-import 'package:figure_skating_jumps/widgets/dialogs/confirm_cancel_custom_dialog.dart';
 import 'package:figure_skating_jumps/widgets/dialogs/helper_dialog.dart';
+import 'package:figure_skating_jumps/widgets/dialogs/confirm_logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import '../../dialogs/confirm_remove_coach_dialog.dart';
 
 class IceDrawerMenu extends StatelessWidget {
   final bool isUserDebuggingFeature;
@@ -52,7 +54,7 @@ class IceDrawerMenu extends StatelessWidget {
                       text: myAcquisitionsTitle,
                       iconData: Icons.history,
                       onPressed: () {
-                        Navigator.pushNamed(context, '/Acquisitions',
+                        Navigator.pushNamed(context, '/Captures',
                             arguments: UserClient().currentSkatingUser!);
                       }),
                   if (UserClient().currentSkatingUser!.role == UserRole.coach)
@@ -75,7 +77,7 @@ class IceDrawerMenu extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(
                         context,
-                        '/RawDataView',
+                        '/RawData',
                       );
                     }),
                 Padding(
@@ -121,8 +123,7 @@ class IceDrawerMenu extends StatelessWidget {
                                     await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return ConfirmCancelCustomDialog(
-                                              description: disconnectLabel,
+                                          return ConfirmLogoutDialog(
                                               confirmAction: () async {
                                                 await UserClient().signOut();
                                                 if (context.mounted) {
@@ -146,7 +147,7 @@ class IceDrawerMenu extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pushNamed(
                                   context,
-                                  '/ProfileView',
+                                  '/Profile',
                                 );
                               },
                               icon: const Icon(Icons.account_circle),
