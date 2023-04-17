@@ -21,6 +21,7 @@ import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotDeviceCusto
 import com.example.figure_skating_jumps.x_sens_dot.callbacks.XSensDotExporter
 import com.example.figure_skating_jumps.x_sens_dot.enums.ErrorCodes
 import com.example.figure_skating_jumps.x_sens_dot.utils.XSensFileInfoSerializer
+import com.xsens.dot.android.sdk.models.XsensDotPayload
 import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import io.flutter.plugin.common.BinaryMessenger
 
@@ -183,6 +184,8 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun startMeasuring(result: MethodChannel.Result) {
+        currentXSensDot?.measurementMode = XsensDotPayload.PAYLOAD_TYPE_HIGH_FIDELITY_NO_MAG;
+        SystemClock.sleep(sleepingTimeMs);
         currentXSensDot?.startMeasuring()
         result.success(null)
     }
