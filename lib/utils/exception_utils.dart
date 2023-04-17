@@ -7,12 +7,18 @@ import 'package:figure_skating_jumps/exceptions/wrong_password_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ExceptionUtils {
-  /// Handles a [FirebaseAuthException] and throws the corresponding exception.
+  /// Handles a [FirebaseAuthException] by mapping its error code to a custom exception type and throwing it.
   ///
-  /// This function takes a [FirebaseAuthException] object and uses its [code] property
-  /// to determine which exception to throw.
+  /// Exceptions:
+  /// - Throws a [ConflictException] if the Firebase auth error code is "email-already-in-use".
+  /// - Throws an [InvalidEmailException] if the Firebase auth error code is "invalid-email".
+  /// - Throws a [WeakPasswordException] if the Firebase auth error code is "weak-password".
+  /// - Throws a [NullUserException] if the Firebase auth error code is "user-not-found".
+  /// - Throws a [WrongPasswordException] if the Firebase auth error code is "wrong-password".
+  /// - Throws a [TooManyAttemptsException] if the Firebase auth error code is "too-many-requests".
   ///
-  /// Throws a specific exception according to the Firebase authentication error code received.
+  /// Parameters:
+  /// - [e]: The [FirebaseAuthException] to handle.
   static handleFirebaseAuthException(FirebaseAuthException e) {
     switch (e.code) {
       case "email-already-in-use":
