@@ -33,6 +33,13 @@ class FieldValidators {
     return null;
   }
 
+  /// Validates a [String] value to ensure that it is a valid double and returns an error message if
+  /// the validation fails.
+  ///
+  /// This function takes a [String] [value] and performs validation checks to ensure that the [value]
+  /// is not null or empty, and that it is a valid double in the format `0` or `1.23` or `0.456` etc.
+  ///
+  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
   static String? doubleValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;

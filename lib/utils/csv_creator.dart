@@ -3,6 +3,13 @@ import 'package:figure_skating_jumps/enums/x_sens/x_sens_dot_csv_columns.dart';
 import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 
 class CsvCreator {
+  /// Generates a CSV string from a list of [XSensDotData] and returns it as a [String].
+  ///
+  /// This function takes a [List] of [XSensDotData] and converts it to a CSV format.
+  /// The resulting CSV string contains columns for the ID, timestamp, Euler angles (X, Y, Z),
+  /// acceleration (X, Y, Z), and gyroscope (X, Y, Z) data.
+  ///
+  /// Returns a [String] CSV representation of the [XSensDotData], or null if the input list is null.
   static String createXSensDotCsv(List<XSensDotData> extractedData) {
     List<List<dynamic>> rows = <List<dynamic>>[];
 
