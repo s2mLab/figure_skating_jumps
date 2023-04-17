@@ -7,6 +7,7 @@ import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
 import 'package:figure_skating_jumps/enums/models/jump_type.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';
 import 'package:figure_skating_jumps/utils/field_validators.dart';
+import 'package:figure_skating_jumps/utils/time_converter.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/layout/instruction_prompt.dart';
@@ -19,6 +20,7 @@ class JumpPanelContent extends StatefulWidget {
       _onModified;
   final void Function(Jump j, JumpType initialJumpType) _onDeleted;
   final void Function(JumpType jumpType) _onChangeAllTypes;
+
   const JumpPanelContent(
       {super.key,
       required jump,
@@ -80,8 +82,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   }
 
   void _initializeAdvancedMetricsControllers() {
-    _durationController = TextEditingController(text: _j!.duration.toString());
-    _startTimeController = TextEditingController(text: _j!.time.toString());
+    _durationController = TextEditingController(
+        text: TimeConverter.convertMsToStringSeconds(_j!.duration));
+    _startTimeController = TextEditingController(
+        text: TimeConverter.convertMsToStringSeconds(_j!.time));
     _timeToMaxSpeedController = TextEditingController(
         text: _j!.durationToMaxSpeed.toStringAsFixed(_maxDigitsForDoubleData));
     _maxSpeedController = TextEditingController(
@@ -103,10 +107,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if(!_rotationFormKey.currentState!.validate()) {
+        if (!_rotationFormKey.currentState!.validate()) {
           _initializeRotationController();
         }
-        if(_rotationController.text != _j!.turns.toStringAsFixed(_maxDigitsForDoubleData)) {
+        if (_rotationController.text !=
+            _j!.turns.toStringAsFixed(_maxDigitsForDoubleData)) {
           _updateRotationData();
         }
         FocusScope.of(context).requestFocus(FocusNode());
@@ -145,15 +150,15 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                   builder: (context) {
                                     return SimpleDialog(
                                       contentPadding: EdgeInsets.symmetric(
-                                        vertical: ReactiveLayoutHelper.getWidthFromFactor(8),
-                                          horizontal: ReactiveLayoutHelper.getWidthFromFactor(32, true)),
+                                          vertical: ReactiveLayoutHelper
+                                              .getWidthFromFactor(8),
+                                          horizontal: ReactiveLayoutHelper
+                                              .getWidthFromFactor(32, true)),
                                       insetPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                          ReactiveLayoutHelper.getWidthFromFactor(
-                                              16, true)),
+                                          horizontal: ReactiveLayoutHelper
+                                              .getWidthFromFactor(16, true)),
                                       title: Center(
-                                        child: Text(
-                                            continueModifOfAllJumpsInfo,
+                                        child: Text(continueModifOfAllJumpsInfo,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontSize: ReactiveLayoutHelper
@@ -167,7 +172,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                             },
                                             textColor: primaryColor,
                                             color: primaryColor,
-                                            iceButtonImportance: IceButtonImportance.secondaryAction,
+                                            iceButtonImportance:
+                                                IceButtonImportance
+                                                    .secondaryAction,
                                             iceButtonSize: IceButtonSize.small),
                                         IceButton(
                                             text: cancelLabel,
@@ -176,9 +183,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                                             },
                                             textColor: paleText,
                                             color: primaryColor,
-                                            iceButtonImportance: IceButtonImportance.mainAction,
+                                            iceButtonImportance:
+                                                IceButtonImportance.mainAction,
                                             iceButtonSize: IceButtonSize.small),
-                                        ],
+                                      ],
                                     );
                                   }).then((value) {
                                 if (!value) return;
@@ -368,7 +376,8 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           return FieldValidators.doubleValidator(val);
                         },
                         onEditingComplete: () {
-                          if(!_rotationFormKey.currentState!.validate()) return;
+                          if (!_rotationFormKey.currentState!.validate())
+                            return;
                           _updateRotationData();
                         },
                         controller: _rotationController,
@@ -642,10 +651,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               controller: _durationController,
                               maxLines: 1,
                               onSaved: (val) {
-                                _j!.duration = int.parse(val!);
+                                _j!.duration =
+                                    TimeConverter.convertStringSecondsToMS(
+                                        val!);
                               },
                               validator: (val) =>
-                                  FieldValidators.nonNegativeValidator(val),
+                                  FieldValidators.doubleValidator(val),
                             ),
                           ),
                         ],
@@ -670,10 +681,12 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                               controller: _startTimeController,
                               maxLines: 1,
                               onSaved: (val) {
-                                _j!.time = int.parse(val!);
+                                _j!.time =
+                                    TimeConverter.convertStringSecondsToMS(
+                                        val!);
                               },
                               validator: (val) =>
-                                  FieldValidators.nonNegativeValidator(val),
+                                  FieldValidators.doubleValidator(val),
                             ),
                           ),
                         ],
