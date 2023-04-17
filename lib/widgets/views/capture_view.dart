@@ -29,16 +29,16 @@ import 'package:flutter/material.dart';
 
 import 'dart:developer' as developer;
 
-class CaptureView extends StatefulWidget {
-  const CaptureView({
+class CaptureDataView extends StatefulWidget {
+  const CaptureDataView({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CaptureView> createState() => _CaptureViewState();
+  State<CaptureDataView> createState() => _CaptureDataViewState();
 }
 
-class _CaptureViewState extends State<CaptureView>
+class _CaptureDataViewState extends State<CaptureDataView>
     implements IRecorderSubscriber {
   bool _cameraInError = false;
   final XSensDotRecordingService _xSensDotRecordingService =

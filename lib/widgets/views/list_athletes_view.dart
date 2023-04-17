@@ -243,7 +243,7 @@ class _ListAthletesViewState extends State<ListAthletesView> {
                                                       onTap: () {
                                                         Navigator.pushNamed(
                                                             context,
-                                                            '/Acquisitions',
+                                                            '/Captures',
                                                             arguments: item);
                                                       },
                                                       child: Container(

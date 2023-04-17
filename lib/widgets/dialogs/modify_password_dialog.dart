@@ -31,12 +31,10 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
     if (_modificationInfoKey.currentState != null &&
         _modificationInfoKey.currentState!.validate()) {
       try {
-        await UserClient().signIn(
-            email: UserClient().currentAuthUser!.email!,
-            password: _previousPasswordController.text);
-
         await UserClient().changePassword(
-            userID: _currentUser.uID!, password: _passwordController.text);
+            email: _currentUser.email,
+            oldPassword: _previousPasswordController.text,
+            password: _passwordController.text);
         if (context.mounted) Navigator.of(context).pop();
       } catch (e) {
         setState(() {
