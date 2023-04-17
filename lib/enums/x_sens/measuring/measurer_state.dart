@@ -1,2 +1,2 @@
-/// This enum represents state of the measuring process.
+/// This enum represents the state of the measuring process.
 enum MeasurerState { idle, preparing, measuring }

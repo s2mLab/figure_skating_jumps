@@ -1,2 +1,2 @@
-/// This enum represents every role of a user.
+/// This enum represents the possible roles of a user.
 enum UserRole { coach, iceSkater }

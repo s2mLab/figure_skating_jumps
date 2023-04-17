@@ -1,6 +1,6 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 
-/// This enum represents all season type in figure skating.
+/// This enum represents the different season types in figure skating.
 enum Season {
   preparation(preparationSeasonLabel),
   competition(competitionSeasonLabel),
