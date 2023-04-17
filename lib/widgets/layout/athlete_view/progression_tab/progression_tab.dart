@@ -16,6 +16,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ProgressionTab extends StatefulWidget {
   final Map<String, List<Capture>> _captures;
+
   const ProgressionTab(
       {required Map<String, List<Capture>> groupedCaptures, super.key})
       : _captures = groupedCaptures;
@@ -34,7 +35,9 @@ class _ProgressionTabState extends State<ProgressionTab> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(24), vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
+          padding: EdgeInsets.symmetric(
+              horizontal: ReactiveLayoutHelper.getWidthFromFactor(24),
+              vertical: ReactiveLayoutHelper.getHeightFromFactor(8)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,7 +70,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
                               children: [
                                 Text(
                                   item == null
-                                      ? noneLabel
+                                      ? allLabel
                                       : item.displayedString,
                                   style: TextStyle(
                                       color: darkText,
@@ -86,7 +89,7 @@ class _ProgressionTabState extends State<ProgressionTab> {
                       items: [
                             DropdownMenuItem<Season>(
                               value: null,
-                              child: Text(noneLabel,
+                              child: Text(allLabel,
                                   style: TextStyle(
                                       fontSize: ReactiveLayoutHelper
                                           .getHeightFromFactor(16))),
@@ -138,8 +141,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
         Center(
             child: Text(
           '${dateDisplayFormat.format(GraphDatePreferencesUtils.begin)}  -> ${dateDisplayFormat.format(GraphDatePreferencesUtils.end)}',
-          style: TextStyle(
-              fontSize: ReactiveLayoutHelper.getHeightFromFactor(14)),
+          style:
+              TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(14)),
         )),
         Expanded(
             child: SingleChildScrollView(
@@ -184,7 +187,9 @@ class _ProgressionTabState extends State<ProgressionTab> {
               primaryXAxis: DateTimeAxis(),
               primaryYAxis: NumericAxis(
                   maximum: jumpScores.first.toDouble(),
-                  minimum: jumpScores.last.toDouble()),
+                  minimum: jumpScores.last.toDouble(),
+                  decimalPlaces: 0,
+                  rangePadding: ChartRangePadding.normal),
               // Chart title
               title: ChartTitle(
                   text: succeededJumpsGraphicTitle,
@@ -251,6 +256,8 @@ class _ProgressionTabState extends State<ProgressionTab> {
           }
           return SfCartesianChart(
               primaryXAxis: DateTimeAxis(),
+              primaryYAxis:
+                  NumericAxis(rangePadding: ChartRangePadding.normal),
               // Chart title
               title: ChartTitle(
                   text: averageJumpDurationGraphicTitle,
