@@ -300,7 +300,7 @@ const String athleteAlreadyExistsInfo =
     "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
 const String athleteAlreadyInListInfo = "Cet athète est déjà dans votre liste.";
 const String ownProfileInListInfo =
-    "Vous ne pouvez pas vous ajouté dans votre liste d'athlètes";
+    "Vous ne pouvez pas vous ajouter dans votre liste d'athlètes";
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";
