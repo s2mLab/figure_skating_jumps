@@ -12,4 +12,12 @@ class TimeConverter {
 
     return "${nbSeconds.toString()}.${ms.toString().padLeft(3, "0")}s";
   }
+
+  static int convertStringSecondsToMS(String value) {
+    return (double.parse(value) * 1000).floor();
+  }
+
+  static String convertMsToStringSeconds(int ms) {
+    return (ms.toDouble() / 1000).toString();
+  }
 }
