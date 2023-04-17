@@ -29,6 +29,13 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     return _activeSession;
   }
 
+  /// Saves the active session to the local database, unless there is already an active session with the same email.
+  ///
+  /// Parameters:
+  /// - [email] : the email of the user associated with the active session.
+  /// - [password] : the password of the user associated with the active session.
+  ///
+  /// Returns void.
   Future<void> saveActiveSession(String email, String password) async {
     if (ActiveSessionManager().activeSession != null &&
         ActiveSessionManager().activeSession!.email == email) return;
@@ -41,12 +48,18 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     }
   }
 
+  /// Loads the active session into the singleton.
+  ///
+  /// Returns void.
   Future<void> loadActiveSession() async {
     List<ActiveSession> sessions = constructObject(await LocalDbService()
         .readWhere(LocalDbService.activeSessionTableName, 'id', '1'));
     if (sessions.isNotEmpty) _activeSession = sessions[0];
   }
 
+  /// Clears the active session from the local database and from the singleton.
+  ///
+  /// Returns void.
   Future<void> clearActiveSession() async {
     if (_activeSession == null) return;
     _activeSession!.id = 1;
@@ -55,6 +68,12 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
     _activeSession = null;
   }
 
+  /// Changes the active session password.
+  ///
+  /// Parameters:
+  /// - [password] : the new password.
+  ///
+  /// Returns void.
   Future<void> changeSessionPassword(String password) async {
     if (_activeSession == null) return;
     _activeSession =
