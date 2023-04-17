@@ -221,8 +221,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         (JumpType jumpType) async {
                                       for (Jump j in _jumps) {
                                         j.type = jumpType;
-                                        await CaptureClient()
-                                            .updateJump(jump: j);
+                                        await CaptureClient().updateJump(
+                                            jump: j, currentCapture: _capture!);
                                       }
                                       setState(() {});
                                       if (mounted) {
@@ -267,7 +267,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         _jumpTypeCount[j.type] =
                                             _jumpTypeCount[j.type]! + 1;
                                         CaptureClient()
-                                            .updateJump(jump: j)
+                                            .updateJump(
+                                                jump: j,
+                                                currentCapture: _capture!)
                                             .then((value) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
