@@ -58,7 +58,8 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
+                    SizedBox(
+                        height: ReactiveLayoutHelper.getHeightFromFactor(24)),
                     Text(previousPasswordField,
                         style: TextStyle(
                             fontSize:
@@ -82,6 +83,7 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
                                 ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
+                            obscureText: true,
                             style: TextStyle(
                                 fontSize:
                                     ReactiveLayoutHelper.getHeightFromFactor(
@@ -99,6 +101,7 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
                                 ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
+                            obscureText: true,
                             style: TextStyle(
                                 fontSize:
                                     ReactiveLayoutHelper.getHeightFromFactor(
