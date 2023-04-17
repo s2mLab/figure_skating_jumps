@@ -185,7 +185,7 @@ const String continueModifOfAllJumpsInfo =
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDotButton =
-    "Connecter un nouvel appareil XSens DOT";
+    "Connecter un nouvel XSens DOT";
 const String noDataLabel = "Aucune donnée n'a été collectée";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
