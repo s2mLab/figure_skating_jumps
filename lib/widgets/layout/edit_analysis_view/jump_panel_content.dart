@@ -376,8 +376,9 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
                           return FieldValidators.doubleValidator(val);
                         },
                         onEditingComplete: () {
-                          if (!_rotationFormKey.currentState!.validate())
+                          if (!_rotationFormKey.currentState!.validate()) {
                             return;
+                          }
                           _updateRotationData();
                         },
                         controller: _rotationController,
