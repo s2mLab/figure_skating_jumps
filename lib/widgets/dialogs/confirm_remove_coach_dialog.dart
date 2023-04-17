@@ -43,8 +43,10 @@ class ConfirmRemoveCoachDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         right: ReactiveLayoutHelper.getWidthFromFactor(16)),
                     child: IceButton(
-                        text: confirmLabel,
-                        onPressed: () => confirmAction(),
+                        text: goBackLabel,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         textColor: paleText,
                         color: primaryColor,
                         iceButtonImportance: IceButtonImportance.mainAction,
@@ -54,10 +56,8 @@ class ConfirmRemoveCoachDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         left: ReactiveLayoutHelper.getWidthFromFactor(16)),
                     child: IceButton(
-                        text: goBackLabel,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        text: confirmLabel,
+                        onPressed: () => confirmAction(),
                         textColor: errorColor,
                         color: errorColor,
                         iceButtonImportance:
