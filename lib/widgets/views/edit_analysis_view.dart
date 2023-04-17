@@ -116,8 +116,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      top:
-                      ReactiveLayoutHelper.getHeightFromFactor(16)),
+                      top: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: const PageTitle(text: editAnalysisPageTitle),
                 ),
                 if (_capture!.hasVideo &&
@@ -160,7 +159,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     onPressed: () async {
                       Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0,
                           _capture!.uID!, 0, 0, 0);
-                      newJump = await CaptureClient().createJump(jump: newJump);
+                      newJump = await CaptureClient()
+                          .createJump(jump: newJump, currentCapture: _capture!);
                       _capture!.jumpsID.add(newJump.uID!);
                       if (mounted) {
                         Navigator.of(context).pushReplacement(_createRoute());
@@ -221,8 +221,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         (JumpType jumpType) async {
                                       for (Jump j in _jumps) {
                                         j.type = jumpType;
-                                        await CaptureClient()
-                                            .updateJump(jump: j);
+                                        await CaptureClient().updateJump(
+                                            jump: j, currentCapture: _capture!);
                                       }
                                       setState(() {});
                                       if (mounted) {
@@ -267,7 +267,9 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         _jumpTypeCount[j.type] =
                                             _jumpTypeCount[j.type]! + 1;
                                         CaptureClient()
-                                            .updateJump(jump: j)
+                                            .updateJump(
+                                                jump: j,
+                                                currentCapture: _capture!)
                                             .then((value) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
@@ -289,7 +291,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                         (Jump j, JumpType initial) async {
                                       _capture!.jumpsID.removeWhere(
                                           (element) => element == j.uID!);
-                                      await CaptureClient().deleteJump(jump: j);
+                                      await CaptureClient().deleteJump(
+                                          jump: j, currentCapture: _capture!);
                                       if (mounted) {
                                         Navigator.of(context)
                                             .pushReplacement(_createRoute());
