@@ -1,3 +1,5 @@
+/// This enum represents the different channels used to exchange data with
+/// the Kotlin side.
 enum MethodChannelNames {
   bluetoothChannel("bluetooth-permission-method-channel"),
   recordingChannel("recording-method-channel"),
