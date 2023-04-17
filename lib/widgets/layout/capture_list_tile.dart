@@ -48,14 +48,17 @@ class CaptureListTileState extends State<CaptureListTile> {
   @override
   Widget build(BuildContext context) {
     _initializeVariables();
-    return _loadRequired ? FutureBuilder(
-        future: _loadCaptureData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Container(height: ReactiveLayoutHelper.getHeightFromFactor(115));
-          }
-          return _captureListTileContent();
-        }) : _captureListTileContent();
+    return _loadRequired
+        ? FutureBuilder(
+            future: _loadCaptureData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Container(
+                    height: ReactiveLayoutHelper.getHeightFromFactor(115));
+              }
+              return _captureListTileContent();
+            })
+        : _captureListTileContent();
   }
 
   Widget _captureListTileContent() {
@@ -76,26 +79,25 @@ class CaptureListTileState extends State<CaptureListTile> {
               builder: (_) {
                 return ModificationInfoDialog(
                     orderedModifications:
-                    _currentCapture.modifications.reversed.toList());
+                        _currentCapture.modifications.reversed.toList());
               });
         },
         onPressed: _isInteractive
             ? () {
-          Navigator.pushNamed(context, '/EditAnalysis',
-              arguments: _currentCapture);
-        }
+                Navigator.pushNamed(context, '/EditAnalysis',
+                    arguments: _currentCapture);
+              }
             : null,
         child: Container(
-          padding: EdgeInsets.all(
-              ReactiveLayoutHelper.getHeightFromFactor(16)),
+          padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
           decoration: _isInteractive
               ? BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  ReactiveLayoutHelper.getHeightFromFactor(8)))
+                  borderRadius: BorderRadius.circular(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)))
               : BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  ReactiveLayoutHelper.getHeightFromFactor(8)),
-              color: cardBackground),
+                  borderRadius: BorderRadius.circular(
+                      ReactiveLayoutHelper.getHeightFromFactor(8)),
+                  color: cardBackground),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -109,15 +111,14 @@ class CaptureListTileState extends State<CaptureListTile> {
                           TimeConverter.dateTimeToHoursAndMinutes(
                               _currentCapture.date),
                           style: TextStyle(
-                              fontSize: ReactiveLayoutHelper
-                                  .getHeightFromFactor(24),
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(24),
                               color: darkText)),
                       Text(
-                          TimeConverter.dateTimeToSeconds(
-                              _currentCapture.date),
+                          TimeConverter.dateTimeToSeconds(_currentCapture.date),
                           style: TextStyle(
-                              fontSize: ReactiveLayoutHelper
-                                  .getHeightFromFactor(14),
+                              fontSize:
+                                  ReactiveLayoutHelper.getHeightFromFactor(14),
                               color: darkText)),
                     ],
                   ),
@@ -134,17 +135,17 @@ class CaptureListTileState extends State<CaptureListTile> {
                         Row(children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                left: ReactiveLayoutHelper
-                                    .getWidthFromFactor(4)),
-                            child: const Icon(Icons.schedule,
-                                color: darkText),
+                                left:
+                                    ReactiveLayoutHelper.getWidthFromFactor(4)),
+                            child: const Icon(Icons.schedule, color: darkText),
                           ),
                           Text(
                             TimeConverter.msToFormatSMs(
                                 _currentCapture.duration),
                             style: TextStyle(
-                                fontSize: ReactiveLayoutHelper
-                                    .getHeightFromFactor(16),
+                                fontSize:
+                                    ReactiveLayoutHelper.getHeightFromFactor(
+                                        16),
                                 color: darkText),
                           )
                         ]),
@@ -158,26 +159,27 @@ class CaptureListTileState extends State<CaptureListTile> {
                     top: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(JumpType.values.length - 1,
-                            (index) {
-                          return Row(
-                            children: [
-                              ColorCircle(
-                                  colorCircle: JumpType.values[index].color),
-                              Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: ReactiveLayoutHelper
-                                          .getWidthFromFactor(5)),
-                                  child: Text(
-                                      jumpTypeCount[JumpType.values[index]]
-                                          .toString(),
-                                      style: TextStyle(
-                                          color: darkText,
-                                          fontSize: ReactiveLayoutHelper
-                                              .getHeightFromFactor(16)))),
-                            ],
-                          );
-                        })),
+                    children:
+                        List.generate(JumpType.values.length - 1, (index) {
+                      return Row(
+                        children: [
+                          ColorCircle(
+                              colorCircle: JumpType.values[index].color),
+                          Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          5)),
+                              child: Text(
+                                  jumpTypeCount[JumpType.values[index]]
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: darkText,
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)))),
+                        ],
+                      );
+                    })),
               )
             ],
           ),
