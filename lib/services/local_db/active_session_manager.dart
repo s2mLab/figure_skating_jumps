@@ -49,9 +49,10 @@ class ActiveSessionManager implements ILocalDbManager<ActiveSession> {
 
   Future<void> clearActiveSession() async {
     if (_activeSession == null) return;
-    _activeSession?.id = 1;
+    _activeSession!.id = 1;
     await LocalDbService()
         .deleteOne(_activeSession!, LocalDbService.activeSessionTableName);
+    _activeSession = null;
   }
 
   Future<void> changeSessionPassword(String password) async {
