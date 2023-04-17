@@ -115,10 +115,13 @@ class CaptureClient {
     }
   }
 
-  Future<void> updateJump({required Jump jump}) async {
+  Future<void> updateJump(
+      {required Jump jump, required Capture currentCapture}) async {
     try {
       await _addUpdateJumpModificationToCapture(
-          captureID: jump.captureID, updatedJump: jump);
+          captureID: jump.captureID,
+          updatedJump: jump,
+          currentCapture: currentCapture);
       await _firestore.collection(_jumpsCollectionString).doc(jump.uID!).set({
         'capture': jump.captureID,
         'comment': jump.comment,
@@ -216,22 +219,24 @@ class CaptureClient {
   }
 
   Future<void> _addUpdateJumpModificationToCapture(
-      {required String captureID, required Jump updatedJump}) async {
+      {required String captureID,
+      required Jump updatedJump,
+      required Capture currentCapture}) async {
     try {
       Jump oldJump = await getJumpByID(uID: updatedJump.uID!);
       List<String> actions = _getJumpModificationActions(
           oldJump: oldJump, updatedJump: updatedJump);
 
-      Capture capture = await getCaptureByID(uID: captureID);
       DateTime modificationTime = DateTime.now();
       for (String action in actions) {
-        capture.modifications.add(Modification(action, modificationTime));
+        currentCapture.modifications
+            .add(Modification(action, modificationTime));
       }
       await _firestore
           .collection(_captureCollectionString)
           .doc(captureID)
           .update({
-        'modifications': capture.modsAsMap,
+        'modifications': currentCapture.modsAsMap,
       });
     } catch (e) {
       debugPrint(e.toString());
