@@ -68,7 +68,7 @@ Le projet se base sur une architecture de micro services. Le service pour commun
 │   │   └── views
 │   ├── firebase_options.dart
 │   └── main.dart
-├── Python_analysis
+├── python_analysis
 │   ├── analysis.py
 │   ├── analysis_utils.py
 │   ├── app.py
