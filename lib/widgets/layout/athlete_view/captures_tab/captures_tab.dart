@@ -11,7 +11,6 @@ class CapturesTab extends StatelessWidget {
   const CapturesTab({Key? key, required this.groupedCaptures})
       : super(key: key);
   final Map<String, List<Capture>> groupedCaptures;
-  final double heightContainer = 130;
 
   @override
   Widget build(BuildContext context) {
@@ -31,37 +30,41 @@ class CapturesTab extends StatelessWidget {
                           fontSize:
                               ReactiveLayoutHelper.getHeightFromFactor(16))),
                 )
-              : ListView.builder( // This will have to be adapted to lazy loading when the # of captures will increase
+              : ListView.builder(
+                  // This will have to be adapted to lazy loading when the # of captures will increase
                   itemCount: groupedCaptures.length,
                   itemBuilder: (context, dateIndex) {
                     String key = groupedCaptures.keys.elementAt(dateIndex);
                     List<Capture> capturesToDisplay = groupedCaptures[key]!;
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            key.replaceAll('-', '/'),
-                            style: TextStyle(
-                                fontSize:
-                                    ReactiveLayoutHelper.getHeightFromFactor(
-                                        26),
-                                color: primaryColorLight,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                              height: capturesToDisplay.length *
-                                  ReactiveLayoutHelper.getHeightFromFactor(
-                                      heightContainer),
-                              child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: capturesToDisplay.length,
-                                  itemBuilder: (context, index) {
-                                    Capture currentCapture =
-                                        capturesToDisplay[index];
-                                    return CaptureListTile(
-                                        currentCapture: currentCapture);
-                                  }))
-                        ]);
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical:
+                              ReactiveLayoutHelper.getHeightFromFactor(8)),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              key.replaceAll('-', '/'),
+                              style: TextStyle(
+                                  fontSize:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          26),
+                                  color: primaryColorLight,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: capturesToDisplay.length,
+                              itemBuilder: (context, index) {
+                                Capture currentCapture =
+                                    capturesToDisplay[index];
+                                return CaptureListTile(
+                                    currentCapture: currentCapture);
+                              },
+                            )
+                          ]),
+                    );
                   },
                 ),
         )),
