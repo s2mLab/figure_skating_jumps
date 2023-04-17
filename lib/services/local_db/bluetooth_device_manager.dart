@@ -33,11 +33,23 @@ class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
     });
   }
 
+  /// Loads the Bluetooth devices for the given user ID from the local database.
+  ///
+  /// Parameters:
+  /// - [userID] : The ID of the user whose devices to load.
+  ///
+  /// Returns void.
   Future<void> loadDevices(String userID) async {
     _devices = constructObject(await LocalDbService()
         .readWhere(LocalDbService.bluetoothDeviceTableName, "userID", userID));
   }
 
+  /// Adds a [BluetoothDevice] to the user's known devices.
+  ///
+  /// Parameters:
+  /// - [device] : The [BluetoothDevice] object to add.
+  ///
+  /// Returns void.
   Future<void> addDevice(BluetoothDevice device) async {
     int id = await LocalDbService()
         .insertOne(device, LocalDbService.bluetoothDeviceTableName);
@@ -45,6 +57,12 @@ class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
     _devices.add(device);
   }
 
+  /// Removes the given [device] from the users known devices.
+  ///
+  /// Parameters:
+  /// - [device] : the [BluetoothDevice] to be removed.
+  ///
+  /// Returns void.
   Future<void> removeDevice(BluetoothDevice device) async {
     if (!_devices.any((element) => element.macAddress == device.macAddress)) {
       debugPrint("Could not find device ${device.macAddress} in local storage");
@@ -55,6 +73,12 @@ class BluetoothDeviceManager implements ILocalDbManager<BluetoothDevice> {
         .deleteOne(device, LocalDbService.bluetoothDeviceTableName);
   }
 
+  /// Updates the given [device] in the users known devices.
+  ///
+  /// Parameters:
+  /// - [device] : the [BluetoothDevice] to be updated.
+  ///
+  /// Returns void.
   Future<void> updateDevice(BluetoothDevice device) async {
     await LocalDbService()
         .updateOne(device, LocalDbService.bluetoothDeviceTableName);
