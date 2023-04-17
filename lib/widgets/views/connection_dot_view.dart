@@ -17,14 +17,14 @@ import 'package:figure_skating_jumps/widgets/layout/scaffold/topbar.dart';
 import 'package:figure_skating_jumps/widgets/titles/page_title.dart';
 import 'package:flutter/material.dart';
 
-class ConnectionDotView extends StatefulWidget {
-  const ConnectionDotView({Key? key}) : super(key: key);
+class DeviceManagementView extends StatefulWidget {
+  const DeviceManagementView({Key? key}) : super(key: key);
 
   @override
-  State<ConnectionDotView> createState() => _ConnectionDotViewState();
+  State<DeviceManagementView> createState() => _DeviceManagementViewState();
 }
 
-class _ConnectionDotViewState extends State<ConnectionDotView>
+class _DeviceManagementViewState extends State<DeviceManagementView>
     implements IXSensStateSubscriber {
   final XSensDotConnectionService _xSensDotConnectionService =
       XSensDotConnectionService();
