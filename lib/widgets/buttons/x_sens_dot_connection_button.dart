@@ -30,9 +30,9 @@ class _XSensDotConnectionButtonState extends State<XSensDotConnectionButton>
     super.dispose();
   }
 
-  /// This fonction remove the animation transition to prevent user from spaming button.
+  /// This fonction removes the animation transition to prevent the user from spamming the button.
   ///
-  /// returns a [Route] for the [DeviceManagementView].
+  /// Returns a [Route] for the [DeviceManagementView].
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
