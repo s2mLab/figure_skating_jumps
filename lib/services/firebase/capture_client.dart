@@ -197,8 +197,8 @@ class CaptureClient {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a ajouté le saut $jumpID à la capture $captureID.";
-      currentCapture.modifications.add(Modification(action, DateTime.now()));
-      await _addModificationToCapture(captureID: captureID, action: action);
+      await _addModificationToCapture(
+          currentCapture: currentCapture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -212,8 +212,8 @@ class CaptureClient {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a supprimé le saut $jumpID de la capture $captureID.";
-      currentCapture.modifications.add(Modification(action, DateTime.now()));
-      await _addModificationToCapture(captureID: captureID, action: action);
+      await _addModificationToCapture(
+          currentCapture: currentCapture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -247,15 +247,14 @@ class CaptureClient {
   }
 
   Future<void> _addModificationToCapture(
-      {required String captureID, required String action}) async {
+      {required Capture currentCapture, required String action}) async {
     try {
-      Capture capture = await getCaptureByID(uID: captureID);
-      capture.modifications.add(Modification(action, DateTime.now()));
+      currentCapture.modifications.add(Modification(action, DateTime.now()));
       await _firestore
           .collection(_captureCollectionString)
-          .doc(captureID)
+          .doc(currentCapture.uID)
           .update({
-        'modifications': capture.modsAsMap,
+        'modifications': currentCapture.modsAsMap,
       });
     } catch (e) {
       debugPrint(e.toString());
