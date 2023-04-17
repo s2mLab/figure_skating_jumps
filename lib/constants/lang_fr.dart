@@ -188,7 +188,7 @@ const String continueModifOfAllJumpsInfo =
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDotButton =
-    "Connecter un nouvel appareil XSens DOT";
+    "Connecter un nouvel XSens DOT";
 const String noDataLabel = "Aucune donnée n'a été collectée";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
@@ -302,6 +302,8 @@ const String warnAccountTypeChangeInfo =
 const String athleteAlreadyExistsInfo =
     "Cet athlète existe déjà; il a été ajouté à votre liste d'athlètes!";
 const String athleteAlreadyInListInfo = "Cet athète est déjà dans votre liste.";
+const String ownProfileInListInfo =
+    "Vous ne pouvez pas vous ajouter dans votre liste d'athlètes";
 
 // exceptions
 const String conflictException = "La ressource existe déjà.";
