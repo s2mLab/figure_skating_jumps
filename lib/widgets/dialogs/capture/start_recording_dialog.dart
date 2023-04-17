@@ -27,7 +27,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
   @override
   void initState() {
     RecorderState state = _xSensDotRecordingService.subscribe(this);
-    if(state == RecorderState.full) _currentId = 1;
+    if (state == RecorderState.full) _currentId = 1;
     _startingState = [_startingRecording(), _fullMemory(), _erasingMemory()];
     super.initState();
   }
@@ -39,8 +39,18 @@ class _StartRecordingState extends State<StartRecordingDialog>
   }
 
   @override
-  SimpleDialog build(BuildContext context) {
-    return _startingState[_currentId];
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () {
+          if (_currentId == 1) _xSensDotRecordingService.acknowledgeError();
+          bool canPop = _xSensDotRecordingService.recorderState !=
+                  RecorderState.preparing &&
+              _xSensDotRecordingService.recorderState !=
+                  RecorderState.erasing &&
+              _xSensDotRecordingService.recorderState != RecorderState.full;
+          return Future<bool>.value(canPop);
+        },
+        child: _startingState[_currentId]);
   }
 
   SimpleDialog _startingRecording() {
@@ -76,6 +86,7 @@ class _StartRecordingState extends State<StartRecordingDialog>
             IceButton(
                 text: goBackLabel,
                 onPressed: () {
+                  _xSensDotRecordingService.acknowledgeError();
                   Navigator.pop(context);
                 },
                 textColor: primaryColor,
