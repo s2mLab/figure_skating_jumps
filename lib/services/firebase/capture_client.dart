@@ -34,7 +34,8 @@ class CaptureClient {
 
   CaptureClient._internal();
 
-  Future<Jump> createJump({required Jump jump, required currentCapture}) async {
+  Future<Jump> createJump(
+      {required Jump jump, required Capture currentCapture}) async {
     try {
       DocumentReference<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).add({
@@ -97,7 +98,8 @@ class CaptureClient {
     }
   }
 
-  Future<void> deleteJump({required Jump jump, required currentCapture}) async {
+  Future<void> deleteJump(
+      {required Jump jump, required Capture currentCapture}) async {
     try {
       await _addDeleteJumpModificationToCapture(
           captureID: jump.captureID,
