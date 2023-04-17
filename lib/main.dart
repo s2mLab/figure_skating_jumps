@@ -52,9 +52,13 @@ Future<void> main() async {
 
     await ActiveSessionManager().loadActiveSession();
     if (ActiveSessionManager().activeSession != null) {
-      await UserClient().signIn(
-          email: ActiveSessionManager().activeSession!.email,
-          password: ActiveSessionManager().activeSession!.password);
+      try {
+        await UserClient().signIn(
+            email: ActiveSessionManager().activeSession!.email,
+            password: ActiveSessionManager().activeSession!.password);
+      } catch (e) {
+        ActiveSessionManager().clearActiveSession();
+      }
     }
 
     await GlobalSettingsManager().loadSettings();
