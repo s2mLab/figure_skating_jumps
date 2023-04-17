@@ -1,5 +1,4 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
-import 'package:flutter/cupertino.dart';
 
 class FieldValidators {
   /// Validates a new name string and returns an error message if the validation fails.
@@ -39,21 +38,6 @@ class FieldValidators {
       return pleaseFillField;
     }
     if (!RegExp(r'^(0|[1-9]\d*)(\.\d+)?$').hasMatch(value)) {
-      return invalidDigitFormatLabel;
-    }
-    return null;
-  }
-
-  static String? nonNegativeValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return pleaseFillField;
-    }
-    try {
-      if (int.parse(value) < 0 || !RegExp(r'^(0|[1-9]\d*)$').hasMatch(value)) {
-        return invalidDigitFormatLabel;
-      }
-    } on FormatException catch (e) {
-      debugPrint(e.message);
       return invalidDigitFormatLabel;
     }
     return null;
