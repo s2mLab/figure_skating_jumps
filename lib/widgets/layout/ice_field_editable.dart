@@ -31,49 +31,47 @@ class _IceFieldEditableState extends State<IceFieldEditable> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _isEditing
-                  ? SizedBox(
-                      width: ReactiveLayoutHelper.getWidthFromFactor(200),
-                      child: TextField(
-                        style: TextStyle(
-                            fontSize:
-                                ReactiveLayoutHelper.getHeightFromFactor(24)),
-                        onEditingComplete: widget._onEditComplete(baseText),
-                        controller: controller,
-                      ),
-                    )
-                  : Text(
-                      baseText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize:
-                              ReactiveLayoutHelper.getHeightFromFactor(24),
-                          overflow: TextOverflow.ellipsis,
-                          color:
-                              widget._text.isEmpty ? discreetText : darkText),
-                    ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isEditing = !_isEditing;
-                    baseText = controller.text;
-                    if (!_isEditing) widget._onEditComplete(baseText);
-                  });
-                },
-                icon: Icon(
-                    color: secondaryColor,
-                    _isEditing ? Icons.done : Icons.edit),
-                padding: EdgeInsets.zero,
-                iconSize: 32,
-              )
-            ],
-          ),
-        ),
+        _isEditing
+            ? Expanded(
+              child: SizedBox(
+                  width: ReactiveLayoutHelper.getWidthFromFactor(200),
+                  child: TextField(
+                    style: TextStyle(
+                        fontSize:
+                            ReactiveLayoutHelper.getHeightFromFactor(24)),
+                    onEditingComplete: widget._onEditComplete(baseText),
+                    controller: controller,
+                  ),
+                ),
+            )
+            : Expanded(
+              child: Text(
+                  baseText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize:
+                          ReactiveLayoutHelper.getHeightFromFactor(24),
+                      overflow: TextOverflow.ellipsis,
+                      color:
+                          widget._text.isEmpty ? discreetText : darkText),
+                ),
+            ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _isEditing = !_isEditing;
+              baseText = controller.text;
+              if (!_isEditing) widget._onEditComplete(baseText);
+            });
+          },
+          icon: Icon(
+              color: primaryColorLight,
+              _isEditing ? Icons.done : Icons.edit),
+          padding: EdgeInsets.zero,
+          iconSize: 32,
+        )
       ],
     );
   }
