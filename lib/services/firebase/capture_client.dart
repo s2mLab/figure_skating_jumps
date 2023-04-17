@@ -34,7 +34,7 @@ class CaptureClient {
 
   CaptureClient._internal();
 
-  Future<Jump> createJump({required Jump jump}) async {
+  Future<Jump> createJump({required Jump jump, required currentCapture}) async {
     try {
       DocumentReference<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).add({
@@ -53,7 +53,9 @@ class CaptureClient {
       _modifyCaptureJumpList(
           captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
       await _addNewJumpModificationToCapture(
-          captureID: jump.captureID, jumpID: jump.uID!);
+          captureID: jump.captureID,
+          jumpID: jump.uID!,
+          currentCapture: currentCapture);
       return jump;
     } catch (e) {
       debugPrint(e.toString());
@@ -95,10 +97,12 @@ class CaptureClient {
     }
   }
 
-  Future<void> deleteJump({required Jump jump}) async {
+  Future<void> deleteJump({required Jump jump, required currentCapture}) async {
     try {
       await _addDeleteJumpModificationToCapture(
-          captureID: jump.captureID, jumpID: jump.uID!);
+          captureID: jump.captureID,
+          jumpID: jump.uID!,
+          currentCapture: currentCapture);
       await _firestore
           .collection(_jumpsCollectionString)
           .doc(jump.uID)
@@ -162,7 +166,8 @@ class CaptureClient {
 
   Future<Capture> getCaptureByID({required String uID}) async {
     try {
-      return Capture.fromFirestore(uID, await _firestore.collection(_captureCollectionString).doc(uID).get());
+      return Capture.fromFirestore(uID,
+          await _firestore.collection(_captureCollectionString).doc(uID).get());
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -181,10 +186,13 @@ class CaptureClient {
   }
 
   Future<void> _addNewJumpModificationToCapture(
-      {required String captureID, required String jumpID}) async {
+      {required String captureID,
+      required String jumpID,
+      required Capture currentCapture}) async {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a ajouté le saut $jumpID à la capture $captureID.";
+      currentCapture.modifications.add(Modification(action, DateTime.now()));
       await _addModificationToCapture(captureID: captureID, action: action);
     } catch (e) {
       debugPrint(e.toString());
@@ -193,10 +201,13 @@ class CaptureClient {
   }
 
   Future<void> _addDeleteJumpModificationToCapture(
-      {required String captureID, required String jumpID}) async {
+      {required String captureID,
+      required String jumpID,
+      required Capture currentCapture}) async {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a supprimé le saut $jumpID de la capture $captureID.";
+      currentCapture.modifications.add(Modification(action, DateTime.now()));
       await _addModificationToCapture(captureID: captureID, action: action);
     } catch (e) {
       debugPrint(e.toString());
