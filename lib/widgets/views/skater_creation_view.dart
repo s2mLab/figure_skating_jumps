@@ -244,6 +244,14 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
         UserClient().currentSkatingUser!.traineesID.add(skatingUserUID);
       }
       if (mounted) {
+        String messageToUser;
+        if (_emailController.text == UserClient().currentAuthUser!.email) {
+          messageToUser = ownProfileInListInfo;
+        } else if (skatingUserUID == null) {
+          messageToUser = athleteAlreadyInListInfo;
+        } else {
+          messageToUser = athleteAlreadyExistsInfo;
+        }
         showDialog(
             barrierDismissible: false,
             context: context,
@@ -256,9 +264,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
                       padding: EdgeInsets.all(
                           ReactiveLayoutHelper.getHeightFromFactor(8)),
                       child: Text(
-                        skatingUserUID == null
-                            ? athleteAlreadyInListInfo
-                            : athleteAlreadyExistsInfo,
+                        messageToUser,
                         style: TextStyle(
                             fontSize:
                                 ReactiveLayoutHelper.getHeightFromFactor(20)),
