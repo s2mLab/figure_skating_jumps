@@ -14,7 +14,7 @@ data class RecordingEvent(private val status: RecordingStatus, private val data:
     /**
      * Overrides the toString method that convert an object into a string
      *
-     * @return [String] The converted RecordingEvent
+     * @return [String] The converted [RecordingEvent]
      */
     override fun toString(): String {
         val json = buildJsonObject {
