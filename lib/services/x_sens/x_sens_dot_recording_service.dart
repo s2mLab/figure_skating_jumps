@@ -118,6 +118,15 @@ class XSensDotRecordingService
     return _exportStream;
   }
 
+  /// Stops the recording.
+  ///
+  /// Throws a [PlatformException] if the platform API call fails.
+  ///
+  /// Parameters:
+  /// - [hasVideo] : a [bool] value indicating whether the recording has video or not.
+  /// - [videoPath] : a [String] representing the file path to the video.
+  ///
+  /// Returns void.
   Future<void> stopRecording(bool hasVideo, String videoPath) async {
     _currentRecordingHasVideo = hasVideo;
     _currentRecordingVideoPath = videoPath;
@@ -128,6 +137,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Erases the memory of the recorder if it's full.
+  ///
+  /// Returns void.
   Future<void> eraseMemory() async {
     if (_recorderState == RecorderState.full) {
       _changeState(RecorderState.erasing);
@@ -135,10 +147,19 @@ class XSensDotRecordingService
     }
   }
 
+  /// Changes the state to idle after an error.
+  ///
+  /// Returns void.
   void acknowledgeError() {
     _changeState(RecorderState.idle);
   }
 
+  /// Sets the recording rate.
+  ///
+  /// Throws a [PlatformException] if a platform-specific error occurs during the
+  /// invocation of the recording method channel.
+  ///
+  /// Returns void.
   static Future<void> _setRate() async {
     _resetTimer();
     try {
@@ -149,11 +170,21 @@ class XSensDotRecordingService
     }
   }
 
+  /// Resets the timer and prepares for recording.
+  ///
+  /// Returns void.
   static Future<void> _handleSetRate() async {
     _resetTimer();
     await _recordingMethodChannel.invokeMethod('prepareRecording');
   }
 
+  /// Handles the enable recording notification by calling the method or logging
+  /// a message.
+  ///
+  /// Parameters:
+  /// - [data] : The boolean completion status of the process as a string.
+  ///
+  /// Returns void.
   static Future<void> _handleEnableRecordingNotificationDone(
       String data) async {
     if (data == "true") {
@@ -168,6 +199,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the start of the recording process.
+  ///
+  /// Returns void.
   static void _handleRecordingStarted() {
     if (_recorderState == RecorderState.preparing) {
       _timeoutTimer?.cancel();
@@ -176,6 +210,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the completion of the recording process.
+  ///
+  /// Returns void.
   static Future<void> _handleRecordingStopped() async {
     if (_recorderState == RecorderState.recording) {
       int recordingDuration = DateTime.now().millisecondsSinceEpoch -
@@ -188,6 +225,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the completion of the "get flash info" process.
+  ///
+  /// Returns void
   static Future<void> _handleGetFlashInfoDone(String? data) async {
     _resetTimer();
     switch (_recorderState) {
@@ -217,6 +257,12 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the completion of the "get file info" process.
+  ///
+  /// Parameters:
+  /// - [data] : A comma-separated string representing the file info.
+  ///
+  /// Returns void.
   static Future<void> _handleGetFileInfoDone(String data) async {
     if (_recorderState == RecorderState.exporting) {
       _resetTimer();
@@ -226,6 +272,12 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the process of extracting a file.
+  ///
+  /// Parameters:
+  /// - [data] : A String containing the extracted data.
+  ///
+  /// Returns void.
   static void _handleExtractingFile(String? data) {
     if (_recorderState == RecorderState.exporting) {
       if (data != null) {
@@ -252,6 +304,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Handles the completion of the extraction of a file.
+  ///
+  /// Returns void.
   static Future<void> _handleExtractFileDone() async {
     if (_recorderState == RecorderState.exporting) {
       _timeoutTimer?.cancel();
@@ -267,6 +322,9 @@ class XSensDotRecordingService
     }
   }
 
+  /// Analyzes data and creates jumps from them.
+  ///
+  /// Returns void.
   static Future<void> _analyzeData() async {
     String content = CsvCreator.createXSensDotCsv(_exportedData);
     bool success = await HttpClient()
@@ -290,15 +348,27 @@ class XSensDotRecordingService
     _changeState(RecorderState.idle);
   }
 
+  /// Changes the state to idle when the memory is done erasing.
+  ///
+  /// Returns void.
   static void _handleEraseMemoryDone() async {
     _changeState(RecorderState.idle);
   }
 
+  /// Changes the state.
+  ///
+  /// Parameters:
+  /// - [state] : The new [RecorderState].
+  ///
+  /// Returns void.
   static void _changeState(RecorderState state) {
     _recorderState = state;
     XSensDotRecordingService().notifySubscribers(state);
   }
 
+  /// Resets the timer.
+  ///
+  /// Returns void.
   static void _resetTimer() {
     _timeoutTimer?.cancel();
     _timeoutTimer = Timer(_timeoutDuration, () {
