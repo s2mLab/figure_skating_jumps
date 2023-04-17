@@ -44,10 +44,10 @@ class InitialRedirectRoute extends StatelessWidget {
                 const ListAthletesView())
         : PageRouteBuilder(
             settings: RouteSettings(
-                name: '/Acquisitions',
+                name: '/Captures',
                 arguments: UserClient().currentSkatingUser),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const AthleteView());
+                const CapturesView());
   }
 
   @override

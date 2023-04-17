@@ -50,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
         UserClient().currentSkatingUser!.role == UserRole.coach
             ? Navigator.pushReplacementNamed(context, '/ListAthletes',
                 arguments: false)
-            : Navigator.pushReplacementNamed(context, '/Acquisitions',
+            : Navigator.pushReplacementNamed(context, '/Captures',
                 arguments: UserClient().currentSkatingUser);
       }
     } on AbstractIceException catch (e) {
@@ -213,7 +213,7 @@ class _LoginViewState extends State<LoginView> {
                                   onPressed: () {
                                     Navigator.pushNamed(
                                       context,
-                                      '/ForgotPasswordView',
+                                      '/ForgotPassword',
                                     );
                                   },
                                   textColor: primaryColor,
