@@ -160,7 +160,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0,
                           _capture!.uID!, 0, 0, 0);
                       newJump = await CaptureClient()
-                          .createJump(jump: newJump, currentCapture: _capture);
+                          .createJump(jump: newJump, currentCapture: _capture!);
                       _capture!.jumpsID.add(newJump.uID!);
                       if (mounted) {
                         Navigator.of(context).pushReplacement(_createRoute());
@@ -292,7 +292,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                       _capture!.jumpsID.removeWhere(
                                           (element) => element == j.uID!);
                                       await CaptureClient().deleteJump(
-                                          jump: j, currentCapture: _capture);
+                                          jump: j, currentCapture: _capture!);
                                       if (mounted) {
                                         Navigator.of(context)
                                             .pushReplacement(_createRoute());
