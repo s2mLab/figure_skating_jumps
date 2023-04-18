@@ -13,6 +13,8 @@ import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
+/// A singleton used to communicate with Firebase.
+/// It handles anything related to captures and jumps.
 class CaptureClient {
   static final CaptureClient _captureClient = CaptureClient._internal();
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,8 +36,18 @@ class CaptureClient {
 
   CaptureClient._internal();
 
+  /// Creates a new Jump and saves it to Firestore.
+  ///
+  /// Throws a [FirebaseException] if there is an error saving the jump to Firestore.
+  ///
+  /// Parameters:
+  /// - [jump] : The [Jump] to create.
+  /// - [capture] : The [Capture] associated with the jump.
+  ///
+  /// Returns the newly created [Jump] object when the jump is successfully saved to Firestore.
+  /// The [Jump] is returned with its uID from Firestore.
   Future<Jump> createJump(
-      {required Jump jump, required Capture currentCapture}) async {
+      {required Jump jump, required Capture capture}) async {
     try {
       DocumentReference<Map<String, dynamic>> jumpInfo =
           await _firestore.collection(_jumpsCollectionString).add({
@@ -54,9 +66,8 @@ class CaptureClient {
       _modifyCaptureJumpList(
           captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
       await _addNewJumpModificationToCapture(
-          captureID: jump.captureID,
-          jumpID: jump.uID!,
-          currentCapture: currentCapture);
+          capture: capture,
+          jumpID: jump.uID!);
       return jump;
     } catch (e) {
       debugPrint(e.toString());
@@ -64,6 +75,14 @@ class CaptureClient {
     }
   }
 
+  /// Creates and saves all the jumps passed in the list to Firestore.
+  ///
+  /// Throws a [FirebaseException] if there is an error during the save to Firestore.
+  ///
+  /// Parameters:
+  /// - [jumps] : The list of [Jump] to create.
+  ///
+  /// Returns a list of [Jump] objects. Each of these jumps has its uID from Firestore.
   Future<List<Jump>> createJumps({required List<Jump> jumps}) async {
     try {
       List<String> jumpIds = [];
@@ -98,13 +117,25 @@ class CaptureClient {
     }
   }
 
+  /// Deletes a [Jump] from the Firestore database.
+  /// Also updates the capture's jump list and creates a modification to track
+  /// the deletion.
+  ///
+  /// Throws a [FirebaseException] if there is an error deleting the document.
+  /// Throws an [ArgumentError] if [jump.uID] is null.
+  ///
+  /// Parameters:
+  /// - [jump] : The [Jump] to delete.
+  /// - [capture] : The [Capture] object corresponding to the capture that
+  ///   contains the jump.
+  ///
+  /// Returns void.
   Future<void> deleteJump(
-      {required Jump jump, required Capture currentCapture}) async {
+      {required Jump jump, required Capture capture}) async {
     try {
       await _addDeleteJumpModificationToCapture(
-          captureID: jump.captureID,
-          jumpID: jump.uID!,
-          currentCapture: currentCapture);
+          capture: capture,
+          jumpID: jump.uID!);
       await _firestore
           .collection(_jumpsCollectionString)
           .doc(jump.uID)
@@ -117,13 +148,21 @@ class CaptureClient {
     }
   }
 
+  /// Updates an existing jump document in Firestore with the provided jump object.
+  ///
+  /// Throws a [FirebaseException] if there was an error updating the document.
+  ///
+  /// Parameters:
+  /// - [jump] : The [Jump] object with the new values. The uID must be set to complete the update.
+  /// - [capture] : The [Capture] associated to the jump.
+  ///
+  /// Returns void.
   Future<void> updateJump(
-      {required Jump jump, required Capture currentCapture}) async {
+      {required Jump jump, required Capture capture}) async {
     try {
       await _addUpdateJumpModificationToCapture(
-          captureID: jump.captureID,
-          updatedJump: jump,
-          currentCapture: currentCapture);
+          capture: capture,
+          updatedJump: jump);
       await _firestore.collection(_jumpsCollectionString).doc(jump.uID!).set({
         'capture': jump.captureID,
         'comment': jump.comment,
@@ -142,6 +181,19 @@ class CaptureClient {
     }
   }
 
+  /// Saves XSens data locally and to Firebase. It creates a capture associated
+  /// to the data. If there is video, it'll save it locally.
+  ///
+  /// Throws a [FirebaseException] if there is an error while accessing the Firestore database.
+  ///
+  /// Parameters:
+  /// - [exportFileName] : A [String] representing the export file name.
+  /// - [exportedData] : A [List] of [XSensDotData] representing the exported data to be saved.
+  /// - [hasVideo] : A [bool] indicating whether the capture has a video.
+  /// - [videoPath] : A [String] representing the path to the video file.
+  /// - [season] : A [Season] representing the season the capture was made in.
+  ///
+  /// Returns the saved [Capture] object.
   Future<Capture> saveCapture(
       {required String exportFileName,
       required List<XSensDotData> exportedData,
@@ -169,6 +221,14 @@ class CaptureClient {
     return capture;
   }
 
+  /// Retrieves a Capture object from Firestore by the provided uID.
+  ///
+  /// Throws a [FirebaseException] if there is an error retrieving the Capture object from Firestore.
+  ///
+  /// Parameters:
+  /// - [uID] : The unique identifier of the [Capture] object to be retrieved.
+  ///
+  /// Returns the retrieved [Capture] object if successful.
   Future<Capture> getCaptureByID({required String uID}) async {
     try {
       return Capture.fromFirestore(uID,
@@ -179,6 +239,14 @@ class CaptureClient {
     }
   }
 
+  /// Retrieves a [Jump] object by its ID from Firestore.
+  ///
+  /// Throws a [FirebaseException] if an error occurs while retrieving the Capture object from Firestore.
+  ///
+  /// Parameters:
+  /// - [uID] : The ID of the [Jump] to retrieve.
+  ///
+  /// Returns the wanted [Jump] object.
   Future<Jump> getJumpByID({required String uID}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> jumpInfo =
@@ -190,40 +258,64 @@ class CaptureClient {
     }
   }
 
+  /// Adds a new [Jump] modification to a [Capture] in Firestore.
+  ///
+  /// Throws a [FirebaseException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [capture] : The current [Capture] object to be updated.
+  /// - [jumpID] : The ID of the [Jump] to add to the Capture.
+  ///
+  /// Returns void.
   Future<void> _addNewJumpModificationToCapture(
-      {required String captureID,
-      required String jumpID,
-      required Capture currentCapture}) async {
+      {required Capture capture,
+      required String jumpID}) async {
     try {
       String action =
-          "L'utilisateur ${UserClient().currentSkatingUser!.name} a ajouté le saut $jumpID à la capture $captureID.";
+          "L'utilisateur ${UserClient().currentSkatingUser!.name} a ajouté le saut $jumpID à la capture ${capture.uID!}.";
       await _addModificationToCapture(
-          currentCapture: currentCapture, action: action);
+          capture: capture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
 
+  /// Adds a [Jump] deleted modification to a [Capture] object.
+  ///
+  /// Throws a [FirebaseException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [capture] : The current [Capture] object being modified.
+  /// - [jumpID] : The ID of the [Jump] being deleted
+  ///
+  /// Returns void.
   Future<void> _addDeleteJumpModificationToCapture(
-      {required String captureID,
-      required String jumpID,
-      required Capture currentCapture}) async {
+      {required Capture capture,
+      required String jumpID}) async {
     try {
       String action =
-          "L'utilisateur ${UserClient().currentSkatingUser!.name} a supprimé le saut $jumpID de la capture $captureID.";
+          "L'utilisateur ${UserClient().currentSkatingUser!.name} a supprimé le saut $jumpID de la capture ${capture.uID!}.";
       await _addModificationToCapture(
-          currentCapture: currentCapture, action: action);
+          capture: capture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
 
+  /// Adds a [Jump] updated modification to a Capture object.
+  ///
+  /// Throws a [FirebaseException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [capture] : The current [Capture] object to be modified.
+  /// - [updatedJump] : The updated [Jump] object.
+  ///
+  /// Returns void.
   Future<void> _addUpdateJumpModificationToCapture(
-      {required String captureID,
-      required Jump updatedJump,
-      required Capture currentCapture}) async {
+      {required Capture capture,
+      required Jump updatedJump}) async {
     try {
       Jump oldJump = await getJumpByID(uID: updatedJump.uID!);
       List<String> actions = _getJumpModificationActions(
@@ -231,14 +323,14 @@ class CaptureClient {
 
       DateTime modificationTime = DateTime.now();
       for (String action in actions) {
-        currentCapture.modifications
+        capture.modifications
             .add(Modification(action, modificationTime));
       }
       await _firestore
           .collection(_captureCollectionString)
-          .doc(captureID)
+          .doc(capture.uID!)
           .update({
-        'modifications': currentCapture.modsAsMap,
+        'modifications': capture.modsAsMap,
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -246,15 +338,24 @@ class CaptureClient {
     }
   }
 
+  /// Adds a modification to a Capture object and updates the corresponding Firestore document.
+  ///
+  /// Throws a [FirebaseException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [capture] : The [Capture] object to add the modification to.
+  /// - [action] : The action as a [String] to add as a modification to the [Capture].
+  ///
+  /// Returns void.
   Future<void> _addModificationToCapture(
-      {required Capture currentCapture, required String action}) async {
+      {required Capture capture, required String action}) async {
     try {
-      currentCapture.modifications.add(Modification(action, DateTime.now()));
+      capture.modifications.add(Modification(action, DateTime.now()));
       await _firestore
           .collection(_captureCollectionString)
-          .doc(currentCapture.uID)
+          .doc(capture.uID!)
           .update({
-        'modifications': currentCapture.modsAsMap,
+        'modifications': capture.modsAsMap,
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -262,6 +363,14 @@ class CaptureClient {
     }
   }
 
+  /// Returns a list of strings describing the modifications made to a [Jump] object.
+  ///
+  /// Parameters:
+  /// - [oldJump] : The original [Jump] object.
+  /// - [updatedJump] : The updated [Jump] object.
+  ///
+  /// Returns a list of strings describing the modifications made to the Jump object.
+  /// The strings are in the following format: "L'utilisateur {username} a changé la valeur du champ {field} du saut {jumpID} de la capture {captureID} de {oldValue} à {updatedValue}"
   List<String> _getJumpModificationActions(
       {required Jump oldJump, required Jump updatedJump}) {
     List<String> actions = [];
@@ -310,6 +419,15 @@ class CaptureClient {
     return actions;
   }
 
+  /// Saves a CSV file of a capture to Firebase Storage
+  ///
+  /// Throws a [FirebaseException] if an error occurs when saving the file
+  ///
+  /// Parameters:
+  /// - [fullPath] : the full path to the CSV file to be saved
+  /// - [fileName] : the name of the file to be saved
+  ///
+  /// Returns void.
   Future<void> _saveCaptureCsv(
       {required String fullPath, required String fileName}) async {
     Reference fileRef = appBucketRef.child(fileName);
@@ -323,7 +441,15 @@ class CaptureClient {
     }
   }
 
-  Future<void> _createCapture({required Capture capture}) async {
+  /// Creates a new capture in Firestore and returns its unique ID.
+  ///
+  /// Throws a [FirebaseException] if the creation fails.
+  ///
+  /// Parameters:
+  /// - [capture] : The [Capture] object to be saved in Firestore.
+  ///
+  /// Returns the unique ID of the created capture as a [String].
+  Future<String> _createCapture({required Capture capture}) async {
     try {
       DocumentReference<Map<String, dynamic>> captureInfo =
           await _firestore.collection(_captureCollectionString).add({
@@ -337,12 +463,20 @@ class CaptureClient {
         'modifications': capture.modifications
       });
       capture.uID = captureInfo.id;
+      return captureInfo.id;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
 
+  /// Links the given capture to the currently logged-in user.
+  /// Does nothing if there is no user currently logged in.
+  ///
+  /// Parameters:
+  /// - [capture] : The [Capture] to link to the current user.
+  ///
+  /// Returns void.
   Future<void> _linkCaptureToCurrentUser({required Capture capture}) async {
     if (_capturingSkatingUser == null) return;
     await UserClient().linkCapture(
@@ -350,6 +484,16 @@ class CaptureClient {
     _capturingSkatingUser?.capturesID.add(capture.uID!);
   }
 
+  /// Modifies the list of jumps linked to a capture by adding or removing a jump.
+  ///
+  /// Throws a [FirebaseException] if an error occurs while accessing the Firestore database.
+  ///
+  /// Parameters:
+  /// - [captureID] : A [String] representing the ID of the capture.
+  /// - [jumpID] : A [String] representing the ID of the jump to be linked/removed.
+  /// - [linkJump] : A [bool] indicating whether to link or remove the jump from the list.
+  ///
+  /// Returns a [Future] that completes with no result when the operation is complete.
   Future<void> _modifyCaptureJumpList(
       {required String captureID,
       required String jumpID,
@@ -378,6 +522,15 @@ class CaptureClient {
     }
   }
 
+  /// Adds multiple jump IDs to a capture.
+  ///
+  /// Throws a [FirebaseException] if an error occurs during the Firestore operation.
+  ///
+  /// Parameters:
+  /// - [captureID] : The ID of the [Capture] to which jumps will be added.
+  /// - [jumpIds] : The IDs of the jumps to add to the [Capture].
+  ///
+  /// Returns void.
   Future<void> _addMultipleJumpsToCapture(
       {required String captureID, required List<String> jumpIds}) async {
     try {

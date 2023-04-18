@@ -93,6 +93,17 @@ class Jump {
       this._rotationDegrees,
       [this.uID]);
 
+  /// Creates a new [Jump] instance from a Firestore document snapshot.
+  ///
+  /// Throws an [Exception] if the Firestore document snapshot is missing any
+  /// of the required fields or if the fields cannot be properly parsed.
+  ///
+  /// Parameters:
+  /// - [uID] : The user ID for the jump.
+  /// - [jumpInfo] : The document snapshot containing the jump data.
+  ///
+  /// Returns a new [Jump] instance with the data from the provided Firestore
+  /// document snapshot.
   factory Jump.fromFirestore(
       uID, DocumentSnapshot<Map<String, dynamic>> jumpInfo) {
     try {

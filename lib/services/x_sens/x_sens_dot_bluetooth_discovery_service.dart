@@ -40,12 +40,20 @@ class XSensDotBluetoothDiscoveryService
 
   XSensDotBluetoothDiscoveryService._internal();
 
+  /// Returns a deep copy of the Bluetooth devices.
+  ///
+  /// Returns a list of Bluetooth devices.
   List<BluetoothDevice> getDevices() {
     return [
       ..._devices
     ]; //Deep copy for now, might be relevant to shallow copy in the end
   }
 
+  /// Requests permission to access the device's Bluetooth functionality and scans for available Bluetooth devices.
+  ///
+  /// Throws a [PlatformException] if an error occurs while requesting permission to access Bluetooth functionality.
+  ///
+  /// Returns void.
   Future<void> scanDevices() async {
     try {
       await _bluetoothMethodChannel.invokeMethod('managePermissions');
@@ -54,6 +62,10 @@ class XSensDotBluetoothDiscoveryService
     }
   }
 
+  /// Set up scanning for Bluetooth devices by starting a periodic timer to clear the current list of devices
+  /// and notify subscribers of changes. If a previous scan timer exists, it is cancelled before the new timer is started.
+  ///
+  /// Returns void.
   static Future<void> _setUpScan() async {
     if (_scanTimer != null) {
       _scanTimer?.cancel();
@@ -66,6 +78,13 @@ class XSensDotBluetoothDiscoveryService
     });
   }
 
+  /// Starts scanning for Bluetooth devices using the XSens scan method channel.
+  /// Clears the list of discovered devices, and if successful, starts a periodic timer
+  /// to refresh the list of discovered devices at a fixed interval.
+  ///
+  /// Throws a [PlatformException] if there is an error while invoking the XSens scan method channel.
+  ///
+  /// Returns void
   static Future<void> _startScan() async {
     _devices.clear();
     try {
@@ -75,6 +94,11 @@ class XSensDotBluetoothDiscoveryService
     }
   }
 
+  /// Stops the XSens Dot Bluetooth scan.
+  ///
+  /// Throws a [PlatformException] if an error occurs while stopping the scan.
+  ///
+  /// Returns void.
   static Future<void> _stopScan() async {
     try {
       await _xSensScanMethodChannel.invokeMethod('stopScan');
@@ -83,12 +107,24 @@ class XSensDotBluetoothDiscoveryService
     }
   }
 
+  /// Handles a Bluetooth event by setting up a new device scan if Bluetooth is enabled.
+  ///
+  /// Parameters:
+  /// - [bluetoothEvent] : A boolean indicating whether a Bluetooth event has occurred
+  ///
+  /// Returns void.
   static Future<void> _handleBluetoothEvent(bool bluetoothEvent) async {
     if (bluetoothEvent) {
       await _setUpScan();
     }
   }
 
+  /// This function adds a new Bluetooth device to the list of discovered devices.
+  ///
+  /// Parameters:
+  /// - [eventDevice] : a [String] representation of the Bluetooth device to be added
+  ///
+  /// Returns void
   static void _addDevice(String eventDevice) {
     var device = BluetoothDevice.fromEvent(eventDevice);
     if (_devices.any((el) => el.macAddress == device.macAddress)) {

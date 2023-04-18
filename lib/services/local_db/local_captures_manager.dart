@@ -33,11 +33,24 @@ class LocalCapturesManager implements ILocalDbManager<LocalCapture> {
     });
   }
 
+  /// Saves the path to the capture in the local database.
+  ///
+  /// Parameters:
+  /// - [capture] : the [LocalCapture] to be saved.
+  ///
+  /// Returns the id of the entity in the database.
   Future<int> saveCapture(LocalCapture capture) async {
     return await LocalDbService()
         .insertOne(capture, LocalDbService.localCapturesTableName);
   }
 
+  /// Saves the path to the capture in the local database.
+  ///
+  /// Parameters:
+  /// - [captureID] : the id of the [LocalCapture] to get.
+  ///
+  /// Returns the [LocalCapture].
+  /// It can also return null if it finds more or less than one object with the id.
   Future<LocalCapture?> getCapture(String captureID) async {
     List<LocalCapture> captures = constructObject(await LocalDbService()
         .readWhere(
@@ -45,6 +58,12 @@ class LocalCapturesManager implements ILocalDbManager<LocalCapture> {
     return captures.length == 1 ? captures[0] : null;
   }
 
+  /// Deletes the capture from the local database.
+  ///
+  /// Parameters:
+  /// - [captureID] : the id of the [LocalCapture] to delete.
+  ///
+  /// Returns the id of the entity in the database.
   Future<int> deleteCapture(String captureID) async {
     return await LocalDbService().deleteWhere(
         LocalDbService.localCapturesTableName, 'captureID', captureID);

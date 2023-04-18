@@ -11,6 +11,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+/// A singleton used to communicate with Firebase.
+/// It handles anything related to users, both storage and authentication.
 class UserClient {
   static final UserClient _userClient = UserClient._internal();
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -35,6 +37,16 @@ class UserClient {
     return _currentSkatingUser;
   }
 
+  /// Registers a new user with the provided email and password, and saves their info to the database.
+  ///
+  /// Throws a [FirebaseException] if an error occurs during the registration process or database write.
+  ///
+  /// Parameters:
+  /// - [email] : The user's email address as a [String].
+  /// - [password] : The user's password as a [String].
+  /// - [userInfo] : The [SkatingUser] object containing the user's information.
+  ///
+  /// Returns the user's unique ID as a [String].
   Future<String> signUp(
       {required String email,
       required String password,
@@ -45,7 +57,18 @@ class UserClient {
     return uID;
   }
 
-  /// Signs in the user with the give [email] and [password].
+  /// Signs in a user with the given email and password.
+  /// It will set [_currentSkatingUser] to the user associated with the given email and password
+  /// and saves an active session with the given email and password to allow easy login later.
+  /// It also loads the user's Bluetooth devices.
+  ///
+  /// Throws a [FirebaseAuthException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [email] : a [String] representing the user's email
+  /// - [password] : a [String] representing the user's password
+  ///
+  /// Returns void.
   Future<void> signIn({required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -76,6 +99,11 @@ class UserClient {
     }
   }
 
+  /// Signs out the current user and clears the active session.
+  ///
+  /// Throws a [FirebaseAuthException] if sign out fails.
+  ///
+  /// Returns void.
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
@@ -87,21 +115,14 @@ class UserClient {
     }
   }
 
-  Future<void> delete() async {
-    try {
-      if (_firebaseAuth.currentUser == null) {
-        throw NullUserException();
-      }
-      String? uID = _firebaseAuth.currentUser?.uid;
-      await _firebaseAuth.currentUser?.delete();
-      await _firestore.collection(_userCollectionString).doc(uID).delete();
-    } catch (e) {
-      developer.log(e.toString());
-      rethrow;
-    }
-  }
-
-  /// Put in a try catch. Throws an exception when there is an error during the operation
+  /// Returns a [SkatingUser] by their [id].
+  ///
+  /// Throws a [FirebaseAuthException] if the user information cannot be retrieved.
+  ///
+  /// Parameters:
+  /// - [id] : The [String] ID of the [SkatingUser] to retrieve.
+  ///
+  /// Returns the [SkatingUser] object of the specified [id].
   Future<SkatingUser> getUserById({required String id}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> userInfo =
@@ -113,6 +134,16 @@ class UserClient {
     }
   }
 
+  /// Changes the first and last name of a user in the database.
+  ///
+  /// Throws a [FirebaseAuthException] if an error occurs.
+  ///
+  /// Parameters:
+  /// - [userID] : the ID of the user whose name is being changed.
+  /// - [firstName] : the new first name of the user.
+  /// - [lastName] : the new last name of the user.
+  ///
+  /// Returns void.
   Future<void> changeName(
       {required String userID,
       required String firstName,
@@ -129,6 +160,15 @@ class UserClient {
     }
   }
 
+  /// Changes the role of a user identified by the given [userID].
+  ///
+  /// Throws a [FirebaseAuthException] if an error occurs during the process.
+  ///
+  /// Parameters:
+  /// - [userID] : A [String] representing the ID of the user whose role is to be changed.
+  /// - [role] : A [UserRole] representing the new role for the user.
+  ///
+  /// Returns void.
   Future<void> changeRole(
       {required String userID, required UserRole role}) async {
     try {
@@ -143,6 +183,16 @@ class UserClient {
     }
   }
 
+  /// Changes the password of the user with the provided [email] and [oldPassword] to the provided [password].
+  ///
+  /// Throws a [FirebaseAuthException] if the Firebase authentication fails.
+  ///
+  /// Parameters:
+  /// - [email] : The email of the user whose password is to be changed.
+  /// - [oldPassword] : The old password of the user.
+  /// - [password] : The new password for the user.
+  ///
+  /// Returns void.
   Future<void> changePassword(
       {required String email, required String oldPassword, required String password}) async {
     try {
@@ -160,6 +210,14 @@ class UserClient {
     }
   }
 
+  /// Sends a password reset email to the specified email address.
+  ///
+  /// Throws a [FirebaseAuthException] if there is an error with sending the password reset email.
+  ///
+  /// Parameters:
+  /// - [email] : The email address of the user who needs to reset their password.
+  ///
+  /// Returns void.
   Future<void> resetPassword({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
@@ -174,6 +232,18 @@ class UserClient {
     }
   }
 
+  /// Creates a new user and links them to a coach user in the database.
+  ///
+  /// Throws a [ConflictException] if the provided skater email already exists in the database.
+  /// Throws a [FirebaseAuthException] if there is an error in the database.
+  ///
+  /// Parameters:
+  /// - [skaterEmail] : the email of the skater to be created
+  /// - [coachId] : the ID of the coach user to link the skater to
+  /// - [firstName] : the first name of the skater to be created
+  /// - [lastName] : the last name of the skater to be created
+  ///
+  /// Returns a [String] representing the ID of the newly created skater user.
   Future<String> createAndLinkSkater(
       {required String skaterEmail,
       required String coachId,
@@ -198,6 +268,18 @@ class UserClient {
     return skatingUser.uID!;
   }
 
+  /// Links an existing Skater user to a Coach user
+  ///
+  /// Throws a [NullUserException] if the skater user does not exist
+  /// Throws a [FirebaseAuthException] if there is an error in the database.
+  ///
+  /// Parameters:
+  /// - [skaterEmail] : The email of the Skater user to be linked
+  /// - [coachId] : The id of the Coach user to link the Skater to
+  ///
+  /// Returns the id of the Skater user that was linked.
+  /// It can return null if the Skater was already linked to or if the skater
+  /// and the coach are the same user.
   Future<String?> linkExistingSkater(
       {required String skaterEmail, required String coachId}) async {
     QuerySnapshot<Map<String, dynamic>> result = await _firestore
@@ -217,6 +299,15 @@ class UserClient {
     return skatingUser.uID!;
   }
 
+  /// Removes the link between a skater and a coach.
+  ///
+  /// Throws a [FirebaseAuthException] if there is an error in the database.
+  ///
+  /// Parameters:
+  /// - [skaterId] : the ID of the skater to be unlinked.
+  /// - [coachId] : the ID of the coach to be unlinked.
+  ///
+  /// Returns void.
   Future<void> unlinkSkaterAndCoach(
       {required String skaterId, required String coachId}) async {
     try {
@@ -250,6 +341,15 @@ class UserClient {
     }
   }
 
+  /// Adds a capture to a user's list of captures.
+  ///
+  /// Throws a [FirebaseAuthException] if there is an error during the process.
+  ///
+  /// Parameters:
+  /// - [userId] : The ID of the user to whom the capture is being added.
+  /// - [captureId] : The ID of the capture to be added to the user's list of captures.
+  ///
+  /// Returns void.
   Future<void> linkCapture(
       {required String userId, required String captureId}) async {
     try {
@@ -268,12 +368,24 @@ class UserClient {
     }
   }
 
+  /// Generates a random secure password of 64 characters.
+  ///
+  /// Returns a string containing the password.
   String _genPassword() {
     Random rnd = Random.secure();
     return List.generate(64, (index) => chars[rnd.nextInt(chars.length)])
         .join();
   }
 
+  /// Links a skater and coach together by updating their respective coach and trainee lists.
+  ///
+  /// Throws a [FirebaseAuthException] if any error occurs during the linking process.
+  ///
+  /// Parameters:
+  /// - [skaterId] : A [String] representing the unique identifier of the skater.
+  /// - [coachId] : A [String] representing the unique identifier of the coach.
+  ///
+  /// Returns void.
   Future<void> _linkSkaterAndCoach(
       {required String skaterId, required String coachId}) async {
     try {
@@ -307,6 +419,17 @@ class UserClient {
     }
   }
 
+  /// Creates a new user in the database.
+  ///
+  /// Throws a [FirebaseAuthException] if an error occurs with Firebase authentication.
+  /// Throws a [NullUserException] if the [userCreds] user object is null.
+  ///
+  /// Parameters:
+  /// - [email] : the email address of the user.
+  /// - [password] : the password of the user.
+  /// - [userInfo] : an instance of [SkatingUser] with the user's information.
+  ///
+  /// Returns a [String] representing the user ID of the created user.
   Future<String> _createUserInDb(
       {required String email,
       required String password,

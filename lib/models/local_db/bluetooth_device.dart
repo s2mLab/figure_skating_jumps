@@ -27,6 +27,7 @@ class BluetoothDevice extends AbstractLocalDbObject {
     return _name;
   }
 
+  /// Does nothing if the value is empty
   set name(String val) {
     if (val.isNotEmpty) {
       _name = val;

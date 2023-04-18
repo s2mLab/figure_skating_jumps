@@ -192,7 +192,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                       Jump newJump = Jump(0, 0, true, JumpType.unknown, "", 0,
                           _capture!.uID!, 0, 0, 0);
                       newJump = await CaptureClient()
-                          .createJump(jump: newJump, currentCapture: _capture!);
+                          .createJump(jump: newJump, capture: _capture!);
                       _capture!.jumpsID.add(newJump.uID!);
                       if (mounted) {
                         Navigator.of(context).pushReplacement(_createRoute());
@@ -254,7 +254,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                       for (Jump j in _jumps) {
                                         j.type = jumpType;
                                         await CaptureClient().updateJump(
-                                            jump: j, currentCapture: _capture!);
+                                            jump: j, capture: _capture!);
                                       }
                                       setState(() {});
                                       if (mounted) {
@@ -300,8 +300,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                             _jumpTypeCount[j.type]! + 1;
                                         CaptureClient()
                                             .updateJump(
-                                                jump: j,
-                                                currentCapture: _capture!)
+                                                jump: j, capture: _capture!)
                                             .then((value) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
@@ -324,7 +323,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                                       _capture!.jumpsID.removeWhere(
                                           (element) => element == j.uID!);
                                       await CaptureClient().deleteJump(
-                                          jump: j, currentCapture: _capture!);
+                                          jump: j, capture: _capture!);
                                       if (mounted) {
                                         Navigator.of(context)
                                             .pushReplacement(_createRoute());

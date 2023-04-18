@@ -17,6 +17,14 @@ class HttpClient {
 
   HttpClient._internal();
 
+  /// Uploads the given file content to a server using HTTP PUT method with the given file name.
+  ///
+  /// Parameters:
+  /// - [fileName] : A [String] value representing the name of the file to be uploaded.
+  /// - [fileContent] : A [String] value representing the content of the file to be uploaded.
+  ///
+  /// Returns a bool value representing the upload status, where true indicates
+  /// a successful upload, and false indicates a failed upload.
   Future<bool> uploadFile(
       {required String fileName, required String fileContent}) async {
     Uri uri = Uri.http(_serverAddress, _addFileRoute, {"fileName": fileName});
@@ -30,9 +38,16 @@ class HttpClient {
       debugPrint(e.toString());
       return false;
     }
-
   }
 
+  /// Analyzes a capture file and to try and find jumps.
+  ///
+  /// Parameters:
+  /// - [fileName] : The name of the capture file to analyze.
+  /// - [captureID] : A unique ID to associate with the capture file.
+  ///
+  /// Returns a [List] of [Jump] objects representing the detected jumps in the
+  /// capture file. If an error occurs, returns null.
   Future<List<Jump>?> analyze(
       {required String fileName, required String captureID}) async {
     Uri uri = Uri.http(_serverAddress, _analyzeRoute);
@@ -66,6 +81,5 @@ class HttpClient {
       debugPrint(e.toString());
       return null;
     }
-
   }
 }

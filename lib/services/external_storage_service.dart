@@ -17,9 +17,12 @@ class ExternalStorageService {
 
   ExternalStorageService._internal();
 
-  /// Saves a video from XFile [f] to external storage accessible to the user
+  /// Saves the given video file in the default video directory.
   ///
-  /// Returns the path of the file in external storage
+  /// Parameters:
+  /// - [f] : A [XFile] object representing the video file to be saved.
+  ///
+  /// Returns a [String] value containing the path of the saved video file upon completion.
   Future<String> saveVideo(XFile f) async {
     Directory directory = Directory(DirType.video.fullPath(
         dirName: DirType.video.defaults, relativePath: null.orAppFolder));
@@ -34,6 +37,13 @@ class ExternalStorageService {
     return Future<String>.value(file.path);
   }
 
+  /// Saves the extracted data in a CSV file with the given file name.
+  ///
+  /// Parameters:
+  /// - [fileName] : A [String] value representing the name of the CSV file to be saved.
+  /// - [extractedData] : A [List] of [XSensDotData] objects representing the data to be saved in the CSV file.
+  ///
+  /// Returns a String value containing the path of the saved CSV file upon completion.
   Future<String> saveCaptureCsv(
       String fileName, List<XSensDotData> extractedData) async {
     Directory directory = await getApplicationDocumentsDirectory();
