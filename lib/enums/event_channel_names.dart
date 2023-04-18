@@ -1,3 +1,5 @@
+/// This enum contains the different event channel names used to receive
+/// events from the Kotlin project
 enum EventChannelNames {
   bluetoothChannel("xsens-dot-bluetooth-permission"),
   connectionChannel("xsens-dot-connection"),

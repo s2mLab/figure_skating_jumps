@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This enum represents the different jump types done in figure skating as well as the associated color.
 enum JumpType {
   axel("A", Color.fromARGB(255, 235, 134, 255)),
   salchow("S", Color.fromARGB(255, 255, 188, 134)),
