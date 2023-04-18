@@ -1,3 +1,4 @@
+/// This enum represents the status of the recording process.
 enum RecordingStatus {
   setRate("SetRate"),
   enableRecordingNotificationDone("EnableRecordingNotificationDone"),

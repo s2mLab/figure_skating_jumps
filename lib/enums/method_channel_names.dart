@@ -1,3 +1,5 @@
+/// This enum contains the different method channel names used to invoke function
+/// declared in the Kotlin project.
 enum MethodChannelNames {
   bluetoothChannel("bluetooth-permission-method-channel"),
   recordingChannel("recording-method-channel"),

@@ -1,3 +1,4 @@
+/// This enum represents each column of the csv file.
 enum XSensDotCsvColumns {
   id("PacketCounter"),
   time("SampleTimeFine"),
