@@ -30,6 +30,7 @@ class _ProfileViewState extends State<ProfileView> {
   List<SkatingUser> _coaches = [];
   bool _loading = true;
 
+  /// Loads data from the current user's coaches and updates the state to reflect the change.
   _loadData() async {
     if (!_loading) return;
     _coaches = await _currentUser.getCoachesData();
@@ -38,6 +39,12 @@ class _ProfileViewState extends State<ProfileView> {
     });
   }
 
+  /// Removes the coach with the specified ID from the list of coaches associated with the current user and updates the state to reflect the change.
+  ///
+  /// Parameters:
+  /// - [coachID] : The ID of the coach to be removed.
+  ///
+  /// Returns void
   removeCoachAction(String coachID) {
     UserClient()
         .unlinkSkaterAndCoach(coachId: coachID, skaterId: _currentUser.uID!)
@@ -47,10 +54,6 @@ class _ProfileViewState extends State<ProfileView> {
         _coaches.removeWhere((element) => element.uID! == coachID);
       });
     });
-  }
-
-  _refresh() {
-    setState(() {});
   }
 
   @override
@@ -104,7 +107,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return ModifyFullName(
-                                          refreshParent: _refresh);
+                                          refreshParent: () {setState(() {});});
                                     });
                               },
                               icon: const Icon(Icons.edit)))
