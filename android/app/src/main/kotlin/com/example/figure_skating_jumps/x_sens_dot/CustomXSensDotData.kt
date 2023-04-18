@@ -5,6 +5,11 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.putJsonArray
 
+/**
+ * A data class that represents an XSens Dot collected data
+ *
+ * @param data The XSens Dot original data
+ */
 data class CustomXSensDotData(private val data: XsensDotData?) {
     private val acc: DoubleArray? = data?.acc
     private val gyr: DoubleArray? = data?.gyr
@@ -12,6 +17,11 @@ data class CustomXSensDotData(private val data: XsensDotData?) {
     private val time: Long? = data?.sampleTimeFine
     private val id: Int? = data?.packetCounter
 
+    /**
+     * Overrides the toString method that convert an object into a string
+     *
+     * @return [String] The converted [CustomXSensDotData]
+     */
     override fun toString(): String {
         val json = buildJsonObject {
             putJsonArray("acc") {

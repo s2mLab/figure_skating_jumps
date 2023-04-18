@@ -19,13 +19,17 @@ import com.example.figure_skating_jumps.R
 import com.example.figure_skating_jumps.channels.event_channels.BluetoothPermissionStreamHandler
 
 
+/**
+ * A class that contains method to check and manage bluetooth permissions and requirements
+ */
 object PermissionUtils {
     private const val bluetoothEnableRequestCode = 1001
     private const val requiredBluetoothPermissionsRequestCode: Int = 1002
 
     /**
-     * The method controls the bluetooth requirements flow. It verifies that the bluetooth is enabled
-     * and, if enabled, ask for the required runtime permissions.
+     * The method controls the bluetooth requirements flow.
+     * It verifies that the bluetooth is enabled
+     * and, if enabled, ask for the required runtime permissions
      *
      * @param activity The main activity of the application
      */
@@ -41,6 +45,13 @@ object PermissionUtils {
         Log.i("Android", "Bluetooth Adapter - ${isBluetoothAdapterEnabled(activity)}")
     }
 
+    /**
+     * Handles the results of a Bluetooth Adapter Enable request
+     *
+     * @param requestCode The code used to identify the request
+     * @param resultCode The code representing the user choice
+     * @param activity The main activity of the application
+     */
     fun handleBluetoothRequestResults(requestCode: Int, resultCode: Int, activity: MainActivity) {
         if (requestCode != bluetoothEnableRequestCode) return
         if (resultCode == RESULT_OK) {
@@ -50,7 +61,14 @@ object PermissionUtils {
             showRequiredDialog(activity, activity.getString(R.string.bluetooth_disabled_message))
         }
     }
-
+    /**
+     * Handles the results of a Bluetooth Permissions request
+     *
+     * @param requestCode The code used to identify the request
+     * @param permissions An [Array] containing the requested permissions
+     * @param grantResults An [IntArray] containing the result for each permissions
+     * @param activity The main activity of the application
+     */
     fun handlePermissionsRequestResults(
         requestCode: Int,
         permissions: Array<out String>,
@@ -76,6 +94,13 @@ object PermissionUtils {
         }
     }
 
+    /**
+     * The method controls the bluetooth permissions flow.
+     * It verifies that the bluetooth required runtime permissions are granted
+     * and, if not granted, asks for the required runtime permissions
+     *
+     * @param activity The main activity of the application
+     */
     private fun manageBluetoothPermissions(activity: MainActivity) {
         val isFineLocationGranted = isFineLocationPermissionGranted(activity)
         val isScanGranted =
@@ -99,6 +124,13 @@ object PermissionUtils {
         requestRequiredBluetoothPermissions(activity, permissions)
     }
 
+    /**
+     * The method verifies if the bluetooth adapter is enabled
+     *
+     * @param context The current activity context
+     *
+     * @return A [Boolean] representing whether the bluetooth adapter is enabled or not
+     */
     private fun isBluetoothAdapterEnabled(context: Context): Boolean {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -107,6 +139,12 @@ object PermissionUtils {
         return false
     }
 
+    /**
+     * The method requests that the user enables the bluetooth adapter
+     *
+     * @param activity The main activity of the application
+     * @param requestCode A code to identify the request
+     */
     private fun requestEnableBluetooth(
         activity: Activity,
         requestCode: Int = bluetoothEnableRequestCode
@@ -119,20 +157,48 @@ object PermissionUtils {
         }
     }
 
+    /**
+     * The method verifies if the fine location permission is granted
+     *
+     * @param activity The main activity of the application
+     *
+     * @return A [Boolean] representing whether the fine location permission is granted or not
+     */
     private fun isFineLocationPermissionGranted(activity: Activity): Boolean {
         return activity.checkSelfPermission(permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * The method verifies if the bluetooth connect permission is granted
+     *
+     * @param activity The main activity of the application
+     *
+     * @return A [Boolean] representing whether the bluetooth connect permission is granted or not
+     */
     @RequiresApi(Build.VERSION_CODES.S)
     private fun isBluetoothConnectPermissionGranted(activity: Activity): Boolean {
         return activity.checkSelfPermission(permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * The method verifies if the bluetooth scan permission is granted
+     *
+     * @param activity The main activity of the application
+     *
+     * @return A [Boolean] representing whether the bluetooth scan permission is granted or not
+     */
     @RequiresApi(Build.VERSION_CODES.S)
     private fun isBluetoothScanPermissionGranted(activity: Activity): Boolean {
         return activity.checkSelfPermission(permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * The method requests that the user grants the bluetooth permissions
+     *
+     * @param activity The main activity of the application
+     * @param permissions An [Array] containing the permissions to grant
+     * @param requestCode A code to identify the request
+     */
     private fun requestRequiredBluetoothPermissions(
         activity: Activity,
         permissions: Array<String>,
@@ -158,6 +224,15 @@ object PermissionUtils {
         )
     }
 
+    /**
+     * The method checks if a permission dialog should be displayed
+     *
+     * @param activity The main activity of the application
+     * @param permissions An [Array] containing the permissions to grant
+     *
+     * @return A [Boolean] representing whether a
+     * permission rationale dialog should be displayed or not
+     */
     private fun shouldShowPermissionDialog(
         activity: Activity,
         permissions: Array<out String>
@@ -167,6 +242,15 @@ object PermissionUtils {
         return shouldShowLocationDialog || shouldShowDeviceDialog
     }
 
+    /**
+     * The method checks if a permission dialog linked to location permission should be displayed
+     *
+     * @param activity The main activity of the application
+     * @param permissions An [Array] containing the permissions to grant
+     *
+     * @return A [Boolean] representing whether a location
+     * permission rationale dialog should be displayed or not
+     */
     private fun shouldShowLocationDialog(
         activity: Activity,
         permissions: Array<out String>
@@ -175,6 +259,15 @@ object PermissionUtils {
                 && activity.shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)
     }
 
+    /**
+     * The method checks if a bluetooth permission dialog should be displayed
+     *
+     * @param activity The main activity of the application
+     * @param permissions An [Array] containing the permissions to grant
+     *
+     * @return A [Boolean] representing whether a bluetooth
+     * permission rationale dialog should be displayed or not
+     */
     private fun shouldShowDeviceDialog(
         activity: Activity,
         permissions: Array<out String>
@@ -188,6 +281,13 @@ object PermissionUtils {
         return false
     }
 
+    /**
+     * The method builds a message to inform the user which permissions must be granted
+     * to use the bluetooth functionalities of the app
+     *
+     * @param activity The main activity of the application
+     * @param permissions An [Array] containing the permissions to grant
+     */
     private fun buildPermissionMessage(activity: Activity, permissions: Array<out String>): String {
         var message = ""
 
@@ -199,6 +299,13 @@ object PermissionUtils {
         return message
     }
 
+    /**
+     * The method displays a dialog to inform the user he must grant permissions to use the bluetooth
+     * functionalities of the app
+     *
+     * @param activity The main activity of the application
+     * @param message The explanation message for the user
+     */
     private fun showRequiredDialog(activity: Activity, message: String) {
         val builder = AlertDialog.Builder(activity)
         builder.apply {
