@@ -64,8 +64,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: primaryBackground,
-      insetPadding:
-          EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true), vertical: ReactiveLayoutHelper.getHeightFromFactor(104)),
+      insetPadding: EdgeInsets.symmetric(
+          horizontal: ReactiveLayoutHelper.getWidthFromFactor(16, true),
+          vertical: ReactiveLayoutHelper.getHeightFromFactor(104)),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -78,11 +79,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
             ),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
+                padding: EdgeInsets.all(
+                    ReactiveLayoutHelper.getHeightFromFactor(16)),
                 child: Text(
                   newXSensConnectionDialogTitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: paleText, fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
+                  style: TextStyle(
+                      color: paleText,
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
                 ),
               ),
             ),
@@ -106,17 +110,18 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
       children: [
         Padding(
           padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
-          child:
-              const InstructionPrompt(bluetoothAuthorizationPromptInfo, secondaryColor),
-
+          child: const InstructionPrompt(
+              bluetoothAuthorizationPromptInfo, secondaryColor),
         ),
         Padding(
-          padding: EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
+          padding:
+              EdgeInsets.only(top: ReactiveLayoutHelper.getHeightFromFactor(8)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: ReactiveLayoutHelper.getWidthFromFactor(16)),
+                padding: EdgeInsets.only(
+                    right: ReactiveLayoutHelper.getWidthFromFactor(16)),
                 child: SizedBox(
                   height: ReactiveLayoutHelper.getHeightFromFactor(20),
                   width: ReactiveLayoutHelper.getHeightFromFactor(20),
@@ -126,7 +131,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   ),
                 ),
               ),
-              Text(searchingLabel, style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
+              Text(searchingLabel,
+                  style: TextStyle(
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)))
             ],
           ),
         ),
@@ -137,7 +144,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               itemCount: _devices.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  padding: EdgeInsets.only(
+                      bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
                   child: XSensDotListElement(
                     hasLine: true,
                     text: _devices[index].name,
@@ -151,7 +159,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               }),
         )),
         Padding(
-          padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+          padding: EdgeInsets.only(
+              bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
               text: cancelLabel,
               onPressed: () {
@@ -177,9 +186,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               child: XSensStateIcon(false, XSensDeviceState.connecting)),
         ),
         Padding(
-          padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
-          child: const InstructionPrompt(verifyConnectivityLabel, secondaryColor),
-
+          padding:
+              EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(8)),
+          child:
+              const InstructionPrompt(verifyConnectivityLabel, secondaryColor),
         ),
         Expanded(
           child: _streamedData.isNotEmpty
@@ -190,16 +200,20 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                   // Chart title
                   title: ChartTitle(
                       text: dataChartTitle,
-                      textStyle:
-                          TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(12.0), fontFamily: 'Jost'),
+                      textStyle: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(12.0),
+                          fontFamily: 'Jost'),
                       alignment: ChartAlignment.near),
                   // Enable legend
                   legend: Legend(
                       isVisible: true,
                       position: LegendPosition.right,
                       alignment: ChartAlignment.center,
-                      textStyle:
-                          TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(8.0), fontFamily: 'Jost'),
+                      textStyle: TextStyle(
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(8.0),
+                          fontFamily: 'Jost'),
                       itemPadding: 0.0),
                   series: <ChartSeries<XSensDotData, int>>[
                       FastLineSeries<XSensDotData, int>(
@@ -236,12 +250,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               : Center(
                   child: Text(
                   noDataLabel,
-                  style: TextStyle(fontFamily: 'Jost', fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
-
+                  style: TextStyle(
+                      fontFamily: 'Jost',
+                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
                 )),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
+          padding: EdgeInsets.symmetric(
+              vertical: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
               text: completePairingButton,
               onPressed: () async {
@@ -256,7 +272,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
               iceButtonSize: IceButtonSize.large),
         ),
         Padding(
-          padding: EdgeInsets.only(bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
+          padding: EdgeInsets.only(
+              bottom: ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: IceButton(
               text: cancelLabel,
               onPressed: () async {
@@ -275,6 +292,12 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     );
   }
 
+  /// This function is called when the list of Bluetooth devices changes. It updates the state
+  /// of the component by calling _addScannedDevices which adds the new devices to the list of
+  /// devices to be displayed.
+  ///
+  /// Parameters:
+  /// - [devices] : The new list of Bluetooth devices.
   @override
   void onBluetoothDeviceListChange(List<BluetoothDevice> devices) {
     if (mounted) {
@@ -284,6 +307,14 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     }
   }
 
+  /// Connects to the given Bluetooth device and starts streaming data from it. Displays a connection
+  /// error message and logs a message to the console if the connection fails.
+  ///
+  /// Parameters:
+  /// - [device]: The Bluetooth device to connect to.
+  ///
+  /// Return:
+  /// - Future<void>: A Future that completes when the connection and data streaming have been started.
   Future<void> _onDevicePressed(BluetoothDevice device) async {
     _streamedData.clear();
     if (await _xSensDotConnectionService.connect(device)) {
@@ -298,6 +329,10 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     }
   }
 
+  /// Clears the existing device list, and adds any scanned devices that are not already in the list.
+  ///
+  /// Parameters:
+  /// - [scannedDevices]: a list of [BluetoothDevice] objects to be added
   void _addScannedDevices(List<BluetoothDevice> scannedDevices) {
     _devices.clear();
     List<String> knownMacAddresses = [];
@@ -309,6 +344,12 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
     _devices.addAll(devicesToAdd);
   }
 
+  /// This function updates the [_streamedData] list with the newly measured data, and updates
+  /// the data sources of the x, y and z [SfCartesianChart] series controllers with any new data
+  /// that was added to the [_streamedData] list.
+  ///
+  /// Parameters:
+  /// - [measuredData]: a list of [XSensDotData] objects that represent the newly measured data.
   @override
   void onDataReceived(List<XSensDotData> measuredData) {
     if (_streamedData.isEmpty) {

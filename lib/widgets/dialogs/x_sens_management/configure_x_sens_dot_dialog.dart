@@ -89,6 +89,14 @@ class ConfigureXSensDotDialog extends StatelessWidget {
         ));
   }
 
+  /// Returns a widget that displays a connection management button.
+  ///
+  /// If the device is already connected, it will display a button to disconnect the device.
+  /// Otherwise, it will check if the device is within range and display a button to connect to the device if it is.
+  /// If the device is not within range, it will return an empty SizedBox widget.
+  ///
+  /// Returns:
+  /// A widget that displays a connection management button.
   Widget _connectionManagementButton() {
     if (_isDeviceConnected()) {
       return IceButton(
@@ -127,6 +135,9 @@ class ConfigureXSensDotDialog extends StatelessWidget {
         : SizedBox(height: ReactiveLayoutHelper.getHeightFromFactor(56));
   }
 
+  /// Checks whether the XSensDot device is currently connected.
+  ///
+  /// Returns a boolean value that indicates whether the XSensDot device is currently connected or not.
   bool _isDeviceConnected() {
     return XSensDotConnectionService().currentXSensDevice != null &&
         xSensDot.macAddress ==
