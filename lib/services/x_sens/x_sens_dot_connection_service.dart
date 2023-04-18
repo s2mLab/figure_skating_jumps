@@ -49,6 +49,15 @@ class XSensDotConnectionService
     return _currentXSensDevice;
   }
 
+  /// Connects to a [BluetoothDevice] identified by its mac address and returns
+  /// a [bool] indicating if the connection was successful.
+  ///
+  /// Throws a [PlatformException] if there's an error connecting to the device.
+  ///
+  /// Parameters:
+  /// - [bluetoothDevice] : the [BluetoothDevice] to connect to.
+  ///
+  /// Returns a [bool] indicating if the connection was successful.
   Future<bool> connect(BluetoothDevice bluetoothDevice) async {
     if (_currentXSensDevice == null) {
       bool response = false;
@@ -83,6 +92,11 @@ class XSensDotConnectionService
     return false;
   }
 
+  /// Disconnects the current XSens device.
+  ///
+  /// Throws a [PlatformException] if an error occurs during disconnection.
+  ///
+  /// Returns void.
   Future<void> disconnect() async {
     try {
       await _xSensConnectionMethodChannel.invokeMethod('disconnectXSensDot');
@@ -92,6 +106,12 @@ class XSensDotConnectionService
     _currentXSensDevice = null;
   }
 
+  /// Changes the state of the XSens device based on the received [state].
+  ///
+  /// Parameters:
+  /// - [state] : The integer value representing the new state.
+  ///
+  /// Returns void.
   static void _changeState(int state) {
     XSensDeviceState? newState = XSensDeviceState.values
         .firstWhereOrNull((element) => element.state == state);

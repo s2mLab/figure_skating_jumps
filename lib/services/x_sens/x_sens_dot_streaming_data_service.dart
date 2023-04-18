@@ -44,6 +44,14 @@ class XSensDotStreamingDataService
     return _measuredData;
   }
 
+  /// Starts the measuring process by clearing previously measured data,
+  /// setting the MeasurerState to preparing, and setting the measuring rate
+  /// if the device initialization is already done.
+  ///
+  /// Parameters:
+  /// - [isDeviceInitDone] : A boolean value indicating if the device initialization is done or not.
+  ///
+  /// Returns void.
   Future<void> startMeasuring(bool isDeviceInitDone) async {
     _measuredData.clear();
     _state = MeasurerState.preparing;
@@ -52,11 +60,22 @@ class XSensDotStreamingDataService
     }
   }
 
+  /// Stops the measuring process and sets the MeasurerState to idle.
+  ///
+  /// Returns void.
   Future<void> stopMeasuring() async {
     await _xSensMeasuringMethodChannel.invokeMethod('stopMeasuring');
     _state = MeasurerState.idle;
   }
 
+  /// Handles changes in measuring state based on the given event.
+  /// It checks if the event is related to initialization or setting measuring rate
+  /// and updates the MeasurerState accordingly.
+  ///
+  /// Parameters:
+  /// - [event] : A String value representing the event that caused the measuring state change.
+  ///
+  /// Returns void
   static Future<void> _handleMeasuringStateChange(String event) async {
     var status = MeasuringStatus.values.firstWhere((el) => el.status == event);
 
@@ -76,11 +95,23 @@ class XSensDotStreamingDataService
     }
   }
 
+  /// Adds the given data to the list of previously measured data and
+  /// notifies the subscribers with the updated data list.
+  ///
+  /// Parameters:
+  /// - [data] : A String value representing the data to be added.
+  ///
+  /// Returns void
   static void _addData(String data) {
     _measuredData.add(XSensDotData.fromEventChannel(data));
     XSensDotStreamingDataService().notifySubscribers(_measuredData);
   }
 
+  /// Sets the measuring rate to the given streaming rate value.
+  /// It also starts a timer to monitor the duration of the setting process
+  /// and handles any errors that may occur during the process.
+  ///
+  /// Returns void
   static Future<void> _setMeasuringRate() async {
     _errorTimer?.cancel();
     _errorTimer = Timer(_maxDelay, () {
