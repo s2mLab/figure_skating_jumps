@@ -21,6 +21,12 @@ class ModifyFullName extends StatelessWidget {
   final TextEditingController _lastNameController = TextEditingController();
   final _modificationInfoKey = GlobalKey<FormState>();
 
+  /// Confirms the user modification by checking if the modification information is valid, and then sends the new name to the server.
+  ///
+  /// Parameters:
+  /// - [context]: the context where the dialog was opened
+  ///
+  /// Returns: a Future<void> indicating that the function completed its execution.
   _confirmModification(BuildContext context) async {
     if (_modificationInfoKey.currentState != null &&
         _modificationInfoKey.currentState!.validate()) {
@@ -53,7 +59,6 @@ class ModifyFullName extends StatelessWidget {
                         style: TextStyle(
                             fontSize:
                                 ReactiveLayoutHelper.getHeightFromFactor(16))),
-
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(
@@ -72,9 +77,10 @@ class ModifyFullName extends StatelessWidget {
                 SizedBox(height: ReactiveLayoutHelper.getHeightFromFactor(8)),
                 Row(
                   children: [
-                    Text(lastNameField,style: TextStyle(
-                        fontSize:
-                        ReactiveLayoutHelper.getHeightFromFactor(16))),
+                    Text(lastNameField,
+                        style: TextStyle(
+                            fontSize:
+                                ReactiveLayoutHelper.getHeightFromFactor(16))),
                     Expanded(
                         child: TextFormField(
                             style: TextStyle(
@@ -92,10 +98,22 @@ class ModifyFullName extends StatelessWidget {
                 )
               ]))),
       actions: <Widget>[
-        IceButton(text: cancelLabel, onPressed: () {
-          Navigator.pop(context);
-        }, textColor: errorColor, color: errorColorDark, iceButtonImportance: IceButtonImportance.secondaryAction, iceButtonSize: IceButtonSize.small),
-        IceButton(text: modifyButton, onPressed: () => _confirmModification(context), textColor: paleText, color: primaryColor, iceButtonImportance: IceButtonImportance.mainAction, iceButtonSize: IceButtonSize.small),
+        IceButton(
+            text: cancelLabel,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            textColor: errorColor,
+            color: errorColorDark,
+            iceButtonImportance: IceButtonImportance.secondaryAction,
+            iceButtonSize: IceButtonSize.small),
+        IceButton(
+            text: modifyButton,
+            onPressed: () => _confirmModification(context),
+            textColor: paleText,
+            color: primaryColor,
+            iceButtonImportance: IceButtonImportance.mainAction,
+            iceButtonSize: IceButtonSize.small),
       ],
     );
   }

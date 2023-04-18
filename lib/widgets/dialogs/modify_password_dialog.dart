@@ -27,6 +27,11 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
 
   String _errorMessage = "";
 
+  /// Confirm a password modification by checking the validity of the new and previous passwords
+  /// and sending a request to the UserClient to change the password if they are valid.
+  ///
+  /// Parameters:
+  /// - [context]: the context of the current widget tree.
   _confirmModification(BuildContext context) async {
     if (_modificationInfoKey.currentState != null &&
         _modificationInfoKey.currentState!.validate()) {
