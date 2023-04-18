@@ -57,6 +57,12 @@ class _StartRecordingState extends State<StartRecordingDialog>
     return _loadingDialog(captureStartingLabel);
   }
 
+  /// Returns a SimpleDialog widget that shows an error message indicating that the memory
+  /// is full and provides options to erase the memory or go back.
+  ///
+  /// Return:
+  /// - A SimpleDialog widget that shows an error message indicating that the memory is full
+  /// and provides options to erase the memory or go back.
   SimpleDialog _fullMemory() {
     return SimpleDialog(
       title: Text(
@@ -103,6 +109,13 @@ class _StartRecordingState extends State<StartRecordingDialog>
     return _loadingDialog(erasingDataLabel);
   }
 
+  /// Returns a SimpleDialog widget with a loading message, a linear progress indicator and an information text.
+  ///
+  /// Parameters:
+  /// - [message] : A string to be displayed as the title of the dialog.
+  ///
+  /// Return:
+  /// - A SimpleDialog widget.
   SimpleDialog _loadingDialog(String message) {
     return SimpleDialog(
       title: Text(
@@ -135,6 +148,10 @@ class _StartRecordingState extends State<StartRecordingDialog>
     );
   }
 
+  /// Updates the state of the widget based on the given [state].
+  ///
+  /// Parameters:
+  /// - [state]: the [RecorderState] to update the widget's state based on.
   @override
   void onStateChange(RecorderState state) {
     switch (state) {
