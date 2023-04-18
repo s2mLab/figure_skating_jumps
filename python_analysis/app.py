@@ -12,10 +12,31 @@ FILE_REPO: str = "files"
 
 @app.route("/test", methods = ['GET'])
 def test():
+    """
+    Method: GET\n
+    A test route to make sure the server is up and running.
+
+    Returns:
+        A 200 if the server is running
+    """
     return "Server is up."
 
 @app.route("/analyze", methods = ['POST'])
 def analyze():
+    """
+    Method: POST\n
+    Does an analysis on the designated file. The name of the file
+    is passed in the body in format JSON with the key "fileName".
+
+    Returns:
+        200 with JSON formatted Jump objects containing the result 
+        of the analysis
+    
+    Errors:
+        404 if the file isn't found or if it is empty\n
+        400 if the file has the wrong format\n
+        500 if there is an unexpected error
+    """
     try:
         fileName: str = request.json['fileName']
         result = analyze_session(f"{FILE_REPO}/{fileName}")
@@ -35,6 +56,18 @@ def analyze():
 
 @app.route("/file", methods = ['PUT'])
 def add_file():
+    """
+    Method: PUT\n
+    Uploads a file to the server. Takes the contents of the file as
+    a raw string in the body. It also needs the name of the file
+    in the query with the key "fileName".
+
+    Returns:
+        200 on a success
+    
+    Errors:
+        500 if there is an unexpected error
+    """
     try:
         fileName = request.args.get("fileName")
         fileName = fileName.replace(' ', '_')
