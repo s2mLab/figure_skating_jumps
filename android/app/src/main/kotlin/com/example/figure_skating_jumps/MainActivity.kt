@@ -25,7 +25,9 @@ import com.xsens.dot.android.sdk.models.XsensDotPayload
 import com.xsens.dot.android.sdk.models.XsensDotRecordingFileInfo
 import io.flutter.plugin.common.BinaryMessenger
 
-
+/**
+ * Implements the [FlutterActivity] class. Is the Main activity of the application
+ */
 class MainActivity : FlutterActivity() {
     private var currentXSensDot: XsensDotDevice? = null
     private var xSensDotRecorder: XSensDotRecorder? = null
@@ -33,17 +35,36 @@ class MainActivity : FlutterActivity() {
     private lateinit var xSensDotDeviceScanner: XSensDotDeviceScanner
     private val sleepingTimeMs: Long = 30
 
+    /**
+     * Configures the flutter engine to start the Flutter project
+     *
+     * @param flutterEngine The [FlutterEngine] to configure
+     */
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         xSensDotDeviceScanner = XSensDotDeviceScanner(this)
         setUpChannels(flutterEngine.dartExecutor.binaryMessenger)
     }
 
+    /**
+     * Overrides the onActivityResult method. Handles the result of starting the activity
+     *
+     * @param requestCode The id of the request
+     * @param resultCode The result code of the request
+     * @param data The data associated with the results
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         PermissionUtils.handleBluetoothRequestResults(requestCode, resultCode, this)
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    /**
+     * Overrides the onRequestPermissionsResult method. Handles the result of requesting permissions
+     *
+     * @param requestCode The id of the request
+     * @param permissions Contains the permissions to be granted
+     * @param grantResults Contains result for each permission
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -58,6 +79,11 @@ class MainActivity : FlutterActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    /**
+     * Set ups both the Event and Method channel to receive and send data to the flutter project
+     *
+     * @param messenger The binaryMessenger that will relay the events
+     */
     private fun setUpChannels(messenger: BinaryMessenger) {
         MethodChannel(
             messenger,
@@ -87,6 +113,12 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    /**
+     * Handles the Bluetooth Method channel calls
+     *
+     * @param call The method to call and its parameters
+     * @param result The result to send back to the flutter project
+     */
     private fun handleBluetoothPermissionsCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "managePermissions" -> PermissionUtils.manageBluetoothRequirements(this)
@@ -94,6 +126,12 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    /**
+     * Handles the Recording Method channel calls
+     *
+     * @param call The method to call and its parameters
+     * @param result The result to send back to the flutter project
+     */
     private fun handleRecordingCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "enableRecordingNotification" -> enableRecordingNotification(result)
@@ -119,6 +157,12 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    /**
+     * Handles the Connection Method channel calls
+     *
+     * @param call The method to call and its parameters
+     * @param result The result to send back to the flutter project
+     */
     private fun handleConnectionCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "connectXSensDot" -> connectXSensDot(call, result)
@@ -127,6 +171,12 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    /**
+     * Handles the Scan Method channel calls
+     *
+     * @param call The method to call and its parameters
+     * @param result The result to send back to the flutter project
+     */
     private fun handleScanCalls(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "startScan" -> startScan(result)
@@ -135,16 +185,33 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    /**
+     * Starts a XSens Dot device scan
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun startScan(result: MethodChannel.Result) {
         xSensDotDeviceScanner.startScan()
         result.success(null)
     }
 
+    /**
+     * Stops a XSens Dot device scan
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun stopScan(result: MethodChannel.Result) {
         xSensDotDeviceScanner.stopScan()
         result.success(null)
     }
 
+    /**
+     * Connects to XSens Dot device
+     *
+     * @param call The call containing the MAC address of the device
+     * @param result The result to send back to the flutter project. Sends an error
+     * if the MAC address argument does not exists
+     */
     private fun connectXSensDot(call: MethodCall, result: MethodChannel.Result) {
         val address = call.argument<String>("address")
         if (address == null) {
@@ -165,6 +232,13 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Set the connected XSens Dot device output rate
+     *
+     * @param call The call containing the new output rate
+     * @param result The result to send back to the flutter project. Sends an error
+     * if the rate argument does not exists
+     */
     private fun setRate(call: MethodCall, result: MethodChannel.Result) {
         val rate: Int? = call.argument<Int>("rate")
         if (rate != null) {
@@ -175,6 +249,11 @@ class MainActivity : FlutterActivity() {
         result.error(ErrorCodes.ArgNotSet.code, "Rate not set", null)
     }
 
+    /**
+     * Disconnects from XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun disconnectXSensDot(result: MethodChannel.Result) {
         currentXSensDot?.disconnect()
         xSensDotRecorder = null
@@ -183,6 +262,11 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Starts live data stream from a XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun startMeasuring(result: MethodChannel.Result) {
         currentXSensDot?.measurementMode = XsensDotPayload.PAYLOAD_TYPE_HIGH_FIDELITY_NO_MAG;
         SystemClock.sleep(sleepingTimeMs);
@@ -190,26 +274,51 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Stops live data stream from a XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun stopMeasuring(result: MethodChannel.Result) {
         currentXSensDot?.stopMeasuring()
         result.success(null)
     }
 
+    /**
+     * Enables the recording notification on a XSens Dot recorder
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun enableRecordingNotification(result: MethodChannel.Result) {
         xSensDotRecorder?.enableDataRecordingNotification()
         result.success(null)
     }
 
+    /**
+     * Starts recording from a XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun startRecording(result: MethodChannel.Result) {
         xSensDotRecorder?.startRecording()
         result.success(null)
     }
 
+    /**
+     * Stops recording from a XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun stopRecording(result: MethodChannel.Result) {
         xSensDotRecorder?.stopRecording()
         result.success(null)
     }
 
+    /**
+     * Gets flash memory info from a XSens Dot device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun getFlashInfo(call: MethodCall, result: MethodChannel.Result) {
         val isManagingFiles: Boolean? = call.argument<Boolean>("isManagingFiles")
         if (isManagingFiles == null) {
@@ -226,11 +335,21 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Gets file info from a XSens Dot device flash memory
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun getFileInfo(result: MethodChannel.Result) {
         xSensDotExporter?.getFileInfo()
         result.success(null)
     }
 
+    /**
+     * Starts the data extraction preparation on a XSens Dot Device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun prepareExtract(result: MethodChannel.Result) {
         if (xSensDotExporter != null) {
             xSensDotExporter?.clearManager()
@@ -247,6 +366,14 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Extracts a specific file from the XSens Dot device
+     *
+     * @param call The call containing the new output rate
+     * @param result The result to send back to the flutter project. Sends an error
+     * if the fileInfo argument does not exists
+     * or if the fileInfo does not respect the expected format
+     */
     private fun extractFile(call: MethodCall, result: MethodChannel.Result) {
         val file: String? = call.argument<String>("fileInfo")
 
@@ -276,6 +403,11 @@ class MainActivity : FlutterActivity() {
 
     }
 
+    /**
+     * Starts the data recording preparation on a XSens Dot Device
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun prepareRecording(result: MethodChannel.Result) {
         if (xSensDotRecorder != null) {
             xSensDotRecorder?.clearManager()
@@ -292,6 +424,11 @@ class MainActivity : FlutterActivity() {
         result.success(null)
     }
 
+    /**
+     * Erases all files from a XSens Dot device flash memory
+     *
+     * @param result The result to send back to the flutter project
+     */
     private fun eraseMemory(result: MethodChannel.Result) {
         xSensDotExporter?.eraseMemory()
         result.success(null)
