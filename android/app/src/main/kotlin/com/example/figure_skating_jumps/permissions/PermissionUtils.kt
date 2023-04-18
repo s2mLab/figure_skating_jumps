@@ -46,7 +46,7 @@ object PermissionUtils {
     }
 
     /**
-     * Handle the results of a Bluetooth Adapter Enable request
+     * Handles the results of a Bluetooth Adapter Enable request
      *
      * @param requestCode The code used to identify the request
      * @param resultCode The code representing the user choice
@@ -62,7 +62,7 @@ object PermissionUtils {
         }
     }
     /**
-     * Handle the results of a Bluetooth Permissions request
+     * Handles the results of a Bluetooth Permissions request
      *
      * @param requestCode The code used to identify the request
      * @param permissions An [Array] containing the requested permissions
@@ -97,7 +97,7 @@ object PermissionUtils {
     /**
      * The method controls the bluetooth permissions flow.
      * It verifies that the bluetooth required runtime permissions are granted
-     * and, if not granted enabled, ask for the required runtime permissions
+     * and, if not granted, asks for the required runtime permissions
      *
      * @param activity The main activity of the application
      */
@@ -140,7 +140,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method request the user to enable the bluetooth adapter
+     * The method requests that the user enables the bluetooth adapter
      *
      * @param activity The main activity of the application
      * @param requestCode A code to identify the request
@@ -160,7 +160,7 @@ object PermissionUtils {
     /**
      * The method verifies if the fine location permission is granted
      *
-     * @param cactivity The main activity of the application
+     * @param activity The main activity of the application
      *
      * @return A [Boolean] representing whether the fine location permission is granted or not
      */
@@ -171,7 +171,7 @@ object PermissionUtils {
     /**
      * The method verifies if the bluetooth connect permission is granted
      *
-     * @param cactivity The main activity of the application
+     * @param activity The main activity of the application
      *
      * @return A [Boolean] representing whether the bluetooth connect permission is granted or not
      */
@@ -193,7 +193,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method request the user to granted the bluetooth permissions
+     * The method requests that the user grants the bluetooth permissions
      *
      * @param activity The main activity of the application
      * @param permissions An [Array] containing the permissions to grant
@@ -225,7 +225,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method check if a permission dialog should be displayed
+     * The method checks if a permission dialog should be displayed
      *
      * @param activity The main activity of the application
      * @param permissions An [Array] containing the permissions to grant
@@ -243,7 +243,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method check if a permission dialog linked to location permission should be displayed
+     * The method checks if a permission dialog linked to location permission should be displayed
      *
      * @param activity The main activity of the application
      * @param permissions An [Array] containing the permissions to grant
@@ -260,7 +260,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method check if a bluetooth permission dialog should be displayed
+     * The method checks if a bluetooth permission dialog should be displayed
      *
      * @param activity The main activity of the application
      * @param permissions An [Array] containing the permissions to grant
@@ -282,7 +282,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method build a message to inform the user which permissions must be granted permissions
+     * The method builds a message to inform the user which permissions must be granted
      * to use the bluetooth functionalities of the app
      *
      * @param activity The main activity of the application
@@ -300,7 +300,7 @@ object PermissionUtils {
     }
 
     /**
-     * The method display a dialog to inform the user he must grant permissions to use the bluetooth
+     * The method displays a dialog to inform the user he must grant permissions to use the bluetooth
      * functionalities of the app
      *
      * @param activity The main activity of the application
