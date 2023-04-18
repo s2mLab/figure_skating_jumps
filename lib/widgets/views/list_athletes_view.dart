@@ -43,7 +43,10 @@ class _ListAthletesViewState extends State<ListAthletesView> {
     super.initState();
   }
 
-  _loadData() async {
+  /// Loads trainee data for the current user and updates the list of trainees accordingly.
+  ///
+  /// Returns a [Future] that completes once the trainee data has been loaded and the list has been updated.
+  Future<void> _loadData() async {
     if (!_loading) return;
     _trainees = await _currentUser.getTraineesData();
     _updateList();
@@ -52,12 +55,17 @@ class _ListAthletesViewState extends State<ListAthletesView> {
     });
   }
 
+  /// Updates the state of [_searching] based on the focus status of the search bar.
+  ///
+  /// Parameters:
+  /// - [hasFocus] : A [bool] indicating whether or not the search bar currently has focus.
   _searchFocusChanged(bool hasFocus) {
     setState(() {
       _searching = hasFocus || _searchController.text.isNotEmpty;
     });
   }
 
+  /// Updates the list of trainees to show based on the [_searchString] and the group-by-first-letter logic.
   _updateList() {
     _traineesToShow = groupBy(_trainees,
         (obj) => obj.firstName.toString().toUpperCase().substring(0, 1));

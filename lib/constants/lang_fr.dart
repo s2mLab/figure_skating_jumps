@@ -1,3 +1,7 @@
+/// This file regroups all String values used in the code for the
+/// French language.
+
+
 // global
 const String searchingLabel = "Recherche en cours";
 const String cancelLabel = "Annuler";
