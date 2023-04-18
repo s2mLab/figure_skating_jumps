@@ -36,6 +36,11 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
   }
 
+  /// Signs in the user with the given email and password and navigates to the appropriate screen based on the user's role.
+  ///
+  /// Throws an [AbstractIceException] if an error occurs during the sign-in process.
+  ///
+  /// Returns a [Future] that completes once the sign-in process has completed and the user has been navigated to the appropriate screen.
   Future<void> onConnection() async {
     if (_connectionInfoKey.currentState == null ||
         !_connectionInfoKey.currentState!.validate()) {
