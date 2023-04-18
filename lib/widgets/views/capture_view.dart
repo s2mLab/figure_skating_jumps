@@ -344,11 +344,11 @@ class _CaptureDataViewState extends State<CaptureDataView>
   /// Builds a camera preview widget that shows the camera feed on the screen.
   ///
   /// Exceptions:
-  /// - Returns [_noCameraIcon()] if an error occurred while building the preview.
+  /// - Returns [_noCameraIcon] if an error occurred while building the preview.
   ///
   /// Parameters:
-  /// - [context]: The build context.
-  /// - [snapshot]: An [AsyncSnapshot] object that represents the current state of the camera preview.
+  /// - [context] : The build context.
+  /// - [snapshot] : An [AsyncSnapshot] object that represents the current state of the camera preview.
   ///
   /// Return: A [Widget] object that displays the camera preview or a loading indicator if the preview is not ready.
   Widget _buildCameraPreview(
