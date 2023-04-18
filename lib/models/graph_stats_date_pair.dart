@@ -7,6 +7,4 @@ class GraphStatsDatePair {
 
   GraphStatsDatePair(this.average, this.stdDev, this.min,
       this.max, this.day);
-
-  GraphStatsDatePair.empty({required this.day, this.average, this.stdDev, this.min, this.max});
 }

@@ -15,6 +15,17 @@ class XSensDotData {
       required this.time,
       required this.id});
 
+  /// Creates a new [XSensDotData] instance from a JSON string received from an
+  /// event channel.
+  ///
+  /// Throws a [FormatException] if the provided JSON string is invalid or does
+  /// not have the expected format.
+  ///
+  /// Parameters:
+  /// - [event] : The JSON string received from the event channel.
+  ///
+  /// Returns a new [XSensDotData] instance with data parsed from the provided
+  /// JSON string.
   XSensDotData.fromEventChannel(String event) {
     var data = jsonDecode(event);
     acc = Float64List.fromList(data['acc'].cast<double>());
