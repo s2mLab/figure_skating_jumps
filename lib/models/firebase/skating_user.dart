@@ -57,6 +57,9 @@ class SkatingUser {
   SkatingUser(this._firstName, this._lastName, this.role, this._email,
       [this.uID]);
 
+  /// Retrieves the data of every coach in this SkatingUser instance.
+  ///
+  /// Returns a [List] of [SkatingUser] instances.
   Future<List<SkatingUser>> getCoachesData() async {
     List<SkatingUser> coaches = [];
     for (String id in _coachesID) {
@@ -66,6 +69,9 @@ class SkatingUser {
     return coaches;
   }
 
+  /// Retrieves the data of every trainee in this SkatingUser instance.
+  ///
+  /// Returns a [List] of [SkatingUser] instances.
   Future<List<SkatingUser>> getTraineesData() async {
     List<SkatingUser> trainees = [];
     for (String id in _traineesID) {
@@ -74,6 +80,9 @@ class SkatingUser {
     return trainees;
   }
 
+  /// Retrieves the data of every capture in this SkatingUser instance.
+  ///
+  /// Returns a [List] of [Capture] instances.
   Future<List<Capture>> getCapturesData() async {
     List<Capture> captures = [];
     for (String captureID in _capturesID) {
@@ -82,6 +91,14 @@ class SkatingUser {
     return captures;
   }
 
+  /// Creates a new [SkatingUser] instance from a Firestore document snapshot.
+  ///
+  /// Parameters:
+  /// - [uID] : The user ID for the skating user.
+  /// - [userInfo] : The document snapshot containing the skating user's data.
+  ///
+  /// Returns a new [SkatingUser] instance with the data from the provided
+  /// Firestore document snapshot.
   factory SkatingUser.fromFirestore(
       uID, DocumentSnapshot<Map<String, dynamic>> userInfo) {
     String firstName = userInfo.get('firstName');
