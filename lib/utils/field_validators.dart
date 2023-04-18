@@ -1,12 +1,16 @@
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 
 class FieldValidators {
-  /// Validates a new name string and returns an error message if the validation fails.
+  /// Validates a given [value] for use as a name, returning an error message if the validation fails.
   ///
-  /// This function takes a [String] value and performs validation checks to ensure
-  /// that the value is not null or empty, and that it does not exceed 255 characters.
+  /// Parameters:
+  /// - [value]: The value to validate.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Return:
+  /// - A [String] or `null` indicating whether the [value] is valid.
+  ///     - If [value] is `null` or empty, returns a [String] with the message "Please fill out this field".
+  ///     - If [value] length is greater than 255 characters, returns a [String] with the message "Please reduce character length to 255 or less".
+  ///     - If [value] is valid, returns `null`.
   static String? newNameValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
@@ -17,12 +21,16 @@ class FieldValidators {
     return null;
   }
 
-  /// Validates a new email string and returns an error message if the validation fails.
+  /// Validates a given [value] for use as an email address, returning an error message if the validation fails.
   ///
-  /// This function takes a [String] value and performs validation checks to ensure
-  /// that the value is not null or empty, and that it is in a valid email format.
+  /// Parameters:
+  /// - [value]: The value to validate.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Return:
+  /// - A [String] or `null` indicating whether the [value] is valid.
+  ///     - If [value] is `null` or empty, returns a [String] with the message "Please fill out this field".
+  ///     - If [value] is not in the format of a valid email address, returns a [String] with the message "Please enter a valid email address".
+  ///     - If [value] is valid, returns `null`.
   static String? newEmailValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
@@ -33,6 +41,16 @@ class FieldValidators {
     return null;
   }
 
+  /// Validates a given [value] for use as a double, returning an error message if the validation fails.
+  ///
+  /// Parameters:
+  /// - [value]: The value to validate.
+  ///
+  /// Return:
+  /// - A [String] or `null` indicating whether the [value] is valid.
+  ///     - If [value] is `null` or empty, returns a [String] with the message "Please fill out this field".
+  ///     - If [value] is not in the format of a valid double, returns a [String] with the message "Please enter a valid number".
+  ///     - If [value] is valid, returns `null`.
   static String? doubleValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
@@ -43,12 +61,13 @@ class FieldValidators {
     return null;
   }
 
-  /// Validates a new password string and returns an error message if the validation fails.
+  /// Validates the provided password string.
   ///
-  /// This function takes a [String] value and performs validation checks to ensure
-  /// that the value is not null or empty, and that it contains at least 10 characters.
+  /// Parameters:
+  /// - [value]: The password string to validate.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Return:
+  /// - Null if the provided string is a valid password; otherwise, a string with an error message describing the problem with the input.
   static String? newPassValidator(String? value) {
     if (value == null || value.isEmpty) {
       return pleaseFillField;
@@ -59,22 +78,28 @@ class FieldValidators {
     return null;
   }
 
-  /// Validates a new password confirmation string and returns an error message if the validation fails.
+  /// Validates the provided confirmation password string, ensuring that it matches the password provided.
   ///
-  /// This function takes two [String] values: a `value` to validate and a `password` to compare it against.
-  /// It checks whether the `value` matches the `password` and returns an error message if they do not match.
+  /// Parameters:
+  /// - [value]: The confirmation password string to validate.
+  /// - [password]: The original password to match against.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Return:
+  /// - Null if the confirmation password matches the original password; otherwise, a string with an error message describing the problem with the input.
   static String? newPassConfirmValidator(String? value, String? password) {
     return value == password ? null : passwordMismatchLabel;
   }
 
   /// Validates a login email string and returns an error message if the validation fails.
   ///
-  /// This function takes a [String] value and performs validation checks to ensure
-  /// that the value is not null or empty.
+  /// Exceptions:
+  /// - Returns [pleaseFillField] if the email value is null or empty after trimming.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Parameters:
+  /// - [value]: The email value to validate.
+  ///
+  /// Return:
+  /// - Null if the email value is valid, otherwise a String with an error message.
   static String? loginEmailValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return pleaseFillField;
@@ -82,13 +107,14 @@ class FieldValidators {
     return null;
   }
 
-  /// Validates a login password string and returns an error message if the validation fails.
-  /// The password string may start by or contain spaces (not trimmed).
+  /// This function is used to validate the user login password input.
   ///
-  /// This function takes a [String] value and performs validation checks to ensure
-  /// that the value is not null or empty.
+  /// Parameters:
+  /// - [value]: The value of the password input field as a string.
   ///
-  /// Returns a [String] error message if the validation fails, otherwise returns `null`.
+  /// Return:
+  /// - If the input is not null or empty, return null.
+  /// - If the input is null or empty, return a string with an error message.
   static String? loginPassValidator(String? value) {
     if (value == null || value.isEmpty) {
       return pleaseFillField;
