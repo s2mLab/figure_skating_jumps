@@ -66,21 +66,25 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     super.initState();
   }
 
+  /// This method initializes all the [TextEditingController] objects
   void _initializeAllTextControllers() {
     _initializeCommentController();
     _initializeRotationController();
     _initializeAdvancedMetricsControllers();
   }
 
+  /// This method initializes the [_rotationController] variable
   void _initializeRotationController() {
     _rotationController = TextEditingController(
         text: _j!.turns.toStringAsFixed(_maxDigitsForDoubleData));
   }
 
+  /// This method initializes the [_commentController] variable
   void _initializeCommentController() {
     _commentController = TextEditingController(text: _j!.comment);
   }
 
+  /// This method initializes the [_durationController], [_startTimeController], [_timeToMaxSpeedController] and [_maxSpeedController] variables
   void _initializeAdvancedMetricsControllers() {
     _durationController = TextEditingController(
         text: TimeConverter.convertMsToStringSeconds(_j!.duration));
@@ -250,6 +254,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
+  /// Build a form that allows to change a jump.
+  /// It exposes the elements to change the score, the comment and the rotation degrees
+  ///
+  /// Returns a [Widget] that allows a user to modify a jump
   Widget _jumpModificationForm() {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -392,13 +400,17 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
+  /// Updates the rotation data after the user input
   void _updateRotationData() {
     _j!.turns = double.parse(_rotationController.text);
     widget._onModified(_j!, _initialJumpType, _initialTime);
     _initialJumpType = _selectedType;
   }
 
-  //This dialog is kept in this class because it references the jump and modifies its value through it
+  /// Builds a [SimpleDialog] to allow a user to confirm the jump deletion
+  /// This dialog is kept in this class because it references the jump and modifies its value through it
+  ///
+  /// Returns a [Widget] that allows a user to confirm the jump deletion
   Widget _confirmDeleteJumpDialog() {
     return SimpleDialog(
       title: Text(
@@ -448,7 +460,10 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
-  //This dialog is kept in this class because it references the context and returns a value through it
+  /// Builds a [SimpleDialog] to allow a user to select or write a comment on a jump
+  /// This dialog is kept in this class because it references the jump and modifies its value through it
+  ///
+  /// Returns a [Widget] that allows a user to select or write a comment
   Widget _commentDialog() {
     return SimpleDialog(
         insetPadding: EdgeInsets.symmetric(
@@ -598,7 +613,11 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
         ]);
   }
 
-  //This dialog is kept in this class because it references the jump and modifies its value through it
+  /// Builds a [SimpleDialog] to allow a user to view and edit the advance metrics.
+  /// The advanced metrics are duration, startTime, timeToMaxSpeed and maxSpeed
+  /// This dialog is kept in this class because it references the jump and modifies its value through it
+  ///
+  /// Returns a [Widget] that allows a user to view and change the advanced metrics
   Widget _temporalValuesDialog() {
     return SimpleDialog(
         insetPadding: EdgeInsets.symmetric(
