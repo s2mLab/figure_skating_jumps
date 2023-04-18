@@ -254,7 +254,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
     );
   }
 
-  /// Build a form that allows to change a jump.
+  /// Builds a form that allows to change a jump.
   /// It exposes the elements to change the score, the comment and the rotation degrees
   ///
   /// Returns a [Widget] that allows a user to modify a jump
