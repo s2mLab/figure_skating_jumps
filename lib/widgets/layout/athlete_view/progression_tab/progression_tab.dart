@@ -162,6 +162,11 @@ class _ProgressionTabState extends State<ProgressionTab> {
     );
   }
 
+  /// Builds the graphic of the average jump score according to the date.
+  /// The graphic also includes detailed information about each day like
+  /// the average, min score, max score and standard deviation of the scores.
+  ///
+  /// Returns a Widget
   Widget _scorePerJumpsGraphic() {
     return FutureBuilder(
         future: GraphicDataHelper.getJumpScorePerTypeGraphData(
@@ -234,6 +239,10 @@ class _ProgressionTabState extends State<ProgressionTab> {
         });
   }
 
+  /// Filters the captures to get those of a specified season
+  ///
+  /// Returns a [Map] with dates as keys and Capture lists as values. It only
+  /// returns those that are of the appropriate season.
   Map<String, List<Capture>> _getCapturesBySeason(Season? s) {
     if (s == null) return widget._captures;
     Map<String, List<Capture>> filteredCaptures = {};
@@ -242,6 +251,11 @@ class _ProgressionTabState extends State<ProgressionTab> {
     return filteredCaptures;
   }
 
+  /// Builds the graphic of the average jump duration according to the date.
+  /// The graphic also includes detailed information about each day like
+  /// the average, min score, max score and standard deviation of the scores.
+  ///
+  /// Returns a Widget
   Widget _averageJumpDurationGraphic() {
     return FutureBuilder(
         future: GraphicDataHelper.getAverageFlyTimeGraphData(
