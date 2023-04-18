@@ -39,6 +39,8 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
     _controller.dispose();
   }
 
+  /// Toggles the playback state of a video. If the video is currently playing,
+  /// it pauses it, and if it is paused, it starts playing it.
   void _playPause() {
     setState(() {
       if (_controller.value.isPlaying) {
@@ -49,6 +51,10 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
     });
   }
 
+  /// Jumps the current video time by the given [time] duration.
+  ///
+  /// Parameters:
+  /// - [time]: The duration to jump by.
   void _jumpTime(Duration time) {
     setState(() {
       _controller.position.then((value) {
@@ -61,7 +67,8 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: primaryBackground,
-      insetPadding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getHeightFromFactor(16)),
+      insetPadding: EdgeInsets.symmetric(
+          horizontal: ReactiveLayoutHelper.getHeightFromFactor(16)),
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -85,16 +92,20 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                         onTap: _playPause,
                         onDoubleTap: () =>
                             _jumpTime(const Duration(seconds: -3)),
-                        child:
-                            Container(height: ReactiveLayoutHelper.getHeightFromFactor(620), color: Colors.transparent),
+                        child: Container(
+                            height:
+                                ReactiveLayoutHelper.getHeightFromFactor(620),
+                            color: Colors.transparent),
                       )),
                       Flexible(
                           child: GestureDetector(
                         onTap: _playPause,
                         onDoubleTap: () =>
                             _jumpTime(const Duration(seconds: 3)),
-                        child:
-                            Container(height: ReactiveLayoutHelper.getHeightFromFactor(620), color: Colors.transparent),
+                        child: Container(
+                            height:
+                                ReactiveLayoutHelper.getHeightFromFactor(620),
+                            color: Colors.transparent),
                       ))
                     ],
                   ),
@@ -120,7 +131,15 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                               onChanged: (value) => _controller.seekTo(
                                   Duration(milliseconds: value.toInt())),
                             )),
-                            SizedBox(width: ReactiveLayoutHelper.getWidthFromFactor(100), child: Text(position.toString().substring(2, 11), style: TextStyle(fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),))
+                            SizedBox(
+                                width: ReactiveLayoutHelper.getWidthFromFactor(
+                                    100),
+                                child: Text(
+                                  position.toString().substring(2, 11),
+                                  style: TextStyle(
+                                      fontSize: ReactiveLayoutHelper
+                                          .getHeightFromFactor(16)),
+                                ))
                           ]));
                     }),
               ]);
