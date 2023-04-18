@@ -3,6 +3,13 @@ import 'package:figure_skating_jumps/enums/x_sens/x_sens_dot_csv_columns.dart';
 import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 
 class CsvCreator {
+  /// Creates a CSV string from the given list of [XSensDotData] objects.
+  ///
+  /// Parameters:
+  /// - [extractedData]: A list of [XSensDotData] objects to convert into CSV format.
+  ///
+  /// Return:
+  /// - A CSV string representation of the data in [extractedData].
   static String createXSensDotCsv(List<XSensDotData> extractedData) {
     List<List<dynamic>> rows = <List<dynamic>>[];
 
