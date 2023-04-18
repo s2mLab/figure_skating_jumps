@@ -10,7 +10,7 @@ class ExceptionUtils {
   /// Handles a [FirebaseAuthException] by mapping its error code to a custom exception type and throwing it.
   ///
   /// Exceptions:
-  /// - Throws a [FirebaseAuthException] if the Firebase auth error.
+  /// - Throws an instance of [AbstractIceException].
   ///
   /// Parameters:
   /// - [e]: The [FirebaseAuthException] to handle.
