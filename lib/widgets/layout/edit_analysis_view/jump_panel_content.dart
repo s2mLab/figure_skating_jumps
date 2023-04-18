@@ -613,7 +613,7 @@ class _JumpPanelContentState extends State<JumpPanelContent> {
         ]);
   }
 
-  /// Builds a [SimpleDialog] to allow a user to view and edit the advance metrics.
+  /// Builds a [SimpleDialog] to allow a user to view and edit the advanced metrics.
   /// The advanced metrics are duration, startTime, timeToMaxSpeed and maxSpeed
   /// This dialog is kept in this class because it references the jump and modifies its value through it
   ///
