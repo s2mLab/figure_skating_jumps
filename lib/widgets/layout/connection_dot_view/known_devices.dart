@@ -41,7 +41,7 @@ class _KnownDevicesState extends State<KnownDevices>
     _stateIconDisconnected =
         const XSensStateIcon(true, XSensDeviceState.disconnected);
 
-    _updateKnowDevices();
+    _updateKnownDevices();
 
     XSensDotBluetoothDiscoveryService().subscribe(this);
     XSensDotConnectionService().subscribe(this);
@@ -180,6 +180,7 @@ class _KnownDevicesState extends State<KnownDevices>
     );
   }
 
+  /// Fills the [_nearDevices] list with near devices.
   void _filterNearDevices() {
     _nearDevices.clear();
     _nearDevices.addAll(_knownDevices
@@ -191,6 +192,7 @@ class _KnownDevicesState extends State<KnownDevices>
     }
   }
 
+  /// Fills the [_farDevices] list with far devices.
   void _filterFarDevices() {
     _farDevices.clear();
     _farDevices.addAll(_knownDevices.where(
@@ -202,6 +204,10 @@ class _KnownDevicesState extends State<KnownDevices>
     }
   }
 
+  /// Handles the press of a Bluetooth device in the list of available devices.
+  ///
+  /// Parameters:
+  /// - [device] (optional) : the Bluetooth device that was pressed
   Future<void> _onDevicePressed(BluetoothDevice? device) async {
     if (device == null) return;
     final result = await showDialog(
@@ -212,7 +218,7 @@ class _KnownDevicesState extends State<KnownDevices>
             close: () {
               if (mounted) Navigator.of(context).pop();
               setState(() {
-                _updateKnowDevices();
+                _updateKnownDevices();
               });
               if (_knownDevices.isEmpty) {
                 widget.refreshParentCallback();
@@ -223,7 +229,8 @@ class _KnownDevicesState extends State<KnownDevices>
     if (result == null) setState(() {});
   }
 
-  void _updateKnowDevices() {
+  /// Updates the [_knownDevices] list with the latest list of available Bluetooth devices.
+  void _updateKnownDevices() {
     if (_knownDevices.length != BluetoothDeviceManager().devices.length) {
       _knownDevices.clear();
       _knownDevices.addAll(BluetoothDeviceManager().devices);
@@ -231,6 +238,7 @@ class _KnownDevicesState extends State<KnownDevices>
     }
   }
 
+  /// Updates the [_nearDevices] and [_farDevices] lists by invoking the [_filterNearDevices] and [_filterFarDevices] functions.
   void _updateDeviceLists() {
     _filterNearDevices();
     _filterFarDevices();
