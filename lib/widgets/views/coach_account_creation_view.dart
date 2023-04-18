@@ -334,8 +334,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   /// Creates a new coach account using the email and password stored in _coachEmail and _coachPassword, respectively,
   /// and signs the user in using the same email and password.
   ///
-  /// Exceptions:
-  /// - Throws an [Exception] if an error occurs during the sign-up or sign-in process.
+  /// Throws an [Exception] if an error occurs during the sign-up or sign-in process.
   ///
   /// Returns a Future<bool> that is true if the sign-up and sign-in process was successful, and false otherwise.
   Future<bool> _createAccount() async {
@@ -366,8 +365,7 @@ class _CoachAccountCreationViewState extends State<CoachAccountCreationView> {
   /// navigates to the '/ListAthletes' page. If the account creation is unsuccessful, displays an error dialog with the
   /// error message stored in _errorStateMessage.
   ///
-  /// Exceptions:
-  /// - Throws an Exception if an error occurs during the account creation process.
+  /// Throws an Exception if an error occurs during the account creation process.
   Future<void> onAccountCreatePressed() async {
     if (_passwordKey.currentState != null &&
         _passwordKey.currentState!.validate()) {

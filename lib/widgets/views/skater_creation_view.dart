@@ -226,8 +226,7 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
   /// This function is called when a new skater is to be created for a coach.
   /// It creates a new skater, associates the skater with the coach, and adds the skater to the coach's list of trainees.
   ///
-  /// Exceptions:
-  /// - [ConflictException] is thrown when a conflict occurs during the creation of the skater.
+  /// Throws a [ConflictException] when a conflict occurs during the creation of the skater.
   ///
   /// Parameters:
   /// - [coachId] : The ID of the coach for whom the skater is to be created.
