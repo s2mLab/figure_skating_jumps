@@ -223,6 +223,15 @@ class _SkaterCreationViewState extends State<SkaterCreationView> {
         ));
   }
 
+  /// This function is called when a new skater is to be created for a coach.
+  /// It creates a new skater, associates the skater with the coach, and adds the skater to the coach's list of trainees.
+  ///
+  /// Exceptions:
+  /// - [ConflictException] is thrown when a conflict occurs during the creation of the skater.
+  ///
+  /// Parameters:
+  /// - [coachId] : The ID of the coach for whom the skater is to be created.
+  /// - [context] : The [BuildContext] used to navigate to the list of athletes.
   Future<void> _onCreateNewSkater(String coachId, BuildContext context) async {
     // Ideally this would not use a try-catch as a condition-like structure
     try {

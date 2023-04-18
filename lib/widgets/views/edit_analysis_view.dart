@@ -44,6 +44,10 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     super.initState();
   }
 
+  /// Builds and returns a [PageRouteBuilder] that navigates to the '/EditAnalysis' page with the analysis data
+  /// stored in _capture as the arguments. The returned route does not have any custom page transition animations.
+  ///
+  /// Returns: A [Route] object.
   Route _createRoute() {
     return PageRouteBuilder(
       settings: RouteSettings(name: '/EditAnalysis', arguments: _capture),
@@ -55,6 +59,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     );
   }
 
+  /// Loads the data for the current capture and the list of [Jump]s,
+  /// and the number of jumps for each jump type. If the capture was not previously set,
+  /// retrieves it from the arguments of the current route.
+  ///
+  /// Returns a Future<void> that completes when the data has been loaded.
   Future<void> _loadCaptureData() async {
     _capture ??= ModalRoute.of(context)!.settings.arguments as Capture;
     _captureInfo = await LocalCapturesManager().getCapture(_capture!.uID!);
@@ -66,10 +75,27 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     _jumps.sort((a, b) => a.time.compareTo(b.time));
   }
 
+
+  /// Determines whether the [Jump] at the specified [index] needs to be reordered after
+  /// having been changed by the user.
+  ///
+  /// Parameters:
+  /// - [initialTime] : The initial time of the jumps.
+  /// - [index] : The index of the jump to check for reorder.
+  ///
+  /// Returns a boolean value indicating whether the [Jump] at the specified [index] needs to be reordered.
   bool _jumpsNeedsReorder(int initialTime, int index) {
     return _jumps[index].time != initialTime && !_isJumpWellPlaced(index);
   }
 
+  /// Determines whether the [Jump] at the specified [index] is well placed
+  /// relative to its neighbors
+  ///
+  /// Parameters:
+  /// - [index] : The index of the jump to check for well placement.
+  ///
+  /// Returns a boolean value indicating whether the [Jump] at the specified [index] is well placed
+  /// relative to its neighbors
   bool _isJumpWellPlaced(int index) {
     return (index == 0 || _jumps[index - 1].time <= _jumps[index].time) &&
         (index == _jumps.length - 1 ||
@@ -99,6 +125,12 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
             : _editAnalysisViewStaticContent());
   }
 
+  /// Generates a [Widget] that displays the static content of the
+  /// EditAnalysisView. It includes the button to see a video, the relevant
+  /// [Capture] and [Jump] information, as well as the [ExpansionPanelList]
+  /// to display each jump.
+  ///
+  /// Returns a [Widget] representing the view.
   Widget _editAnalysisViewStaticContent() {
     return SizedBox(
       height: MediaQuery.of(context).size.height -

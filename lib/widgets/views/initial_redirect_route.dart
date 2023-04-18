@@ -10,6 +10,9 @@ import 'package:figure_skating_jumps/widgets/views/missing_permissions_view.dart
 import 'package:flutter/material.dart';
 import 'package:system_info2/system_info2.dart';
 
+/// This widget is used as a gate before accessing the application.
+/// It redirects you to the appropriate view depending of the state
+/// of previous sign ins or according to errors that might have occured.
 class InitialRedirectRoute extends StatelessWidget {
   late final bool _hasStoragePermissions;
   late final bool _hasNetwork;
@@ -28,6 +31,12 @@ class InitialRedirectRoute extends StatelessWidget {
         _hasStoragePermissions = hasStoragePermissions,
         super(key: key);
 
+  /// Returns the appropriate [PageRoute] for redirection based on the user's current session and role.
+  ///
+  /// Returns:
+  /// - If the user is not logged in, returns a [PageRoute] that leads to the [LoginView].
+  /// - If the user is logged in and has a 'coach' role, returns a [PageRoute] that leads to the [ListAthletesView].
+  /// - If the user is logged in and does not have a 'coach' role, returns a [PageRoute] that leads to the [CapturesView].
   Route _getRedirectRoute() {
     if (ActiveSessionManager().activeSession == null) {
       return PageRouteBuilder(
@@ -44,8 +53,7 @@ class InitialRedirectRoute extends StatelessWidget {
                 const ListAthletesView())
         : PageRouteBuilder(
             settings: RouteSettings(
-                name: '/Captures',
-                arguments: UserClient().currentSkatingUser),
+                name: '/Captures', arguments: UserClient().currentSkatingUser),
             pageBuilder: (context, animation, secondaryAnimation) =>
                 const CapturesView());
   }

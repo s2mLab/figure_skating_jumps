@@ -137,12 +137,19 @@ class _LoggerViewState extends State<_LoggerView>
     }
   }
 
+  /// Starts the XSensDot streaming data service and subscribes to the
+  /// received data. If the XSensDot connection service is not initialized,
+  /// the function will start measuring as soon as the connection is established.
+  /// The received data is displayed using the _displayedData variable.
   void _startStreaming() {
     XSensDotStreamingDataService()
         .startMeasuring(XSensDotConnectionService().isInitialized);
     _displayedData = _xSensDotStreamingDataService.subscribe(this);
   }
 
+  /// This function stops the measurement of data from the XSensDot device and
+  /// unsubscribes the current instance from receiving updates from the streaming
+  /// data service.
   void _stopStreaming() {
     _xSensDotStreamingDataService.stopMeasuring();
     _xSensDotStreamingDataService.unsubscribe(this);

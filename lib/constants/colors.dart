@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// This file regroups all the colors that can be used in the application.
+
 const primaryColorLight = Color(0xFF008AB9);
 const primaryColor = Color(0xFF124A89);
 const primaryColorDark =
@@ -8,10 +10,8 @@ const primaryColorDark =
 const secondaryLight =
     Color(0xFFF6D268); // Use sparingly, not an official color.
 const secondaryColor = Color(0xFFF1BA1B);
-const secondaryColorDark = Color(0xFFF49121);
 
 const errorColor = Color(0xFFFF4E2A);
-const errorColorLight = Color(0xFFFF8C75); // Use sparingly on primaryBackground
 const errorColorDark = Color(0xFF802614);
 
 const primaryBackground = Color(0xFFF8F8F8); // App background
