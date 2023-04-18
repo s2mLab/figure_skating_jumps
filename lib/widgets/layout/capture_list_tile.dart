@@ -35,10 +35,13 @@ class CaptureListTileState extends State<CaptureListTile> {
     return _jumps == null;
   }
 
+  /// Loads the data of the current capture and assigns it to the _jumps attribute.
   Future<void> _loadCaptureData() async {
     _jumps = await _currentCapture.getJumpsData();
   }
 
+  /// Copies all the attributes from the constructor into the state attributes
+  /// so they can be used and modified since we can't modify a stateless widget
   void _initializeVariables() {
     _currentCapture = widget._currentCapture;
     _isInteractive = widget._isInteractive;
@@ -61,6 +64,9 @@ class CaptureListTileState extends State<CaptureListTile> {
         : _captureListTileContent();
   }
 
+  /// Builds the capture content of the capture tile.
+  ///
+  /// Returns a [Widget].
   Widget _captureListTileContent() {
     Map<JumpType, int> jumpTypeCount = Capture.getJumpTypeCount(_jumps!);
     return Padding(
