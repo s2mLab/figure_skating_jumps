@@ -10,7 +10,7 @@ abstract class IObservable<Subscriber, Data> {
   /// Return the [Data] object being observed.
   Data subscribe(Subscriber subscriber);
 
-  /// Removes a s[Subscriber] from the observable object.
+  /// Removes a [Subscriber] from the observable object.
   ///
   /// Parameters:
   /// - [subscriber] : A subscriber of type [Subscriber] to be removed from the list of subscribers.
