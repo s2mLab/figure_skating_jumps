@@ -60,6 +60,17 @@ class Capture {
       this._season, this._jumpsID, this._modifications,
       [this.uID]);
 
+  /// Creates a new [Capture] instance from a Firestore document snapshot.
+  ///
+  /// Throws an [Exception] if the Firestore document snapshot is missing any
+  /// of the required fields or if the fields cannot be properly parsed.
+  ///
+  /// Parameters:
+  /// - [uID] : The user ID for the capture.
+  /// - [captureInfo] : The document snapshot containing the capture data.
+  ///
+  /// Returns a new [Capture] instance with the data from the provided Firestore
+  /// document snapshot.
   factory Capture.fromFirestore(
       String? uID, DocumentSnapshot<Map<String, dynamic>> captureInfo) {
     return Capture(
@@ -76,6 +87,9 @@ class Capture {
         uID);
   }
 
+  /// Retrieves every [Jump]'s data for a list of jump IDs.
+  ///
+  /// Returns a [List] of [Jump] instances.
   Future<List<Jump>> getJumpsData() async {
     List<Jump> jumps = [];
     for (String id in _jumpsID) {
@@ -84,6 +98,13 @@ class Capture {
     return jumps;
   }
 
+  /// Computes the number of jumps of each [JumpType] in a list of [Jump] instances.
+  ///
+  /// Parameters:
+  /// - [jumps] : The list of [Jump] instances to count.
+  ///
+  /// Returns a [Map] with keys as [JumpType] values and values as the number of
+  /// jumps of that type in the provided list of jumps.
   static Map<JumpType, int> getJumpTypeCount(List<Jump> jumps) {
     Map<JumpType, int> jumpTypeCount = {};
     for (JumpType type in JumpType.values) {
