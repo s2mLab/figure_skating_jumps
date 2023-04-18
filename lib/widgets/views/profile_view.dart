@@ -44,8 +44,7 @@ class _ProfileViewState extends State<ProfileView> {
   /// Parameters:
   /// - [coachID] : The ID of the coach to be removed.
   ///
-  /// Returns:
-  /// - None.
+  /// Returns void
   removeCoachAction(String coachID) {
     UserClient()
         .unlinkSkaterAndCoach(coachId: coachID, skaterId: _currentUser.uID!)
