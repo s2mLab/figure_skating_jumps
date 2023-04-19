@@ -247,11 +247,19 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                           width: 1),
                     ])
               : Center(
-                  child: Text(
-                  noDataLabel,
-                  style: TextStyle(
-                      fontFamily: 'Jost',
-                      fontSize: ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      noDataLabel,
+                      style: TextStyle(
+                          fontFamily: 'Jost',
+                          fontSize:
+                              ReactiveLayoutHelper.getHeightFromFactor(16)),
+                    ),
+                    const CircularProgressIndicator()
+                  ],
                 )),
         ),
         Padding(
@@ -260,9 +268,9 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: completePairingButton,
               onPressed: () async {
-                try{
-                  await BluetoothDeviceManager()
-                      .addDevice(_xSensDotConnectionService.currentXSensDevice!);
+                try {
+                  await BluetoothDeviceManager().addDevice(
+                      _xSensDotConnectionService.currentXSensDevice!);
                 } catch (e) {
                   Fluttertoast.showToast(msg: pairErrorLabel);
                 }
