@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 
 class RawDataView extends StatelessWidget {
   final RouteObserver<ModalRoute<void>> routeObserver;
+
   const RawDataView({super.key, required this.routeObserver});
 
   @override
@@ -49,6 +50,7 @@ class RawDataView extends StatelessWidget {
 
 class _LoggerView extends StatefulWidget {
   final RouteObserver<ModalRoute<void>> routeObserver;
+
   const _LoggerView({Key? key, required this.routeObserver}) : super(key: key);
 
   @override
@@ -58,8 +60,9 @@ class _LoggerView extends StatefulWidget {
 class _LoggerViewState extends State<_LoggerView>
     with RouteAware
     implements IXSensDotMeasuringDataSubscriber {
+  final int _rateRatio = 4;
   final ScrollController _scrollController = ScrollController();
-  late List<XSensDotData> _displayedData;
+  final List<XSensDotData> _displayedData = [];
   final XSensDotStreamingDataService _xSensDotStreamingDataService =
       XSensDotStreamingDataService();
 
@@ -130,7 +133,14 @@ class _LoggerViewState extends State<_LoggerView>
   void onDataReceived(List<XSensDotData> measuredData) {
     if (mounted) {
       setState(() {
-        _displayedData = measuredData;
+        if (measuredData.length < _rateRatio) {
+          _displayedData.clear();
+        }
+        int startIndex = _displayedData.length * _rateRatio;
+        for (int i = startIndex; i < measuredData.length; i += _rateRatio) {
+          _displayedData.add(measuredData[i]);
+        }
+
         _scrollController.animateTo(_scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 100), curve: Curves.easeOut);
       });
@@ -144,7 +154,7 @@ class _LoggerViewState extends State<_LoggerView>
   void _startStreaming() {
     XSensDotStreamingDataService()
         .startMeasuring(XSensDotConnectionService().isInitialized);
-    _displayedData = _xSensDotStreamingDataService.subscribe(this);
+    _displayedData.addAll(_xSensDotStreamingDataService.subscribe(this));
   }
 
   /// This function stops the measurement of data from the XSensDot device and

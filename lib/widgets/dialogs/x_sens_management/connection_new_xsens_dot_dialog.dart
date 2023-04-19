@@ -260,8 +260,13 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: completePairingButton,
               onPressed: () async {
-                await BluetoothDeviceManager()
-                    .addDevice(_xSensDotConnectionService.currentXSensDevice!);
+                try{
+                  await BluetoothDeviceManager()
+                      .addDevice(_xSensDotConnectionService.currentXSensDevice!);
+                } catch (e) {
+                  Fluttertoast.showToast(msg: pairErrorLabel);
+                }
+
                 await _xSensDotStreamingDataService.stopMeasuring();
                 if (mounted) {
                   Navigator.pop(context);
