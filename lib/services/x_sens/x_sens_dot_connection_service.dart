@@ -70,7 +70,7 @@ class XSensDotConnectionService
       }
       if (response) {
         _currentXSensDevice = BluetoothDeviceManager().devices.firstWhereOrNull(
-                (iter) => _currentXSensDevice!.macAddress == iter.macAddress) ??
+                (iter) => bluetoothDevice.macAddress == iter.macAddress) ??
             BluetoothDevice(
                 macAddress: bluetoothDevice.macAddress,
                 userId: UserClient().currentSkatingUser!.uID!,
