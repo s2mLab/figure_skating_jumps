@@ -246,21 +246,24 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
                           name: lastFastLineName,
                           width: 1),
                     ])
-              : Center(
-                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      noDataLabel,
-                      style: TextStyle(
-                          fontFamily: 'Jost',
-                          fontSize:
-                              ReactiveLayoutHelper.getHeightFromFactor(16)),
-                    ),
-                    const CircularProgressIndicator()
-                  ],
-                )),
+              : Padding(
+                padding: EdgeInsets.symmetric(horizontal: ReactiveLayoutHelper.getHeightFromFactor(8)),
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    noDataLabel,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Jost',
+                        fontSize:
+                            ReactiveLayoutHelper.getHeightFromFactor(16)),
+                  ),
+                  const CircularProgressIndicator()
+                ],
+                  ),
+              ),
         ),
         Padding(
           padding: EdgeInsets.symmetric(
