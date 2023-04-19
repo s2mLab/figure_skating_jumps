@@ -195,7 +195,7 @@ const String continueModifOfAllJumpsInfo =
 const String managingXSensDotTitle = "Gestion des XSens DOT";
 const String connectNewXSensDotButton =
     "Connecter un nouvel XSens DOT";
-const String noDataLabel = "Aucune donnée n'a été collectée";
+const String noDataLabel = "En attente du capteur - les données devraient arriver rapidement.";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
 const String secondFastLineName = "Y";

@@ -29,7 +29,7 @@ final TextStyle connectedStyle = TextStyle(
         ? ReactiveLayoutHelper.getHeightFromFactor(14)
         : 14);
 
-const dateSecondsFormatString = 'dd/MM/yyyy - hh:mm:ss';
+const dateSecondsFormatString = 'dd/MM/yyyy - HH:mm:ss';
 const dateFormatString = 'dd/MM/yyyy';
 final dateSecondsDisplayFormat = DateFormat(dateSecondsFormatString);
 final dateDisplayFormat = DateFormat(dateFormatString);
