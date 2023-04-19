@@ -216,7 +216,7 @@ class _KnownDevicesState extends State<KnownDevices>
           return ConfigureXSensDotDialog(
             xSensDot: device,
             close: () {
-              if (mounted) Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).pop();
               setState(() {
                 _updateKnownDevices();
               });
