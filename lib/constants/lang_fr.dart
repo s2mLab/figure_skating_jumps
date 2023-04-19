@@ -65,6 +65,8 @@ const String completePairingButton = "Compléter le jumelage";
 const String verifyConnectivityLabel = "Vérifier la réception du capteur";
 const String connectionErrorLabel =
     "Erreur lors de la connexion à l'appareil: ";
+const String pairErrorLabel =
+    "Erreur lors du jumelage. Veuillez réessayer.";
 
 // widgets/dialogs/modification_info_dialog
 const String modificationInfoDialogTitle =
