@@ -182,7 +182,6 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
         Padding(
           padding: EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(16)),
           child: const Center(
-              //TODO connecting before changing lists in top XSENS button
               child: XSensStateIcon(false, XSensDeviceState.connecting)),
         ),
         Padding(
@@ -261,6 +260,8 @@ class _ConnectionNewXSensDotState extends State<ConnectionNewXSensDotDialog>
           child: IceButton(
               text: completePairingButton,
               onPressed: () async {
+                await BluetoothDeviceManager()
+                    .addDevice(_xSensDotConnectionService.currentXSensDevice!);
                 await _xSensDotStreamingDataService.stopMeasuring();
                 if (mounted) {
                   Navigator.pop(context);
