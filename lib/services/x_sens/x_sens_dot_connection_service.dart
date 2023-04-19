@@ -69,22 +69,13 @@ class XSensDotConnectionService
         debugPrint(e.message!);
       }
       if (response) {
-        _currentXSensDevice = BluetoothDevice(
-            macAddress: bluetoothDevice.macAddress,
-            userId: UserClient().currentSkatingUser!.uID!,
-            name: bluetoothDevice.name,
-            id: bluetoothDevice.id);
-
-        BluetoothDevice? deviceName = BluetoothDeviceManager()
-            .devices
-            .firstWhereOrNull(
-                (iter) => _currentXSensDevice!.macAddress == iter.macAddress);
-
-        if (deviceName != null) {
-          _currentXSensDevice!.name = deviceName.name;
-        } else {
-          BluetoothDeviceManager().addDevice(_currentXSensDevice!);
-        }
+        _currentXSensDevice = BluetoothDeviceManager().devices.firstWhereOrNull(
+                (iter) => bluetoothDevice.macAddress == iter.macAddress) ??
+            BluetoothDevice(
+                macAddress: bluetoothDevice.macAddress,
+                userId: UserClient().currentSkatingUser!.uID!,
+                name: bluetoothDevice.name,
+                id: bluetoothDevice.id);
       }
       return response;
     }
@@ -139,7 +130,7 @@ class XSensDotConnectionService
   @override
   void notifySubscribers(XSensDeviceState state) {
     _connectionState = state;
-    if(_connectionState == XSensDeviceState.disconnected) {
+    if (_connectionState == XSensDeviceState.disconnected) {
       _currentXSensDevice = null;
     }
     for (IXSensStateSubscriber s in _subscribers) {
