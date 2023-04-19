@@ -26,6 +26,7 @@ class ModificationInfoDialog extends StatelessWidget {
                 EdgeInsets.all(ReactiveLayoutHelper.getHeightFromFactor(8)),
             child: Text(
               modificationInfoDialogTitle,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   color: primaryColor,
                   fontSize: ReactiveLayoutHelper.getHeightFromFactor(20)),
@@ -47,23 +48,28 @@ class ModificationInfoDialog extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(
-                                  bottom: ReactiveLayoutHelper
-                                      .getHeightFromFactor(32)),
+                                  bottom:
+                                      ReactiveLayoutHelper.getHeightFromFactor(
+                                          32)),
                               child: Text(
-                                dateSecondsDisplayFormat.format(
-                                    _orderedModifications[index].date),
+                                dateSecondsDisplayFormat
+                                    .format(_orderedModifications[index].date),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: primaryColorDark,
                                     fontSize: ReactiveLayoutHelper
                                         .getHeightFromFactor(16),
-                                    decorationStyle:
-                                        TextDecorationStyle.solid,
+                                    decorationStyle: TextDecorationStyle.solid,
                                     decoration: TextDecoration.underline),
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: ReactiveLayoutHelper.getWidthFromFactor(16.0), bottom: ReactiveLayoutHelper.getWidthFromFactor(16.0)),
+                              padding: EdgeInsets.only(
+                                  left: ReactiveLayoutHelper.getWidthFromFactor(
+                                      16.0),
+                                  bottom:
+                                      ReactiveLayoutHelper.getWidthFromFactor(
+                                          16.0)),
                               child: InstructionPrompt(
                                   _orderedModifications[index].action,
                                   primaryColorLight),

@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/exceptions/null_user_exception.dart';
 import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
 import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
 import 'package:figure_skating_jumps/services/local_db/bluetooth_device_manager.dart';
+import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/utils/exception_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,6 +107,7 @@ class UserClient {
   /// Returns void.
   Future<void> signOut() async {
     try {
+      await XSensDotConnectionService().disconnect();
       await _firebaseAuth.signOut();
       await ActiveSessionManager().clearActiveSession();
       _currentSkatingUser = null;
