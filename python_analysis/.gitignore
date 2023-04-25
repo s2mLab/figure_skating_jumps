@@ -1,0 +1,8 @@
+# Will ignore everything
+*
+
+# ! Negates it, add your files manually
+!.gitignore
+!*.py
+!README.txt
+!requirements.txt

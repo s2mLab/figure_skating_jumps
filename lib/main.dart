@@ -1,115 +1,138 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:figure_skating_jumps/constants/colors.dart';
+import 'package:figure_skating_jumps/firebase_options.dart';
+import 'package:figure_skating_jumps/services/camera_service.dart';
+import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';
+import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
+import 'package:figure_skating_jumps/services/local_db/global_settings_manager.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
+import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
+import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
+import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
+import 'package:figure_skating_jumps/widgets/views/connection_dot_view.dart';
+import 'package:figure_skating_jumps/widgets/views/edit_analysis_view.dart';
+import 'package:figure_skating_jumps/widgets/views/forgot_password_view.dart';
+import 'package:figure_skating_jumps/widgets/views/initial_redirect_route.dart';
+import 'package:figure_skating_jumps/widgets/views/list_athletes_view.dart';
+import 'package:figure_skating_jumps/widgets/views/login_view.dart';
+import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
+import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
+import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:media_store_plus/media_store_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:camera/camera.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  bool hasStoragePermissions = false;
+  bool hasNetwork = false;
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  var cameras = await availableCameras();
+  CameraService().rearCamera = cameras.first;
+
+  hasStoragePermissions = await initializeStoragePermissions();
+
+  if (hasStoragePermissions) {
+    ConnectivityResult connectivityResult =
+        await Connectivity().checkConnectivity();
+    hasNetwork = connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile;
+  }
+
+  if(hasNetwork) {
+    await LocalDbService().ensureInitialized();
+
+    await ActiveSessionManager().loadActiveSession();
+    if (ActiveSessionManager().activeSession != null) {
+      try {
+        await UserClient().signIn(
+            email: ActiveSessionManager().activeSession!.email,
+            password: ActiveSessionManager().activeSession!.password);
+      } catch (e) {
+        ActiveSessionManager().clearActiveSession();
+      }
+    }
+
+    await GlobalSettingsManager().loadSettings();
+  }
+
+  // prevent phone rotation
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(FigureSkatingJumpApp(
+      hasStoragePermissions: hasStoragePermissions,
+      hasNetwork: hasNetwork,
+      routeObserver: RouteObserver<ModalRoute<void>>()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<bool> initializeStoragePermissions() async {
+  bool permissionState = true;
+  List<Permission> permissions = [];
 
-  // This widget is the root of your application.
+  if ((await MediaStore().getPlatformSDKInt()) >= 33) {
+    permissions.add(Permission.photos);
+    permissions.add(Permission.audio);
+    permissions.add(Permission.videos);
+  }
+
+  if ((await MediaStore().getPlatformSDKInt()) <= 32) {
+    permissions.add(Permission.storage);
+  }
+
+  if (permissions.isNotEmpty) {
+    (await permissions.request()).forEach((key, value) {
+      if (!value.isGranted) {
+        permissionState = false;
+      }
+    });
+  }
+  return Future<bool>.value(permissionState);
+}
+
+class FigureSkatingJumpApp extends StatelessWidget {
+  final bool hasStoragePermissions;
+  final bool hasNetwork;
+  final RouteObserver<ModalRoute<void>> routeObserver;
+
+  const FigureSkatingJumpApp(
+      {super.key, required this.hasStoragePermissions, required this.hasNetwork, required this.routeObserver});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Figure Skating Jump App',
+      initialRoute: '/InitialRedirectRoute',
+      routes: {
+        '/InitialRedirectRoute': (context) => InitialRedirectRoute(hasNetwork: hasNetwork, hasStoragePermissions: hasStoragePermissions),
+        '/ManageDevices': (context) => const DeviceManagementView(),
+        '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
+        '/CaptureData': (context) => const CaptureDataView(),
+        '/Login': (context) => const LoginView(),
+        '/CreateSkater': (context) => const SkaterCreationView(),
+        '/Captures': (context) => const CapturesView(),
+        '/EditAnalysis': (context) => const EditAnalysisView(),
+        '/ListAthletes': (context) => const ListAthletesView(),
+        '/Profile': (context) => const ProfileView(),
+        '/RawData': (context) => RawDataView(routeObserver: routeObserver),
+        '/ForgotPassword': (context) => ForgotPasswordView(),
+      },
+      navigatorObservers: [routeObserver],
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: primaryBackground,
+        fontFamily: 'Jost',
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
