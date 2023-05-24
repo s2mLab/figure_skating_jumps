@@ -275,3 +275,5 @@ fabric.properties
 .firebase/
 
 # End of https://www.toptal.com/developers/gitignore/api/firebase
+
+lib/firebase_options.dart
