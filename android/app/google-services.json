@@ -29,6 +29,13 @@
             {
               "client_id": "630048534810-gmi9iogfue854i19n89hookuufse6g2v.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "630048534810-qrhs3j561d1mh6ramv1g3omo1b89b8ib.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.s2mlab.figure-skating"
+              }
             }
           ]
         }
