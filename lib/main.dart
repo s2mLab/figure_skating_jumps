@@ -21,7 +21,6 @@ import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:media_store_plus/media_store_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
 
@@ -80,15 +79,9 @@ Future<bool> initializeStoragePermissions() async {
   bool permissionState = true;
   List<Permission> permissions = [];
 
-  if ((await MediaStore().getPlatformSDKInt()) >= 33) {
-    permissions.add(Permission.photos);
-    permissions.add(Permission.audio);
-    permissions.add(Permission.videos);
-  }
-
-  if ((await MediaStore().getPlatformSDKInt()) <= 32) {
-    permissions.add(Permission.storage);
-  }
+  permissions.add(Permission.photos);
+  permissions.add(Permission.audio);
+  permissions.add(Permission.videos);
 
   if (permissions.isNotEmpty) {
     (await permissions.request()).forEach((key, value) {

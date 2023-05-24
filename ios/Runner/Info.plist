@@ -30,6 +30,12 @@
 	<string>Explanation on why the camera access is needed.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Explanation on why the microphone access is needed.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Explanation on why the photo access is needed.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Explanation on why the peripheral access is needed.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Explanation on why the bluetooth access is needed.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
