@@ -6,6 +6,7 @@ import 'package:figure_skating_jumps/enums/ice_button/ice_button_importance.dart
 import 'package:figure_skating_jumps/enums/ice_button/ice_button_size.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
 import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
+import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/firebase/capture_client.dart';
 import 'package:figure_skating_jumps/utils/reactive_layout_helper.dart';
 import 'package:figure_skating_jumps/widgets/buttons/ice_button.dart';
@@ -53,9 +54,8 @@ class _CapturesViewState extends State<CapturesView> {
             padding: EdgeInsets.only(
                 left: ReactiveLayoutHelper.getWidthFromFactor(24, true),
                 bottom: ReactiveLayoutHelper.getHeightFromFactor(16),
-            top: ReactiveLayoutHelper.getHeightFromFactor(16)),
-            child:
-                PageTitle(text: '${skater!.firstName} ${skater!.lastName}'),
+                top: ReactiveLayoutHelper.getHeightFromFactor(16)),
+            child: PageTitle(text: '${skater!.firstName} ${skater!.lastName}'),
           ),
           Center(
               child: SlideSwitcher(
@@ -101,10 +101,12 @@ class _CapturesViewState extends State<CapturesView> {
               child: IceButton(
                   elevation: 4.0,
                   text: captureButton,
-                  onPressed: () {
-                    CaptureClient().capturingSkatingUser = skater!;
-                    Navigator.pushNamed(context, '/CaptureData');
-                  },
+                  onPressed: CameraService().hasCamera
+                      ? () {
+                          CaptureClient().capturingSkatingUser = skater!;
+                          Navigator.pushNamed(context, '/CaptureData');
+                        }
+                      : null,
                   textColor: paleText,
                   color: primaryColor,
                   iceButtonImportance: IceButtonImportance.mainAction,
@@ -115,7 +117,6 @@ class _CapturesViewState extends State<CapturesView> {
       ),
     );
   }
-
 
   /// Builds the captures tab widget.
   ///

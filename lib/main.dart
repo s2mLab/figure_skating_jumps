@@ -36,7 +36,7 @@ Future<void> main() async {
   );
 
   var cameras = await availableCameras();
-  CameraService().rearCamera = cameras.first;
+  if (cameras.isNotEmpty) CameraService().rearCamera = cameras.first;
 
   hasStoragePermissions = await initializeStoragePermissions();
 
@@ -47,7 +47,7 @@ Future<void> main() async {
         connectivityResult == ConnectivityResult.mobile;
   }
 
-  if(hasNetwork) {
+  if (hasNetwork) {
     await LocalDbService().ensureInitialized();
 
     await ActiveSessionManager().loadActiveSession();
@@ -97,7 +97,7 @@ Future<bool> initializeStoragePermissions() async {
       }
     });
   }
-  return Future<bool>.value(permissionState);
+  return permissionState;
 }
 
 class FigureSkatingJumpApp extends StatelessWidget {
@@ -106,7 +106,10 @@ class FigureSkatingJumpApp extends StatelessWidget {
   final RouteObserver<ModalRoute<void>> routeObserver;
 
   const FigureSkatingJumpApp(
-      {super.key, required this.hasStoragePermissions, required this.hasNetwork, required this.routeObserver});
+      {super.key,
+      required this.hasStoragePermissions,
+      required this.hasNetwork,
+      required this.routeObserver});
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,9 @@ class FigureSkatingJumpApp extends StatelessWidget {
       title: 'Figure Skating Jump App',
       initialRoute: '/InitialRedirectRoute',
       routes: {
-        '/InitialRedirectRoute': (context) => InitialRedirectRoute(hasNetwork: hasNetwork, hasStoragePermissions: hasStoragePermissions),
+        '/InitialRedirectRoute': (context) => InitialRedirectRoute(
+            hasNetwork: hasNetwork,
+            hasStoragePermissions: hasStoragePermissions),
         '/ManageDevices': (context) => const DeviceManagementView(),
         '/CoachAccountCreation': (context) => const CoachAccountCreationView(),
         '/CaptureData': (context) => const CaptureDataView(),

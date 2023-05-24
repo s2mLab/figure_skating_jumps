@@ -7,6 +7,8 @@ class CameraService {
     return _cameraService;
   }
 
+  bool get hasCamera => _rearCamera != null;
+
   CameraService._internal();
 
   set rearCamera(CameraDescription camera) {
