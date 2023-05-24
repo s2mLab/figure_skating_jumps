@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:figure_skating_jumps/constants/lang_fr.dart';
 import 'package:figure_skating_jumps/enums/models/user_role.dart';
 import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
@@ -65,7 +67,8 @@ class InitialRedirectRoute extends StatelessWidget {
       Route route = _getRedirectRoute();
 
       // Architectures that crash
-      if (_unsupportedArchitectures.contains(SysInfo.kernelArchitecture)) {
+      if (Platform.isAndroid &&
+          _unsupportedArchitectures.contains(SysInfo.kernelArchitecture)) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -92,7 +95,8 @@ class InitialRedirectRoute extends StatelessWidget {
         return;
       }
       // Architectures that might crash
-      if (_untrustedArchitectures.contains(SysInfo.kernelArchitecture)) {
+      if (Platform.isAndroid &&
+          _untrustedArchitectures.contains(SysInfo.kernelArchitecture)) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

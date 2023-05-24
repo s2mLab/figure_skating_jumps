@@ -1,11 +1,14 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:figure_skating_jumps/constants/colors.dart';
 import 'package:figure_skating_jumps/firebase_options.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
-import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/services/local_db/active_session_manager.dart';
 import 'package:figure_skating_jumps/services/local_db/global_settings_manager.dart';
-import 'package:figure_skating_jumps/services/firebase/user_client.dart';
+import 'package:figure_skating_jumps/services/local_db/local_db_service.dart';
 import 'package:figure_skating_jumps/widgets/views/athlete_view.dart';
 import 'package:figure_skating_jumps/widgets/views/capture_view.dart';
 import 'package:figure_skating_jumps/widgets/views/coach_account_creation_view.dart';
@@ -18,11 +21,10 @@ import 'package:figure_skating_jumps/widgets/views/login_view.dart';
 import 'package:figure_skating_jumps/widgets/views/profile_view.dart';
 import 'package:figure_skating_jumps/widgets/views/raw_data_view.dart';
 import 'package:figure_skating_jumps/widgets/views/skater_creation_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:camera/camera.dart';
 
 Future<void> main() async {
   bool hasStoragePermissions = false;
@@ -80,8 +82,14 @@ Future<bool> initializeStoragePermissions() async {
   List<Permission> permissions = [];
 
   permissions.add(Permission.photos);
-  permissions.add(Permission.audio);
-  permissions.add(Permission.videos);
+  if (Platform.isAndroid) {
+    permissions.add(Permission.audio);
+    permissions.add(Permission.videos);
+  }
+  permissions.add(Permission.camera);
+  permissions.add(Permission.microphone);
+
+  if (Platform.isIOS) permissions.add(Permission.storage);
 
   if (permissions.isNotEmpty) {
     (await permissions.request()).forEach((key, value) {
