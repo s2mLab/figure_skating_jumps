@@ -158,6 +158,11 @@ La collection `jumps` est gérée dans `capture_client.dart` puisque leur utilis
 Dans le futur, s'il est souhaité d'ajouter les vidéos au stockage Firebase, la documentation est disponible [ici](https://firebase.google.com/docs/storage).
 Cela nécessitera un refactor du code pour ajouter des fonctionnalités Firebase correspondantes pour que l'application gère bien les téléchargements et téléversements de ces fichiers volumineux.
 
+Pour configurer firebase localement, il est également nécessaire de configurer firebase
+
+  firebase login
+  flutterfire configure --project=figure-skating-jumps
+
 ## Communication avec BD locale
 Toutes les méthodes pour gérer la base de données locale se trouvent dans le fichier `services/local_db`. C'est une base de données `sqlite` qui utilise le paquet `sqflite`.
 Le fichier `local_db_service` s'occupe de la création de la base de données. Il y a un code initial qui créé la base de données et après une liste de modifications sous le format de migrations. Ceci permet de faire une mise à jour dynamique de la base de données lors de changements (bien qu'il peut y avoir des problèmes dépendemment du type du changement).
