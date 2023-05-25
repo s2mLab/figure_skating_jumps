@@ -32,10 +32,8 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  const xSensConnectionMethodChannel =
-      MethodChannel('samples.flutter.io/battery');
-  final coucou =
-      await xSensConnectionMethodChannel.invokeMethod('getBatteryLevel');
+  const xSensConnectionMethodChannel = MethodChannel('scanner');
+  final coucou = await xSensConnectionMethodChannel.invokeMethod('startScan');
   debugPrint(coucou.toString());
 
   await Firebase.initializeApp(

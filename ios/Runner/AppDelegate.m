@@ -16,17 +16,12 @@
   FlutterViewController* controller =
       (FlutterViewController*)self.window.rootViewController;
 
-  FlutterMethodChannel* batteryChannel = [FlutterMethodChannel
-      methodChannelWithName:@"samples.flutter.io/battery"
-            binaryMessenger:controller];
+  FlutterMethodChannel* scanner = [
+      FlutterMethodChannel methodChannelWithName:@"scanner" 
+      binaryMessenger:controller];
   __weak typeof(self) weakSelf = self;
-  [batteryChannel setMethodCallHandler:^(FlutterMethodCall* call,
-                                         FlutterResult result) {
-    if ([@"getBatteryLevel" isEqualToString:call.method]) {
-        result(@("Bonjour"));
-    } else {
-      result(FlutterMethodNotImplemented);
-    }
+  [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+    [weakSelf handleScanCalls:call result:result];
   }];
 
   FlutterEventChannel* chargingChannel = [FlutterEventChannel
@@ -36,14 +31,23 @@
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
-- (int)getBatteryLevel {
-  UIDevice* device = UIDevice.currentDevice;
-  device.batteryMonitoringEnabled = YES;
-  if (device.batteryState == UIDeviceBatteryStateUnknown) {
-    return -1;
+/**
+  * Handles the Scan Method channel calls
+  *
+  * @param call The method to call and its parameters
+  * @param result The result to send back to the flutter project
+  */
+- (void)handleScanCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
+  if ([call.method isEqualToString:@"startScan"]) {
+    [self startScan:result];
   } else {
-    return ((int)(device.batteryLevel * 100));
+    result(FlutterMethodNotImplemented);
   }
+}
+
+- (void)startScan:(FlutterResult)result {
+  // To complete
+  result(@"success");
 }
 
 - (FlutterError*)onListenWithArguments:(id)arguments
