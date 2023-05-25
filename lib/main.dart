@@ -32,6 +32,10 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  const xSensConnectionMethodChannel = MethodChannel('scan-method-channel');
+  final coucou = await xSensConnectionMethodChannel.invokeMethod('startScan');
+  debugPrint(coucou.toString());
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
