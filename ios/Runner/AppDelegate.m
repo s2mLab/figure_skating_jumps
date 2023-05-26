@@ -6,6 +6,12 @@
 #import <Flutter/Flutter.h>
 #import "GeneratedPluginRegistrant.h"
 
+#import "XSensDotDeviceScanner.h"
+
+@interface AppDelegate ()
+@property (nonatomic, strong) XSensDotDeviceScanner *xSensDotDeviceScanner;
+@end
+
 @implementation AppDelegate {
   FlutterEventSink _eventSink;
 }
@@ -16,18 +22,22 @@
   FlutterViewController* controller =
       (FlutterViewController*)self.window.rootViewController;
 
+  // Declaring all the xsens devices
+  self.xSensDotDeviceScanner = [[XSensDotDeviceScanner alloc] init];
+
   FlutterMethodChannel* scanner = [
-      FlutterMethodChannel methodChannelWithName:@"scanner" 
-      binaryMessenger:controller];
-  __weak typeof(self) weakSelf = self;
+      FlutterMethodChannel methodChannelWithName:@"scanner" binaryMessenger:controller];
   [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
-    [weakSelf handleScanCalls:call result:result];
+    [self handleScanCalls:call result:result];
   }];
 
+  /*
+   * THIS IS AN EXAMPLE ON HOW TO USE EVENT. TO BE USED LATER
   FlutterEventChannel* chargingChannel = [FlutterEventChannel
       eventChannelWithName:@"samples.flutter.io/charging"
            binaryMessenger:controller];
   [chargingChannel setStreamHandler:self];
+  */
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -46,10 +56,12 @@
 }
 
 - (void)startScan:(FlutterResult)result {
-  // To complete
+  [self.xSensDotDeviceScanner startScan];
   result(@"success");
 }
 
+/**
+  * FROM THAT POINT IT IS AN EXAMPLE ON HOW TO USE EVENTS. TO USE LATER
 - (FlutterError*)onListenWithArguments:(id)arguments
                              eventSink:(FlutterEventSink)eventSink {
   _eventSink = eventSink;
@@ -91,5 +103,5 @@
   _eventSink = nil;
   return nil;
 }
-
+*/
 @end
