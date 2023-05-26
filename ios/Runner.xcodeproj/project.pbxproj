@@ -12,6 +12,9 @@
 		74970F681EDC0F26000507F3 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 74970F671EDC0F26000507F3 /* GeneratedPluginRegistrant.m */; };
 		8439E9E62A21028000375E5F /* XSensDotDeviceScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9E52A21027F00375E5F /* XSensDotDeviceScanner.m */; };
 		8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9EF2A21098E00375E5F /* MethodChannelNames.m */; };
+		8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F22A210CEF00375E5F /* EventChannelParameters.m */; };
+		8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */; };
+		8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -47,6 +50,12 @@
 		8439E9E52A21027F00375E5F /* XSensDotDeviceScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XSensDotDeviceScanner.m; sourceTree = "<group>"; };
 		8439E9EE2A21066D00375E5F /* MethodChannelNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodChannelNames.h; sourceTree = "<group>"; };
 		8439E9EF2A21098E00375E5F /* MethodChannelNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodChannelNames.m; sourceTree = "<group>"; };
+		8439E9F12A210CD900375E5F /* EventChannelParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventChannelParameters.h; sourceTree = "<group>"; };
+		8439E9F22A210CEF00375E5F /* EventChannelParameters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventChannelParameters.m; sourceTree = "<group>"; };
+		8439E9F82A214AC400375E5F /* XSensDotScanStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotScanStreamHandler.h; sourceTree = "<group>"; };
+		8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotScanStreamHandler.m; sourceTree = "<group>"; };
+		8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotConnectionStreamHandler.h; sourceTree = "<group>"; };
+		8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotConnectionStreamHandler.m; sourceTree = "<group>"; };
 		8E8C0B76FEC67E7B9D18030F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -110,6 +119,7 @@
 		8439E9EC2A21062500375E5F /* Channels */ = {
 			isa = PBXGroup;
 			children = (
+				8439E9F42A21374600375E5F /* EventChannels */,
 				8439E9ED2A21063000375E5F /* Enums */,
 			);
 			path = Channels;
@@ -120,8 +130,21 @@
 			children = (
 				8439E9EF2A21098E00375E5F /* MethodChannelNames.m */,
 				8439E9EE2A21066D00375E5F /* MethodChannelNames.h */,
+				8439E9F12A210CD900375E5F /* EventChannelParameters.h */,
+				8439E9F22A210CEF00375E5F /* EventChannelParameters.m */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		8439E9F42A21374600375E5F /* EventChannels */ = {
+			isa = PBXGroup;
+			children = (
+				8439E9F82A214AC400375E5F /* XSensDotScanStreamHandler.h */,
+				8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */,
+				8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */,
+				8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */,
+			);
+			path = EventChannels;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -391,9 +414,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */,
 				8439E9E62A21028000375E5F /* XSensDotDeviceScanner.m in Sources */,
+				8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */,
 				8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */,
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
+				8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
 				74970F681EDC0F26000507F3 /* GeneratedPluginRegistrant.m in Sources */,
 			);

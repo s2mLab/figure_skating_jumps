@@ -7,10 +7,18 @@
 #import "GeneratedPluginRegistrant.h"
 
 #import "MethodChannelNames.h"
+#import "EventChannelParameters.h"
+
 #import "XSensDotDeviceScanner.h"
+#import "XSensDotScanStreamHandler.h"
+#import "XSensDotConnectionStreamHandler.h"
+
 
 @interface AppDelegate ()
 @property (nonatomic, strong) XSensDotDeviceScanner *xSensDotDeviceScanner;
+@property (nonatomic, strong) XSensDotScanStreamHandler *xSensDotScanStreamHandler;
+
+@property (nonatomic, strong) XSensDotConnectionStreamHandler *xSensDotConnectionStreamHandler;
 @end
 
 @implementation AppDelegate {
@@ -20,28 +28,50 @@
 - (BOOL)application:(UIApplication*)application
     didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
   [GeneratedPluginRegistrant registerWithRegistry:self];
+
+  // Initialize all the xsens properties
+  self.xSensDotDeviceScanner = [[XSensDotDeviceScanner alloc] init];
+  self.xSensDotScanStreamHandler = [[XSensDotScanStreamHandler alloc] init];
+  self.xSensDotConnectionStreamHandler = [[XSensDotConnectionStreamHandler alloc] init];
+ 
+  [self setUpChannels];
+  
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (void)setUpChannels{
   FlutterViewController* controller =
       (FlutterViewController*)self.window.rootViewController;
 
-  // Declaring all the xsens devices
-  self.xSensDotDeviceScanner = [[XSensDotDeviceScanner alloc] init];
-
-
+  // Methods
   FlutterMethodChannel* scanner = [
-      FlutterMethodChannel methodChannelWithName:ChannelNames(ScanChannel) binaryMessenger:controller];
+      FlutterMethodChannel methodChannelWithName:ChannelNames(ScanChannel) 
+                                 binaryMessenger:controller];
   [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
-    [self handleScanCalls:call result:result];
+      [self handleScanCalls:call result:result];
   }];
 
-  /*
-   * THIS IS AN EXAMPLE ON HOW TO USE EVENT. TO BE USED LATER
-  FlutterEventChannel* chargingChannel = [FlutterEventChannel
-      eventChannelWithName:@"samples.flutter.io/charging"
-           binaryMessenger:controller];
-  [chargingChannel setStreamHandler:self];
-  */
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
-}
+  FlutterMethodChannel* connection = [
+      FlutterMethodChannel methodChannelWithName:ChannelNames(ConnectionChannel) 
+                                 binaryMessenger:controller];
+  [connection setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+      [self handleConnectionCalls:call result:result];
+  }];
+
+
+
+  // Events
+  FlutterEventChannel* scanChannelEvent = [
+    FlutterEventChannel eventChannelWithName:ChannelEventNames(ScanChannelEvent)
+                             binaryMessenger:controller];
+  [scanChannelEvent setStreamHandler:self.xSensDotScanStreamHandler];
+
+  FlutterEventChannel* connectionChannelEvent = [
+    FlutterEventChannel eventChannelWithName:ChannelEventNames(ConnectionChannelEvent)
+                             binaryMessenger:controller];
+  [connectionChannelEvent setStreamHandler:self.xSensDotScanStreamHandler];
+
+ }
 
 /**
   * Handles the Scan Method channel calls
@@ -62,48 +92,30 @@
   result(nil);
 }
 
+
 /**
-  * FROM THAT POINT IT IS AN EXAMPLE ON HOW TO USE EVENTS. TO USE LATER
-- (FlutterError*)onListenWithArguments:(id)arguments
-                             eventSink:(FlutterEventSink)eventSink {
-  _eventSink = eventSink;
-  [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-  [self sendBatteryStateEvent];
-  [[NSNotificationCenter defaultCenter]
-   addObserver:self
-      selector:@selector(onBatteryStateDidChange:)
-          name:UIDeviceBatteryStateDidChangeNotification
-        object:nil];
-  return nil;
+  * Handles the Connection Method channel calls
+  *
+  * @param call The method to call and its parameters
+  * @param result The result to send back to the flutter project
+  */
+- (void)handleConnectionCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
+    if ([call.method isEqualToString:@"connectXSensDot"]) {
+      [self connectXSensDot:call result:result];
+    } else {
+      result(FlutterMethodNotImplemented);
+    }
 }
 
-- (void)onBatteryStateDidChange:(NSNotification*)notification {
-  [self sendBatteryStateEvent];
+ /**
+   * Connects to XSens Dot device
+   *
+   * @param call The call containing the MAC address of the device
+   * @param result The result to send back to the flutter project. Sends an error
+   * if the MAC address argument does not exists
+   */
+- (void)connectXSensDot:(FlutterMethodCall*)call result:(FlutterResult)result {
+  result(@"tata");
 }
 
-- (void)sendBatteryStateEvent {
-  if (!_eventSink) return;
-  UIDeviceBatteryState state = [[UIDevice currentDevice] batteryState];
-  switch (state) {
-    case UIDeviceBatteryStateFull:
-    case UIDeviceBatteryStateCharging:
-      _eventSink(@"charging");
-      break;
-    case UIDeviceBatteryStateUnplugged:
-      _eventSink(@"discharging");
-      break;
-    default:
-      _eventSink([FlutterError errorWithCode:@"UNAVAILABLE"
-                                     message:@"Charging status unavailable"
-                                     details:nil]);
-      break;
-  }
-}
-
-- (FlutterError*)onCancelWithArguments:(id)arguments {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  _eventSink = nil;
-  return nil;
-}
-*/
 @end
