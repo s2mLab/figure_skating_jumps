@@ -6,6 +6,7 @@
 #import <Flutter/Flutter.h>
 #import "GeneratedPluginRegistrant.h"
 
+#import "MethodChannelNames.h"
 #import "XSensDotDeviceScanner.h"
 
 @interface AppDelegate ()
@@ -25,8 +26,9 @@
   // Declaring all the xsens devices
   self.xSensDotDeviceScanner = [[XSensDotDeviceScanner alloc] init];
 
+
   FlutterMethodChannel* scanner = [
-      FlutterMethodChannel methodChannelWithName:@"scanner" binaryMessenger:controller];
+      FlutterMethodChannel methodChannelWithName:ChannelNames(ScanChannel) binaryMessenger:controller];
   [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
     [self handleScanCalls:call result:result];
   }];
@@ -57,7 +59,7 @@
 
 - (void)startScan:(FlutterResult)result {
   [self.xSensDotDeviceScanner startScan];
-  result(@"success");
+  result(nil);
 }
 
 /**
