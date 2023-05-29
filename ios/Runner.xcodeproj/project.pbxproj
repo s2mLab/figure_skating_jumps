@@ -10,11 +10,17 @@
 		04C7E3D4C15B3C46BCEF33F6 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6C9A95B697EF5700CE1CE5A /* Pods_Runner.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74970F681EDC0F26000507F3 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 74970F671EDC0F26000507F3 /* GeneratedPluginRegistrant.m */; };
-		8439E9E62A21028000375E5F /* XSensDotDeviceScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9E52A21027F00375E5F /* XSensDotDeviceScanner.m */; };
 		8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9EF2A21098E00375E5F /* MethodChannelNames.m */; };
 		8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F22A210CEF00375E5F /* EventChannelParameters.m */; };
 		8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */; };
 		8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */; };
+		849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */; };
+		849F3B0F2A2514E1007A77EA /* XsensDotSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; };
+		849F3B102A2514E1007A77EA /* XsensDotSdk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */; };
+		849F3B1A2A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */; };
+		849F3B1D2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */; };
+		84D120822A24EFDA000769FE /* XSensDotInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D120812A24EFDA000769FE /* XSensDotInterface.m */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -30,6 +36,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				849F3B102A2514E1007A77EA /* XsensDotSdk.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -46,8 +53,6 @@
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		8439E9E42A21027F00375E5F /* XSensDotDeviceScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XSensDotDeviceScanner.h; sourceTree = "<group>"; };
-		8439E9E52A21027F00375E5F /* XSensDotDeviceScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XSensDotDeviceScanner.m; sourceTree = "<group>"; };
 		8439E9EE2A21066D00375E5F /* MethodChannelNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodChannelNames.h; sourceTree = "<group>"; };
 		8439E9EF2A21098E00375E5F /* MethodChannelNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodChannelNames.m; sourceTree = "<group>"; };
 		8439E9F12A210CD900375E5F /* EventChannelParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventChannelParameters.h; sourceTree = "<group>"; };
@@ -56,6 +61,16 @@
 		8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotScanStreamHandler.m; sourceTree = "<group>"; };
 		8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotConnectionStreamHandler.h; sourceTree = "<group>"; };
 		8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotConnectionStreamHandler.m; sourceTree = "<group>"; };
+		849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XsensDotSdk.framework; sourceTree = "<group>"; };
+		849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = XsensDotSdk.framework.dSYM; sourceTree = "<group>"; };
+		849F3B152A2528E7007A77EA /* BluetoothPermissionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BluetoothPermissionStreamHandler.h; sourceTree = "<group>"; };
+		849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluetoothPermissionStreamHandler.m; sourceTree = "<group>"; };
+		849F3B182A2536D7007A77EA /* XSensDotMeasuringStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotMeasuringStreamHandler.h; sourceTree = "<group>"; };
+		849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotMeasuringStreamHandler.m; sourceTree = "<group>"; };
+		849F3B1B2A2537D5007A77EA /* XSensDotMeasuringStatusStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotMeasuringStatusStreamHandler.h; sourceTree = "<group>"; };
+		849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotMeasuringStatusStreamHandler.m; sourceTree = "<group>"; };
+		84D120802A24EFDA000769FE /* XSensDotInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XSensDotInterface.h; sourceTree = "<group>"; };
+		84D120812A24EFDA000769FE /* XSensDotInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XSensDotInterface.m; sourceTree = "<group>"; };
 		8E8C0B76FEC67E7B9D18030F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -74,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04C7E3D4C15B3C46BCEF33F6 /* Pods_Runner.framework in Frameworks */,
+				849F3B0F2A2514E1007A77EA /* XsensDotSdk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +109,8 @@
 		8439E9E92A2103FF00375E5F /* XSensDot */ = {
 			isa = PBXGroup;
 			children = (
+				849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */,
+				849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */,
 				8439E9EA2A21041600375E5F /* Callbacks */,
 			);
 			path = XSensDot;
@@ -101,8 +119,8 @@
 		8439E9EA2A21041600375E5F /* Callbacks */ = {
 			isa = PBXGroup;
 			children = (
-				8439E9E42A21027F00375E5F /* XSensDotDeviceScanner.h */,
-				8439E9E52A21027F00375E5F /* XSensDotDeviceScanner.m */,
+				84D120802A24EFDA000769FE /* XSensDotInterface.h */,
+				84D120812A24EFDA000769FE /* XSensDotInterface.m */,
 			);
 			path = Callbacks;
 			sourceTree = "<group>";
@@ -143,6 +161,12 @@
 				8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */,
 				8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */,
 				8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */,
+				849F3B152A2528E7007A77EA /* BluetoothPermissionStreamHandler.h */,
+				849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */,
+				849F3B182A2536D7007A77EA /* XSensDotMeasuringStreamHandler.h */,
+				849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */,
+				849F3B1B2A2537D5007A77EA /* XSensDotMeasuringStatusStreamHandler.h */,
+				849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */,
 			);
 			path = EventChannels;
 			sourceTree = "<group>";
@@ -274,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
@@ -320,7 +345,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		47E771095EE4059C37DB9D30 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -405,7 +430,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -414,11 +439,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84D120822A24EFDA000769FE /* XSensDotInterface.m in Sources */,
 				8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */,
-				8439E9E62A21028000375E5F /* XSensDotDeviceScanner.m in Sources */,
 				8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */,
 				8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */,
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
+				849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */,
+				849F3B1A2A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m in Sources */,
+				849F3B1D2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m in Sources */,
 				8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
 				74970F681EDC0F26000507F3 /* GeneratedPluginRegistrant.m in Sources */,
@@ -501,13 +529,20 @@
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = MM9472U4HB;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Plugins",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Plugins/XSensDot",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.PlatformChannel;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.s2mlab.figure-skating";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Profile;
@@ -621,13 +656,20 @@
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = MM9472U4HB;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Plugins",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Plugins/XSensDot",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.PlatformChannel;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.s2mlab.figure-skating";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -637,13 +679,20 @@
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = MM9472U4HB;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Plugins",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Plugins/XSensDot",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.PlatformChannel;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.s2mlab.figure-skating";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

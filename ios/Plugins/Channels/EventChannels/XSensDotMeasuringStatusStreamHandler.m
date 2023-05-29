@@ -1,6 +1,6 @@
-#import "XSensDotConnectionStreamHandler.h"
+#import "XSensDotMeasuringStatusStreamHandler.h"
 
-@implementation XSensDotConnectionStreamHandler{
+@implementation XSensDotMeasuringStatusStreamHandler{
     FlutterEventSink _eventSink;
   }
 

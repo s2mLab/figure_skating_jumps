@@ -1,6 +1,6 @@
-#import "XSensDotConnectionStreamHandler.h"
+#import "BluetoothPermissionStreamHandler.h"
 
-@implementation XSensDotConnectionStreamHandler{
+@implementation BluetoothPermissionStreamHandler{
     FlutterEventSink _eventSink;
   }
 
@@ -20,5 +20,7 @@
     _eventSink(event);
   }
 }
+
+
 
 @end

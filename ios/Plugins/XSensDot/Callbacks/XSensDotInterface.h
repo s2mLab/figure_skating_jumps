@@ -1,7 +1,8 @@
 #import <Foundation/Foundation.h>
 
-@interface XSensDotDeviceScanner : NSObject
+@interface XSensDotInterface : NSObject
 
 - (void)startScan;
+- (void)stopScan;
 
 @end

@@ -14,6 +14,21 @@
     //       selector:@selector(onBatteryStateDidChange:)
     //           name:UIDeviceBatteryStateDidChangeNotification
     //         object:nil];
+    
+//    // Get callback id
+//        
+//        // Prepare a timer like self calling task
+//        void (^callback)(void) = ^() {
+//            int time = (int) CFAbsoluteTimeGetCurrent();
+//            
+//            eventSink([NSString stringWithFormat:@"Hello Listener! %d", time]);
+//            
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), callback);
+//            
+//        };
+//        
+//        // Run task
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), callback);
       return nil;
     
 }
@@ -30,25 +45,6 @@
   }
 }
 
-// - (void)onBatteryStateDidChange:(NSNotification*)notification {
-//   [self sendBatteryStateEvent];
-// }
 
-// - (void)sendBatteryStateEvent {
-//   if (!_eventSink) return;
-//   UIDeviceBatteryState state = [[UIDevice currentDevice] batteryState];
-//   switch (state) {
-//     case UIDeviceBatteryStateFull:
-//     case UIDeviceBatteryStateCharging:
-//       _eventSink(@"charging");
-//       break;
-//     case UIDeviceBatteryStateUnplugged:
-//       _eventSink(@"discharging");
-//       break;
-//     default:
-//       _eventSink(@"tata2");
-//       break;
-//   }
-// }
 
 @end
