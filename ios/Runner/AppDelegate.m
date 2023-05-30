@@ -104,21 +104,17 @@
   */
 - (void)handleConnectionCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([call.method isEqualToString:@"connectXSensDot"]) {
-      [self connectXSensDot:call result:result];
+        // Get the device associated with the address argument
+        NSDictionary *arguments = call.arguments;
+        NSString *macAddress = arguments[@"address"];
+        XsensDotDevice *device = [self.xSensDotScanStreamHandler deviceFrom:macAddress];
+        
+        [self.xSensDotConnectionStreamHandler connect:device];
+        [self.xSensDotMeasuringStreamHandler currentDevice:device];
+        result(nil);
     } else {
-      result(FlutterMethodNotImplemented);
+        result(FlutterMethodNotImplemented);
     }
-}
-
- /**
-   * Connects to XSens Dot device
-   *
-   * @param call The call containing the MAC address of the device
-   * @param result The result to send back to the flutter project. Sends an error
-   * if the MAC address argument does not exists
-   */
-- (void)connectXSensDot:(FlutterMethodCall*)call result:(FlutterResult)result {
-  result(@"tata");
 }
 
 
@@ -130,22 +126,14 @@
   */
 - (void)handleScanCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([call.method isEqualToString:@"startScan"]) {
-        [self startScan:result];
+        [self.xSensDotScanStreamHandler startScan];
+        result(nil);
     } else if ([call.method isEqualToString:@"stopScan"]) {
-        [self stopScan:result];
+        [self.xSensDotScanStreamHandler stopScan];
+        result(nil);
     } else {
         result(FlutterMethodNotImplemented);
     }
-}
-
-- (void)startScan:(FlutterResult)result {
-    [self.xSensDotScanStreamHandler startScan];
-    result(nil);
-}
-
-- (void)stopScan:(FlutterResult)result {
-    [self.xSensDotScanStreamHandler stopScan];
-    result(nil);
 }
 
 @end

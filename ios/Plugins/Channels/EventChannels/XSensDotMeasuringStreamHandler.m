@@ -2,10 +2,16 @@
 
 @implementation XSensDotMeasuringStreamHandler{
     FlutterEventSink _eventSink;
+    XsensDotDevice * _currentDevice;
   }
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
     _eventSink = eventSink;
+    if (_currentDevice){
+        _currentDevice.plotMeasureMode = XSBleDevicePayloadCompleteEuler;
+        _currentDevice.plotLogEnable = YES;
+        _currentDevice.plotMeasureEnable = YES;
+    }
     return nil;
 }
 
@@ -19,6 +25,10 @@
   if (_eventSink) {
     _eventSink(event);
   }
+}
+
+- (void)currentDevice:(XsensDotDevice *)device{
+    _currentDevice = device;
 }
 
 @end

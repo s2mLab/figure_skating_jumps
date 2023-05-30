@@ -7,4 +7,5 @@
 @interface XSensDotScanStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
 - (void)startScan;
 - (void)stopScan;
+- (XsensDotDevice *)deviceFrom:(NSString*)macAddress;
 @end

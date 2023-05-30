@@ -2,6 +2,8 @@
 #import <Flutter/Flutter.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler>
+#import <XsensDotSdk/XsensDotConnectionManager.h>
 
+@interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler>
+- (void)currentDevice:(XsensDotDevice *)device;
 @end

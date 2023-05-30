@@ -2,13 +2,15 @@
 
 @implementation XSensDotScanStreamHandler{
     FlutterEventSink _eventSink;
-  }
+    NSMutableDictionary<NSString *, XsensDotDevice *> *_devices;
+}
 
 - (id)init {
     self = [super init];
     if (self){
         /// Set xsensDot connection delete
         [XsensDotConnectionManager setConnectionDelegate:self];
+        _devices = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -32,12 +34,18 @@
     [XsensDotConnectionManager stopScan];
 }
 
+- (XsensDotDevice *)deviceFrom:(NSString*)macAddress
+{
+    return [_devices objectForKey:macAddress];
+}
+
 /// Discovered XsensDot device
 /// @param device XsensDotDevice
 - (void)onDiscoverDevice:(XsensDotDevice *)device
 {
     if (self->_eventSink != nil) {
-        self->_eventSink([NSString stringWithFormat:@"%@,%@", device.macAddress, device.peripheralName]);
+        self->_eventSink([NSString stringWithFormat:@"%@,%@", device.macAddress, device.displayName]);
+        [_devices setObject:device forKey:device.macAddress];
     }
 }
 

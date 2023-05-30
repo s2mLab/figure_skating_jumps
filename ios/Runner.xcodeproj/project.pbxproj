@@ -13,7 +13,7 @@
 		8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9EF2A21098E00375E5F /* MethodChannelNames.m */; };
 		8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F22A210CEF00375E5F /* EventChannelParameters.m */; };
 		8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */; };
-		8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */; };
+		844E25DD2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */; };
 		849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */; };
 		849F3B0F2A2514E1007A77EA /* XsensDotSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; };
 		849F3B102A2514E1007A77EA /* XsensDotSdk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -58,8 +58,8 @@
 		8439E9F22A210CEF00375E5F /* EventChannelParameters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventChannelParameters.m; sourceTree = "<group>"; };
 		8439E9F82A214AC400375E5F /* XSensDotScanStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotScanStreamHandler.h; sourceTree = "<group>"; };
 		8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotScanStreamHandler.m; sourceTree = "<group>"; };
-		8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotConnectionStreamHandler.h; sourceTree = "<group>"; };
-		8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotConnectionStreamHandler.m; sourceTree = "<group>"; };
+		844E25DB2A267C6E00F9B1F2 /* XSensDotConnectionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotConnectionStreamHandler.h; sourceTree = "<group>"; };
+		844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotConnectionStreamHandler.m; sourceTree = "<group>"; };
 		849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XsensDotSdk.framework; sourceTree = "<group>"; };
 		849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = XsensDotSdk.framework.dSYM; sourceTree = "<group>"; };
 		849F3B152A2528E7007A77EA /* BluetoothPermissionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BluetoothPermissionStreamHandler.h; sourceTree = "<group>"; };
@@ -154,14 +154,14 @@
 			children = (
 				8439E9F82A214AC400375E5F /* XSensDotScanStreamHandler.h */,
 				8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */,
-				8439E9FB2A21613E00375E5F /* XSensDotConnectionStreamHandler.h */,
-				8439E9FC2A21614E00375E5F /* XSensDotConnectionStreamHandler.m */,
 				849F3B152A2528E7007A77EA /* BluetoothPermissionStreamHandler.h */,
 				849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */,
 				849F3B182A2536D7007A77EA /* XSensDotMeasuringStreamHandler.h */,
 				849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */,
 				849F3B1B2A2537D5007A77EA /* XSensDotMeasuringStatusStreamHandler.h */,
 				849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */,
+				844E25DB2A267C6E00F9B1F2 /* XSensDotConnectionStreamHandler.h */,
+				844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */,
 			);
 			path = EventChannels;
 			sourceTree = "<group>";
@@ -435,12 +435,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */,
-				8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */,
 				8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */,
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
 				849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */,
 				849F3B1A2A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m in Sources */,
 				849F3B1D2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m in Sources */,
+				844E25DD2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m in Sources */,
 				8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
 				74970F681EDC0F26000507F3 /* GeneratedPluginRegistrant.m in Sources */,
