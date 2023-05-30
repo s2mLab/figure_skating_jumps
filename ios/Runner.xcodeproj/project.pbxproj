@@ -20,7 +20,6 @@
 		849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */; };
 		849F3B1A2A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */; };
 		849F3B1D2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */; };
-		84D120822A24EFDA000769FE /* XSensDotInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D120812A24EFDA000769FE /* XSensDotInterface.m */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -69,8 +68,6 @@
 		849F3B192A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotMeasuringStreamHandler.m; sourceTree = "<group>"; };
 		849F3B1B2A2537D5007A77EA /* XSensDotMeasuringStatusStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotMeasuringStatusStreamHandler.h; sourceTree = "<group>"; };
 		849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotMeasuringStatusStreamHandler.m; sourceTree = "<group>"; };
-		84D120802A24EFDA000769FE /* XSensDotInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XSensDotInterface.h; sourceTree = "<group>"; };
-		84D120812A24EFDA000769FE /* XSensDotInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XSensDotInterface.m; sourceTree = "<group>"; };
 		8E8C0B76FEC67E7B9D18030F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -119,8 +116,6 @@
 		8439E9EA2A21041600375E5F /* Callbacks */ = {
 			isa = PBXGroup;
 			children = (
-				84D120802A24EFDA000769FE /* XSensDotInterface.h */,
-				84D120812A24EFDA000769FE /* XSensDotInterface.m */,
 			);
 			path = Callbacks;
 			sourceTree = "<group>";
@@ -439,7 +434,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84D120822A24EFDA000769FE /* XSensDotInterface.m in Sources */,
 				8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */,
 				8439E9FD2A21614E00375E5F /* XSensDotConnectionStreamHandler.m in Sources */,
 				8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */,

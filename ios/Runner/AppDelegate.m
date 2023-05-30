@@ -11,7 +11,6 @@
 
 #import "BluetoothPermissionStreamHandler.h"
 
-#import "XSensDotInterface.h"
 #import "XSensDotConnectionStreamHandler.h"
 #import "XSensDotMeasuringStreamHandler.h"
 #import "XSensDotMeasuringStatusStreamHandler.h"
@@ -20,8 +19,6 @@
 
 @interface AppDelegate ()
 @property (nonatomic, strong) BluetoothPermissionStreamHandler *bluetoothPermissionStreamHandler;
-
-@property (nonatomic, strong) XSensDotInterface *xSensDotInterface;
 
 @property (nonatomic, strong) XSensDotConnectionStreamHandler *xSensDotConnectionStreamHandler;
 @property (nonatomic, strong) XSensDotMeasuringStreamHandler *xSensDotMeasuringStreamHandler;
@@ -39,7 +36,6 @@
     
     // Initialize all the xsens properties
     self.bluetoothPermissionStreamHandler = [[BluetoothPermissionStreamHandler alloc] init];
-    self.xSensDotInterface = [[XSensDotInterface alloc] init];
     self.xSensDotConnectionStreamHandler = [[XSensDotConnectionStreamHandler alloc] init];
     self.xSensDotMeasuringStreamHandler = [[XSensDotMeasuringStreamHandler alloc] init];
     self.xSensDotMeasuringStatusStreamHandler = [[XSensDotMeasuringStatusStreamHandler alloc] init];
@@ -133,16 +129,23 @@
   * @param result The result to send back to the flutter project
   */
 - (void)handleScanCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([call.method isEqualToString:@"startScan"]) {
-    [self startScan:result];
-  } else {
-    result(FlutterMethodNotImplemented);
-  }
+    if ([call.method isEqualToString:@"startScan"]) {
+        [self startScan:result];
+    } else if ([call.method isEqualToString:@"stopScan"]) {
+        [self stopScan:result];
+    } else {
+        result(FlutterMethodNotImplemented);
+    }
 }
 
 - (void)startScan:(FlutterResult)result {
-  [self.xSensDotInterface startScan];
-  result(nil);
+    [self.xSensDotScanStreamHandler startScan];
+    result(nil);
+}
+
+- (void)stopScan:(FlutterResult)result {
+    [self.xSensDotScanStreamHandler stopScan];
+    result(nil);
 }
 
 @end
