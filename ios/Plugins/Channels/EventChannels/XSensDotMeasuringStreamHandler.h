@@ -4,6 +4,6 @@
 
 #import <XsensDotSdk/XsensDotConnectionManager.h>
 
-@interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler>
+@interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
 - (void)currentDevice:(XsensDotDevice *)device;
 @end
