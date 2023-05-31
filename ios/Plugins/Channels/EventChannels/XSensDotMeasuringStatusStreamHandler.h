@@ -3,5 +3,5 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 @interface XSensDotMeasuringStatusStreamHandler : NSObject<FlutterStreamHandler>
-
+- (void)notifyRateIsSet;
 @end

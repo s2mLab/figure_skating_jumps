@@ -68,7 +68,7 @@
     [measuring setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
         [self handleMeasuringCalls:call result:result];
     }];
-    
+        
     FlutterMethodChannel* scanner = [
         FlutterMethodChannel methodChannelWithName:ChannelNames(ScanChannel) binaryMessenger:controller];
     [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
@@ -135,16 +135,23 @@
   * @param result The result to send back to the flutter project
   */
 - (void)handleMeasuringCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
-    if ([call.method isEqualToString:@"stopMeasuring"]) {
+    if ([call.method isEqualToString:@"startMeasuring"]) {
+        [self.xSensDotMeasuringStreamHandler startMeasuring];
+        result(nil);
+    } else if ([call.method isEqualToString:@"stopMeasuring"]) {
         [self.xSensDotMeasuringStreamHandler stopMeasuring];
         result(nil);
     } else if ([call.method isEqualToString:@"setRate"]) {
+        // Change the rate on the unit
         NSDictionary *arguments = call.arguments;
         id rateValue = arguments[@"rate"];
         if ([rateValue isKindOfClass:[NSNumber class]]) {
             int rate = [rateValue intValue];
             [self.xSensDotMeasuringStreamHandler setRate:rate];
         }
+        // Notify listeners rate was changed
+        [self.xSensDotMeasuringStatusStreamHandler notifyRateIsSet];
+        
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);

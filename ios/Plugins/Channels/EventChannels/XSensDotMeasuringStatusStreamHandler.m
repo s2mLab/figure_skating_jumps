@@ -9,13 +9,18 @@
     return nil;
 }
 
+- (void)notifyRateIsSet
+{
+    [self sendEvent:@"SetRate"];
+}
+
 - (FlutterError*)onCancelWithArguments:(id)arguments {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   _eventSink = nil;
   return nil;
 }
 
-- (void)sendEvent:(NSString*)event {
+- (void)sendEvent:(id)event {
   if (_eventSink) {
     _eventSink(event);
   }
