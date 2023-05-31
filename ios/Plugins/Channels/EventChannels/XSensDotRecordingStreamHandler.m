@@ -1,12 +1,10 @@
-#import "XSensDotMeasuringStreamHandler.h"
+#import "XSensDotRecordingStreamHandler.h"
 
-#import <unistd.h>
-
-@implementation XSensDotMeasuringStreamHandler{
+@implementation XSensDotRecordingStreamHandler{
     FlutterEventSink _eventSink;
     XsensDotDevice * _currentDevice;
     int _packageCounter; // This should not be useful, but for some reason, the vanilla packageCounter from XSens does not increment
-  }
+}
 
 - (id)init {
     self = [super init];
@@ -55,6 +53,7 @@
 {
     _packageCounter++;
     NSString* dataAsString = [self serialize:data withPackageCounter:_packageCounter];
+    // TODO Call the dart stream here to notify that data were received
     [self sendEvent:dataAsString];
 }
 
@@ -89,15 +88,15 @@
     return jsonString;
 }
 
-- (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
+- (FlutterError*)onListenWithArguments:(id)listener
+                             eventSink:(FlutterEventSink)eventSink {
     _eventSink = eventSink;
     return nil;
 }
 
 - (FlutterError*)onCancelWithArguments:(id)arguments {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  _eventSink = nil;
-  return nil;
+    _eventSink = nil;
+    return nil;
 }
 
 - (void)sendEvent:(NSString*)event {

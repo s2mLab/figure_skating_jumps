@@ -14,6 +14,7 @@
 #import "XSensDotConnectionStreamHandler.h"
 #import "XSensDotMeasuringStreamHandler.h"
 #import "XSensDotMeasuringStatusStreamHandler.h"
+#import "XSensDotRecordingStreamHandler.h"
 #import "XSensDotScanStreamHandler.h"
 
 
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) XSensDotConnectionStreamHandler *xSensDotConnectionStreamHandler;
 @property (nonatomic, strong) XSensDotMeasuringStreamHandler *xSensDotMeasuringStreamHandler;
 @property (nonatomic, strong) XSensDotMeasuringStatusStreamHandler *xSensDotMeasuringStatusStreamHandler;
+@property (nonatomic, strong) XSensDotRecordingStreamHandler *xSensDotRecordingStreamHandler;
 @property (nonatomic, strong) XSensDotScanStreamHandler *xSensDotScanStreamHandler;
 @end
 
@@ -39,6 +41,7 @@
     self.xSensDotConnectionStreamHandler = [[XSensDotConnectionStreamHandler alloc] init];
     self.xSensDotMeasuringStreamHandler = [[XSensDotMeasuringStreamHandler alloc] init];
     self.xSensDotMeasuringStatusStreamHandler = [[XSensDotMeasuringStatusStreamHandler alloc] init];
+    self.xSensDotRecordingStreamHandler = [[XSensDotRecordingStreamHandler alloc] init];
     self.xSensDotScanStreamHandler = [[XSensDotScanStreamHandler alloc] init];
     
     [self setUpChannels];
@@ -55,6 +58,12 @@
         FlutterMethodChannel methodChannelWithName:ChannelNames(BluetoothChannel) binaryMessenger:controller];
     [bluetooth setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
         // TODO?
+    }];
+    
+    FlutterMethodChannel* recording = [
+        FlutterMethodChannel methodChannelWithName:ChannelNames(RecordingChannel) binaryMessenger:controller];
+    [recording setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+        [self handleRecordingCalls:call result:result];
     }];
     
     FlutterMethodChannel* connection = [
@@ -94,6 +103,10 @@
     FlutterEventChannel* measuringStatusChannelEvent = [
     FlutterEventChannel eventChannelWithName:ChannelEventNames(MeasuringStatusChannelEvent) binaryMessenger:controller];
     [measuringStatusChannelEvent setStreamHandler:self.xSensDotMeasuringStatusStreamHandler];
+    
+    FlutterEventChannel* recordingChannelEvent = [
+    FlutterEventChannel eventChannelWithName:ChannelEventNames(RecordingChannelEvent) binaryMessenger:controller];
+    [recordingChannelEvent setStreamHandler:self.xSensDotRecordingStreamHandler];
 
     FlutterEventChannel* scanChannelEvent = [
         FlutterEventChannel eventChannelWithName:ChannelEventNames(ScanChannelEvent) binaryMessenger:controller];
@@ -116,11 +129,43 @@
         XsensDotDevice *device = [self.xSensDotScanStreamHandler deviceFrom:macAddress];
         
         [self.xSensDotConnectionStreamHandler connect:device];
-        [self.xSensDotMeasuringStreamHandler currentDevice:device];
+        [self.xSensDotMeasuringStreamHandler connectDevice:device];
+        [self.xSensDotRecordingStreamHandler connectDevice:device];
         result(nil);
     } else if ([call.method isEqualToString:@"disconnectXSensDot"]) {
         [self.xSensDotConnectionStreamHandler disconnectDevice];
         [self.xSensDotMeasuringStreamHandler disconnectDevice];
+        [self.xSensDotRecordingStreamHandler disconnectDevice];
+        result(nil);
+    } else {
+        result(FlutterMethodNotImplemented);
+    }
+}
+
+/**
+  * Handles the Measuring Method channel calls
+  *
+  * @param call The method to call and its parameters
+  * @param result The result to send back to the flutter project
+  */
+- (void)handleRecordingCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
+    if ([call.method isEqualToString:@"startMeasuring"]) {
+        [self.xSensDotRecordingStreamHandler startMeasuring];
+        result(nil);
+    } else if ([call.method isEqualToString:@"stopMeasuring"]) {
+        [self.xSensDotRecordingStreamHandler stopMeasuring];
+        result(nil);
+    } else if ([call.method isEqualToString:@"setRate"]) {
+        // Change the rate on the unit
+        NSDictionary *arguments = call.arguments;
+        id rateValue = arguments[@"rate"];
+        if ([rateValue isKindOfClass:[NSNumber class]]) {
+            int rate = [rateValue intValue];
+            [self.xSensDotRecordingStreamHandler setRate:rate];
+        }
+        // Notify listeners rate was changed
+        //[self.xSensDotRecordingStatusStreamHandler notifyRateIsSet];
+        
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);

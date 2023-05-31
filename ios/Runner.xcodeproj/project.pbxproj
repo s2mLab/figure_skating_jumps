@@ -14,6 +14,7 @@
 		8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F22A210CEF00375E5F /* EventChannelParameters.m */; };
 		8439E9FA2A214AD900375E5F /* XSensDotScanStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */; };
 		844E25DD2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */; };
+		844E25E02A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25DF2A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m */; };
 		849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */; };
 		849F3B0F2A2514E1007A77EA /* XsensDotSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; };
 		849F3B102A2514E1007A77EA /* XsensDotSdk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -60,6 +61,8 @@
 		8439E9F92A214AD900375E5F /* XSensDotScanStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotScanStreamHandler.m; sourceTree = "<group>"; };
 		844E25DB2A267C6E00F9B1F2 /* XSensDotConnectionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotConnectionStreamHandler.h; sourceTree = "<group>"; };
 		844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotConnectionStreamHandler.m; sourceTree = "<group>"; };
+		844E25DE2A27E94C00F9B1F2 /* XSensDotRecordingStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XSensDotRecordingStreamHandler.h; sourceTree = "<group>"; };
+		844E25DF2A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XSensDotRecordingStreamHandler.m; sourceTree = "<group>"; };
 		849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XsensDotSdk.framework; sourceTree = "<group>"; };
 		849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = XsensDotSdk.framework.dSYM; sourceTree = "<group>"; };
 		849F3B152A2528E7007A77EA /* BluetoothPermissionStreamHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BluetoothPermissionStreamHandler.h; sourceTree = "<group>"; };
@@ -162,6 +165,8 @@
 				849F3B1C2A2537E5007A77EA /* XSensDotMeasuringStatusStreamHandler.m */,
 				844E25DB2A267C6E00F9B1F2 /* XSensDotConnectionStreamHandler.h */,
 				844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */,
+				844E25DE2A27E94C00F9B1F2 /* XSensDotRecordingStreamHandler.h */,
+				844E25DF2A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m */,
 			);
 			path = EventChannels;
 			sourceTree = "<group>";
@@ -436,6 +441,7 @@
 			files = (
 				8439E9F32A210CEF00375E5F /* EventChannelParameters.m in Sources */,
 				8439E9F02A21098E00375E5F /* MethodChannelNames.m in Sources */,
+				844E25E02A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m in Sources */,
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
 				849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */,
 				849F3B1A2A2536E9007A77EA /* XSensDotMeasuringStreamHandler.m in Sources */,

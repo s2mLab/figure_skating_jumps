@@ -15,7 +15,6 @@
 }
 
 - (FlutterError*)onCancelWithArguments:(id)arguments {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
   _eventSink = nil;
   return nil;
 }

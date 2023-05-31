@@ -4,7 +4,7 @@
 
 #import <XsensDotSdk/XsensDotConnectionManager.h>
 
-@interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
+@interface XSensDotRecordingStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
 - (void)connectDevice:(XsensDotDevice *)device;
 - (void)disconnectDevice;
 - (void)setRate:(int)rate;
