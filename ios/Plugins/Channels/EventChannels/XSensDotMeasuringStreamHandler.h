@@ -6,4 +6,7 @@
 
 @interface XSensDotMeasuringStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
 - (void)currentDevice:(XsensDotDevice *)device;
+- (void)disconnectDevice;
+- (void)stopMeasuring;
+- (void)setRate:(int)rate;
 @end

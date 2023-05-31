@@ -63,6 +63,12 @@
         [self handleConnectionCalls:call result:result];
     }];
     
+    FlutterMethodChannel* measuring = [
+        FlutterMethodChannel methodChannelWithName:ChannelNames(MeasuringChannel) binaryMessenger:controller];
+    [measuring setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+        [self handleMeasuringCalls:call result:result];
+    }];
+    
     FlutterMethodChannel* scanner = [
         FlutterMethodChannel methodChannelWithName:ChannelNames(ScanChannel) binaryMessenger:controller];
     [scanner setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
@@ -111,6 +117,34 @@
         
         [self.xSensDotConnectionStreamHandler connect:device];
         [self.xSensDotMeasuringStreamHandler currentDevice:device];
+        result(nil);
+    } else if ([call.method isEqualToString:@"disconnectXSensDot"]) {
+        [self.xSensDotConnectionStreamHandler disconnectDevice];
+        [self.xSensDotMeasuringStreamHandler disconnectDevice];
+        result(nil);
+    } else {
+        result(FlutterMethodNotImplemented);
+    }
+}
+
+
+/**
+  * Handles the Measuring Method channel calls
+  *
+  * @param call The method to call and its parameters
+  * @param result The result to send back to the flutter project
+  */
+- (void)handleMeasuringCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
+    if ([call.method isEqualToString:@"stopMeasuring"]) {
+        [self.xSensDotMeasuringStreamHandler stopMeasuring];
+        result(nil);
+    } else if ([call.method isEqualToString:@"setRate"]) {
+        NSDictionary *arguments = call.arguments;
+        id rateValue = arguments[@"rate"];
+        if ([rateValue isKindOfClass:[NSNumber class]]) {
+            int rate = [rateValue intValue];
+            [self.xSensDotMeasuringStreamHandler setRate:rate];
+        }
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);

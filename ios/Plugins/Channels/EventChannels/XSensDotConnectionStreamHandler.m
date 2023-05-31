@@ -17,10 +17,36 @@
 - (void)connect:(XsensDotDevice*)device {
     [XsensDotConnectionManager connect:device];
     _connectedDevice = device;
+    [self addObservers];
+    [self onDeviceInitialized];
+}
+
+/// Add notifications
+- (void)addObservers
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(onDeviceInitialized) name:kXsensDotNotificationDeviceInitialized object:nil];
+}
+
+- (void)removeObservers
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:kXsensDotNotificationDeviceInitialized object:nil];
+}
+
+- (void)onDeviceInitialized
+{
+    [self sendEvent:@(3)];
 }
 
 - (XsensDotDevice*)connectedDevice {
     return _connectedDevice;
+}
+
+- (void)disconnectDevice
+{
+    [self removeObservers];
+    _connectedDevice = nil;
 }
 
 - (FlutterError*)onListenWithArguments:(id)listener
@@ -47,11 +73,12 @@
 
 
 - (FlutterError*)onCancelWithArguments:(id)arguments {
+    [self disconnectDevice];
     _eventSink = nil;
     return nil;
 }
 
-- (void)sendEvent:(NSString*)event {
+- (void)sendEvent:(id)event {
   if (_eventSink) {
     _eventSink(event);
   }

@@ -6,5 +6,6 @@
 
 @interface XSensDotConnectionStreamHandler : NSObject<FlutterStreamHandler, XsensDotConnectionDelegate>
 - (void)connect:(XsensDotDevice*)device;
+- (void)disconnectDevice;
 - (XsensDotDevice*)connectedDevice;
 @end

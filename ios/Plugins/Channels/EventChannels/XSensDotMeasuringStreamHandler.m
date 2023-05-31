@@ -1,8 +1,11 @@
 #import "XSensDotMeasuringStreamHandler.h"
 
+#import <unistd.h>
+
 @implementation XSensDotMeasuringStreamHandler{
     FlutterEventSink _eventSink;
     XsensDotDevice * _currentDevice;
+    int _packageCounter; // This should not be useful, but for some reason, the vanilla packageCounter from XSens does not increment
   }
 
 - (id)init {
@@ -14,28 +17,40 @@
     return self;
 }
 
-/// Add notifications
-- (void)addObservers
+- (void)onReceivedData:(XsensDotPlotData * _Nonnull) data
 {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(onDeviceTagRead:) name:kXsensDotNotificationDeviceNameDidRead object:nil];
+    _packageCounter++;
+    NSString* dataAsString = [self serialize:data withPackageCounter:_packageCounter];
+    // TODO Call the dart stream here to notify that data were received
+    [self sendEvent:dataAsString];
 }
 
-- (void)onDeviceTagRead:(NSNotification *)sender
+- (void)startMeasuring
 {
-    // TODO Call the dart stream here to notify that data were received
-    printf("coucou");
+    // If it already listening to something
+    _currentDevice.plotMeasureMode = XSBleDevicePayloadHighFidelityNoMag;
+    _packageCounter = 0;
+    
+    // Set the data received callback
+    __weak typeof(self) weakSelf = self;
+    [_currentDevice setDidParsePlotDataBlock:^(XsensDotPlotData * _Nonnull data){
+        [weakSelf onReceivedData:data];
+    }];
+        
+    _currentDevice.plotMeasureEnable = YES;
+}
+
+- (void)setRate:(int)rate{
+    _currentDevice.outputRate = rate;
+}
+
+- (void)stopMeasuring
+{
+    _currentDevice.plotMeasureEnable = NO;
 }
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
     _eventSink = eventSink;
-    if (_currentDevice){
-        // If a device was previously added, start measuring with it
-        _currentDevice.plotMeasureMode = XSBleDevicePayloadCompleteEuler;
-        _currentDevice.plotLogEnable = YES;
-        _currentDevice.plotMeasureEnable = YES;
-        [self addObservers];
-    }
     return nil;
 }
 
@@ -54,12 +69,45 @@
 - (void)currentDevice:(XsensDotDevice *)device{
     _currentDevice = device;
     if (_eventSink) {
-        // If it already listening to something
-        _currentDevice.plotMeasureMode = XSBleDevicePayloadCompleteEuler;
-        _currentDevice.plotLogEnable = YES;
-        _currentDevice.plotMeasureEnable = YES;
-        [self addObservers];
+        [self startMeasuring];
     }
+}
+
+- (void)disconnectDevice
+{
+    [self stopMeasuring];
+    _currentDevice = nil;
+}
+
+- (NSString *)serialize:(XsensDotPlotData * _Nonnull) data withPackageCounter:(int)counter
+{
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+
+    NSMutableArray *accArray = [NSMutableArray array];
+    [accArray addObject:@(data.acc0)];
+    [accArray addObject:@(data.acc1)];
+    [accArray addObject:@(data.acc2)];
+    [json setObject:accArray forKey:@"acc"];
+
+    NSMutableArray *gyrArray = [NSMutableArray array];
+    [gyrArray addObject:@(data.gyr0)];
+    [gyrArray addObject:@(data.gyr1)];
+    [gyrArray addObject:@(data.gyr2)];
+    [json setObject:gyrArray forKey:@"gyr"];
+
+    NSMutableArray *eulerArray = [NSMutableArray array];
+    [eulerArray addObject:@(data.euler0)];
+    [eulerArray addObject:@(data.euler1)];
+    [eulerArray addObject:@(data.euler2)];
+    [json setObject:eulerArray forKey:@"euler"];
+
+    [json setObject:@(data.timeStamp) forKey:@"time"];
+    [json setObject:@(counter) forKey:@"id"];
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return jsonString;
 }
 
 @end

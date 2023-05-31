@@ -28,6 +28,14 @@ class XSensDotData {
   /// JSON string.
   XSensDotData.fromEventChannel(String event) {
     var data = jsonDecode(event);
+
+    // Make sure there is no "0", but only "0.0"
+    for (int i = 0; i < 3; i++) {
+      if (data['acc'][i] == 0) data['acc'][i] = 0.0;
+      if (data['gyr'][i] == 0) data['gyr'][i] = 0.0;
+      if (data['euler'][i] == 0) data['euler'][i] = 0.0;
+    }
+
     acc = Float64List.fromList(data['acc'].cast<double>());
     gyr = Float64List.fromList(data['gyr'].cast<double>());
     euler = Float64List.fromList(data['euler'].cast<double>());
