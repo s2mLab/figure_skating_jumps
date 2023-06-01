@@ -1,5 +1,7 @@
 #import "XSensDotRecordingStreamHandler.h"
 
+#import "XSensDotUtils.h"
+
 typedef NS_ENUM(NSInteger, RecordingStatus) {
     RecordingStatusSetRate,
     RecordingStatusEnableRecordingNotificationDone,
@@ -58,8 +60,20 @@ NSString* recordingStatusAsString(RecordingStatus status){
 
 - (void)prepareRecording{
     __weak typeof(self) weakSelf = self;
+    [_currentDevice.recording setUpdateRecordingStatus:^(XSRecordingStatus status) {
+        if (status == XSRecordingIsRecording){
+            [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusRecordingStarted withData:nil]];
+        }
+        else if (status == XSRecordingIsRecordingStopped){
+            [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusRecordingStopped withData:nil]];
+        }
+    }];
+    [self sendEvent:[self serializeWithStatus:RecordingStatusEnableRecordingNotificationDone withData:@"true"]];
+}
+
+- (void)getFlashInfo{
+    __weak typeof(self) weakSelf = self;
     [_currentDevice setFlashInfoDoneBlock: ^(XSFlashInfoStatus status){
-        NSLog(@"Coucou");
         NSString* isReady = (status == XSFlashInfoIsReady ? @"true" : @"false");
         [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusGetFlashInfoDone
                                          withData:isReady]
@@ -82,7 +96,55 @@ NSString* recordingStatusAsString(RecordingStatus status){
 
 - (void)prepareExtract
 {
-    // TODO
+    __strong typeof(self) strongSelf = self;
+    [_currentDevice setExportFileInfoDone:^(BOOL success) {
+        if (success){
+            NSString* jsonData = [strongSelf serializeFilesInfo:strongSelf->_currentDevice.recording.files];
+            [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusGetFileInfoDone
+                                                         withData:jsonData]];
+        }
+    }];
+    [_currentDevice getExportFileInfo];
+}
+
+- (void)extractFileWithFileInfo:(NSString*)fileInfo
+{
+    NSArray *array = [[NSArray alloc] initWithObjects:@([self deserializeFileInfo:fileInfo]), nil];
+    _currentDevice.recording.exportFileList = array;
+    _currentDevice.plotMeasureMode = XSBleDevicePayloadHighFidelityNoMag;
+    
+    // Setup the callbacks
+    __strong typeof(self) strongSelf = self;
+    [_currentDevice setDidParseExportFileDataBlock:^(XsensDotPlotData * _Nonnull data) {
+        NSString* dataAsString = [XSensDotUtils serializeData:data withPackageCounter:strongSelf->_packageCounter];
+        strongSelf->_packageCounter++;
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractingFile withData:dataAsString]];
+    }];
+    
+    [_currentDevice.recording setExportFileDone:^(NSUInteger index, BOOL result) {
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractFileDone withData:nil]];
+    }];
+    
+    // Start extracting
+    [_currentDevice startExportFileData];
+}
+
+- (NSString*)serializeFilesInfo:(NSMutableArray<XsensDotRecordingFile *> *)filesInfo
+{
+    int fileId = (int)filesInfo.count - 1;
+    NSString* fileName = @"test";
+    unsigned long size = filesInfo[fileId].fileSize;
+    return [NSString stringWithFormat:@"id: %d, name: %@, size: %lu", fileId, fileName, size];
+}
+
+- (int)deserializeFileInfo:(NSString *)jsonData {
+    NSScanner *scanner = [NSScanner scannerWithString:jsonData];
+    int fileId;
+    
+    // We actually just need the id
+    [scanner scanString:@"id:" intoString:nil];
+    [scanner scanInt:&fileId];
+    return fileId;
 }
 
 - (FlutterError*)onListenWithArguments:(id)listener

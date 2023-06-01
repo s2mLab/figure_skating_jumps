@@ -9,7 +9,9 @@
 - (void)disconnectDevice;
 - (void)setRate:(int)rate;
 - (void)prepareRecording;
+- (void)getFlashInfo;
 - (void)startRecording;
 - (void)stopRecording;
 - (void)prepareExtract;
+- (void)extractFileWithFileInfo:(NSString*)fileInfo;
 @end

@@ -161,6 +161,9 @@
             [self.xSensDotRecordingStreamHandler setRate:rate];
         }
         result(nil);
+    } else if ([call.method isEqualToString:@"getFlashInfo"]) {
+        [self.xSensDotRecordingStreamHandler getFlashInfo];
+        result(nil);
     } else if ([call.method isEqualToString:@"startRecording"]) {
         [self.xSensDotRecordingStreamHandler startRecording];
         result(nil);
@@ -169,6 +172,11 @@
         result(nil);
     } else if ([call.method isEqualToString:@"prepareExtract"]) {
         [self.xSensDotRecordingStreamHandler prepareExtract];
+        result(nil);
+    } else if ([call.method isEqualToString:@"extractFile"]) {
+        NSDictionary *arguments = call.arguments;
+        id fileInfo = arguments[@"fileInfo"];
+        [self.xSensDotRecordingStreamHandler extractFileWithFileInfo:fileInfo];
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);
