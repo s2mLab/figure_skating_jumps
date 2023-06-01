@@ -1,5 +1,19 @@
 #import "XSensDotMeasuringStatusStreamHandler.h"
 
+
+typedef NS_ENUM(NSInteger, MeasuringStatus) {
+    MeasuringStatusInitDone,
+    MeasuringStatusSetRate
+};
+
+NSString* measuringStatusAsString(MeasuringStatus status){
+    switch (status){
+        case MeasuringStatusInitDone: return @"InitDone";
+        case MeasuringStatusSetRate: return @"SetRate";
+    }
+}
+
+
 @implementation XSensDotMeasuringStatusStreamHandler{
     FlutterEventSink _eventSink;
   }
@@ -11,7 +25,7 @@
 
 - (void)notifyRateIsSet
 {
-    [self sendEvent:@"SetRate"];
+    [self sendEvent:measuringStatusAsString(MeasuringStatusSetRate)];
 }
 
 - (FlutterError*)onCancelWithArguments:(id)arguments {

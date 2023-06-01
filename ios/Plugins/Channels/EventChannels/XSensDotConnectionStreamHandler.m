@@ -1,5 +1,16 @@
 #import "XSensDotConnectionStreamHandler.h"
 
+
+typedef NS_ENUM(NSInteger, DeviceState) {
+    DeviceStateDisconnected = 0,
+    DeviceStateConnecting = 1,
+    DeviceStateConnected = 2,
+    DeviceStateInitialized = 3,
+    DeviceStateReconnecting = 4,
+    DeviceStateStartReconnecting = 5
+};
+
+
 @implementation XSensDotConnectionStreamHandler{
     FlutterEventSink _eventSink;
     XsensDotDevice* _connectedDevice;
@@ -36,7 +47,7 @@
 
 - (void)onDeviceInitialized
 {
-    [self sendEvent:@(3)];
+    [self sendEvent:@(DeviceStateInitialized)];
 }
 
 - (XsensDotDevice*)connectedDevice {

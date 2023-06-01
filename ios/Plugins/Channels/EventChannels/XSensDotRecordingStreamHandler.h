@@ -8,6 +8,8 @@
 - (void)connectDevice:(XsensDotDevice *)device;
 - (void)disconnectDevice;
 - (void)setRate:(int)rate;
-- (void)startMeasuring;
-- (void)stopMeasuring;
+- (void)prepareRecording;
+- (void)startRecording;
+- (void)stopRecording;
+- (void)prepareExtract;
 @end

@@ -1,5 +1,31 @@
 #import "XSensDotRecordingStreamHandler.h"
 
+typedef NS_ENUM(NSInteger, RecordingStatus) {
+    RecordingStatusSetRate,
+    RecordingStatusEnableRecordingNotificationDone,
+    RecordingStatusRecordingStarted,
+    RecordingStatusRecordingStopped,
+    RecordingStatusGetFlashInfoDone,
+    RecordingStatusGetFileInfoDone,
+    RecordingStatusExtractingFile,
+    RecordingStatusExtractFileDone,
+    RecordingStatusEraseMemoryDone
+};
+
+NSString* recordingStatusAsString(RecordingStatus status){
+    switch (status){
+        case RecordingStatusSetRate: return @"SetRate";
+        case RecordingStatusEnableRecordingNotificationDone: return @"EnableRecordingNotificationDone";
+        case RecordingStatusRecordingStarted: return @"RecordingStarted";
+        case RecordingStatusRecordingStopped: return @"RecordingStopped";
+        case RecordingStatusGetFlashInfoDone: return @"GotFlashInfo";
+        case RecordingStatusGetFileInfoDone: return @"GotFileInfo";
+        case RecordingStatusExtractingFile: return @"ExtractingFile";
+        case RecordingStatusExtractFileDone: return @"ExtractFileDone";
+        case RecordingStatusEraseMemoryDone: return @"EraseMemoryDone";
+    }
+}
+
 @implementation XSensDotRecordingStreamHandler{
     FlutterEventSink _eventSink;
     XsensDotDevice * _currentDevice;
@@ -21,71 +47,42 @@
 
 - (void)disconnectDevice
 {
-    [self stopMeasuring];
+    [self stopRecording];
     _currentDevice = nil;
 }
 
 - (void)setRate:(int)rate{
     _currentDevice.outputRate = rate;
+    [self sendEvent:[self serializeWithStatus:RecordingStatusSetRate withData:nil]];
 }
 
-- (void)startMeasuring
-{
-    // If it already listening to something
-    _currentDevice.plotMeasureMode = XSBleDevicePayloadHighFidelityNoMag;
-    _packageCounter = 0;
-    
-    // Set the data received callback
+- (void)prepareRecording{
     __weak typeof(self) weakSelf = self;
-    [_currentDevice setDidParsePlotDataBlock:^(XsensDotPlotData * _Nonnull data){
-        [weakSelf onReceivedData:data];
+    [_currentDevice setFlashInfoDoneBlock: ^(XSFlashInfoStatus status){
+        NSLog(@"Coucou");
+        NSString* isReady = (status == XSFlashInfoIsReady ? @"true" : @"false");
+        [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusGetFlashInfoDone
+                                         withData:isReady]
+        ];
     }];
-        
-    _currentDevice.plotMeasureEnable = YES;
+    [_currentDevice getFlashInfo];
 }
 
-- (void)stopMeasuring
-{
-    _currentDevice.plotMeasureEnable = NO;
+- (void)startRecording
+{    
+    [_currentDevice startRecording:0xFFFF]; // 0xFFFF indicate infinite amount of time
+    [self sendEvent:[self serializeWithStatus:RecordingStatusRecordingStarted withData:nil]];
 }
 
-- (void)onReceivedData:(XsensDotPlotData * _Nonnull) data
+- (void)stopRecording
 {
-    _packageCounter++;
-    NSString* dataAsString = [self serialize:data withPackageCounter:_packageCounter];
-    // TODO Call the dart stream here to notify that data were received
-    [self sendEvent:dataAsString];
+    [_currentDevice stopRecording];
+    [self sendEvent:[self serializeWithStatus:RecordingStatusRecordingStopped withData:nil]];
 }
 
-- (NSString *)serialize:(XsensDotPlotData * _Nonnull) data withPackageCounter:(int)counter
+- (void)prepareExtract
 {
-    NSMutableDictionary *json = [NSMutableDictionary dictionary];
-
-    NSMutableArray *accArray = [NSMutableArray array];
-    [accArray addObject:@(data.acc0)];
-    [accArray addObject:@(data.acc1)];
-    [accArray addObject:@(data.acc2)];
-    [json setObject:accArray forKey:@"acc"];
-
-    NSMutableArray *gyrArray = [NSMutableArray array];
-    [gyrArray addObject:@(data.gyr0)];
-    [gyrArray addObject:@(data.gyr1)];
-    [gyrArray addObject:@(data.gyr2)];
-    [json setObject:gyrArray forKey:@"gyr"];
-
-    NSMutableArray *eulerArray = [NSMutableArray array];
-    [eulerArray addObject:@(data.euler0)];
-    [eulerArray addObject:@(data.euler1)];
-    [eulerArray addObject:@(data.euler2)];
-    [json setObject:eulerArray forKey:@"euler"];
-
-    [json setObject:@(data.timeStamp) forKey:@"time"];
-    [json setObject:@(counter) forKey:@"id"];
-
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-
-    return jsonString;
+    // TODO
 }
 
 - (FlutterError*)onListenWithArguments:(id)listener
@@ -97,6 +94,19 @@
 - (FlutterError*)onCancelWithArguments:(id)arguments {
     _eventSink = nil;
     return nil;
+}
+
+
+- (NSString*) serializeWithStatus:(RecordingStatus)status withData:(id)data{
+    NSDictionary *jsonObject = @{
+        @"status": recordingStatusAsString(status),
+        @"data": (data != nil ? data : @""),
+    };
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:nil];
+
+
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 - (void)sendEvent:(NSString*)event {

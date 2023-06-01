@@ -149,11 +149,8 @@
   * @param result The result to send back to the flutter project
   */
 - (void)handleRecordingCalls:(FlutterMethodCall*)call result:(FlutterResult)result {
-    if ([call.method isEqualToString:@"startMeasuring"]) {
-        [self.xSensDotRecordingStreamHandler startMeasuring];
-        result(nil);
-    } else if ([call.method isEqualToString:@"stopMeasuring"]) {
-        [self.xSensDotRecordingStreamHandler stopMeasuring];
+    if ([call.method isEqualToString:@"prepareRecording"]) {
+        [self.xSensDotRecordingStreamHandler prepareRecording];
         result(nil);
     } else if ([call.method isEqualToString:@"setRate"]) {
         // Change the rate on the unit
@@ -163,9 +160,15 @@
             int rate = [rateValue intValue];
             [self.xSensDotRecordingStreamHandler setRate:rate];
         }
-        // Notify listeners rate was changed
-        //[self.xSensDotRecordingStatusStreamHandler notifyRateIsSet];
-        
+        result(nil);
+    } else if ([call.method isEqualToString:@"startRecording"]) {
+        [self.xSensDotRecordingStreamHandler startRecording];
+        result(nil);
+    } else if ([call.method isEqualToString:@"stopRecording"]) {
+        [self.xSensDotRecordingStreamHandler stopRecording];
+        result(nil);
+    } else if ([call.method isEqualToString:@"prepareExtract"]) {
+        [self.xSensDotRecordingStreamHandler prepareExtract];
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);
