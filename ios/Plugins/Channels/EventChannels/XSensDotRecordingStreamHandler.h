@@ -13,5 +13,7 @@
 - (void)startRecording;
 - (void)stopRecording;
 - (void)prepareExtract;
+- (void)getFileInfo;
 - (void)extractFileWithFileInfo:(NSString*)fileInfo;
+- (void)eraseMemory;
 @end

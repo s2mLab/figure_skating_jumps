@@ -45,6 +45,41 @@ NSString* recordingStatusAsString(RecordingStatus status){
 
 - (void)connectDevice:(XsensDotDevice *)device{
     _currentDevice = device;
+    
+    // Setup all the callbacks that will be used with this device
+    __strong typeof(self) strongSelf = self;
+    [_currentDevice setFlashInfoDoneBlock: ^(XSFlashInfoStatus status){
+        NSString* isReady = (status == XSFlashInfoIsReady ? @"true" : @"false");
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusGetFlashInfoDone
+                                                     withData:isReady]
+        ];
+    }];
+    [_currentDevice.recording setUpdateRecordingStatus:^(XSRecordingStatus status) {
+        if (status == XSRecordingIsRecording){
+            [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusRecordingStarted withData:nil]];
+        }
+        else if (status == XSRecordingIsRecordingStopped){
+            [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusRecordingStopped withData:nil]];
+        }
+    }];
+    [_currentDevice setExportFileInfoDone:^(BOOL success) {
+        if (success){
+            NSString* jsonData = [strongSelf serializeFilesInfo:strongSelf->_currentDevice.recording.files];
+            [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusGetFileInfoDone
+                                                         withData:jsonData]];
+        }
+    }];
+    [_currentDevice setDidParseExportFileDataBlock:^(XsensDotPlotData * _Nonnull data) {
+        NSString* dataAsString = [XSensDotUtils serializeData:data withPackageCounter:strongSelf->_packageCounter];
+        strongSelf->_packageCounter++;
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractingFile withData:dataAsString]];
+    }];
+    [_currentDevice.recording setExportFileDone:^(NSUInteger index, BOOL result) {
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractFileDone withData:nil]];
+    }];
+    [_currentDevice setEraseDataDoneBlock:^(int success) {
+        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusEraseMemoryDone withData:nil]];
+    }];
 }
 
 - (void)disconnectDevice
@@ -59,26 +94,10 @@ NSString* recordingStatusAsString(RecordingStatus status){
 }
 
 - (void)prepareRecording{
-    __weak typeof(self) weakSelf = self;
-    [_currentDevice.recording setUpdateRecordingStatus:^(XSRecordingStatus status) {
-        if (status == XSRecordingIsRecording){
-            [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusRecordingStarted withData:nil]];
-        }
-        else if (status == XSRecordingIsRecordingStopped){
-            [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusRecordingStopped withData:nil]];
-        }
-    }];
     [self sendEvent:[self serializeWithStatus:RecordingStatusEnableRecordingNotificationDone withData:@"true"]];
 }
 
 - (void)getFlashInfo{
-    __weak typeof(self) weakSelf = self;
-    [_currentDevice setFlashInfoDoneBlock: ^(XSFlashInfoStatus status){
-        NSString* isReady = (status == XSFlashInfoIsReady ? @"true" : @"false");
-        [weakSelf sendEvent:[weakSelf serializeWithStatus:RecordingStatusGetFlashInfoDone
-                                         withData:isReady]
-        ];
-    }];
     [_currentDevice getFlashInfo];
 }
 
@@ -94,17 +113,14 @@ NSString* recordingStatusAsString(RecordingStatus status){
     [self sendEvent:[self serializeWithStatus:RecordingStatusRecordingStopped withData:nil]];
 }
 
+- (void)getFileInfo
+{
+    [_currentDevice getExportFileInfo];
+}
+
 - (void)prepareExtract
 {
-    __strong typeof(self) strongSelf = self;
-    [_currentDevice setExportFileInfoDone:^(BOOL success) {
-        if (success){
-            NSString* jsonData = [strongSelf serializeFilesInfo:strongSelf->_currentDevice.recording.files];
-            [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusGetFileInfoDone
-                                                         withData:jsonData]];
-        }
-    }];
-    [_currentDevice getExportFileInfo];
+    [_currentDevice getFlashInfo];
 }
 
 - (void)extractFileWithFileInfo:(NSString*)fileInfo
@@ -113,27 +129,20 @@ NSString* recordingStatusAsString(RecordingStatus status){
     _currentDevice.recording.exportFileList = array;
     _currentDevice.plotMeasureMode = XSBleDevicePayloadHighFidelityNoMag;
     
-    // Setup the callbacks
-    __strong typeof(self) strongSelf = self;
-    [_currentDevice setDidParseExportFileDataBlock:^(XsensDotPlotData * _Nonnull data) {
-        NSString* dataAsString = [XSensDotUtils serializeData:data withPackageCounter:strongSelf->_packageCounter];
-        strongSelf->_packageCounter++;
-        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractingFile withData:dataAsString]];
-    }];
-    
-    [_currentDevice.recording setExportFileDone:^(NSUInteger index, BOOL result) {
-        [strongSelf sendEvent:[strongSelf serializeWithStatus:RecordingStatusExtractFileDone withData:nil]];
-    }];
-    
     // Start extracting
     [_currentDevice startExportFileData];
+}
+
+- (void)eraseMemory
+{
+    [_currentDevice eraseData];
 }
 
 - (NSString*)serializeFilesInfo:(NSMutableArray<XsensDotRecordingFile *> *)filesInfo
 {
     int fileId = (int)filesInfo.count - 1;
     NSString* fileName = @"test";
-    unsigned long size = filesInfo[fileId].fileSize;
+    unsigned long size = filesInfo[fileId].fileSize; // This should be number of frames, but we don't have access here
     return [NSString stringWithFormat:@"id: %d, name: %@, size: %lu", fileId, fileName, size];
 }
 
