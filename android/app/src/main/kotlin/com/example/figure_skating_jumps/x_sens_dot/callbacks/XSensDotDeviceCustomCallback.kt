@@ -43,12 +43,12 @@ class XSensDotDeviceCustomCallback : XsensDotDeviceCallback {
      * @param state The new connection state
      */
     override fun onXsensDotConnectionChanged(address: String?, state: Int) {
-        Log.i("XSensDot", "onXsensDotConnectionChanged")
+        // Log.i("XSensDot", "onXsensDotConnectionChanged")
         XSensDotConnectionStreamHandler.sendEvent(state)
         if (state == XsensDotDevice.CONN_STATE_CONNECTED) {
-            Log.i("XSensDot", "Connected to $address")
+            // Log.i("XSensDot", "Connected to $address")
         } else if (state == XsensDotDevice.CONN_STATE_DISCONNECTED) {
-            Log.i("XSensDot", "Disconnected from $address")
+            // Log.i("XSensDot", "Disconnected from $address")
         }
     }
 
@@ -59,7 +59,7 @@ class XSensDotDeviceCustomCallback : XsensDotDeviceCallback {
      * @param address The XSens Dot MAC address
      */
     override fun onXsensDotInitDone(address: String?) {
-        Log.i("XSensDot", "Initialization of device $address complete")
+        // Log.i("XSensDot", "Initialization of device $address complete")
         XSensDotConnectionStreamHandler.sendEvent(initializedState)
         XSensDotMeasuringStatusStreamHandler.sendEvent(MeasuringStatus.InitDone);
     }
@@ -72,7 +72,7 @@ class XSensDotDeviceCustomCallback : XsensDotDeviceCallback {
      * @param outputRate The new output rate
      */
     override fun onXsensDotOutputRateUpdate(address: String?, outputRate: Int) {
-        Log.i("XSensDot", "Updated output rate of device $address to $outputRate Hz")
+        // Log.i("XSensDot", "Updated output rate of device $address to $outputRate Hz")
         if (outputRate == maxRecordingOutputRate) {
             XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.SetRate))
         }
@@ -90,7 +90,7 @@ class XSensDotDeviceCustomCallback : XsensDotDeviceCallback {
     override fun onXsensDotDataChanged(address: String?, data: XsensDotData?) {
         val customXSensDotData = CustomXSensDotData(data)
         XSensDotMeasuringStreamHandler.sendEvent(customXSensDotData)
-        Log.i("XSensDot", "Received live data from $address : $customXSensDotData")
+        // Log.i("XSensDot", "Received live data from $address : $customXSensDotData")
     }
 
     /**

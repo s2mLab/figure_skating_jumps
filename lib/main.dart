@@ -81,19 +81,20 @@ Future<bool> initializeStoragePermissions() async {
   bool permissionState = true;
   List<Permission> permissions = [];
 
-  permissions.add(Permission.bluetooth);
-  //permissions.add(Permission.bluetoothScan);
-  //permissions.add(Permission.bluetoothConnect);
-  //permissions.add(Permission.location);
-
   permissions.add(Permission.camera);
   permissions.add(Permission.photos);
   permissions.add(Permission.microphone);
   if (Platform.isAndroid) {
     permissions.add(Permission.videos);
     permissions.add(Permission.audio);
+    permissions.add(Permission.bluetoothScan);
+    permissions.add(Permission.bluetoothConnect);
+    permissions.add(Permission.location);
   }
-  if (Platform.isIOS) permissions.add(Permission.storage);
+  if (Platform.isIOS) {
+    permissions.add(Permission.storage);
+    permissions.add(Permission.bluetooth);
+  }
 
   if (permissions.isNotEmpty) {
     (await permissions.request()).forEach((key, value) {

@@ -63,7 +63,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * Gets the flash memory info from the device
      */
     fun getFlashInfo() {
-        Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
+        // Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
             exportingManager.requestFlashInfo()
@@ -74,7 +74,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * Gets the files info from the device
      */
     fun getFileInfo() {
-        Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
+        // Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
             exportingManager.requestFileInfo()
@@ -94,7 +94,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
     fun eraseMemory() {
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
-            Log.i("XSensDot", "Started erasing")
+            // Log.i("XSensDot", "Started erasing")
             exportingManager.eraseRecordingData()
         }
     }
@@ -114,8 +114,8 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * @param isEnabled whether or not the recording notification were enabled
      */
     override fun onXsensDotRecordingNotification(address: String?, isEnabled: Boolean) {
-        Log.i("XSensDot", "onXsensDotRecordingNotification")
-        Log.i("XSensDot", "Notification Enabled $isEnabled")
+        // Log.i("XSensDot", "onXsensDotRecordingNotification")
+        // Log.i("XSensDot", "Notification Enabled $isEnabled")
         isNotificationEnabled = isEnabled
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
@@ -133,7 +133,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * @param isSuccess Whether or not the erasing was a success
      */
     override fun onXsensDotEraseDone(address: String?, isSuccess: Boolean) {
-        Log.i("XSensDot", "onXsensDotEraseDone")
+        // Log.i("XSensDot", "onXsensDotEraseDone")
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
                 RecordingStatus.EraseMemoryDone
@@ -154,8 +154,8 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         usedFlashSpace: Int,
         totalFlashSpace: Int
     ) {
-        Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
-        Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
+        // Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
+        // Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
         XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.GetFlashInfoDone))
     }
 
@@ -173,11 +173,11 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         isSuccess: Boolean
     ) {
         if (!isSuccess) {
-            Log.i("XSensDot", "File info request was not successful")
+            // Log.i("XSensDot", "File info request was not successful")
             return
         }
         if (fileInfoList == null || fileInfoList.isEmpty()) {
-            Log.i("XSensDot", "File info list is empty")
+            // Log.i("XSensDot", "File info list is empty")
             return
         }
 
@@ -203,7 +203,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
         fileInfo: XsensDotRecordingFileInfo?,
         exportedData: XsensDotData?
     ) {
-        Log.i("XSensDot", "Exported this data ${exportedData?.packetCounter}")
+        // Log.i("XSensDot", "Exported this data ${exportedData?.packetCounter}")
         val data = CustomXSensDotData(exportedData)
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
@@ -221,7 +221,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * @param fileInfo The file from which the data was extracted
      */
     override fun onXsensDotDataExported(address: String?, fileInfo: XsensDotRecordingFileInfo?) {
-        Log.i("XSensDot", "onXsensDotDataExported")
+        // Log.i("XSensDot", "onXsensDotDataExported")
         XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.ExtractingFile))
     }
 
@@ -232,7 +232,7 @@ class XSensDotExporter(context: Context, device: XsensDotDevice) :
      * @param address The XSens Dot device MAC address
      */
     override fun onXsensDotAllDataExported(address: String?) {
-        Log.i("XSensDot", "I am done exporting!")
+        // Log.i("XSensDot", "I am done exporting!")
         XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.ExtractFileDone))
     }
 

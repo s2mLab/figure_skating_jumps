@@ -21,7 +21,7 @@ abstract class XSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
      * @param events The event sink to send events to
      */
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        Log.i("XSensDotEventStreamHandler", "Listen stream")
+        // Log.i("XSensDotEventStreamHandler", "Listen stream")
         sink = events
     }
 
@@ -31,7 +31,7 @@ abstract class XSensDotEventStreamHandler<T> : EventChannel.StreamHandler {
      * @param arguments Any arguments passed to the stream handler
      */
     override fun onCancel(arguments: Any?) {
-        Log.i("XSensDotEventStreamHandler", "Cancel stream")
+        // Log.i("XSensDotEventStreamHandler", "Cancel stream")
         sink = null
     }
 

@@ -62,7 +62,7 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
      * Gets the flash memory info from the device
      */
     fun getFlashInfo() {
-        Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
+        // Log.i("XSensDot", "Is notification enable $isNotificationEnabled")
         if (isNotificationEnabled) {
             SystemClock.sleep(sleepingTimeMs)
             recordingManager.requestFlashInfo()
@@ -84,8 +84,8 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
      * @param isEnabled whether or not the recording notification were enabled
      */
     override fun onXsensDotRecordingNotification(address: String?, isEnabled: Boolean) {
-        Log.i("XSensDot", "onXsensDotRecordingNotification")
-        Log.i("XSensDot", "Notification Enabled $isEnabled")
+        // Log.i("XSensDot", "onXsensDotRecordingNotification")
+        // Log.i("XSensDot", "Notification Enabled $isEnabled")
         isNotificationEnabled = isEnabled
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
@@ -113,8 +113,8 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
         usedFlashSpace: Int,
         totalFlashSpace: Int
     ) {
-        Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
-        Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
+        // Log.i("XSensDot", "onXsensDotRequestFlashInfoDone")
+        // Log.i("XSensDot", "$usedFlashSpace $totalFlashSpace")
         val canRecord = usedFlashSpace.toDouble() / totalFlashSpace.toDouble() < maxUsedSpacePct
         XSensDotRecordingStreamHandler.sendEvent(
             RecordingEvent(
@@ -141,15 +141,16 @@ class XSensDotRecorder(context: Context, device: XsensDotDevice) :
     ) {
         when (recordingId) {
             XsensDotRecordingManager.RECORDING_ID_START_RECORDING -> {
-                Log.i("XSensDot", "start CallBack")
+                // Log.i("XSensDot", "start CallBack")
                 XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.RecordingStarted))
             }
             XsensDotRecordingManager.RECORDING_ID_STOP_RECORDING -> {
-                Log.i("XSensDot", "stop CallBack")
+                // Log.i("XSensDot", "stop CallBack")
                 XSensDotRecordingStreamHandler.sendEvent(RecordingEvent(RecordingStatus.RecordingStopped))
             }
-            XsensDotRecordingManager.RECORDING_ID_GET_STATE ->
-                Log.i("XSensDot", "Current state $recordingState")
+            XsensDotRecordingManager.RECORDING_ID_GET_STATE -> {
+                // Log.i("XSensDot", "Current state $recordingState")
+            }
         }
     }
 
