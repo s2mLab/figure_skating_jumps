@@ -282,7 +282,7 @@ class XSensDotRecordingService
     if (_recorderState == RecorderState.exporting) {
       if (data != null) {
         _resetTimer();
-        try{
+        try {
           _exportedData.add(XSensDotData.fromEventChannel(data));
         } catch (e) {
           debugPrint(e.toString());
@@ -333,7 +333,7 @@ class XSensDotRecordingService
       List<Jump>? jumps = await HttpClient()
           .analyze(fileName: _exportFileName, captureID: _currentCapture!.uID!);
 
-      if(jumps == null) {
+      if (jumps == null) {
         _changeState(RecorderState.error);
         return;
       }
@@ -342,7 +342,10 @@ class XSensDotRecordingService
           await CaptureClient().createJumps(jumps: jumps);
       _currentCapture?.jumpsID.addAll(analyzedJumps.map((jump) => jump.uID!));
     } else {
-      _changeState(RecorderState.error);
+      // This is supposed to raise an error, but since we don't mind about
+      // the server communication, do not raise
+      // _changeState(RecorderState.error);
+      _changeState(RecorderState.idle);
       return;
     }
     _changeState(RecorderState.idle);

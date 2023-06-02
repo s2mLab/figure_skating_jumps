@@ -141,7 +141,12 @@ NSString* recordingStatusAsString(RecordingStatus status){
 - (NSString*)serializeFilesInfo:(NSMutableArray<XsensDotRecordingFile *> *)filesInfo
 {
     int fileId = (int)filesInfo.count - 1;
-    NSString* fileName = @"test";
+    
+    NSDate *currentDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd_HHmmss"];
+    NSString *fileName = [dateFormatter stringFromDate:currentDate];
+    
     unsigned long size = filesInfo[fileId].fileSize; // This should be number of frames, but we don't have access here
     return [NSString stringWithFormat:@"id: %d, name: %@, size: %lu", fileId, fileName, size];
 }

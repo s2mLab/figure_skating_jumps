@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:figure_skating_jumps/utils/csv_creator.dart';
+import 'package:flutter/services.dart';
 import 'package:media_store_plus/media_store_plus.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ExternalStorageService {
@@ -24,17 +26,30 @@ class ExternalStorageService {
   ///
   /// Returns a [String] value containing the path of the saved video file upon completion.
   Future<String> saveVideo(XFile f) async {
-    Directory directory = Directory(DirType.video.fullPath(
-        dirName: DirType.video.defaults, relativePath: null.orAppFolder));
-
-    await Directory('${directory.path}/$_videoDirPrefix')
-        .create(recursive: true);
-
     String fileName = Uri.parse(f.path).pathSegments.last.trim();
-    File file =
-        await File(f.path).copy("${directory.path}/$_videoDirPrefix/$fileName");
+    if (Platform.isAndroid) {
+      Directory directory = Directory(DirType.video.fullPath(
+          dirName: DirType.video.defaults, relativePath: null.orAppFolder));
 
-    return Future<String>.value(file.path);
+      await Directory('${directory.path}/$_videoDirPrefix')
+          .create(recursive: true);
+
+      File file = await File(f.path)
+          .copy("${directory.path}/$_videoDirPrefix/$fileName");
+
+      return Future<String>.value(file.path);
+    } else if (Platform.isIOS) {
+      String newPath = (await ImageGallerySaver.saveFile(f.path,
+          name: fileName, isReturnPathOfIOS: true))['filePath'];
+
+      final re = RegExp(r'^file:///.+$');
+      if (re.hasMatch(newPath)) {
+        newPath = newPath.substring(6); // Remove "file://" of the path
+      }
+      return newPath;
+    } else {
+      throw PlatformException(code: 'Wrong platform');
+    }
   }
 
   /// Saves the extracted data in a CSV file with the given file name.
@@ -46,7 +61,14 @@ class ExternalStorageService {
   /// Returns a String value containing the path of the saved CSV file upon completion.
   Future<String> saveCaptureCsv(
       String fileName, List<XSensDotData> extractedData) async {
-    Directory directory = await getApplicationDocumentsDirectory();
+    late Directory directory;
+    if (Platform.isAndroid) {
+      directory = await getApplicationDocumentsDirectory();
+    } else if (Platform.isIOS) {
+      directory = (await getExternalStorageDirectory())!;
+    } else {
+      throw PlatformException(code: 'Wrong platform');
+    }
     String dirPath = '${directory.path}/csv';
     await Directory(dirPath).create(recursive: true);
 
