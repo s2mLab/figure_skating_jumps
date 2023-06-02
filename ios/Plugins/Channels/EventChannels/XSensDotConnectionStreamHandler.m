@@ -28,21 +28,20 @@ typedef NS_ENUM(NSInteger, DeviceState) {
 - (void)connect:(XsensDotDevice*)device {
     [XsensDotConnectionManager connect:device];
     _connectedDevice = device;
-    [self addObservers];
-    [self onDeviceInitialized];
-}
-
-/// Add notifications
-- (void)addObservers
-{
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(onDeviceInitialized) name:kXsensDotNotificationDeviceInitialized object:nil];
-}
-
-- (void)removeObservers
-{
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:kXsensDotNotificationDeviceInitialized object:nil];
+    
+    [self sendEvent:@(DeviceStateConnecting)];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (![self->_connectedDevice isInitialized]) {
+            // Wait for a bit of time before testing again
+            [NSThread sleepForTimeInterval:0.1];
+            // We are suppose to wait for the device to be initalized before sending the initialized event
+            // but since "isInitialized" never turns to true we just skip this process...
+            break;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self onDeviceInitialized];
+        });
+    });
 }
 
 - (void)onDeviceInitialized
@@ -56,7 +55,6 @@ typedef NS_ENUM(NSInteger, DeviceState) {
 
 - (void)disconnectDevice
 {
-    [self removeObservers];
     _connectedDevice = nil;
 }
 
