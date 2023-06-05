@@ -5,6 +5,7 @@ import 'package:figure_skating_jumps/utils/csv_creator.dart';
 import 'package:flutter/services.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ExternalStorageService {
@@ -23,10 +24,13 @@ class ExternalStorageService {
   ///
   /// Parameters:
   /// - [f] : A [XFile] object representing the video file to be saved.
+  /// - [fileName] : The destination file name, without extension
   ///
   /// Returns a [String] value containing the path of the saved video file upon completion.
-  Future<String> saveVideo(XFile f) async {
-    String fileName = Uri.parse(f.path).pathSegments.last.trim();
+  Future<String> saveVideo(XFile f, String fileName) async {
+    String fileExtension = extension(f.path);
+    String fileNameWithExtension = '$fileName$fileExtension';
+
     if (Platform.isAndroid) {
       Directory directory = Directory(DirType.video.fullPath(
           dirName: DirType.video.defaults, relativePath: null.orAppFolder));
@@ -35,18 +39,20 @@ class ExternalStorageService {
           .create(recursive: true);
 
       File file = await File(f.path)
-          .copy("${directory.path}/$_videoDirPrefix/$fileName");
+          .copy("${directory.path}/$_videoDirPrefix/$fileNameWithExtension");
 
       return Future<String>.value(file.path);
     } else if (Platform.isIOS) {
-      String newPath = (await ImageGallerySaver.saveFile(f.path,
-          name: fileName, isReturnPathOfIOS: true))['filePath'];
+      String pathInGallery = (await ImageGallerySaver.saveFile(f.path,
+          name: fileNameWithExtension, isReturnPathOfIOS: true))['filePath'];
 
+      // Remove "file://" of the path
       final re = RegExp(r'^file:///.+$');
-      if (re.hasMatch(newPath)) {
-        newPath = newPath.substring(6); // Remove "file://" of the path
+      if (re.hasMatch(pathInGallery)) {
+        pathInGallery = pathInGallery.substring(6);
       }
-      return newPath;
+
+      return pathInGallery;
     } else {
       throw PlatformException(code: 'Wrong platform');
     }

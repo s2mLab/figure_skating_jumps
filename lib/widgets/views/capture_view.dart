@@ -9,6 +9,7 @@ import 'package:figure_skating_jumps/interfaces/i_recorder_state_subscriber.dart
 import 'package:figure_skating_jumps/models/local_db/global_settings.dart';
 import 'package:figure_skating_jumps/services/camera_service.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
+import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:figure_skating_jumps/services/local_db/global_settings_manager.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_connection_service.dart';
 import 'package:figure_skating_jumps/services/x_sens/x_sens_dot_recording_service.dart';
@@ -29,6 +30,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:developer' as developer;
 
+import 'package:intl/intl.dart';
+
 class CaptureDataView extends StatefulWidget {
   const CaptureDataView({
     Key? key,
@@ -40,6 +43,7 @@ class CaptureDataView extends StatefulWidget {
 
 class _CaptureDataViewState extends State<CaptureDataView>
     implements IRecorderSubscriber {
+  String _exportFilename = ''; // Name of the exported files
   bool _cameraInError = false;
   final XSensDotRecordingService _xSensDotRecordingService =
       XSensDotRecordingService();
@@ -279,7 +283,8 @@ class _CaptureDataViewState extends State<CaptureDataView>
       String videoPath = "";
       if (_isCameraActivated) {
         XFile f = await _controller.stopVideoRecording();
-        videoPath = await ExternalStorageService().saveVideo(f);
+        videoPath =
+            await ExternalStorageService().saveVideo(f, _exportFilename);
       }
       await _xSensDotRecordingService.stopRecording(
           _isCameraActivated, videoPath);
@@ -315,8 +320,13 @@ class _CaptureDataViewState extends State<CaptureDataView>
     }
 
     try {
+      _exportFilename =
+          '${DateFormat('yyyyMMdd_HHmmss').format(DateTime.now())}_'
+          '${UserClient().currentAuthUser?.uid ?? 'NoName'}';
+
       await _initializeControllerFuture;
-      await _xSensDotRecordingService.startRecording();
+      await _xSensDotRecordingService.startRecording(
+          exportFilename: '$_exportFilename.csv');
       _displayStepDialog(const StartRecordingDialog()).then((_) async {
         if (_xSensDotRecordingService.recorderState !=
             RecorderState.recording) {

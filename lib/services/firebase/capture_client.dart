@@ -1,18 +1,18 @@
 import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/enums/models/season.dart';
 import 'package:figure_skating_jumps/models/firebase/capture.dart';
-import 'package:figure_skating_jumps/models/local_db/local_capture.dart';
 import 'package:figure_skating_jumps/models/firebase/jump.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:figure_skating_jumps/models/firebase/modification.dart';
 import 'package:figure_skating_jumps/models/firebase/skating_user.dart';
+import 'package:figure_skating_jumps/models/local_db/local_capture.dart';
 import 'package:figure_skating_jumps/models/x_sens_dot_data.dart';
 import 'package:figure_skating_jumps/services/external_storage_service.dart';
-import 'package:figure_skating_jumps/services/local_db/local_captures_manager.dart';
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
+import 'package:figure_skating_jumps/services/local_db/local_captures_manager.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart';
 
 /// A singleton used to communicate with Firebase.
 /// It handles anything related to captures and jumps.
@@ -422,8 +422,7 @@ class CaptureClient {
   /// Returns void.
   Future<void> _saveCaptureCsv(
       {required String fullPath, required String fileName}) async {
-    Reference fileRef = appBucketRef.child(
-        '${basenameWithoutExtension(fileName)}_${UserClient().currentAuthUser?.uid ?? 'NoName'}${extension(fileName)}');
+    Reference fileRef = appBucketRef.child(fileName);
     File captureCsvFile = File(fullPath);
     await captureCsvFile.absolute.exists();
 

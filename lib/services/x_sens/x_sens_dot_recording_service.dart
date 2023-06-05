@@ -95,9 +95,9 @@ class XSensDotRecordingService
     }
   }
 
-  Future<void> startRecording() async {
+  Future<void> startRecording({required String exportFilename}) async {
     _exportedData.clear();
-    _exportFileName = "";
+    _exportFileName = exportFilename;
     _currentRecordingHasVideo = false;
     _currentRecordingVideoPath = "";
     _totalRecordingData = 0;
@@ -266,7 +266,6 @@ class XSensDotRecordingService
   static Future<void> _handleGetFileInfoDone(String data) async {
     if (_recorderState == RecorderState.exporting) {
       _resetTimer();
-      _exportFileName = "${data.split(",")[1].split(": ")[1]}.csv";
       await _recordingMethodChannel
           .invokeMethod('extractFile', <String, dynamic>{'fileInfo': data});
     }
