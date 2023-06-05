@@ -12,6 +12,7 @@ import 'package:figure_skating_jumps/services/local_db/local_captures_manager.da
 import 'package:figure_skating_jumps/services/firebase/user_client.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path/path.dart';
 
 /// A singleton used to communicate with Firebase.
 /// It handles anything related to captures and jumps.
@@ -66,8 +67,7 @@ class CaptureClient {
       _modifyCaptureJumpList(
           captureID: jump.captureID, jumpID: jumpInfo.id, linkJump: true);
       await _addNewJumpModificationToCapture(
-          capture: capture,
-          jumpID: jump.uID!);
+          capture: capture, jumpID: jump.uID!);
       return jump;
     } catch (e) {
       debugPrint(e.toString());
@@ -134,8 +134,7 @@ class CaptureClient {
       {required Jump jump, required Capture capture}) async {
     try {
       await _addDeleteJumpModificationToCapture(
-          capture: capture,
-          jumpID: jump.uID!);
+          capture: capture, jumpID: jump.uID!);
       await _firestore
           .collection(_jumpsCollectionString)
           .doc(jump.uID)
@@ -161,8 +160,7 @@ class CaptureClient {
       {required Jump jump, required Capture capture}) async {
     try {
       await _addUpdateJumpModificationToCapture(
-          capture: capture,
-          updatedJump: jump);
+          capture: capture, updatedJump: jump);
       await _firestore.collection(_jumpsCollectionString).doc(jump.uID!).set({
         'capture': jump.captureID,
         'comment': jump.comment,
@@ -268,13 +266,11 @@ class CaptureClient {
   ///
   /// Returns void.
   Future<void> _addNewJumpModificationToCapture(
-      {required Capture capture,
-      required String jumpID}) async {
+      {required Capture capture, required String jumpID}) async {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a ajouté le saut $jumpID à la capture ${capture.uID!}.";
-      await _addModificationToCapture(
-          capture: capture, action: action);
+      await _addModificationToCapture(capture: capture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -291,13 +287,11 @@ class CaptureClient {
   ///
   /// Returns void.
   Future<void> _addDeleteJumpModificationToCapture(
-      {required Capture capture,
-      required String jumpID}) async {
+      {required Capture capture, required String jumpID}) async {
     try {
       String action =
           "L'utilisateur ${UserClient().currentSkatingUser!.name} a supprimé le saut $jumpID de la capture ${capture.uID!}.";
-      await _addModificationToCapture(
-          capture: capture, action: action);
+      await _addModificationToCapture(capture: capture, action: action);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -314,8 +308,7 @@ class CaptureClient {
   ///
   /// Returns void.
   Future<void> _addUpdateJumpModificationToCapture(
-      {required Capture capture,
-      required Jump updatedJump}) async {
+      {required Capture capture, required Jump updatedJump}) async {
     try {
       Jump oldJump = await getJumpByID(uID: updatedJump.uID!);
       List<String> actions = _getJumpModificationActions(
@@ -323,8 +316,7 @@ class CaptureClient {
 
       DateTime modificationTime = DateTime.now();
       for (String action in actions) {
-        capture.modifications
-            .add(Modification(action, modificationTime));
+        capture.modifications.add(Modification(action, modificationTime));
       }
       await _firestore
           .collection(_captureCollectionString)
@@ -430,7 +422,8 @@ class CaptureClient {
   /// Returns void.
   Future<void> _saveCaptureCsv(
       {required String fullPath, required String fileName}) async {
-    Reference fileRef = appBucketRef.child(fileName);
+    Reference fileRef = appBucketRef.child(
+        '${basenameWithoutExtension(fileName)}_${UserClient().currentAuthUser?.uid ?? 'NoName'}${extension(fileName)}');
     File captureCsvFile = File(fullPath);
     await captureCsvFile.absolute.exists();
 

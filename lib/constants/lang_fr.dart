@@ -1,7 +1,6 @@
 /// This file regroups all String values used in the code for the
 /// French language.
 
-
 // global
 const String searchingLabel = "Recherche en cours";
 const String cancelLabel = "Annuler";
@@ -65,8 +64,7 @@ const String completePairingButton = "Compléter le jumelage";
 const String verifyConnectivityLabel = "Vérifier la réception du capteur";
 const String connectionErrorLabel =
     "Erreur lors de la connexion à l'appareil: ";
-const String pairErrorLabel =
-    "Erreur lors du jumelage. Veuillez réessayer.";
+const String pairErrorLabel = "Erreur lors du jumelage. Veuillez réessayer.";
 
 // widgets/dialogs/modification_info_dialog
 const String modificationInfoDialogTitle =
@@ -193,9 +191,9 @@ const String continueModifOfAllJumpsInfo =
 
 // widgets/screens/connection_dot_view
 const String managingXSensDotTitle = "Gestion des XSens DOT";
-const String connectNewXSensDotButton =
-    "Connecter un nouvel XSens DOT";
-const String noDataLabel = "En attente du capteur - les données devraient arriver rapidement.";
+const String connectNewXSensDotButton = "Connecter un nouvel XSens DOT";
+const String noDataLabel =
+    "En attente du capteur - les données devraient arriver rapidement.";
 const String dataChartTitle = "Accélération";
 const String firstFastLineName = "X";
 const String secondFastLineName = "Y";

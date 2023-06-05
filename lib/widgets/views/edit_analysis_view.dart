@@ -75,7 +75,6 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     _jumps.sort((a, b) => a.time.compareTo(b.time));
   }
 
-
   /// Determines whether the [Jump] at the specified [index] needs to be reordered after
   /// having been changed by the user.
   ///
