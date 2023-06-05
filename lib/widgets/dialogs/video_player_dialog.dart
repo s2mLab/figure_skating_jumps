@@ -80,9 +80,14 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
             if (snapshot.connectionState == ConnectionState.done) {
               return Column(mainAxisSize: MainAxisSize.min, children: [
                 Stack(children: [
-                  AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                  Center(
+                    child: SizedBox(
+                      height: ReactiveLayoutHelper.getHeightFromFactor(620),
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    ),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.max,

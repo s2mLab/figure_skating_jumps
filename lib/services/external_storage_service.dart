@@ -61,14 +61,7 @@ class ExternalStorageService {
   /// Returns a String value containing the path of the saved CSV file upon completion.
   Future<String> saveCaptureCsv(
       String fileName, List<XSensDotData> extractedData) async {
-    late Directory directory;
-    if (Platform.isAndroid) {
-      directory = await getApplicationDocumentsDirectory();
-    } else if (Platform.isIOS) {
-      directory = (await getExternalStorageDirectory())!;
-    } else {
-      throw PlatformException(code: 'Wrong platform');
-    }
+    Directory directory = await getApplicationDocumentsDirectory();
     String dirPath = '${directory.path}/csv';
     await Directory(dirPath).create(recursive: true);
 

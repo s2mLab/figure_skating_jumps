@@ -33,7 +33,7 @@ class ModificationInfoDialog extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: ReactiveLayoutHelper.getWidthFromFactor(500),
+            height: ReactiveLayoutHelper.getHeightFromFactor(600),
             child: SingleChildScrollView(
               child: Column(
                 children: [
