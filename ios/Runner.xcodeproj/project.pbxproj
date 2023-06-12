@@ -16,7 +16,6 @@
 		844E25DD2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25DC2A267C7E00F9B1F2 /* XSensDotConnectionStreamHandler.m */; };
 		844E25E02A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25DF2A27E95B00F9B1F2 /* XSensDotRecordingStreamHandler.m */; };
 		844E25E42A29357F00F9B1F2 /* XSensDotUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E25E32A29357F00F9B1F2 /* XSensDotUtils.m */; };
-		849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */ = {isa = PBXBuildFile; fileRef = 849F3B0C2A2514D7007A77EA /* XsensDotSdk.framework.dSYM */; };
 		849F3B0F2A2514E1007A77EA /* XsensDotSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; };
 		849F3B102A2514E1007A77EA /* XsensDotSdk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849F3B0B2A2514D7007A77EA /* XsensDotSdk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		849F3B172A2528F5007A77EA /* BluetoothPermissionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 849F3B162A2528F5007A77EA /* BluetoothPermissionStreamHandler.m */; };
@@ -311,7 +310,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				849F3B0E2A2514D7007A77EA /* XsensDotSdk.framework.dSYM in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
